@@ -5,13 +5,13 @@ Indented lines explain what's happening on this code
   
 ### 1. Build docker image in minikube env (and verify)   
 1a. eval $(minikube docker-env)    
-  - Change execution / output context to inside of the minikube container, so the image is available   
+    - Change execution / output context to inside of the minikube container, so the image is available   
 1b. docker build -t [Image-Name] .   
-  - Requires a Dockerfile, and outputs a Docker image   
+    - Requires a Dockerfile, and outputs a Docker image   
 [1c]. docker ssh   
-  - Ssh into docker, in order to...   
+    - Ssh into docker, in order to...   
 [1d]. docker images      
-  - Check local image directory to ensure your custom image is available   
+    - Check local image directory to ensure your custom image is available   
 
 ### 2. Fire up depl pod somehow
 * kubectl apply -f pithy.yaml
