@@ -1,17 +1,17 @@
 ## Minikube Deployment Steps
-There are lots of ways to do different things. 2-6 have multiple options flagged with '*'.
-Indented lines explain what's happening on this code
-'Pithy' is the placeholder server I made.
-
-### 1. Build docker image in minikube env (and verify)
-a. eval $(minikube docker-env) 
-  - Change execution / output context to inside of the minikube container, so the image is available
-b. docker build -t [Image-Name] .
-  - Requires a Dockerfile, and outputs a Docker image
-[c]. docker ssh
-  - Ssh into docker, in order to...
-[d]. docker images
-  - Check local image directory to ensure your custom image is available
+There are lots of ways to do different things. 2-6 have multiple options flagged with '*'.   
+Indented lines explain what's happening on this code   
+'Pithy' is the placeholder server I made.   
+  
+### 1. Build docker image in minikube env (and verify)   
+1a. eval $(minikube docker-env)    
+  - Change execution / output context to inside of the minikube container, so the image is available   
+1b. docker build -t [Image-Name] .   
+  - Requires a Dockerfile, and outputs a Docker image   
+[1c]. docker ssh   
+  - Ssh into docker, in order to...   
+[1d]. docker images      
+  - Check local image directory to ensure your custom image is available   
 
 ### 2. Fire up depl pod somehow
 * kubectl apply -f pithy.yaml
