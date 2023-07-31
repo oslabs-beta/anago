@@ -4,8 +4,8 @@ Indented lines explain what's happening on this code
 'Pithy' is the placeholder server I made.   
   
 ### 1. Build docker image in minikube env (and verify)   
-1a. eval $(minikube docker-env)    
-    - Change execution / output context to inside of the minikube container, so the image is available   
+1a. eval $(minikube docker-env)     
+    - Change execution / output context to inside of the minikube container, so the image is available     
 1b. docker build -t [Image-Name] .   
     - Requires a Dockerfile, and outputs a Docker image   
 [1c]. docker ssh   
