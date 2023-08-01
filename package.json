@@ -1,0 +1,16 @@
+{
+  "name": "anago",
+  "version": "1.0.0",
+  "description": "There are lots of ways to do different things. 2-6 have multiple options flagged with '*'.    Indented lines explain what's happening on this code    'Pithy' is the placeholder server I made.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-router-dom": "^6.14.2"
+  }
+}
