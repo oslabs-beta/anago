@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pithy-deployment
+  name: pithy
 spec:
   selector:
     matchLabels:
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: pithy
-          image: pithy-node
+          image: pithy
           imagePullPolicy: Never
           ports:
             - containerPort: 3000
