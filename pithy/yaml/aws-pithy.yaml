@@ -1,7 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pithy
+  name: pithy-deployment
+  labels:
+    app: pithy
 spec:
   selector:
     matchLabels:
@@ -13,13 +15,7 @@ spec:
         app: pithy
     spec:
       containers:
-        - name: pithy
-          image: pithy-node
-          imagePullPolicy: Never
+        - name: pithy-container
+          image: 180202761917.dkr.ecr.us-east-2.amazonaws.com/pithy
           ports:
             - containerPort: 3000
-          resources:
-            limits:
-              cpu: 400m
-            requests:
-              cpu: 200m
