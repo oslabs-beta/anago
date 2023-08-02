@@ -325,20 +325,62 @@ send to the client allow a developer to respond immediately to critical
 performance issues, often even before the issue impacts the user experience in a
 production environment.
 
-Alerts in Prometheus are forwarded from the Prometheus server to the
-**Alertmanager**. Alertmanager configures alerts, can send notifications across
-platforms, and can be run both inside and outside of a cluster. In large
-production environments, it is strongly encouraged to run multiple
-Alertmanagers.
+A fantastic tool for handling alerts in Prometheus is the open-source tool
+**Alertmanager**. Alertmanager is simple, effective, highly available, and
+streamlines alerting data as soon as it's generated to help development teams
+determine which alerts actually matter and should be prioritized. It can send
+notifications across platforms and via various third-party tools like email or
+Slack. Alertmanager can be run both inside and outside of a cluster, and often
+multiple instances of Alertmanager are necessary in production environments.
 
-The Alertmanager configures alerts in three ways:
+Alertmanager configures alerts in three ways:
 
-1. Grouping: Alerts can be grouped by kind (e.g., node alerts, pod alerts)
-2. Inhibition: If similar alerts are firing, Alertmanager will 'dedupe' the
-   alerts to avoid spamming the user.
+1. Grouping: Alerts can be grouped by kind (e.g., node alerts, pod alerts) into
+   a single notification. This is essential in larger system failures to prevent
+   thousands of alerts from firing simulataneously.
+2. Inhibition: Sometimes a notification will be suppressed by Alertmanager if
+   redundant alerts are also firing. For example, if an alert fires that an
+   entire cluster is unreachable, it is unnecessary to receive an alert that a
+   pod within that cluster is unreachable, too.
 3. Silencing: Alerts can be muted based on labels or regular expressions.
 
-As mentioned above, alerts are configured in a rule file:
+Alert States:
+
+- Pending: The time elapsed since threshold breach is less than the recording
+  interval
+- Firing: The time elapsed since threshold breach is more than the recording
+  interval and alertmanager is delivering notifications
+- Resolved: The alert is no longer firing because the threshold is no longer
+  exceeded; you can optionally enable resolution notifications using
+  `[ send_resolved: <boolean> | default = true ]` in your config file
+
+### Configuring Alertmanager
+
+The Alertmanager YAML configuration file is important for numerous parameters.
+Prometheus requires Alertmanager endpoints to be specified in the file, as all
+alerts are sent to all endpoints to ensure high availability. Config parameters
+tell Alertmanager how to group and route alerts, defines inhibition rules,
+notification routing, and notification receivers.
+
+Three essential components to Alertmanager configuration:
+
+1. Clients: Alerts in Prometheus are forwarded from data sources referred to as
+   'clients' (usually Prometheus server instances) to the Alertmanager. The
+   Alertmanager can handle data incoming from multiple clients.
+2. Alerting rules: While not part of the Alertmanager architecture, alerting
+   rules are essential to determine how alerts should be processed prior to
+   being routed. A configuration example for alerting rules is provided below.
+3. Integrations: Define which third-party tools or platforms will receive alerts
+   pushed by Alertmanager.
+
+Various examples of Alertmanager configuration files can be reviewed in the
+[Prometheus docs](https://prometheus.io/docs/alerting/latest/configuration/).
+There are many recommended alerts to set up, some of them are provided in this
+helpful link
+[here](https://www.opsramp.com/guides/prometheus-monitoring/prometheus-alerting/).
+
+Example alerting rules configuration in the Prometheus configuration's rule
+file:
 
     `groups:
       - name: ElasticSearch Alerts
@@ -370,29 +412,12 @@ As mentioned above, alerts are configured in a rule file:
     Labels: Additional labels attached to the alert
     Annotations: Any actionable or contextual information
 
-The more severe alert has a lower recording interval than the less critical
-alert.
+Notice: The more severe alert has a lower recording interval than the less
+critical alert.
 
-Alert States:
+### Sending Alert Notifications
 
-- Pending: The time elapsed since threshold breach is less than the recording
-  interval
-- Firing: The time elapsed since threshold breach is more than the recording
-  interval and alertmanager is delivering notifications
-- Resolved: The alert is no longer firing because the threshold is no longer
-  exceeded; you can optionally enable resolution notifications using
-  `[ send_resolved: <boolean> | default = true ]` in your config file
-
-There are many alerts that are recommended to set up in the configuration file.
-Some of them are provided in this helpful link
-[here](https://www.opsramp.com/guides/prometheus-monitoring/prometheus-alerting/).
-
-Prometheus is made aware of Alertmanager by adding Alertmanager endpoints to the
-Prometheus configuration file. Alertmanager expects all alerts to be sent to all
-Alertmanagers to ensure high availability, so load balancing traffic is
-unnecessary.
-
-(ADD MORE HERE ABOUT RECEIVING ALERTS)
+https://www.groundcover.com/blog/prometheus-alert-manager
 
 ## Quick Start with AWS EKS:
 
