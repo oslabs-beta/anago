@@ -13,7 +13,7 @@
 2. From command line, run ‘aws configure’ and enter AuthID and AuthSecret
    AuthID: **\***
    AuthSecret: **\***
-3. Change ~/.aws/config to the following:
+3. Entering your credentials automatically creates the secret file: ~/.aws/config.  Find the file on your local machine by typing 'command-shift-g' within your Finder.  You have to change the secret file to the following:
 
 > [default]
 > region = us-east-2
@@ -27,9 +27,11 @@
 > source_profile = schlep
 > region = us-east-2
 
+Note: (Notes on the importance of the region, etc.)
+
 ## eksctl setup
 
-1. `eksctl create cluster --name [test-cluster] --region us-east-2 —node-type [t2.micro] --nodes [2]`
+1. `eksctl create cluster --name [test-cluster] --region us-east-2 —-node-type [t2.micro] --nodes [2]`
 2. kesctl will add a config file in ~/.kube that directs local kubectl commands to your EKS instance.
 3. To access elsewhere, run this code:
    `aws eks update-kubeconfig --region us-east-2 name [test-cluster]`
