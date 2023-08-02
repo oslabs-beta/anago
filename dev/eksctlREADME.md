@@ -42,6 +42,8 @@ Note: (Notes on the importance of the region, etc.)
 2. the software folder should have a Dockerfile
 3. From ECR’s image repo (must be in the right region), click “View Push Commands”
 4. Run these exact commands in order in order to hand amazon auth info to docker (expires after 12 hours), build and tag a docker image, and push it up to amazon
+WHAT EXACT COMMANDS?!
+   
 5. NOTE: If using an M1 Mac, you MUST modify the docker build command in order to correct the build platform:
    `docker buildx build --platform linux/amd64 -t [pithy] .`
 
