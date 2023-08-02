@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: pithy
-          image: pithy-node
+          image: pithy
           imagePullPolicy: Never
           ports:
             - containerPort: 3000
