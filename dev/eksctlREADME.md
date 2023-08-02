@@ -32,7 +32,7 @@ Note: (Notes on the importance of the region, etc.)
 ## eksctl setup
 
 1. `eksctl create cluster --name [test-cluster] --region us-east-2 —-node-type [t2.micro] --nodes [2]`
-2. kesctl will add a config file in ~/.kube that directs local kubectl commands to your EKS instance.
+2. eksctl will add a config file in ~/.kube that directs local kubectl commands to your EKS instance.
 3. To access elsewhere, run this code:
    `aws eks update-kubeconfig --region us-east-2 name [test-cluster]`
 
