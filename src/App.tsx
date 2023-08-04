@@ -1,11 +1,10 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [count, _setCount] = useState(0);
   return (
     <>
       <div>
@@ -18,7 +17,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button id="countButton" onClick={() => messageLookup()}>
           count is {count}
         </button>
         <p>
@@ -29,7 +28,21 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
+
+async function messageLookup() {
+  console.log('trying to make contact');
+  try {
+    const response = await fetch('/api/message');
+    const message = await response.json();
+    // if (document.querySelector('#countButton')?.innerText != null) {
+    //   document.querySelector('#countButton').innerText = message;
+    // }
+    console.log(message);
+  } catch {
+    console.log('Backend error');
+  }
+}
