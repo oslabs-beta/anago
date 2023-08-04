@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg';
 import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [count, _setCount] = useState(0);
   return (
     <>
       <div>
@@ -38,9 +38,10 @@ async function messageLookup() {
   try {
     const response = await fetch('/api/message');
     const message = await response.json();
-    if (document.querySelector('#countButton')?.innerText != null) {
-      document.querySelector('#countButton').innerText = message;
-    }
+    // if (document.querySelector('#countButton')?.innerText != null) {
+    //   document.querySelector('#countButton').innerText = message;
+    // }
+    console.log(message);
   } catch {
     console.log('Backend error');
   }

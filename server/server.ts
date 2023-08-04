@@ -7,9 +7,10 @@ const PORT: number = 3000;
 
 // import dataRouter from './routers/dataRouter';
 
-//Static handling
-app.use(express.static(path.join(__dirname, '../src')));
-
+//Static handling for full build only (dev uses vite proxy);
+if (process.env.NODE_ENV !== 'dev') {
+  app.use(express.static(path.join(__dirname, '../dist')));
+}
 // Data routes
 // app.use('/data', dataRouter);
 
@@ -18,7 +19,7 @@ app.get('/', (_req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../index.html'));
 });
 
-app.get('/message', (_req: Request, res: Response) => {
+app.get('/api/message', (_req: Request, res: Response) => {
   console.log('Message sent');
   res.json('Message received!');
 });
