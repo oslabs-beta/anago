@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 
-export const StoreContext = React.createContext('null');
+export const StoreContext = React.createContext({});
 
 //creating the type for the children components passed into the state store function
 type Props = {
   children: React.ReactNode;
 };
 
-//setting the type of the children components as the type declared above
+//declaring the parameter type Props to assign children to a ReactNode type
 export default ({ children }: Props) => {
-  const [testState, setTestState] = useState([]);
+  const [currentMetrics, setCurrentMetrics] = useState(['']);
+  const [currentCluster, setCurrentCluster] = useState('');
+  const [clusterCache, setClusterCache] = useState({});
 
-  interface States {
-    testState: testState;
-    setTestState: setTestState;
-  }
+  const States = {
+    currentMetrics: currentMetrics,
+    setCurrentMetrics: setCurrentMetrics,
+    currentCluster: currentCluster,
+    setCurrentCluster: setCurrentCluster,
+    clusterCache: clusterCache,
+    setClusterCache: setClusterCache,
+  };
 
   return (
     <StoreContext.Provider value={States}>{children}</StoreContext.Provider>
