@@ -3,12 +3,14 @@
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
+    "module": "ES2020",
     "skipLibCheck": true,
+    "esModuleInterop": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -22,6 +24,9 @@
 
     "esModuleInterop": true
   },
-  "include": ["client"],
+  "ts-node": {
+    "esm": true
+  },
+  "include": ["src", "server/**/*.ts", "client"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
