@@ -6,7 +6,7 @@ const app: Express = express();
 const PORT: number = 3000;
 
 import dataRouter from './routers/dataRouter.js';
-// import userRouter from './routers/userRouter';
+import userRouter from './routers/userRouter.js';
 
 // json + form processing
 app.use(express.json());
@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Route handlers
 app.use('/api/data', dataRouter);
-// app.use('/api/user', userRouter);
+app.use('/api/user', userRouter);
 
 //Static handling for FULL BUILD ONLY (dev uses vite proxy);
 if (process.env.NODE_ENV !== 'dev') {
