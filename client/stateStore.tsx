@@ -7,13 +7,19 @@ type Props = {
   children: React.ReactNode;
 };
 
-//setting the type of the children components as the type declared above
+//declaring the parameter type Props to assign children to a ReactNode type
 export default ({ children }: Props) => {
-  const [testState, setTestState] = useState([]);
+  const [currentMetrics, setCurrentMetrics] = useState(['']);
+  const [currentCluster, setCurrentCluster] = useState('');
+  const [clusterCache, setClusterCache] = useState({});
 
   const States = {
-    testState: testState,
-    setTestState: setTestState,
+    currentMetrics: currentMetrics,
+    setCurrentMetrics: setCurrentMetrics,
+    currentCluster: currentCluster,
+    setCurrentCluster: setCurrentCluster,
+    clusterCache: clusterCache,
+    setClusterCache: setClusterCache,
   };
 
   return (
