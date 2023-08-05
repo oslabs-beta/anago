@@ -29,7 +29,6 @@ function App() {
       </p>
       <div>
         <h1>Grafana Dashboard</h1>
-        <SampleDashboard />
       </div>
     </>
   );
