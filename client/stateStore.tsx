@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const StoreContext = React.createContext('null');
+export const StoreContext = React.createContext({});
 
 //creating the type for the children components passed into the state store function
 type Props = {
@@ -11,10 +11,10 @@ type Props = {
 export default ({ children }: Props) => {
   const [testState, setTestState] = useState([]);
 
-  interface States {
-    testState: testState;
-    setTestState: setTestState;
-  }
+  const States = {
+    testState: testState,
+    setTestState: setTestState,
+  };
 
   return (
     <StoreContext.Provider value={States}>{children}</StoreContext.Provider>

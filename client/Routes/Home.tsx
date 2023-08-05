@@ -7,6 +7,7 @@ import NavBar from '../Components/NavBar';
 const Home = () => {
   return (
     <>
+      <h1>Hello World!</h1>
       <StatusBar />
       <Dashboard />
       <NavBar />
