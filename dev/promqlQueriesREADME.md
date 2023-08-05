@@ -1,4 +1,4 @@
-# promQL Queries
+# promQL Queries:
 
 - CPU idle by cluster
   sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) -
@@ -50,19 +50,20 @@
   kube*node_status_condition{condition="Ready", status="true"} == 1 ) * count(
   kube*node_status_condition{condition="Ready", status="true"} == 1 and
   kube_node_status_condition{condition="DiskPressure", status="false"} == 1 ) *
-  count( kube*node_status_condition{condition="Ready", status="true"} == 1 and
+  count( kube\*node_status_condition{condition="Ready", status="true"} == 1 and
   kube_node_status_condition{condition="DiskPressure", status="false"} == 1 and
   kube_node_status_condition{condition="MemoryPressure", status="false"} == 1 )
-  * count( kube*node_status_condition{condition="Ready", status="true"} == 1 and
-  kube_node_status_condition{condition="DiskPressure", status="false"} == 1 and
-  kube_node_status_condition{condition="MemoryPressure", status="false"} == 1
-  and kube_node_status_condition{condition="PIDPressure", status="false"} == 1 )
-  * count( kube_node_status_condition{condition="Ready", status="true"} == 1 and
-  kube_node_status_condition{condition="DiskPressure", status="false"} == 1 and
-  kube_node_status_condition{condition="MemoryPressure", status="false"} == 1
-  and kube_node_status_condition{condition="PIDPressure", status="false"} == 1
-  and kube_node_status_condition{condition="NetworkUnavailable", status="false"}
-  == 1 )
+  - count( kube\*node_status_condition{condition="Ready", status="true"} == 1
+    and kube_node_status_condition{condition="DiskPressure", status="false"} ==
+    1 and kube_node_status_condition{condition="MemoryPressure", status="false"}
+    == 1 and kube_node_status_condition{condition="PIDPressure", status="false"}
+    == 1 )
+  - count( kube_node_status_condition{condition="Ready", status="true"} == 1 and
+    kube_node_status_condition{condition="DiskPressure", status="false"} == 1
+    and kube_node_status_condition{condition="MemoryPressure", status="false"}
+    == 1 and kube_node_status_condition{condition="PIDPressure", status="false"}
+    == 1 and kube_node_status_condition{condition="NetworkUnavailable",
+    status="false"} == 1 )
 
 ## alert manager queries
 

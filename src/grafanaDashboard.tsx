@@ -1,7 +1,7 @@
 import React from 'react';
 
 //configuration file that has the values stored for users
-// import config from './config';
+// import config from './config';  l
 
 class SampleDashboard extends React.Component {
   render() {
