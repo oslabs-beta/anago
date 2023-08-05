@@ -53,8 +53,6 @@ Note: (Notes on the importance of the region, etc.)
    `kubectl create deployment [Depl-name] --image=[180202761917.dkr.ecr.us-east-2.amazonaws.com/pithy]`
 2. `kubectl get svc` should surface the Service’s external IP, now accessible
 
-## Prometheus + grafana
-
 ## Prometheus + grafana (using Helm)
 
 1. Add the prometheus-community Helm repo and update Helm:
@@ -90,8 +88,22 @@ To find your remote write endpoint, username, and password, navigate to your sta
 
 1.  use kubectl to create a Kubernetes Secret (called kubepromsecret) to store your Grafana Cloud Prometheus username and password
     `kubectl create secret generic kubepromsecret \ --from-literal=username=[your_grafana_cloud_prometheus_username]\ --from-literal=password='[your_grafana_cloud_API_key]'\ -n [namespace]`
-2.  in VS code, create a values.yaml file and add this snippet to define a new Prometheus' remote_write configuration to the Kube-Prometheus release: > prometheus: > prometheusSpec: > remoteWrite: > - url: "<Your Cloud Prometheus instance remote_write endpoint>" > basicAuth: > username: > name: kubepromsecret > key: username > password: > name: kubepromsecret > key: password > > replicaExternalLabelName: "**replica**" > externalLabels: {cluster: "[clustername]"}
-    NOTE: this snippet will set the remote_write url and use the username and password from the Kubernetes Secret
+2.  in VS code, create a values.yaml file and add this snippet to define a new Prometheus' remote_write configuration to the Kube-Prometheus release: > prometheus:
+    > prometheusSpec:
+    > remoteWrite:
+    >
+    > - url: "<Your Cloud Prometheus instance remote_write endpoint>"
+    >   basicAuth:
+    >   username:
+    >   name: kubepromsecret
+    >   key: username
+    >   password:
+    >   name: kubepromsecret
+    >   key: password
+    >
+    > replicaExternalLabelName: "**replica**"
+    > externalLabels: {cluster: "[clustername]"}
+        NOTE: this snippet will set the remote_write url and use the username and password from the Kubernetes Secret
 3.  save and close the file
 4.  apply the yaml file in the anago folder with the corrent file path:
     `helm upgrade -f dev/values.yaml [release_name]prometheus-community/kube-prometheus-stack -n [namespace]`
