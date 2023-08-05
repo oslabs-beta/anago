@@ -9,12 +9,15 @@ const Home = () => {
     if (heading === 'Server works!') {
       return setHeading('Does the server work?');
     }
-    fetch('/api/message', {
+    fetch('/api/user', {
       method: 'GET',
     })
-      .then(res => res.json())
-      .then(res => setHeading('Server works!'))
-      .catch(err => console.log(err));
+      .then((res) => res.json())
+      .then((res) => {
+        setHeading('Server works!');
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
