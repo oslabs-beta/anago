@@ -56,7 +56,14 @@ Note: (Notes on the importance of the region, etc.)
    `kubectl create deployment [Depl-name] --image=[180202761917.dkr.ecr.us-east-2.amazonaws.com/pithy]`
 2. `kubectl get svc` should surface the Service’s external IP, now accessible
 
-## Prometheus + grafana
+## Make the Metrics available
+
+1. Connect to your desired EKS cluster
+   `aws eks --region region update-kubeconfig --name cluster_name`
+2. Run the configuration to deploy the metrics server
+   `kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`
+3. Check to see that the Metrics Pod is up and running and that the /metrics
+   endpoint is exposed `kubectl get pods -n kube-system`
 
 ## Prometheus + grafana (using Helm)
 
