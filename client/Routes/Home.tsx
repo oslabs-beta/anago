@@ -1,12 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
-//import { StoreContext } from '../routes/dataStore.js';
 import Dashboard from '../Components/Dashboard';
 import StatusBar from '../Components/StatusBar';
 import NavBar from '../Components/NavBar';
 
 const Home = () => {
+  const [heading, setHeading] = useState('Does the server work?');
+  const handleClick = () => {
+    if (heading === 'Server works!') {
+      return setHeading('Does the server work?');
+    }
+    fetch('/api/message', {
+      method: 'GET',
+    })
+      .then(res => res.json())
+      .then(res => setHeading('Server works!'))
+      .catch(err => console.log(err));
+  };
+
   return (
     <>
+      <h1>{heading}</h1>
+      <button onClick={handleClick}>Test Server</button>
       <StatusBar />
       <Dashboard />
       <NavBar />
