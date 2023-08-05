@@ -4,7 +4,7 @@ import { StoreContext } from '../stateStore';
 
 const Dashboard = () => {
     return (
-
+        <></>
     )
 }
 

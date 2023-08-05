@@ -4,7 +4,7 @@ import { StoreContext } from '../stateStore';
 
 const StatusBar = () => {
     return (
-
+        <></>
     )
 }
 
