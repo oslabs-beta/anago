@@ -1,14 +1,10 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Response } from 'express';
+import userDataController from '../controllers/userDataController.js';
+
 const userRouter = express.Router();
 
-
-userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    // make some user info fetch
-    console.log(req.body);
-    res.locals.data = { data: 'Placeholder' };
-    next();
-  }
-);
-
+userRouter.get('/', userDataController.sendUserData, (_, res: Response) => {
+  res.status(200).json(res.locals.userData);
+});
 
 export default userRouter;
