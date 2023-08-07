@@ -3,21 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../stateStore';
 import MetricDisplay from './MetricDisplay';
 
-
-
 const Dashboard = () => {
+  let metrics: any[] = [];
 
-    useEffect(()=>{
-
-    }, [])
-  
-    const metrics = [];
-
-    return (
-        <>
-        {metrics}
-        </>
-    )
-}
+  return <>{metrics}</>;
+};
 
 export default Dashboard;
