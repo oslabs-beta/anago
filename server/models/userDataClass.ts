@@ -3,21 +3,51 @@ import { randomUUID } from 'crypto';
 export class UserData {
   userId: string;
   clusters: Cluster[];
+  dashboards: Dashboard[];
+  metrics: any;
+  addMetric(
+    metricName: string,
+    lookupType: LookupType,
+    queryOptions?: any,
+    dashboardNumber = 0
+  ): string {
+    const newMetric = new Metric(metricName, lookupType, queryOptions);
+    this.dashboards[dashboardNumber].metrics.push(newMetric.metricId);
+    this.metrics[newMetric.metricId] = newMetric;
+    return newMetric.metricId;
+  }
   constructor() {
     this.userId = randomUUID();
     this.clusters = [];
+    this.dashboards = [];
+    this.metrics = {};
+    const firstDash = new Dashboard('Kubernetes Dashboard');
+    this.dashboards.push(firstDash);
   }
 }
+
+// fetch('/api/data/6') --> backend should return a data object that the frontend can print into a Line graph component exactly as is
+
+// userData.cluster.metrics[6] -> request
 
 export class Cluster {
   clusterId: string;
   clusterName: string;
   clusterUrl: string;
-  metrics: Metric[];
   constructor(clusterName: string, clusterUrl: string) {
     this.clusterId = randomUUID();
     this.clusterName = clusterName;
     this.clusterUrl = clusterUrl;
+  }
+}
+
+export class Dashboard {
+  dashboardId: string;
+  dashboardName: string;
+  metrics: string[];
+  constructor(dashboardName: string) {
+    this.dashboardId = randomUUID();
+    this.dashboardName = dashboardName;
     this.metrics = [];
   }
 }
@@ -32,8 +62,8 @@ export class Metric {
   constructor(metricName: string, lookupType: LookupType, queryOptions?: any) {
     this.metricId = randomUUID();
     this.metricName = metricName;
-    this.lookupType = lookupType;
-    this.graphType = graphForQuery(lookupType);
+    this.lookupType = lookupType; // LookupType.MemoryUsed
+    this.graphType = graphForQuery(lookupType); // GraphyType.LineGraph
     this.queryOptions = queryOptions;
     this.searchQuery = queryBuilder(this.lookupType, this.queryOptions);
   }

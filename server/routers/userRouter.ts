@@ -7,4 +7,6 @@ userRouter.get('/', userDataController.sendUserData, (_, res: Response) => {
   res.status(200).json(res.locals.userData);
 });
 
+// userRouter.post('/newMetric')
+
 export default userRouter;
