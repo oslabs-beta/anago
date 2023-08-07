@@ -8,6 +8,7 @@ userDataController.sendUserData = (
   res: Response,
   next: NextFunction
 ) => {
+  //userData = userId, clusters[], dashboards[], metrics{}
   res.locals.userData = userData;
   next();
 };

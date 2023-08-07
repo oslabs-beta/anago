@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Route handlers
+// one visualization group array[0];
 app.use('/api/data', dataRouter);
 app.use('/api/user', userRouter);
 
