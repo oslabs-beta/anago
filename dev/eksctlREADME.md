@@ -71,10 +71,7 @@ Note: (Notes on the importance of the region, etc.)
    `helm repo add prometheus-community https://prometheus-community.github.io/helm-charts`
    `helm repo update`
 2. Install the prometheus-community Helm repo with a desired release name(i.e.'prometheus') in a created namespace(i.e. 'monitoring'). Also, install the alert manager. For example:
-   > helm install prometheus prometheus-community/kube-prometheus-stack \
-   > --namespace monitoring \
-   > --create-namespace \
-   > --set alertmanager.persistentVolume.storageClass="gp2",server.persistentVolume.storageClass="gp2"
+   `helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace --set alertmanager.persistentVolume.storageClass="gp2",server.persistentVolume.storageClass="gp2"`
 
 NOTE: after the Helm chart has been installed, you should see this:
 
