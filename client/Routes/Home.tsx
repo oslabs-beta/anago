@@ -3,7 +3,14 @@ import Dashboard from '../Components/Dashboard';
 import StatusBar from '../Components/StatusBar';
 import NavBar from '../Components/NavBar';
 
+
+import { StoreContext } from '../stateStore';
+import userData from '../../server/models/defaultUserData';
+
 const Home = () => {
+
+  const {hasFetchedUserData, setHasFetchedUserData, currentDashboard, setCurrentDashboard, currentUser, setCurrentUser}: any = useContext(StoreContext);
+
   const [heading, setHeading] = useState('Does the server work?');
   const handleClick = () => {
     if (heading === 'Server works!') {
@@ -19,6 +26,26 @@ const Home = () => {
       })
       .catch((err) => console.log(err));
   };
+
+
+
+  useEffect( () => {
+
+    fetch('/api/user', {
+      method: 'GET'
+    })
+    .then((res)=>res.json())
+    .then(userData=>{
+      setCurrentUser(userData);
+      setHasFetchedUserData(true);
+      setCurrentDashboard(userData.dashboard[0])
+    })
+    .catch((err)=>{console.log(err)})
+  
+
+  }, hasFetchedUserData)
+
+
 
   return (
     <>
