@@ -41,13 +41,13 @@ type yAxis = {
 };
 // object to send to front end to plot on a graph
 type plotData = {
-  xAxis: Date[];
+  labels: Date[];
   dataSets: yAxis[];
 };
 
 /* EXAMPLE plotData
 {
-  xAxis: [arrayOfXValues]
+  labels: [arrayOfXValues]
   dataSets: [
     {
      label: ‘pod 1’,
@@ -86,18 +86,18 @@ const promApiController: any = {
 
     // initialize object to store scraped metrics
     const promMetrics: plotData = {
-      xAxis: [],
+      labels: [],
       dataSets: [],
     };
     try {
       // query Prometheus
       const response = await fetch(
-        promURLRange + query + startQuery + endQuery + stepQuery,
+        promURLRange + query + startQuery + endQuery + stepQuery
       );
       // TODO: should it have different helper functions that process the data depending on the "resultType"? will all range queries be of the type "matrix"?
       // parse response
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       // if the prometheus query response indicates a failure, then send an error message
       if (data.status === 'failure') {
         return next({
@@ -106,7 +106,7 @@ const promApiController: any = {
           message: { err: 'Error retreiving metrics' },
         });
       } else {
-        console.log(data.data);
+        //console.log(data.data);
 
         data.data.result.forEach(
           (obj: { metric: { namespace: string }; values: any[][] }) => {
@@ -116,12 +116,12 @@ const promApiController: any = {
               data: [],
             };
             // populate the data for the promMeterics x-axis one time
-            if (promMetrics.xAxis.length === 0) {
+            if (promMetrics.labels.length === 0) {
               obj.values.forEach((arr: any[]) => {
                 const utcSeconds = arr[0];
                 const d = new Date(0); //  0 sets the date to the epoch
                 d.setUTCSeconds(utcSeconds);
-                promMetrics.xAxis.push(d);
+                promMetrics.labels.push(d);
               });
             }
             // populate the y-axis object with the scraped metrics
@@ -130,7 +130,7 @@ const promApiController: any = {
               yAxis.data.push(Number(arr[1]));
             });
             promMetrics.dataSets.push(yAxis);
-          },
+          }
         );
         res.locals.promMetrics = promMetrics;
         return next();
