@@ -70,26 +70,33 @@ Note: (Notes on the importance of the region, etc.)
 1. Add the prometheus-community Helm repo and update Helm:
    `helm repo add prometheus-community https://prometheus-community.github.io/helm-charts`
    `helm repo update`
-2. Install the prometheus-community Helm repo with a desired release name(i.e.'prometheus') in a created namespace(i.e. 'monitoring'). Also, install the alert manager. For example:
+2. Install the prometheus-community Helm repo with a desired release
+   name(i.e.'prometheus') in a created namespace(i.e. 'monitoring'). Also,
+   install the alert manager. For example:
    `helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace --set alertmanager.persistentVolume.storageClass="gp2",server.persistentVolume.storageClass="gp2"`
 
 NOTE: after the Helm chart has been installed, you should see this:
 
-> NAME: [release-name]
-> LAST DEPLOYED: [date]
-> NAMESPACE: [namespace]
-> default STATUS: deployed REVISION: 1 NOTES: kube-prometheus-stack has beeninstalled.
-> Check its status by running: kubectl --namespace default get pods -l "release=[namespace]" Refer to https://github.com/prometheus-operator/kube-prometheus for instructions on how to create and configure Alertmanager and Prometheus instances using the Operator.
+> NAME: [release-name] LAST DEPLOYED: [date] NAMESPACE: [namespace] default
+> STATUS: deployed REVISION: 1 NOTES: kube-prometheus-stack has beeninstalled.
+> Check its status by running: kubectl --namespace default get pods -l
+> "release=[namespace]" Refer to
+> https://github.com/prometheus-operator/kube-prometheus for instructions on how
+> to create and configure Alertmanager and Prometheus instances using the
+> Operator.
 
 3. use kubectl to see what is installed in the cluster:
-   `kubectl get pod -n [namespace]`
-   NOTE: you should see all nodes including the
+   `kubectl get pod -n [namespace]` NOTE: you should see all nodes including the
    prometheus stack operator, the alert manager, and grafana
 4. use kubectl to see all services: `kubectl get services -n [namespace]`
 5. to access your prometheus instance, use the kubectl port-forward to forward a
-   local port into the Cluster with the service name. Example (with a service name):
+   local port into the Cluster with the service name. Example (with a service
+   name):
    `kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n [namespace] 4001:9090`
-6. navigate to http://localhost:9090 in your browser. NOTE: you should see the Prometheus web UI. Click Status, then Targets to see a list of preconfigured scrape targets. You can use a similar procedure to access the Grafana and Alertmanager web interfaces.
+6. navigate to http://localhost:9090 in your browser. NOTE: you should see the
+   Prometheus web UI. Click Status, then Targets to see a list of preconfigured
+   scrape targets. You can use a similar procedure to access the Grafana and
+   Alertmanager web interfaces.
 
 ## sending metrics to grafana cloud
 
@@ -100,22 +107,17 @@ and click Details next to the Prometheus panel.
 1.  use kubectl to create a Kubernetes Secret (called kubepromsecret) to store
     your Grafana Cloud Prometheus username and password
     `kubectl create secret generic kubepromsecret --from-literal=username=[username]} --from-literal=password=[API_TOKEN] -n monitoring`
-2.  in VS code, create a values.yaml file or update the current one and add this snippet to define a new Prometheus' remote_write configuration to the Kube-Prometheus release:
-    > prometheus:
-    > prometheusSpec:
-    > remoteWrite:
+2.  in VS code, create a values.yaml file or update the current one and add this
+    snippet to define a new Prometheus' remote_write configuration to the
+    Kube-Prometheus release:
+    > prometheus: prometheusSpec: remoteWrite:
     >
-    > - url: "<Your Cloud Prometheus instance remote_write endpoint>"
-    >   basicAuth:
-    >   username:
-    >   name: kubepromsecret
-    >   key: username
-    >   password:
-    >   name: kubepromsecret
-    >   key: password
+    > - url: "<Your Cloud Prometheus instance remote_write endpoint>" basicAuth:
+    >   username: name: kubepromsecret key: username password: name:
+    >   kubepromsecret key: password
     >
-    > replicaExternalLabelName: "**replica**"
-    > externalLabels: {cluster: "[clustername]"}
+    > replicaExternalLabelName: "**replica**" externalLabels: {cluster:
+    > "[clustername]"}
             NOTE: this snippet will set the remote_write url and use the username and password from the Kubernetes Secret
 3.  save and close the file
 4.  apply the yaml file in the anago folder with the corrent file path:
@@ -124,7 +126,7 @@ and click Details next to the Prometheus panel.
     `helm list -n [namespace]`
 5.  after applying those changes, use port-forward to navigate to the prometheus
     UI using the correct service:
-    `kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n [namespace] 4001:9090`
+    `kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n [namespace] 9090`
 6.  Navigate to http://localhost:9090 in your browser, and then click Status and
     Configuration. Verify that the remote_write block you appended above has
     propagated to your running Prometheus instance.
