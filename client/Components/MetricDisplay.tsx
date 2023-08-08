@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StoreContext } from '../stateStore';
+import { Props, StoreContext } from '../stateStore';
+import { MetricProps } from '../types';
 
 const MetricDisplay = () => {
   const { currentMetrics }: any = useContext(StoreContext);
-  console.log(currentMetrics);
+  //console.log(currentMetrics);
 
   return <div className="metric-display">Metric Display</div>;
 };

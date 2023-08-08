@@ -6,7 +6,7 @@ import MetricDisplay from './MetricDisplay';
 const NavBar = () => {
   return (
     <>
-      <MetricDisplay />
+      
     </>
   );
 };

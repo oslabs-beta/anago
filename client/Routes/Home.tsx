@@ -3,13 +3,18 @@ import Dashboard from '../Components/Dashboard';
 import StatusBar from '../Components/StatusBar';
 import NavBar from '../Components/NavBar';
 
-
 import { StoreContext } from '../stateStore';
 import userData from '../../server/models/defaultUserData';
 
 const Home = () => {
-
-  const {hasFetchedUserData, setHasFetchedUserData, currentDashboard, setCurrentDashboard, currentUser, setCurrentUser}: any = useContext(StoreContext);
+  const {
+    hasFetchedUserData,
+    setHasFetchedUserData,
+    currentDashboard,
+    setCurrentDashboard,
+    currentUser,
+    setCurrentUser,
+  }: any = useContext(StoreContext);
 
   const [heading, setHeading] = useState('Does the server work?');
   const handleClick = () => {
@@ -19,31 +24,35 @@ const Home = () => {
     fetch('/api/user', {
       method: 'GET',
     })
-      .then((res) => res.json())
-      .then((res) => {
+      .then(res => res.json())
+      .then(res => {
         setHeading('Server works!');
-        console.log(res);
+        //console.log(res);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
-
-
-  useEffect( () => {
-
+  useEffect(() => {
     fetch('/api/user', {
-      method: 'GET'
+      method: 'GET',
     })
-    .then((res)=>res.json())
-    .then(userData=>{
-      setCurrentUser(userData);
-      setHasFetchedUserData(true);
-      setCurrentDashboard(userData.dashboard[0])
-    })
-    .catch((err)=>{console.log(err)})
-  
+      .then(res => res.json())
+      .then(userData => {
+        setCurrentUser(userData);
+        setHasFetchedUserData(true);
+        setCurrentDashboard(userData.dashboards[0]);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
 
-  }, hasFetchedUserData)
+  //test useEffect fetch
+  console.log('in the body', currentUser);
+  console.log('in the body', currentDashboard);
+  console.log(hasFetchedUserData);
+
+
 
 
 

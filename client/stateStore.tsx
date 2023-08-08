@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 export const StoreContext = React.createContext({});
 
 //creating the type for the children components passed into the state store function
-type Props = {
+export type Props = {
   children: React.ReactNode;
 };
 
