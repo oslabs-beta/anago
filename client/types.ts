@@ -4,6 +4,16 @@ export type ServerError = {
   message: { err: string };
 };
 
+export type MetricProps = {
+  graphType: number;
+  lookupType: number;
+  metricId: string;
+  metricName: string;
+  searchQuery: string;
+
+}
+
+
 type AppProps = {
   message: string;
   count: number;

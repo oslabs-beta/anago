@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: pithy-container
-          image: 180202761917.dkr.ecr.us-east-2.amazonaws.com/pithy
+          image: 180202761917.dkr.ecr.us-east-2.amazonaws.com/pithy:latest
           ports:
             - containerPort: 3000
