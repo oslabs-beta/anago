@@ -30,7 +30,7 @@ Alerts queries:
 /*
  You can URL-encode additional parameters directly in the request body by using the POST method and Content-Type: application/x-www-form-urlencoded header. This is useful when specifying a large query that may breach server-side URL character limits 
  */
-import userData from '../models/defaultUserData';
+import userData from '../models/defaultUserData.js';
 import { Metric } from '../models/userDataClass.js';
 //  types
 import type { Request, Response, NextFunction } from 'express';
@@ -73,11 +73,10 @@ const promApiController: any = {
   getRangeMetrics: async (req: Request, res: Response, next: NextFunction) => {
     // retrieve metricId from request query parameter
     const metricId = req.params.id;
-    //console.log('req.params.id: ', req.params.id);
 
     // prometheues query string components
     // TODO: use metric id to get the metric.searchQuery -> uncomment the line below and comment out the hard coded query
-    // const query = userData.metrics[metricId][searchQuery];
+    // const query = userData.metrics[metricId].searchQuery;
     const query = 'sum by (namespace) (kube_pod_info)';
     const end = Math.floor(Date.now() / 1000); // current date and time
     const start = end - 86400; // 24 hours ago
