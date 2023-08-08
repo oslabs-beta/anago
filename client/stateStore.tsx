@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 export const StoreContext = React.createContext({});
 
 //creating the type for the children components passed into the state store function
-type Props = {
+export type Props = {
   children: React.ReactNode;
 };
 
@@ -12,6 +12,9 @@ export default ({ children }: Props) => {
   const [currentMetrics, setCurrentMetrics] = useState<String[]>([]);
   const [currentCluster, setCurrentCluster] = useState('');
   const [clusterCache, setClusterCache] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
+  const [currentDashboard, setCurrentDashboard] = useState({});
+  const [hasFetchedUserData, setHasFetchedUserData] = useState(false);
 
   const States = {
     currentMetrics: currentMetrics,
@@ -20,6 +23,12 @@ export default ({ children }: Props) => {
     setCurrentCluster: setCurrentCluster,
     clusterCache: clusterCache,
     setClusterCache: setClusterCache,
+    currentUser: currentUser,
+    setCurrentUser: setCurrentUser,
+    currentDashboard: currentDashboard,
+    setCurrentDashboard: setCurrentDashboard,
+    hasFetchedUserData: hasFetchedUserData,
+    setHasFetchedUserData: setHasFetchedUserData,
   };
 
   return (

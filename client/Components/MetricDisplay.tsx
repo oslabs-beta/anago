@@ -1,5 +1,6 @@
-import React, { Suspense, useContext, useEffect, useState } from 'react';
-import { StoreContext } from '../stateStore';
+import React, { useContext, useEffect, useState } from 'react';
+import { Props, StoreContext } from '../stateStore';
+import { MetricProps } from '../types';
 import { Line } from 'react-chartjs-2';
 
 const MetricDisplay = ({ metricId }) => {
