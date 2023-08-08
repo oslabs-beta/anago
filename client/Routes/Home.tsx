@@ -13,8 +13,8 @@ const Home = () => {
     setCurrentDashboard,
     currentUser,
     setCurrentUser,
-    currentMetrics, 
-    setCurrentMetrics
+    currentMetrics,
+    setCurrentMetrics,
   }: any = useContext(StoreContext);
 
   const [heading, setHeading] = useState('Does the server work?');
@@ -23,7 +23,7 @@ const Home = () => {
       'current metrics type: ',
       typeof currentMetrics,
       'currentMetrics:',
-      currentMetrics
+      currentMetrics,
     );
     if (heading === 'Server works!') {
       return setHeading('Does the server work?');
@@ -31,8 +31,8 @@ const Home = () => {
     fetch('/api/user', {
       method: 'GET',
     })
-      .then((res) => res.json())
-      .then((res) => {
+      .then(res => res.json())
+      .then(res => {
         setCurrentMetrics(res.dashboards[0].metrics);
         setHeading('Server works!');
         console.log('Got some data:', res.dashboards[0].metrics);
@@ -59,10 +59,6 @@ const Home = () => {
   console.log('in the body', currentUser);
   console.log('in the body', currentDashboard);
   console.log(hasFetchedUserData);
-
-
-
-
 
   return (
     <>
