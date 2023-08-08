@@ -6,8 +6,7 @@ import { Metric } from '../../server/models/userDataClass';
 import MetricDisplay from './MetricDisplay';
 
 const Dashboard = () => {
-  const { currentDashboard, currentMetrics, setCurrentMetrics }: any =
-    useContext(StoreContext);
+  const { currentDashboard }: any = useContext(StoreContext);
 
   console.log('in dashboard component', currentDashboard);
   /*
@@ -38,13 +37,14 @@ const Dashboard = () => {
   const [displayMetrics, setDisplayMetrics] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
-    const newDisplayMetrics = currentMetrics.map((el) => {
+    const newDisplayMetrics = currentDashboard.map((el:string) => {
       console.log('adding a metric display');
-      return <MetricDisplay metricId={el} />;
+      return <MetricDisplay metricId={el} key={el} />;
     });
-    console.log('settingDisplayMetrics', newDisplayMetrics);
+
+    // setDisplayMetrics([<MetricDisplay metricId={1} key={1} />])
     setDisplayMetrics(newDisplayMetrics);
-  }, [currentMetrics]);
+  }, []);
 
   return <div className="gallery-container">{displayMetrics}</div>;
 };
