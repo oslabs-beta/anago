@@ -35,17 +35,13 @@ const Dashboard = () => {
   );*/
 
   const [displayMetrics, setDisplayMetrics] = useState<JSX.Element[]>([]);
-
   useEffect(() => {
     const newDisplayMetrics = currentDashboard.map((el:string) => {
       console.log('adding a metric display');
       return <MetricDisplay metricId={el} key={el} />;
     });
-
-    // setDisplayMetrics([<MetricDisplay metricId={1} key={1} />])
     setDisplayMetrics(newDisplayMetrics);
   }, []);
-
   return <div className="gallery-container">{displayMetrics}</div>;
 };
 

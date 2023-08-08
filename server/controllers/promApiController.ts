@@ -42,7 +42,7 @@ type yAxis = {
 // object to send to front end to plot on a graph
 type plotData = {
   labels: Date[];
-  dataSets: yAxis[];
+  datasets: yAxis[];
 };
 
 /* EXAMPLE plotData
@@ -87,7 +87,7 @@ const promApiController: any = {
     // initialize object to store scraped metrics
     const promMetrics: plotData = {
       labels: [],
-      dataSets: [],
+      datasets: [],
     };
     try {
       // query Prometheus
@@ -129,7 +129,7 @@ const promApiController: any = {
             obj.values.forEach((arr: any[]) => {
               yAxis.data.push(Number(arr[1]));
             });
-            promMetrics.dataSets.push(yAxis);
+            promMetrics.datasets.push(yAxis);
           }
         );
         res.locals.promMetrics = promMetrics;
