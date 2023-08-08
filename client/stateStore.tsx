@@ -9,7 +9,7 @@ export type Props = {
 
 //declaring the parameter type Props to assign children to a ReactNode type
 export default ({ children }: Props) => {
-  const [currentMetrics, setCurrentMetrics] = useState(['']);
+  const [currentMetrics, setCurrentMetrics] = useState<String[]>([]);
   const [currentCluster, setCurrentCluster] = useState('');
   const [clusterCache, setClusterCache] = useState({});
   const [currentUser, setCurrentUser] = useState({});

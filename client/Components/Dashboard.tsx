@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { JSX } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Props, StoreContext } from '../stateStore';
 import { Metric } from '../../server/models/userDataClass';
 import MetricDisplay from './MetricDisplay';
 
-const Dashboard = (props: Props) => {
+const Dashboard = () => {
   const { currentDashboard, currentMetrics, setCurrentMetrics }: any =
     useContext(StoreContext);
 
   console.log('in dashboard component', currentDashboard);
-
+  /*
   const metricIds = [...currentDashboard.metrics];
   console.log(metricIds);
 
@@ -32,7 +33,20 @@ const Dashboard = (props: Props) => {
       "I am in the dashboard"
       {metrics}
     </div>
-  );
+  );*/
+
+  const [displayMetrics, setDisplayMetrics] = useState<JSX.Element[]>([]);
+
+  useEffect(() => {
+    const newDisplayMetrics = currentMetrics.map((el) => {
+      console.log('adding a metric display');
+      return <MetricDisplay metricId={el} />;
+    });
+    console.log('settingDisplayMetrics', newDisplayMetrics);
+    setDisplayMetrics(newDisplayMetrics);
+  }, [currentMetrics]);
+
+  return <div className="gallery-container">{displayMetrics}</div>;
 };
 
 export default Dashboard;
