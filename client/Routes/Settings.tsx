@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../stateStore';
 
-const Login = () => {
-  return <>This is the login page</>;
+const Settings = () => {
+  return <>This is the settings page</>;
 };
 
-export default Login;
+export default Settings;

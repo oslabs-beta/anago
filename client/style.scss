@@ -127,3 +127,22 @@ button:focus-visible {
   justify-content: center;
   margin: 5px;
 }
+
+header nav {
+  display: flex;
+  justify-content: end;
+  gap: 16px;
+  max-width: 100%;
+  margin: 0 auto;
+  position: fixed;
+  top: 150px;
+}
+header nav h1 {
+  margin-right: 0;
+
+}
+
+header nav a {
+  padding: 6px;
+  border-radius: 4px;
+}
