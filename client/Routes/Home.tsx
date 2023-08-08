@@ -12,12 +12,12 @@ const Home = () => {
     fetch('/api/user', {
       method: 'GET',
     })
-      .then((res) => res.json())
-      .then((res) => {
+      .then(res => res.json())
+      .then(res => {
         setHeading('Server works!');
         console.log(res);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   return (

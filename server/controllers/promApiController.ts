@@ -41,7 +41,7 @@ type yAxis = {
 };
 // object to send to front end to plot on a graph
 type plotData = {
-  xAxis: number[];
+  xAxis: Date[];
   dataSets: yAxis[];
 };
 
@@ -68,7 +68,7 @@ const promURLRange = promURL + 'query_range?query=';
 // TODO: update alerts url if needed
 const promURLAlerts = promURL + 'alerts';
 
-const promApiController: object = {
+const promApiController: any = {
   // query prometheus for data over a specified range of time
   getRangeMetrics: async (req: Request, res: Response, next: NextFunction) => {
     // retrieve metricId from request query parameter
@@ -98,6 +98,7 @@ const promApiController: object = {
       // TODO: should it have different helper functions that process the data depending on the "resultType"? will all range queries be of the type "matrix"?
       // parse response
       const data = await response.json();
+      console.log(data);
       // if the prometheus query response indicates a failure, then send an error message
       if (data.status === 'failure') {
         return next({
@@ -118,7 +119,10 @@ const promApiController: object = {
             // populate the data for the promMeterics x-axis one time
             if (promMetrics.xAxis.length === 0) {
               obj.values.forEach((arr: any[]) => {
-                promMetrics.xAxis.push(arr[0]);
+                const utcSeconds = arr[0];
+                const d = new Date(0); //  0 sets the date to the epoch
+                d.setUTCSeconds(utcSeconds);
+                promMetrics.xAxis.push(d);
               });
             }
             // populate the y-axis object with the scraped metrics
