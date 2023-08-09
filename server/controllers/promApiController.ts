@@ -71,13 +71,14 @@ const promURLAlerts = promURL + 'alerts';
 const promApiController: any = {
   // query prometheus for data over a specified range of time
   getRangeMetrics: async (req: Request, res: Response, next: NextFunction) => {
+    console.log('inside promAPI controller')
     // retrieve metricId from request query parameter
     const metricId = req.params.id;
-
+    console.log('here is the metricId', metricId)
     // prometheues query string components
     // TODO: use metric id to get the metric.searchQuery -> uncomment the line below and comment out the hard coded query
-    // const query = userData.metrics[metricId].searchQuery;
-    const query = 'sum by (namespace) (kube_pod_info)';
+    const query = userData.metrics[metricId].searchQuery;
+    //const query = 'sum by (namespace) (kube_pod_info)';
     const end = Math.floor(Date.now() / 1000); // current date and time
     const start = end - 86400; // 24 hours ago
     const endQuery = `&end=${end}`;
@@ -90,6 +91,7 @@ const promApiController: any = {
       dataSets: [],
     };
     try {
+      console.log('inside promAPI try')
       // query Prometheus
       const response = await fetch(
         promURLRange + query + startQuery + endQuery + stepQuery
@@ -97,7 +99,7 @@ const promApiController: any = {
       // TODO: should it have different helper functions that process the data depending on the "resultType"? will all range queries be of the type "matrix"?
       // parse response
       const data = await response.json();
-      //console.log(data);
+      console.log(data);
       // if the prometheus query response indicates a failure, then send an error message
       if (data.status === 'failure') {
         return next({

@@ -2,12 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Props, StoreContext } from '../stateStore';
 import { MetricProps } from '../types';
 
-const MetricDisplay = {
+const MetricDisplay = ()=> {
 
   return (
     <div>
-    <p>This is a metric</p>
-    console.log(metricData)
+    <h1>This is a metric</h1>
     </div>
   )
 
