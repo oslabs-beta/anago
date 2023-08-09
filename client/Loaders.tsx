@@ -2,15 +2,11 @@ import { redirect } from 'react-router-dom';
 import { StoreContext } from './stateStore';
 import { useContext } from 'react';
 
-
-export const dashboardLoader = async ({params}) => {
-    
-    
-    const res = await fetch('/api/user', {
-        method: 'GET'
-    })
-
-}
+export const dashboardLoader = async ({ params }) => {
+  const res = await fetch('/api/user', {
+    method: 'GET',
+  });
+};
 
 //     return res.json();
 
@@ -30,16 +26,13 @@ export const dashboardLoader = async ({params}) => {
 // }
 
 export const userLoader = async () => {
-    const {setHasFetchedUserData}: any = useContext(StoreContext);
   const res = await fetch('/api/user', {
     method: 'GET',
-  })
-  setHasFetchedUserData(true);
- return res.json()
-//   const userData = await res.json();
-//   console.log('this is Userdata', userData.dashboards)
-//   return userData;
-  
+  });
+  return res.json();
+  //   const userData = await res.json();
+  //   console.log('this is Userdata', userData.dashboards)
+  //   return userData;
 };
 
 export const alertLoader = async () => {

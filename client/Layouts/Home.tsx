@@ -17,14 +17,18 @@ export default function Home() {
     setHasFetchedUserData,
     currentDashboard,
     setCurrentDashboard,
+    currentUser,
+    setCurrentUser
   }: any = useContext(StoreContext);
 
-  
   const dashboards = userData.dashboards;
-  if (userData) setCurrentDashboard(dashboards);
+
+  setCurrentUser(userData);
+  setHasFetchedUserData(true);
+  setCurrentDashboard(dashboards[0])
+  
 
   console.log('has fetched', hasFetchedUserData)
-
   console.log('we are in home', dashboards);
 
 
