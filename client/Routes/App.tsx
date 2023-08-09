@@ -32,19 +32,16 @@ import * as loaders from '../Loaders';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Home />} loader={loaders.userLoader}>
-      <Route path =':id' element={<Dashboard />} loader={loaders.metricsLoader}/>
+      <Route path ='default' element={<Dashboard />}/>
+      <Route path =':id' element={<Dashboard />}/>
         
 
     
       
 
       <Route path='login' element={<Login />} />
-      {/* <Route path='settings' element={<Settings />}>
-        {/*can add nested children routes here, for example
-        <Route path="clusters">
-        <Route path="queries"> route would be /settings/queries
-        would need to pass in another layout instead of settings component
-       </Route> */}
+      <Route path='settings' element={<Settings />}/>
+    
       
     </Route>,
   ),

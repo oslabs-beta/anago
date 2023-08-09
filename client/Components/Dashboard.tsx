@@ -1,12 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { JSX } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 import { Props, StoreContext } from '../stateStore';
 import { Metric } from '../../server/models/userDataClass';
 import MetricDisplay from './MetricDisplay';
 
 const Dashboard = () => {
   const { currentDashboard }: any = useContext(StoreContext);
+
+  const userData = useLoaderData();
+
 
   console.log('in dashboard component', currentDashboard);
 
@@ -29,8 +32,8 @@ const Dashboard = () => {
 
   return (
     <div>
-      <p>I am in the dashboard</p>
-      {metricIds.map(metricId => {
+      <p>I am in a dashboard</p>
+      {/* {metricIds.map(metricId => {
         try {
           fetch(`/api/data/metrics:${metricId}`, {
             method: 'GET',
@@ -40,7 +43,7 @@ const Dashboard = () => {
         } catch (err) {
           console.log(err);
         }
-      })}
+      })} */}
     </div>
   );
 };
