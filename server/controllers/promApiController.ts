@@ -232,6 +232,7 @@ type plotData = {
   labels: Date[];
   dataSets: yAxis[];
 };
+
 // represents the objects stored in the Prometheus query response results array
 type promResResultElements = {
   metric: {
@@ -268,6 +269,7 @@ type promResponse = {
   };
 };
 
+
 // prometheus http api url's to query
 const promURL = 'http://localhost:9090/api/v1/';
 const promURLInstant = promURL + 'query?query=';
@@ -292,6 +294,7 @@ const promApiController: any = {
     const stepQuery = `&step=1200s`; // data interval
 
     // initialize object to store scraped metrics
+
     const promMetrics: string | plotData = {
       labels: [],
       dataSets: [],
@@ -299,10 +302,12 @@ const promApiController: any = {
     try {
       // query Prometheus
       const response = await fetch(
-        promURLRange + query + startQuery + endQuery + stepQuery,
+        promURLRange + query + startQuery + endQuery + stepQuery
       );
       // TODO: should it have different helper functions that process the data depending on the "resultType"? will all range queries be of the type "matrix"? -> it seems so
       const data = await response.json();
+
+
 
       // if the prometheus query response indicates a failure, then send an error message
       if (data.status === 'failure') {
@@ -311,6 +316,7 @@ const promApiController: any = {
           status: 500,
           message: { err: 'Error retreiving metrics' },
         });
+
       }
       // if no metrics meet the query requirements, then no metrics data will be returned from prometheus
       else if (data.data.result.length === 0) {
@@ -327,12 +333,14 @@ const promApiController: any = {
           };
           // populate the data for the promMeterics x-axis one time
           if (promMetrics.labels.length === 0) {
+
             obj.values.forEach((arr: any[]) => {
               const utcSeconds = arr[0];
               const d = new Date(0); //  0 sets the date to the epoch
               d.setUTCSeconds(utcSeconds);
               promMetrics.labels.push(d);
             });
+
           }
           // populate the y-axis object with the scraped metrics
           yAxis.label = obj.metric.toString();
@@ -341,6 +349,7 @@ const promApiController: any = {
           });
           promMetrics.dataSets.push(yAxis);
         });
+
         res.locals.promMetrics = promMetrics;
         // TODO: should i also send a graph title? could make an object with titles assigned to queries
         return next();
