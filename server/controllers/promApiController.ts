@@ -1,3 +1,4 @@
+// ! PromQL HTTP API
 /* 
 Instant queries: 
   (evaluates an instant query at a single point in time)
@@ -30,9 +31,196 @@ Alerts queries:
 /*
  You can URL-encode additional parameters directly in the request body by using the POST method and Content-Type: application/x-www-form-urlencoded header. This is useful when specifying a large query that may breach server-side URL character limits 
  */
+//  ! Default Queries
+/*
+CPU idle by cluster.
+sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)
+
+"status": "success",
+    "data": {
+        "resultType": "matrix",
+        "result": [
+            {
+                "metric": {},
+                "values": [
+                    [
+                        1691441311,
+                        "0.938050565804171"
+                    ],
+
+Memory idle by cluster. 
+sum((container_memory_usage_bytes{container!="POD",container!=""} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)
+
+    "status": "success",
+    "data": {
+        "resultType": "matrix",
+        "result": [
+            {
+                "metric": {},
+                "values": [
+                    [
+                        1691441311,
+                        "0.5337486267089844"
+                    ],
+
+total percentage of used memory- ONLY SHOWS NODES WITH SET MEMORY LIMIT
+node_memory_Active_bytes/node_memory_MemTotal_bytes*100
+
+
+"status": "success",
+    "data": {
+        "resultType": "matrix",
+        "result": [
+            {
+                "metric": {
+                    "container": "node-exporter",
+                    "endpoint": "http-metrics",
+                    "instance": "192.168.29.101:9100",
+                    "job": "node-exporter",
+                    "namespace": "monitoring",
+                    "pod": "prometheus-prometheus-node-exporter-jtl5g",
+                    "service": "prometheus-prometheus-node-exporter"
+                },
+                "values": [
+                    [
+                        1691441311,
+                        "8.306136341145741"
+                    ],
+            ...
+            {
+                "metric": {
+                    "container": "node-exporter",
+                    "endpoint": "http-metrics",
+                    "instance": "192.168.57.47:9100",
+                    "job": "node-exporter",
+                    "namespace": "monitoring",
+                    "pod": "prometheus-prometheus-node-exporter-mfphb",
+                    "service": "prometheus-prometheus-node-exporter"
+                },
+                "values": [
+                    [        
+
+CPU usage per container LOOK FOR TOTAL
+container_cpu_usage_seconds_total
+
+"status": "success",
+    "data": {
+        "resultType": "matrix",
+        "result": [
+            {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "alertmanager",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod765efbff_6dc5_4564_a538_818f6843fffc.slice/cri-containerd-89be286a3872a39b097bf9d8beb759341201e91d67a73ed442daa82c303fac35.scope",
+                    "image": "quay.io/prometheus/alertmanager:v0.25.0",
+                    "instance": "192.168.57.47:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "89be286a3872a39b097bf9d8beb759341201e91d67a73ed442daa82c303fac35",
+                    "namespace": "monitoring",
+                    "node": "ip-192-168-57-47.us-east-2.compute.internal",
+                    "pod": "alertmanager-prometheus-kube-prometheus-alertmanager-0",
+                    "service": "prometheus-kube-prometheus-kubelet"
+                },
+                "values": [
+                    [
+                        1691441311,
+                        "6.382165545"
+                    ],
+                ...
+                {
+                "metric": {
+                    "__name__": "container_cpu_usage_seconds_total",
+                    "container": "aws-node",
+                    "cpu": "total",
+                    "endpoint": "https-metrics",
+                    "id": "/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod9caf85c2_3cf7_4953_926f_ed0062c5ddd4.slice/cri-containerd-b2b5bd4a8287141af09ff83a2bfafb480b8e1656e4f3393de85802dffe6b99f0.scope",
+                    "image": "602401143452.dkr.ecr-fips.us-east-1.amazonaws.com/amazon-k8s-cni:v1.12.2",
+                    "instance": "192.168.57.47:10250",
+                    "job": "kubelet",
+                    "metrics_path": "/metrics/cadvisor",
+                    "name": "b2b5bd4a8287141af09ff83a2bfafb480b8e1656e4f3393de85802dffe6b99f0",
+                    "namespace": "kube-system",
+                    "node": "ip-192-168-57-47.us-east-2.compute.internal",
+                    "pod": "aws-node-b2bt2",
+                    "service": "prometheus-kube-prometheus-kubelet"
+
+total free disk usage
+node_filesystem_avail_bytes/node_filesystem_size_bytes*100
+
+"status": "success",
+    "data": {
+        "resultType": "matrix",
+        "result": [
+            {
+                "metric": {
+                    "container": "node-exporter",
+                    "device": "/dev/xvda1",
+                    "endpoint": "http-metrics",
+                    "fstype": "xfs",
+                    "instance": "192.168.29.101:9100",
+                    "job": "node-exporter",
+                    "mountpoint": "/",
+                    "namespace": "monitoring",
+                    "pod": "prometheus-prometheus-node-exporter-jtl5g",
+                    "service": "prometheus-prometheus-node-exporter"
+                },
+                "values": [
+                    [
+                        1691441311,
+                        "95.58196094960412"
+                    ],
+            ...
+            {
+                "metric": {
+                    "container": "node-exporter",
+                    "device": "/dev/xvda1",
+                    "endpoint": "http-metrics",
+                    "fstype": "xfs",
+                    "instance": "192.168.57.47:9100",
+                    "job": "node-exporter",
+                    "mountpoint": "/",
+                    "namespace": "monitoring",
+                    "pod": "prometheus-prometheus-node-exporter-mfphb",
+                    "service": "prometheus-prometheus-node-exporter"
+                },
+             diff prom node exporter pods with diff mountpoints
+            27048 LINES OF DATA RETURNED
+
+Number of ready nodes per cluster
+sum(kube_node_status_condition{condition="Ready", status="true"}==1)
+
+{
+    "status": "success",
+    "data": {
+        "resultType": "matrix",
+        "result": [
+            {
+                "metric": {},
+                "values": [
+                    [
+                        1691441311,
+                        "2"
+                    ],
+
+Nodes readiness flapping
+sum(changes(kube_node_status_condition{status="true",condition="Ready"}[15m])) by (node) > 2
+
+{
+    "status": "success",
+    "data": {
+        "resultType": "matrix",
+        "result": []
+    }
+}
+
+*/
 import userData from '../models/defaultUserData.js';
 import { Metric } from '../models/userDataClass.js';
-//  types
+
+//  types:
 import type { Request, Response, NextFunction } from 'express';
 // object containing graph label and y-axis values
 type yAxis = {
@@ -41,25 +229,44 @@ type yAxis = {
 };
 // object to send to front end to plot on a graph
 type plotData = {
-  xAxis: Date[];
+  labels: Date[];
   dataSets: yAxis[];
 };
-
-/* EXAMPLE plotData
-{
-  xAxis: [arrayOfXValues]
-  dataSets: [
-    {
-     label: ‘pod 1’,
-     data: [arrayOfYValues]
-    },
-    {
-     label: pod 2’,
-     data: [arrayOfYValues]
-    }
-  ]
-}
-*/
+// represents the objects stored in the Prometheus query response results array
+type promResResultElements = {
+  metric: {
+    __name__?: string;
+    container?: string;
+    cpu?: string;
+    device?: string;
+    endpoint?: string;
+    fstype?: string;
+    id?: string;
+    image?: string;
+    instance?: string;
+    job?: string;
+    metrics_path?: string;
+    mountpoint?: string;
+    name?: string;
+    namespace?: string;
+    node?: string;
+    pod?: string;
+    service?: string;
+  };
+  values: any[][];
+};
+// object representing the Prometheus query response object
+type promResponse = {
+  status: 'success' | 'error';
+  // only returned if status is "error"
+  errorType?: string;
+  error?: string;
+  // may or may not be included if the status is an error
+  data?: {
+    resultType: string;
+    result: promResResultElements[];
+  };
+};
 
 // prometheus http api url's to query
 const promURL = 'http://localhost:9090/api/v1/';
@@ -76,8 +283,8 @@ const promApiController: any = {
 
     // prometheues query string components
     // TODO: use metric id to get the metric.searchQuery -> uncomment the line below and comment out the hard coded query
-    // const query = userData.metrics[metricId].searchQuery;
-    const query = 'sum by (namespace) (kube_pod_info)';
+    const query = userData.metrics[metricId].searchQuery;
+    // const query = 'sum by (namespace) (kube_pod_info)';
     const end = Math.floor(Date.now() / 1000); // current date and time
     const start = end - 86400; // 24 hours ago
     const endQuery = `&end=${end}`;
@@ -85,8 +292,8 @@ const promApiController: any = {
     const stepQuery = `&step=1200s`; // data interval
 
     // initialize object to store scraped metrics
-    const promMetrics: plotData = {
-      xAxis: [],
+    const promMetrics: string | plotData = {
+      labels: [],
       dataSets: [],
     };
     try {
@@ -94,10 +301,9 @@ const promApiController: any = {
       const response = await fetch(
         promURLRange + query + startQuery + endQuery + stepQuery,
       );
-      // TODO: should it have different helper functions that process the data depending on the "resultType"? will all range queries be of the type "matrix"?
-      // parse response
+      // TODO: should it have different helper functions that process the data depending on the "resultType"? will all range queries be of the type "matrix"? -> it seems so
       const data = await response.json();
-      console.log(data);
+
       // if the prometheus query response indicates a failure, then send an error message
       if (data.status === 'failure') {
         return next({
@@ -105,34 +311,38 @@ const promApiController: any = {
           status: 500,
           message: { err: 'Error retreiving metrics' },
         });
-      } else {
-        console.log(data.data);
-
-        data.data.result.forEach(
-          (obj: { metric: { namespace: string }; values: any[][] }) => {
-            // initialize object to store in promMetrics dataSets
-            const yAxis: yAxis = {
-              label: '',
-              data: [],
-            };
-            // populate the data for the promMeterics x-axis one time
-            if (promMetrics.xAxis.length === 0) {
-              obj.values.forEach((arr: any[]) => {
-                const utcSeconds = arr[0];
-                const d = new Date(0); //  0 sets the date to the epoch
-                d.setUTCSeconds(utcSeconds);
-                promMetrics.xAxis.push(d);
-              });
-            }
-            // populate the y-axis object with the scraped metrics
-            yAxis.label = obj.metric.namespace;
+      }
+      // if no metrics meet the query requirements, then no metrics data will be returned from prometheus
+      else if (data.data.result.length === 0) {
+        res.locals.promMeterics = 'No metrics meet the scope of the query';
+        return next();
+      }
+      // if prometheus query response contains metric data, then filter data into an object of plotData type
+      else {
+        data.data.result.forEach((obj: promResResultElements) => {
+          // initialize object to store in promMetrics dataSets
+          const yAxis: yAxis = {
+            label: '',
+            data: [],
+          };
+          // populate the data for the promMeterics x-axis one time
+          if (promMetrics.labels.length === 0) {
             obj.values.forEach((arr: any[]) => {
-              yAxis.data.push(Number(arr[1]));
+              const utcSeconds = arr[0];
+              const d = new Date(0); //  0 sets the date to the epoch
+              d.setUTCSeconds(utcSeconds);
+              promMetrics.labels.push(d);
             });
-            promMetrics.dataSets.push(yAxis);
-          },
-        );
+          }
+          // populate the y-axis object with the scraped metrics
+          yAxis.label = obj.metric.toString();
+          obj.values.forEach((arr: any[]) => {
+            yAxis.data.push(Number(arr[1]));
+          });
+          promMetrics.dataSets.push(yAxis);
+        });
         res.locals.promMetrics = promMetrics;
+        // TODO: should i also send a graph title? could make an object with titles assigned to queries
         return next();
       }
     } catch (err) {
@@ -145,9 +355,5 @@ const promApiController: any = {
   },
   // getSnapshotMetrics
 };
-
-// CURRENT METRIC QUERIES:
-// 'sum by (namespace) (kube_pod_info)';
-// 'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by(namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"}))-1 >0)';
 
 export default promApiController;
