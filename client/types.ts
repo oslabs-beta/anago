@@ -14,6 +14,15 @@ export type MetricProps = {
 }
 
 
+export type UserData = {
+  userId: string;
+  clusters: {}[];
+  clusterName: string;
+  dashboards: {}[];
+  metrics: {};
+
+}
+
 type AppProps = {
   message: string;
   count: number;

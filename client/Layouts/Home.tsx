@@ -1,9 +1,32 @@
-import { NavLink, Outlet, useLoaderData } from 'react-router-dom';
+import {
+  NavLink,
+  Outlet,
+  useRouteLoaderData,
+  useNavigate,
+} from 'react-router-dom';
+import { UserData } from '../types';
+import { useEffect, useContext } from 'react';
+import { StoreContext } from '../stateStore';
+import Dashboard from '../Components/Dashboard';
 
 export default function Home() {
-  const userData = useLoaderData();
+  const userData = useRouteLoaderData('home') as UserData;
+  const navigate = useNavigate();
+  const {
+    hasFetchedUserData,
+    setHasFetchedUserData,
+    currentDashboard,
+    setCurrentDashboard,
+  }: any = useContext(StoreContext);
 
-  console.log(userData);
+  
+  const dashboards = userData.dashboards;
+  if (userData) setCurrentDashboard(dashboards);
+
+  console.log('has fetched', hasFetchedUserData)
+
+  console.log('we are in home', dashboards);
+
 
   return (
     <div className='home-layout'>
@@ -18,8 +41,9 @@ export default function Home() {
           <NavLink to={'/login'}>Log Out</NavLink>
         </nav>
       </header>
-      
+
       <div>
+        <Dashboard />
         <Outlet />
       </div>
     </div>
