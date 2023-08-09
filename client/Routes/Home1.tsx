@@ -4,7 +4,7 @@ import StatusBar from '../Components/StatusBar';
 
 import { StoreContext } from '../stateStore';
 
-const Home = () => {
+const OldHome = () => {
   const {
     hasFetchedUserData,
     setHasFetchedUserData,
@@ -60,4 +60,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default OldHome;

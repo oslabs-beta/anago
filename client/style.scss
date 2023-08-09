@@ -8,6 +8,10 @@
 .logo {
   height: 6em;
   padding: 1.5em;
+  position: fixed;
+  top: 0;
+  margin: 0 auto;
+  margin-left: 0;
   will-change: filter;
   transition: filter 300ms;
 }
@@ -127,19 +131,21 @@ button:focus-visible {
   justify-content: center;
   margin: 5px;
 }
+header {
+  display: flex;
+  position: fixed;
+  top: 0px;
+  justify-content: space-evenly;
+}
 
 header nav {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   gap: 16px;
   max-width: 100%;
-  margin: 0 auto;
-  position: fixed;
-  top: 150px;
-}
-header nav h1 {
   margin-right: 0;
-
+  position: fixed;
+  top: 0px;
 }
 
 header nav a {

@@ -6,40 +6,44 @@ import { Metric } from '../../server/models/userDataClass';
 import MetricDisplay from './MetricDisplay';
 
 const Dashboard = () => {
-//   const { currentDashboard }: any = useContext(StoreContext);
+  const { currentDashboard }: any = useContext(StoreContext);
 
-//   console.log('in dashboard component', currentDashboard);
-  
-//   const metricIds = [...currentDashboard.metrics];
-//   console.log(metricIds);
+  console.log('in dashboard component', currentDashboard);
 
-//   const metrics: React.ReactNode = [];
+  const metricIds : any= [];
+  currentDashboard.map(metric => metricIds.push(metric));
 
-//   metricIds.forEach(metricId => {
-//     try {
-//       fetch(`/api/metrics:${metricId}`, {
-//         method: 'GET',
-//       })
-//         .then(data => data.json())
-//         .then(data => metrics.push(<MetricDisplay {...data} />));
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   });
+  console.log('here are the ids', metricIds);
 
-
+  //metricIds.forEach(metricId => {
+  //     try {
+  //       fetch(`/api/metrics:${metricId}`, {
+  //         method: 'GET',
+  //       })
+  //         .then(data => data.json())
+  //         .then(data => console.log(data));
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   });
 
   return (
     <div>
-      
-      "I am in the dashboard"
+      <p>I am in the dashboard</p>
+      {metricIds.map(metricId => {
+        try {
+          fetch(`/api/data/metrics:${metricId}`, {
+            method: 'GET',
+          })
+          .then(data => data.json())
+          .then(data => console.log(data));
+        } catch (err) {
+          console.log(err);
+        }
+      })}
     </div>
   );
-
-  
 };
 
 export default Dashboard;
 //<h2>{currentDashboard.dashboardName}</h2>
-
-
