@@ -37,9 +37,3 @@ const App = () => {
 };
 
 export default App;
-{
-  /* <Route path='home' element={<HomeLayout />}>
-        <Route index element = {<Home/>}/>
-       // <Route path='dashboard:id' element={<Dashboard/>}></Route>
-      </Route> */
-}
