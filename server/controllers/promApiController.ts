@@ -340,12 +340,8 @@ const promApiController: any = {
               const d = new Date(0); //  0 sets the date to the epoch
               d.setUTCSeconds(utcSeconds);
               promMetrics.labels.push(d);
-            });
-            promMetrics.datasets.push(yAxis);
-          },
-        );
-/*
-RYLIE PLEASE ADVISE
+                     });
+
           }
           // populate the y-axis object with the scraped metrics
           yAxis.label = obj.metric.toString();
@@ -354,7 +350,7 @@ RYLIE PLEASE ADVISE
           });
           promMetrics.dataSets.push(yAxis);
         });
-*/
+
         res.locals.promMetrics = promMetrics;
         // TODO: should i also send a graph title? could make an object with titles assigned to queries
         return next();
