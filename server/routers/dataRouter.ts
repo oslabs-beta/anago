@@ -6,6 +6,7 @@ const dataRouter = express.Router();
 //id = metric-id
 dataRouter.get(
   '/metrics/:id',
+  // metricsController.verifyMetric,
   //metricsController.verifyMetric,
   promApiController.getRangeMetrics,
   async (_req: Request, res: Response) => {

@@ -10,6 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Colors,
 } from 'chart.js';
 import { Line, Chart } from 'react-chartjs-2';
 ChartJS.register(
@@ -17,31 +18,34 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  Colors,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
 const MetricDisplay = ({ metricId }) => {
+  const { currentUser }: any = useContext(StoreContext);
   const [metricData, setMetricData]: any = useState({});
 
   useEffect(() => {
-    console.log('in use effect');
+    console.log('Current user:', currentUser);
     fetch(`/api/data/metrics/${metricId}`, {
       method: 'GET',
     })
-      .then(data => data.json())
-      .then(data => {
+      .then((data) => data.json())
+      .then((data) => {
         console.log('fetched data', data);
         setMetricData(data);
       });
-
   }, []);
 
   console.log('metric data: ', metricData);
   return (
-    <div>
-      <h1>This is a metric named {metricId}</h1>
+    <div className="metric-container">
+      <h4 className="metric-title">
+        {currentUser.metrics[metricId].metricName}
+      </h4>
       {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
     </div>
   );
