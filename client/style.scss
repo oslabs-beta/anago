@@ -110,3 +110,12 @@ header nav {
     font-size: 30px;
   }
 }
+
+.modal-wrapper {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
+}
