@@ -22,7 +22,6 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false
-
   },
   "ts-node": {
     "esm": true
