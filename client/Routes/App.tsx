@@ -1,40 +1,28 @@
-import React from 'react';
-// import {
-//   createBrowserRouter,
-//   RouterProvider,
-//   Routes,
-//   Route,
-//   useParams,
-// } from 'react-router-dom';
-
 import {
   Route,
-  NavLink,
   createBrowserRouter,
   createRoutesFromElements,
-  Outlet,
   RouterProvider,
 } from 'react-router-dom';
 
 //import layouts
-import RootLayout from '../Layouts/Home';
 import Home from '../Layouts/Home';
 
 //pages & components
 import Login from './Login';
 import Settings from './Settings';
 import Dashboard from '../Components/Dashboard';
+import { Modal } from '../Components/MetricDisplay';
 
 //import loaders
 import * as loaders from '../Loaders';
-import MetricDisplay from '../Components/MetricDisplay';
 
 //create router to pass into router provider component returned from app. createBrowserRouter recommended for all latest React Router web projects.
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Home />} loader={loaders.userLoader} id='home'>
       <Route path=':id' element={<Dashboard />}>
-        <Route path=':metricId' element={<MetricDisplay metricId={undefined} />}/>
+        <Route path=':metricId' element={<Modal />} />
       </Route>
 
       <Route path='login' element={<Login />} />

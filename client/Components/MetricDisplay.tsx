@@ -13,7 +13,7 @@ import {
   Colors,
 } from 'chart.js';
 import { Line, Chart } from 'react-chartjs-2';
-import { useNavigate, useRouteLoaderData } from 'react-router-dom';
+import { useLocation, useNavigate, useRouteLoaderData } from 'react-router-dom';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -45,14 +45,14 @@ const MetricDisplay = ({ metricId }) => {
       .catch(err => console.log(err));
   }, []);
 
-
   const handleClick = () => navigate(`${metricId}`);
 
   console.log('metric data: ', metricData);
   return (
-    <div className='metric-container' onClick={handleClick}>
+    <div className='metric-container'>
       <h4 className='metric-title'>{userData.metrics[metricId].metricName}</h4>
       {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
+      <button onClick={handleClick}>expand here</button>
     </div>
   );
 };
@@ -84,3 +84,24 @@ const MetricDisplay = ({ metricId }) => {
 // };
 
 export default MetricDisplay;
+
+export function Modal(metricId) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  function dismiss() {
+    navigate(-1);
+  }
+
+  return (
+  
+    <div className='modal-wrapper'>
+      <div className='modal'>
+        <MetricDisplay metricId={metricId} key={metricId} />
+        <button onClick={dismiss} className='metric-close-button'>
+          Close
+        </button>
+      </div>
+    </div>
+  );
+}

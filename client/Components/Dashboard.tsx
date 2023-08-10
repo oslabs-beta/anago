@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { StoreContext } from '../stateStore';
 import MetricDisplay from './MetricDisplay';
 import { MetricProps, UserData } from '../types';
-import { useRouteLoaderData, useParams } from 'react-router-dom';
+import { useRouteLoaderData, useParams, Outlet } from 'react-router-dom';
 
 const Dashboard = () => {
   const userData = useRouteLoaderData('home') as UserData;
@@ -31,6 +31,7 @@ const Dashboard = () => {
             {metricIds.map(metricId => (
               <MetricDisplay metricId={metricId} key={metricId} />
             ))}
+            <Outlet/>
           </div>
         </>
       )}
