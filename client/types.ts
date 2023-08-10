@@ -12,10 +12,22 @@ export type MetricProps = {
   searchQuery: string;
 };
 
-export type UserData = {
+interface dashboard {
+  dashboardId: string;
+  dashboardName: string;
+  metrics: string[];
+}
+
+export interface UserData {
   userId: string;
   clusters: {}[];
   clusterName: string;
-  dashboards: {}[];
+  dashboards: {}[
+    // {
+    //   dashboardId: string;
+    //   dashboardName: string;
+    //   metrics: string[];
+    // },
+  ];
   metrics: {};
-};
+}

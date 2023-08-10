@@ -27,12 +27,15 @@ import Dashboard from '../Components/Dashboard';
 
 //import loaders
 import * as loaders from '../Loaders';
+import MetricDisplay from '../Components/MetricDisplay';
 
 //create router to pass into router provider component returned from app. createBrowserRouter recommended for all latest React Router web projects.
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Home />} loader={loaders.userLoader} id='home'>
-      <Route path='default' element={<Dashboard />} />
+      <Route path=':id' element={<Dashboard />}>
+        <Route path=':metricId' element={<MetricDisplay metricId={undefined} />}/>
+      </Route>
 
       <Route path='login' element={<Login />} />
       <Route path='settings' element={<Settings />} />
