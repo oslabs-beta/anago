@@ -5,9 +5,10 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import { UserData } from '../types';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { StoreContext } from '../stateStore';
 import Dashboard from '../Components/Dashboard';
+import logo from '../assets/images/anago.png';
 
 export default function Home() {
   const userData = useRouteLoaderData('home') as UserData;
@@ -22,31 +23,39 @@ export default function Home() {
   }: any = useContext(StoreContext);
 
   const dashboards = userData.dashboards;
+  // console.log('home dashboards check: ', dashboards);
 
-  setCurrentUser(userData);
-  setHasFetchedUserData(true);
-  setCurrentDashboard(dashboards[0]);
+  useEffect(() => {
+    setCurrentUser(userData);
+    setHasFetchedUserData(true);
+    setCurrentDashboard(dashboards[0]);
+  }, []);
 
   console.log('has fetched', hasFetchedUserData);
   console.log('we are in home', currentDashboard);
 
-
   return (
-    <div className='home-layout'>
+    <div className="home-layout">
       <header>
-        <span className='logo'>
-          <h1>anago</h1>
-          <img src='' alt='logo' />
+        <span className="logo-container">
+          <img src={logo} alt="logo" className="logo-image" />
+          <h3 className="app-title">Anago</h3>
         </span>
         <nav>
-          <NavLink to={'/home'}>Dashboard</NavLink>
-          <NavLink to={'/settings'}>Settings</NavLink>
-          <NavLink to={'/login'}>Log Out</NavLink>
+          <NavLink to={'/home'} className="nav-btn">
+            Dashboards
+          </NavLink>
+          <NavLink to={'/settings'} className="nav-btn">
+            Settings
+          </NavLink>
+          <NavLink to={'/login'} className="nav-btn">
+            Log Out
+          </NavLink>
         </nav>
       </header>
 
-      <div>
-       {hasFetchedUserData &&  <Dashboard />}
+      <div className="main-body">
+        {hasFetchedUserData && <Dashboard />}
         <Outlet />
       </div>
     </div>
