@@ -9,7 +9,7 @@ export class UserData {
     metricName: string,
     lookupType: LookupType,
     queryOptions?: any,
-    dashboardNumber = 0,
+    dashboardNumber = 0
   ): string {
     const newMetric = new Metric(metricName, lookupType, queryOptions);
     this.dashboards[dashboardNumber].metrics.push(newMetric.metricId);
@@ -59,12 +59,19 @@ export class Metric {
   graphType: GraphType;
   queryOptions: any;
   searchQuery: string;
-  constructor(metricName: string, lookupType: LookupType, queryOptions?: any) {
+  constructor(
+    metricName: string,
+    lookupType: LookupType,
+    queryOptions: any = {}
+  ) {
     this.metricId = randomUUID();
     this.metricName = metricName;
     this.lookupType = lookupType; // LookupType.MemoryUsed
     this.graphType = graphForQuery(lookupType); // GraphyType.LineGraph
-    this.queryOptions = queryOptions;
+    this.queryOptions = Object.assign(
+      { duration: 24 * 60 * 60, stepSize: 20 * 60 },
+      queryOptions
+    );
     this.searchQuery = queryBuilder(this.lookupType, this.queryOptions);
   }
 }
@@ -83,6 +90,7 @@ export enum LookupType {
   FreeDiskUsage,
   ReadyNodesByCluster, //5
   NodesReadinessFlapping,
+  PodCount,
 }
 
 function graphForQuery(lookupType: LookupType): GraphType {
@@ -137,6 +145,10 @@ function queryBuilder(lookupType: LookupType, queryOptions: any): string {
 
     case LookupType.NodesReadinessFlapping: {
       return 'sum(changes(kube_node_status_condition{status="true",condition="Ready"}[15m])) by (node) > 2';
+    }
+
+    case LookupType.PodCount: {
+      return 'sum by (namespace) (kube_pod_info)';
     }
 
     default: {
