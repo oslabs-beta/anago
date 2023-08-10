@@ -77,20 +77,22 @@ enum GraphType {
 
 export enum LookupType {
   PodCount, //0
-  PodCountNow,
   CPUIdle,
+  CPUUsage,
   MemoryIdle,
   MemoryUsed,
-  DiskFree, //5
-  PodActive,
-  PodAge,
+  DiskFree,
+  // PodActive,
+  // PodAge,
+  ReadyNodes,
+  NodeReadinessFlapping,
 }
 
 function graphForQuery(lookupType: LookupType): GraphType {
   // Assigns a graph type to a query type
   switch (lookupType) {
-    case LookupType.PodCountNow:
-      return GraphType.PrintValue;
+    // case LookupType.PodCountNow:
+    //   return GraphType.PrintValue;
     default:
       return GraphType.LineGraph;
   }
@@ -104,15 +106,42 @@ function queryBuilder(lookupType: LookupType, queryOptions: any): string {
       return 'sum by (namespace) (kube_pod_info)';
     }
 
-    case LookupType.PodCountNow: {
-      return 'sum by (namespace) (kube_pod_info)';
+    case LookupType.CPUIdle: {
+      return 'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
     }
 
-    case LookupType.CPUIdle: {
-      return 'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by(namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"}))-1 >0)';
+    case LookupType.CPUUsage: {
+      return 'sum(kube_node_status_condition{condition="Ready", status="true"}==1)';
     }
+
+    case LookupType.MemoryIdle: {
+      return 'sum((container_memory_usage_bytes{container!="POD",container!=""} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
+    }
+
+    case LookupType.MemoryUsed: {
+      return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';
+    }
+
+    case LookupType.DiskFree: {
+      return 'node_filesystem_avail_bytes/node_filesystem_size_bytes*100';
+    }
+
+    // case LookupType.PodActive: {
+    // }
+
+    // case LookupType.PodAge: {
+    // }
+
+    case LookupType.ReadyNodes: {
+      return 'sum(kube_node_status_condition{condition="Ready", status="true"}==1)';
+    }
+
+    case LookupType.NodeReadinessFlapping: {
+      return 'sum(changes(kube_node_status_condition{status="true",condition="Ready"}[15m])) by (node) > 2';
+    }
+
     default: {
-      return 'sum by (namespace) (kube_pod_info)';
+      return '';
     }
   }
 }
