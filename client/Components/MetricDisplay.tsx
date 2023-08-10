@@ -43,7 +43,9 @@ const MetricDisplay = ({ metricId }) => {
   console.log('metric data: ', metricData);
   return (
     <div className="metric-container">
-      <h4>{currentUser.metrics[metricId].metricName}</h4>
+      <h4 className="metric-title">
+        {currentUser.metrics[metricId].metricName}
+      </h4>
       {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
     </div>
   );

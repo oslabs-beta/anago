@@ -81,7 +81,7 @@ export enum LookupType {
   CPUUsage,
   MemoryIdle,
   MemoryUsed,
-  DiskFree,
+  DiskFree, //5
   // PodActive,
   // PodAge,
   ReadyNodes,

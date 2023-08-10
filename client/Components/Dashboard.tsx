@@ -17,7 +17,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-outer">
-      <h2>{currentDashboard.dashboardName}</h2>
+      <h2 className="dashboard-title">{currentDashboard.dashboardName}</h2>
       <div className="dashboard-container">
         {currentMetrics.map((metricId) => (
           <MetricDisplay metricId={metricId} key={metricId} />

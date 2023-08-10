@@ -43,7 +43,7 @@ export default function Home() {
         </span>
         <nav>
           <NavLink to={'/home'} className="nav-btn">
-            Dashboard
+            Dashboards
           </NavLink>
           <NavLink to={'/settings'} className="nav-btn">
             Settings
