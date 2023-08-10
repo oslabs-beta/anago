@@ -327,7 +327,7 @@ const promApiController: any = {
       // if prometheus query response contains metric data, then filter data into an object of plotData type
       else {
         data.data.result.forEach((obj: promResResultElements) => {
-          // initialize object to store in promMetrics dataSets
+          // initialize object to store in promMetrics datasets
           const yAxis: yAxis = {
             label: '',
             data: [],
