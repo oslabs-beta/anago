@@ -5,7 +5,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import { UserData } from '../types';
-import { useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import { StoreContext } from '../stateStore';
 import Dashboard from '../Components/Dashboard';
 
@@ -18,18 +18,17 @@ export default function Home() {
     currentDashboard,
     setCurrentDashboard,
     currentUser,
-    setCurrentUser
+    setCurrentUser,
   }: any = useContext(StoreContext);
 
   const dashboards = userData.dashboards;
 
   setCurrentUser(userData);
   setHasFetchedUserData(true);
-  setCurrentDashboard(dashboards[0])
-  
+  setCurrentDashboard(dashboards[0]);
 
-  console.log('has fetched', hasFetchedUserData)
-  console.log('we are in home', dashboards);
+  console.log('has fetched', hasFetchedUserData);
+  console.log('we are in home', currentDashboard);
 
 
   return (
@@ -47,7 +46,7 @@ export default function Home() {
       </header>
 
       <div>
-        <Dashboard />
+       {hasFetchedUserData &&  <Dashboard />}
         <Outlet />
       </div>
     </div>
