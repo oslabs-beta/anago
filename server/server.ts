@@ -35,6 +35,16 @@ app.get('/', (_req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../index.html'));
 });
 
+app.get('/api/pithy', async (_, res: Response) => {
+  const pithyRes = await fetch(
+    'http://af4229dcba421469f98c7369c72e123c-566514288.us-east-2.elb.amazonaws.com/slow'
+  );
+  const pithyPrimes = await pithyRes.json();
+  //console.log(pithyPrimes);
+  console.log('Sending Pithy data');
+  res.json(pithyPrimes);
+});
+
 // Route error handler
 app.use((req: Request, res: Response) => {
   console.log('Bad incoming request from ' + req.originalUrl);
@@ -52,7 +62,7 @@ app.use(
     const errorObj = Object.assign({}, defaultErr, err);
     console.log(errorObj.log);
     return res.status(errorObj.status).json(errorObj.message);
-  },
+  }
 );
 
 app.listen(PORT, () => {

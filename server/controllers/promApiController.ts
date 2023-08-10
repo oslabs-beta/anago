@@ -218,7 +218,7 @@ sum(changes(kube_node_status_condition{status="true",condition="Ready"}[15m])) b
 
 */
 import userData from '../models/defaultUserData.js';
-import { Metric } from '../models/userDataClass.js';
+import { LookupType, Metric } from '../models/userDataClass.js';
 
 //  types:
 import type { Request, Response, NextFunction } from 'express';
@@ -229,7 +229,7 @@ type yAxis = {
 };
 // object to send to front end to plot on a graph
 type plotData = {
-  labels: Date[];
+  labels: string[];
   datasets: yAxis[];
 };
 
@@ -286,16 +286,23 @@ const promApiController: any = {
     // prometheues query string components
     // TODO: use metric id to get the metric.searchQuery -> uncomment the line below and comment out the hard coded query
     const query = userData.metrics[metricId].searchQuery;
+    const options = userData.metrics[metricId].queryOptions;
     //const query = 'sum by (namespace) (kube_pod_info)';
     const end = Math.floor(Date.now() / 1000); // current date and time
-    const start = end - 86400; // 24 hours ago
+    const duration = options.hasOwnProperty('duration')
+      ? options.duration
+      : 24 * 60 * 60; // default 24h
+    const start = end - duration;
     const endQuery = `&end=${end}`;
     const startQuery = `&start=${start}`;
-    const stepQuery = `&step=1200s`; // data interval
+    const stepSize = options.hasOwnProperty('stepSize')
+      ? options.stepSize
+      : 20 * 60; // default 20 min
+    const stepQuery = `&step=${stepSize}s`; // data interval
 
     // initialize object to store scraped metrics
 
-    const promMetrics: string | plotData = {
+    const promMetrics: plotData = {
       labels: [],
       datasets: [],
     };
@@ -303,7 +310,7 @@ const promApiController: any = {
       //console.log('inside promAPI try');
       // query Prometheus
       const response = await fetch(
-        promURLRange + query + startQuery + endQuery + stepQuery,
+        promURLRange + query + startQuery + endQuery + stepQuery
       );
       // TODO: should it have different helper functions that process the data depending on the "resultType"? will all range queries be of the type "matrix"? -> it seems so
       const data = await response.json();
@@ -324,6 +331,7 @@ const promApiController: any = {
       // if prometheus query response contains metric data, then filter data into an object of plotData type
       else {
         data.data.result.forEach((obj: promResResultElements) => {
+          console.log('received object ', obj);
           // initialize object to store in promMetrics datasets
           const yAxis: yAxis = {
             label: '',
@@ -335,13 +343,13 @@ const promApiController: any = {
               const utcSeconds = arr[0];
               const d = new Date(0); //  0 sets the date to the epoch
               d.setUTCSeconds(utcSeconds);
-              promMetrics.labels.push(d);
-
+              const cleanedTime = cleanTime(d, options);
+              promMetrics.labels.push(cleanedTime);
             });
-
           }
           // populate the y-axis object with the scraped metrics
-          yAxis.label = obj.metric.toString();
+          // yAxis.label = obj.metric.toString();
+          yAxis.label = namePlot(obj, userData.metrics[metricId].lookupType);
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));
           });
@@ -362,5 +370,38 @@ const promApiController: any = {
   },
   // getSnapshotMetrics
 };
+
+function cleanTime(date: Date, options: any) {
+  const metricDuration = options.hasOwnProperty('duration')
+    ? options.duration
+    : 24 * 60 * 60;
+
+  if (metricDuration >= 2 * 7 * 24 * 60 * 60) {
+    // >= 2 week
+    return date.toLocaleDateString(); //date only
+  } else if (metricDuration <= 12 * 60 * 60) {
+    // < 12 h
+    const dateArr = date.toLocaleTimeString().split(':');
+    const pref = dateArr.slice(0, 2).join(':');
+    const suff = dateArr[2].split(' ')[1];
+    return pref + ' ' + suff; // time + AM/PM
+  } else {
+    // 12-2w
+    const arr = date.toLocaleString().split(',');
+    const dateStr = arr[0].split('/').slice(0, 2).join('/');
+    const timeArr = arr[1].split(':');
+    const pref = timeArr.slice(0, 2).join(':');
+    const suff = timeArr[2].split(' ')[1];
+    const timeStr = pref + ' ' + suff;
+    return dateStr + ': ' + timeStr; // MM/DD, TOD
+  }
+}
+
+function namePlot(obj: any, type: LookupType) {
+  switch (type) {
+    default:
+      return 'data';
+  }
+}
 
 export default promApiController;

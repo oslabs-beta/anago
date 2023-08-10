@@ -19,3 +19,8 @@ spec:
           image: 180202761917.dkr.ecr.us-east-2.amazonaws.com/pithy:latest
           ports:
             - containerPort: 3000
+          resources:
+            limits:
+              cpu: 400m
+            requests:
+              cpu: 200m

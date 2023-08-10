@@ -12,9 +12,10 @@ export default ({ children }: Props) => {
   const [currentCluster, setCurrentCluster] = useState('');
   const [clusterCache, setClusterCache] = useState({});
   const [currentUser, setCurrentUser] = useState({});
-  const [currentMetrics, setCurrentMetrics] = useState([])
+  const [currentMetrics, setCurrentMetrics] = useState([]);
   const [currentDashboard, setCurrentDashboard] = useState<String[]>([]);
   const [hasFetchedUserData, setHasFetchedUserData] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState<Number>();
 
   const States = {
     currentCluster: currentCluster,
@@ -28,7 +29,9 @@ export default ({ children }: Props) => {
     hasFetchedUserData: hasFetchedUserData,
     setHasFetchedUserData: setHasFetchedUserData,
     currentMetrics: currentMetrics,
-    setCurrentMetrics: setCurrentMetrics
+    setCurrentMetrics: setCurrentMetrics,
+    lastUpdate: lastUpdate,
+    setLastUpdate: setLastUpdate,
   };
 
   return (
