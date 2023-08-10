@@ -232,6 +232,7 @@ type plotData = {
   labels: Date[];
   dataSets: yAxis[];
 };
+
 // represents the objects stored in the Prometheus query response results array
 type promResResultElements = {
   metric: {
@@ -292,6 +293,7 @@ const promApiController: any = {
     const stepQuery = `&step=1200s`; // data interval
 
     // initialize object to store scraped metrics
+
     const promMetrics: string | plotData = {
       labels: [],
       dataSets: [],
@@ -341,6 +343,7 @@ const promApiController: any = {
           });
           promMetrics.dataSets.push(yAxis);
         });
+
         res.locals.promMetrics = promMetrics;
         // TODO: should i also send a graph title? could make an object with titles assigned to queries
         return next();
