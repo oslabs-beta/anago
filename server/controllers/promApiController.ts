@@ -231,6 +231,7 @@ type yAxis = {
 type plotData = {
   labels: string[];
   datasets: yAxis[];
+  options?: any;
 };
 
 // represents the objects stored in the Prometheus query response results array
@@ -331,7 +332,7 @@ const promApiController: any = {
       // if prometheus query response contains metric data, then filter data into an object of plotData type
       else {
         data.data.result.forEach((obj: promResResultElements) => {
-          console.log('received object ', obj);
+          // console.log('received object ', obj);
           // initialize object to store in promMetrics datasets
           const yAxis: yAxis = {
             label: '',
@@ -399,6 +400,32 @@ function cleanTime(date: Date, options: any) {
 
 function namePlot(obj: any, type: LookupType) {
   switch (type) {
+    case LookupType.CPUIdleByCluster: {
+      return 'MVP-Cluster';
+    }
+    case LookupType.MemoryIdleByCluster: {
+      return 'MVP-Cluster';
+    }
+    case LookupType.MemoryUsed: {
+      return obj.metric.pod;
+    }
+    case LookupType.CPUUsedByContainer: {
+      return obj.metric.node;
+    }
+    case LookupType.FreeDiskUsage: {
+      return obj.metric.pod;
+    }
+    case LookupType.ReadyNodesByCluster: {
+      return 'MVP-Cluster';
+    }
+    case LookupType.NodesReadinessFlapping: {
+      console.log('NAMING', type);
+      console.log(obj.metric);
+      return 'data';
+    }
+    case LookupType.PodCount: {
+      return obj.metric.namespace;
+    }
     default:
       return 'data';
   }

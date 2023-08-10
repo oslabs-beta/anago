@@ -32,6 +32,14 @@ const MetricDisplay = ({ metricId }) => {
 
   const [metricData, setMetricData]: any = useState({});
 
+  const options = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+  };
+
   useEffect(() => {
     console.log('Current user in metric:', userData);
     fetch(`/api/data/metrics/${metricId}`, {
@@ -51,7 +59,9 @@ const MetricDisplay = ({ metricId }) => {
   return (
     <div className='metric-container'>
       <h4 className='metric-title'>{userData.metrics[metricId].metricName}</h4>
-      {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
+      {metricData.hasOwnProperty('labels') && (
+        <Line data={metricData} options={options} />
+      )}
       <button onClick={handleClick}>expand here</button>
     </div>
   );
