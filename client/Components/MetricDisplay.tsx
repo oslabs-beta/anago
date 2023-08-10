@@ -23,29 +23,26 @@ ChartJS.register(
 );
 
 const MetricDisplay = ({ metricId }) => {
-  //useEffect(() => {
-  //   console.log('in use effect', currentDashboard);
-  //   currentDashboard.metrics.forEach(metricId => {
-  //     //console.log(`/api/data/metrics/${metricId}`)
-  //     fetch(`/api/data/metrics/${metricId}`, {
-  //       method: 'GET',
-  //     })
-  //       .then(data => data.json())
-  //       .then(data => {
-  //         console.log('fetched data', data);
-  //         const newMetrics = [...currentMetrics];
-  //         if (newMetrics.length === 8) return;
-  //         else {
-  //           newMetrics.push(<MetricDisplay key={metricId} />);
-  //           setCurrentMetrics(newMetrics);
-  //         }
-  //       });
-  //   });
-  // }, [currentUser]);
+  const [metricData, setMetricData]: any = useState({});
 
+  useEffect(() => {
+    console.log('in use effect');
+    fetch(`/api/data/metrics/${metricId}`, {
+      method: 'GET',
+    })
+      .then(data => data.json())
+      .then(data => {
+        console.log('fetched data', data);
+        setMetricData(data);
+      });
+
+  }, []);
+
+  console.log('metric data: ', metricData);
   return (
     <div>
       <h1>This is a metric named {metricId}</h1>
+      {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
     </div>
   );
 };

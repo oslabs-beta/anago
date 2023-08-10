@@ -1,12 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { JSX } from 'react';
-import { Link, useRouteLoaderData, useNavigate } from 'react-router-dom';
-import { UserData } from '../types';
-import { Props, StoreContext } from '../stateStore';
-import { Metric } from '../../server/models/userDataClass';
+import React, { useContext } from 'react';
+import { StoreContext } from '../stateStore';
 import MetricDisplay from './MetricDisplay';
 import { MetricProps } from '../types';
-import metricsController from '../../server/controllers/metricsController';
+
 
 const Dashboard = () => {
   const {

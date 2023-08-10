@@ -42,7 +42,7 @@ type yAxis = {
 // object to send to front end to plot on a graph
 type plotData = {
   labels: Date[];
-  dataSets: yAxis[];
+  datasets: yAxis[];
 };
 
 /* EXAMPLE plotData
@@ -71,10 +71,10 @@ const promURLAlerts = promURL + 'alerts';
 const promApiController: any = {
   // query prometheus for data over a specified range of time
   getRangeMetrics: async (req: Request, res: Response, next: NextFunction) => {
-    console.log('inside promAPI controller')
+    console.log('inside promAPI controller');
     // retrieve metricId from request query parameter
     const metricId = req.params.id;
-    console.log('here is the metricId', metricId)
+    console.log('here is the metricId', metricId);
     // prometheues query string components
     // TODO: use metric id to get the metric.searchQuery -> uncomment the line below and comment out the hard coded query
     const query = userData.metrics[metricId].searchQuery;
@@ -88,13 +88,13 @@ const promApiController: any = {
     // initialize object to store scraped metrics
     const promMetrics: plotData = {
       labels: [],
-      dataSets: [],
+      datasets: [],
     };
     try {
-      console.log('inside promAPI try')
+      console.log('inside promAPI try');
       // query Prometheus
       const response = await fetch(
-        promURLRange + query + startQuery + endQuery + stepQuery
+        promURLRange + query + startQuery + endQuery + stepQuery,
       );
       // TODO: should it have different helper functions that process the data depending on the "resultType"? will all range queries be of the type "matrix"?
       // parse response
@@ -131,8 +131,8 @@ const promApiController: any = {
             obj.values.forEach((arr: any[]) => {
               yAxis.data.push(Number(arr[1]));
             });
-            promMetrics.dataSets.push(yAxis);
-          }
+            promMetrics.datasets.push(yAxis);
+          },
         );
         res.locals.promMetrics = promMetrics;
         return next();
