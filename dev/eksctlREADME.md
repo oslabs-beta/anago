@@ -92,7 +92,7 @@ NOTE: after the Helm chart has been installed, you should see this:
 5. to access your prometheus instance, use the kubectl port-forward to forward a
    local port into the Cluster with the service name. Example (with a service
    name):
-   `kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n [namespace] 4001:9090`
+   `kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n [namespace] 9090`
 6. navigate to http://localhost:9090 in your browser. NOTE: you should see the
    Prometheus web UI. Click Status, then Targets to see a list of preconfigured
    scrape targets. You can use a similar procedure to access the Grafana and
