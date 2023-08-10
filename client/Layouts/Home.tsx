@@ -17,7 +17,6 @@ export default function Home() {
     setHasFetchedUserData,
     currentDashboard,
     setCurrentDashboard,
-    currentUser,
     setCurrentUser,
   }: any = useContext(StoreContext);
 
@@ -29,7 +28,6 @@ export default function Home() {
 
   console.log('has fetched', hasFetchedUserData);
   console.log('we are in home', currentDashboard);
-
 
   return (
     <div className='home-layout'>
@@ -46,7 +44,7 @@ export default function Home() {
       </header>
 
       <div>
-       {hasFetchedUserData &&  <Dashboard />}
+        {hasFetchedUserData && <Dashboard />}
         <Outlet />
       </div>
     </div>
