@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../stateStore';
 import MetricDisplay from './MetricDisplay';
 import { MetricProps, UserData } from '../types';
-import { useRouteLoaderData, useParams, Outlet } from 'react-router-dom';
+import { useRouteLoaderData, useParams, Outlet, useLocation } from 'react-router-dom';
 
 const Dashboard = () => {
   const userData = useRouteLoaderData('home') as UserData;
   const { id } = useParams();
+  const lcoation = useLocation();
 
   const [lastUpdate, setLastUpdate] = useState<Date>();
 

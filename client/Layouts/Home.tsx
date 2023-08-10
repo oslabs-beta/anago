@@ -23,7 +23,6 @@ export default function Home() {
   }: any = useContext(StoreContext);
 
   const dashboards = userData.dashboards;
-  // console.log('home dashboards check: ', dashboards);
 
   useEffect(() => {
     setCurrentUser(userData);

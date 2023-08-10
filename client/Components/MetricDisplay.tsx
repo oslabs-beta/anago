@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Props, StoreContext } from '../stateStore';
 import { MetricProps, UserData } from '../types';
 import {
@@ -13,7 +13,12 @@ import {
   Colors,
 } from 'chart.js';
 import { Line, Chart } from 'react-chartjs-2';
-import { useLocation, useNavigate, useRouteLoaderData } from 'react-router-dom';
+import {
+  useLocation,
+  useNavigate,
+  useRouteLoaderData,
+  Link,
+} from 'react-router-dom';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -27,6 +32,7 @@ ChartJS.register(
 
 const MetricDisplay = ({ metricId }) => {
   const userData = useRouteLoaderData('home') as UserData;
+  const location = useLocation();
   const navigate = useNavigate();
   console.log('metric display', userData);
 
@@ -52,7 +58,9 @@ const MetricDisplay = ({ metricId }) => {
     <div className='metric-container'>
       <h4 className='metric-title'>{userData.metrics[metricId].metricName}</h4>
       {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
-      <button onClick={handleClick}>expand here</button>
+      <Link to={`/${metricId}`} state={{ previousLocation: location }}>
+        expand here
+      </Link>
     </div>
   );
 };
@@ -87,14 +95,12 @@ export default MetricDisplay;
 
 export function Modal(metricId) {
   const navigate = useNavigate();
-  const location = useLocation();
 
   function dismiss() {
     navigate(-1);
   }
 
   return (
-  
     <div className='modal-wrapper'>
       <div className='modal'>
         <MetricDisplay metricId={metricId} key={metricId} />
