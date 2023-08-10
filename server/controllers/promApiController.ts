@@ -269,7 +269,6 @@ type promResponse = {
   };
 };
 
-
 // prometheus http api url's to query
 const promURL = 'http://localhost:9090/api/v1/';
 const promURLInstant = promURL + 'query?query=';
@@ -308,8 +307,7 @@ const promApiController: any = {
       );
       // TODO: should it have different helper functions that process the data depending on the "resultType"? will all range queries be of the type "matrix"? -> it seems so
       const data = await response.json();
-      console.log(data);
-      
+
       // if the prometheus query response indicates a failure, then send an error message
       if (data.status === 'failure') {
         return next({
@@ -317,7 +315,6 @@ const promApiController: any = {
           status: 500,
           message: { err: 'Error retreiving metrics' },
         });
-
       }
       // if no metrics meet the query requirements, then no metrics data will be returned from prometheus
       else if (data.data.result.length === 0) {
@@ -334,13 +331,13 @@ const promApiController: any = {
           };
           // populate the data for the promMeterics x-axis one time
           if (promMetrics.labels.length === 0) {
-
             obj.values.forEach((arr: any[]) => {
               const utcSeconds = arr[0];
               const d = new Date(0); //  0 sets the date to the epoch
               d.setUTCSeconds(utcSeconds);
               promMetrics.labels.push(d);
-                     });
+
+            });
 
           }
           // populate the y-axis object with the scraped metrics

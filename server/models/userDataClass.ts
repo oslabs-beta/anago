@@ -9,7 +9,7 @@ export class UserData {
     metricName: string,
     lookupType: LookupType,
     queryOptions?: any,
-    dashboardNumber = 0
+    dashboardNumber = 0,
   ): string {
     const newMetric = new Metric(metricName, lookupType, queryOptions);
     this.dashboards[dashboardNumber].metrics.push(newMetric.metricId);
@@ -76,21 +76,32 @@ enum GraphType {
 }
 
 export enum LookupType {
-  PodCount, //0
-  PodCountNow,
-  CPUIdle,
-  MemoryIdle,
+  CPUIdleByCluster, //0
+  MemoryIdleByCluster,
   MemoryUsed,
-  DiskFree, //5
-  PodActive,
-  PodAge,
+  CPUUsedByContainer,
+  FreeDiskUsage,
+  ReadyNodesByCluster, //5
+  NodesReadinessFlapping,
 }
 
 function graphForQuery(lookupType: LookupType): GraphType {
   // Assigns a graph type to a query type
   switch (lookupType) {
-    case LookupType.PodCountNow:
-      return GraphType.PrintValue;
+    case LookupType.CPUIdleByCluster:
+      return GraphType.LineGraph;
+    case LookupType.MemoryIdleByCluster:
+      return GraphType.LineGraph;
+    case LookupType.MemoryUsed:
+      return GraphType.LineGraph;
+    case LookupType.CPUUsedByContainer:
+      return GraphType.LineGraph;
+    case LookupType.FreeDiskUsage:
+      return GraphType.LineGraph;
+    case LookupType.ReadyNodesByCluster:
+      return GraphType.LineGraph;
+    case LookupType.NodesReadinessFlapping:
+      return GraphType.LineGraph;
     default:
       return GraphType.LineGraph;
   }
@@ -100,19 +111,36 @@ function queryBuilder(lookupType: LookupType, queryOptions: any): string {
   // Creates a promQL search string for a given LookupType and set of options
   console.log(lookupType, queryOptions);
   switch (lookupType) {
-    case LookupType.PodCount: {
-      return 'sum by (namespace) (kube_pod_info)';
+    case LookupType.CPUIdleByCluster: {
+      return 'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
     }
 
-    case LookupType.PodCountNow: {
-      return 'sum by (namespace) (kube_pod_info)';
+    case LookupType.MemoryIdleByCluster: {
+      return 'sum((container_memory_usage_bytes{container!="POD",container!=""} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
     }
 
-    case LookupType.CPUIdle: {
-      return 'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by(namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"}))-1 >0)';
+    case LookupType.MemoryUsed: {
+      return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';
     }
+
+    case LookupType.CPUUsedByContainer: {
+      return 'container_cpu_usage_seconds_total';
+    }
+
+    case LookupType.FreeDiskUsage: {
+      return 'node_filesystem_avail_bytes/node_filesystem_size_bytes*100';
+    }
+
+    case LookupType.ReadyNodesByCluster: {
+      return 'sum(kube_node_status_condition{condition="Ready", status="true"}==1)';
+    }
+
+    case LookupType.NodesReadinessFlapping: {
+      return 'sum(changes(kube_node_status_condition{status="true",condition="Ready"}[15m])) by (node) > 2';
+    }
+
     default: {
-      return 'sum by (namespace) (kube_pod_info)';
+      return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';
     }
   }
 }
