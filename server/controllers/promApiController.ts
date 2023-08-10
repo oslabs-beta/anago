@@ -348,7 +348,7 @@ const promApiController: any = {
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));
           });
-          promMetrics.dataSets.push(yAxis);
+          promMetrics.datasets.push(yAxis);
         });
 
         res.locals.promMetrics = promMetrics;
