@@ -28,6 +28,14 @@ const MetricDisplay = ({ metricId }) => {
   const { currentUser }: any = useContext(StoreContext);
   const [metricData, setMetricData]: any = useState({});
 
+  const options = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+  };
+
   useEffect(() => {
     console.log('Current user:', currentUser);
     fetch(`/api/data/metrics/${metricId}`, {
@@ -46,7 +54,9 @@ const MetricDisplay = ({ metricId }) => {
       <h4 className="metric-title">
         {currentUser.metrics[metricId].metricName}
       </h4>
-      {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
+      {metricData.hasOwnProperty('labels') && (
+        <Line data={metricData} options={options} />
+      )}
     </div>
   );
 };

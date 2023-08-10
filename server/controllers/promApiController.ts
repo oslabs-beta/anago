@@ -231,6 +231,7 @@ type yAxis = {
 type plotData = {
   labels: string[];
   datasets: yAxis[];
+  options?: any;
 };
 
 // represents the objects stored in the Prometheus query response results array
