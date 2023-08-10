@@ -10,13 +10,12 @@
   sum((container_memory_usage_bytes{container!="POD",container!=""} - on
   (namespace,pod,container) avg by
   (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"}))
+  -1 >0 ) / (1024\*1024\*1024)
 
-  - -1 >0 ) / (1024\*1024\*1024)
+--count pods per cluster by namespace: sum by (namespace) (kube_pod_info)
 
-- count pods per cluster by namespace: sum by (namespace) (kube_pod_info)
-
-- the number of seconds the CPU has been running in a particular mode (excluding
-  idle time) sum by (cpu)(node_cpu_seconds_total{mode!="idle"})
+-- the number of seconds the CPU has been running in a particular mode
+(excluding idle time) sum by (cpu)(node_cpu_seconds_total{mode!="idle"})
 
 - total percentage of used memory
   node_memory_Active_bytes/node_memory_MemTotal_bytes\*100 (To obtain the
@@ -36,9 +35,8 @@
   - If a post has terminated, the time from creation to completion sum
     by(namespace, pod) (
 
-  (last_over_time(kube_pod_completion_time[1d])
-
-  - last_over_time(kube_pod_created[1d]))
+  (last_over_time(kube_pod_completion_time[1d])-
+  last_over_time(kube_pod_created[1d]))
 
   or
 
