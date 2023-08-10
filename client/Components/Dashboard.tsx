@@ -1,52 +1,44 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { JSX } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Props, StoreContext } from '../stateStore';
-import { Metric } from '../../server/models/userDataClass';
+import React, { useContext } from 'react';
+import { StoreContext } from '../stateStore';
 import MetricDisplay from './MetricDisplay';
+import { MetricProps } from '../types';
+
 
 const Dashboard = () => {
-  const { currentDashboard }: any = useContext(StoreContext);
+  const {
+    currentDashboard,
+    currentMetrics,
+    setCurrentMetrics,
+    currentUser,
+  }: any = useContext(StoreContext);
 
   console.log('in dashboard component', currentDashboard);
-  /*
-  const metricIds = [...currentDashboard.metrics];
-  console.log(metricIds);
 
-  const metrics: React.ReactNode = [];
+  const metricIds: string[] = currentDashboard.metrics;
 
-  metricIds.forEach(metricId => {
-    try {
-      fetch(`/api/metrics:${metricId}`, {
-        method: 'GET',
-      })
-        .then(data => data.json())
-        .then(data => metrics.push(<MetricDisplay {...data} />));
-    } catch (err) {
-      console.log(err);
-    }
-  });
+  console.log('here are the ids', metricIds);
+
+  //   const metricComponents: any[] = [];
+
+  setCurrentMetrics(metricIds);
+
+  // initially currentDashboard = [] --> doesn't have .metrics, so l31 fails.
+  // after first fetch, currentDashboard has data
+
+  //   setTimeout(() => {
+  //     console.log('my components', metricComponents);
+  //   }, 2000);
+
   return (
     <div>
       <h2>{currentDashboard.dashboardName}</h2>
-      "I am in the dashboard"
-      {metrics}
+      {currentMetrics.map(metricId => (
+        <MetricDisplay metricId={metricId} />
+      ))}
     </div>
-  );*/
-
-  const [displayMetrics, setDisplayMetrics] = useState<JSX.Element[]>([]);
-
-  useEffect(() => {
-    const newDisplayMetrics = currentDashboard.map((el:string) => {
-      console.log('adding a metric display');
-      return <MetricDisplay metricId={el} key={el} />;
-    });
-
-    // setDisplayMetrics([<MetricDisplay metricId={1} key={1} />])
-    setDisplayMetrics(newDisplayMetrics);
-  }, []);
-
-  return <div className="gallery-container">{displayMetrics}</div>;
+  );
 };
 
 export default Dashboard;
+
+//{metricComponents.length === 8 ? { ...metricComponents } : <p>Loading</p>}
