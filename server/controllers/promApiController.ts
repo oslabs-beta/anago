@@ -283,7 +283,7 @@ const promApiController: any = {
     console.log('inside promAPI controller');
     // retrieve metricId from request query parameter
     const metricId = req.params.id;
-    console.log('here is the metricId', metricId);
+    // console.log('here is the metricId', metricId);
     // prometheues query string components
     // TODO: use metric id to get the metric.searchQuery -> uncomment the line below and comment out the hard coded query
     const query = userData.metrics[metricId].searchQuery;
@@ -308,7 +308,7 @@ const promApiController: any = {
       datasets: [],
     };
     try {
-      console.log('inside promAPI try');
+      //console.log('inside promAPI try');
       // query Prometheus
       const response = await fetch(
         promURLRange + query + startQuery + endQuery + stepQuery
