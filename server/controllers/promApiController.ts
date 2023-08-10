@@ -230,7 +230,7 @@ type yAxis = {
 // object to send to front end to plot on a graph
 type plotData = {
   labels: Date[];
-  dataSets: yAxis[];
+  datasets: yAxis[];
 };
 
 // represents the objects stored in the Prometheus query response results array
@@ -279,13 +279,14 @@ const promURLAlerts = promURL + 'alerts';
 const promApiController: any = {
   // query prometheus for data over a specified range of time
   getRangeMetrics: async (req: Request, res: Response, next: NextFunction) => {
+    console.log('inside promAPI controller');
     // retrieve metricId from request query parameter
     const metricId = req.params.id;
-
+    console.log('here is the metricId', metricId);
     // prometheues query string components
     // TODO: use metric id to get the metric.searchQuery -> uncomment the line below and comment out the hard coded query
     const query = userData.metrics[metricId].searchQuery;
-    // const query = 'sum by (namespace) (kube_pod_info)';
+    //const query = 'sum by (namespace) (kube_pod_info)';
     const end = Math.floor(Date.now() / 1000); // current date and time
     const start = end - 86400; // 24 hours ago
     const endQuery = `&end=${end}`;
@@ -296,9 +297,10 @@ const promApiController: any = {
 
     const promMetrics: string | plotData = {
       labels: [],
-      dataSets: [],
+      datasets: [],
     };
     try {
+      console.log('inside promAPI try');
       // query Prometheus
       const response = await fetch(
         promURLRange + query + startQuery + endQuery + stepQuery,
@@ -322,7 +324,7 @@ const promApiController: any = {
       // if prometheus query response contains metric data, then filter data into an object of plotData type
       else {
         data.data.result.forEach((obj: promResResultElements) => {
-          // initialize object to store in promMetrics dataSets
+          // initialize object to store in promMetrics datasets
           const yAxis: yAxis = {
             label: '',
             data: [],
@@ -334,14 +336,16 @@ const promApiController: any = {
               const d = new Date(0); //  0 sets the date to the epoch
               d.setUTCSeconds(utcSeconds);
               promMetrics.labels.push(d);
+
             });
+
           }
           // populate the y-axis object with the scraped metrics
           yAxis.label = obj.metric.toString();
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));
           });
-          promMetrics.dataSets.push(yAxis);
+          promMetrics.datasets.push(yAxis);
         });
 
         res.locals.promMetrics = promMetrics;

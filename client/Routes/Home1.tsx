@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Dashboard from '../Components/Dashboard';
 import StatusBar from '../Components/StatusBar';
-import NavBar from '../Components/NavBar';
+
 import { StoreContext } from '../stateStore';
 
-const Home = () => {
+const OldHome = () => {
   const {
     hasFetchedUserData,
     setHasFetchedUserData,
@@ -56,9 +56,8 @@ const Home = () => {
       <button onClick={handleClick}>Test Server</button>
       <StatusBar />
       {currentDashboard.length && <Dashboard />}
-      <NavBar />
     </>
   );
 };
 
-export default Home;
+export default OldHome;

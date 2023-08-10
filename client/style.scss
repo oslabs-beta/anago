@@ -8,6 +8,10 @@
 .logo {
   height: 6em;
   padding: 1.5em;
+  position: fixed;
+  top: 0;
+  margin: 0 auto;
+  margin-left: 0;
   will-change: filter;
   transition: filter 300ms;
 }
@@ -48,7 +52,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  //background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -126,4 +130,25 @@ button:focus-visible {
   align-items: center;
   justify-content: center;
   margin: 5px;
+}
+header {
+  display: flex;
+  position: fixed;
+  top: 0px;
+  justify-content: space-evenly;
+}
+
+header nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  max-width: 100%;
+  margin-right: 0;
+  position: fixed;
+  top: 0px;
+}
+
+header nav a {
+  padding: 6px;
+  border-radius: 4px;
 }

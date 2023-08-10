@@ -19,80 +19,32 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
-class MetricDisplay extends React.Component<any, any> {
-  constructor(props) {
-    console.log('constructor');
-    super(props);
-    this.state = {
-      data: {},
-      metricId: props.metricId,
-    };
-  }
+const MetricDisplay = ({ metricId }) => {
+  const [metricData, setMetricData]: any = useState({});
 
-  demoData = {
-    labels: [1, 2, 3, 4, 5],
-    datasets: [
-      { label: 'default', data: [1, 2, 3, 4, 5] },
-      { label: 'kube', data: [1, 2, 4, 4, 5] },
-      { label: 'monitoring', data: [5, 4, 3, 4, 3] },
-    ],
-  };
+  useEffect(() => {
+    console.log('in use effect');
+    fetch(`/api/data/metrics/${metricId}`, {
+      method: 'GET',
+    })
+      .then(data => data.json())
+      .then(data => {
+        console.log('fetched data', data);
+        setMetricData(data);
+      });
 
-  // componentDidMount(): void {
-  //   console.log('mounted: fetching');
-  //   fetch('/api/data/metrics/' + this.state.metricId)
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       console.log(
-  //         'Data results coming from ',
-  //         this.state.metricId,
-  //         ': ',
-  //         res
-  //       );
-  //       this.setState({
-  //         data: {
-  //           labels: [1, 2, 3, 4, 5],
-  //           dataSets: [
-  //             { label: 'default', data: [1, 2, 3, 4, 5] },
-  //             { label: 'kube', data: [1, 2, 4, 4, 5] },
-  //             { lable: 'monitoring', data: [5, 4, 3, 4, 3] },
-  //           ],
-  //         },
-  //       });
-  //     });
-  // }
+  }, []);
 
-  // const [dataSet, setDataSet] = useState<any>({});
-
-  // useEffect(() => {
-  //   fetch('/api/data/metrics/' + metricId)
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       console.log('Data results coming from ', metricId, ': ', res);
-  //       setDataSet({
-  //         labels: [1, 2, 3, 4, 5],
-  //         dataSets: [
-  //           { label: 'default', data: [1, 2, 3, 4, 5] },
-  //           { label: 'kube', data: [1, 2, 4, 4, 5] },
-  //           { lable: 'monitoring', data: [5, 4, 3, 4, 3] },
-  //         ],
-  //       });
-  //     });
-  // }, []);
-
-  render() {
-    // if (!this.state.data.hasOwnProperty('labels')) {
-    //   return <div className="metric-display" />;
-    // }
-    return (
-      <div className="metric-display">
-        <Line className="metric" data={this.demoData}></Line>
-      </div>
-    );
-  }
-}
+  console.log('metric data: ', metricData);
+  return (
+    <div>
+      <h1>This is a metric named {metricId}</h1>
+      {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
+    </div>
+  );
+};
 
 export default MetricDisplay;
