@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Props, StoreContext } from '../stateStore';
-import { MetricProps, UserData } from '../types';
+import { useEffect, useState } from 'react';
+import { UserData } from '../types';
+import { Modal } from 'react-responsive-modal';
+// import 'react-responsive-modal/styles.css';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -18,6 +20,7 @@ import {
   useNavigate,
   useRouteLoaderData,
   Link,
+  useParams,
 } from 'react-router-dom';
 ChartJS.register(
   CategoryScale,
@@ -32,10 +35,10 @@ ChartJS.register(
 
 const MetricDisplay = ({ metricId }) => {
   const userData = useRouteLoaderData('home') as UserData;
-  const location = useLocation();
-  const navigate = useNavigate();
-  console.log('metric display', userData);
 
+  const { id } = useParams();
+
+  const [open, setOpen]: any = useState(false);
   const [metricData, setMetricData]: any = useState({});
 
   useEffect(() => {
@@ -51,16 +54,24 @@ const MetricDisplay = ({ metricId }) => {
       .catch(err => console.log(err));
   }, []);
 
-  const handleClick = () => navigate(`${metricId}`);
+  const openModal = () => setOpen(true);
+  const closeModal = () => setOpen(false);
 
   console.log('metric data: ', metricData);
+
   return (
     <div className='metric-container'>
       <h4 className='metric-title'>{userData.metrics[metricId].metricName}</h4>
       {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
-      <Link to={`/${metricId}`} state={{ previousLocation: location }}>
-        expand here
-      </Link>
+      <div className='modal'>
+        <button onClick={openModal}>See more</button>
+        <Modal open={open} onClose={closeModal}>
+          <h4 className='metric-title'>
+            {userData.metrics[metricId].metricName}
+          </h4>
+          {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
+        </Modal>
+      </div>
     </div>
   );
 };
@@ -92,22 +103,3 @@ const MetricDisplay = ({ metricId }) => {
 // };
 
 export default MetricDisplay;
-
-export function Modal(metricId) {
-  const navigate = useNavigate();
-
-  function dismiss() {
-    navigate(-1);
-  }
-
-  return (
-    <div className='modal-wrapper'>
-      <div className='modal'>
-        <MetricDisplay metricId={metricId} key={metricId} />
-        <button onClick={dismiss} className='metric-close-button'>
-          Close
-        </button>
-      </div>
-    </div>
-  );
-}
