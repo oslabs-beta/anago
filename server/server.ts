@@ -23,19 +23,13 @@ if (process.env.NODE_ENV !== 'dev') {
   app.use(express.static(path.join(__dirname, '../dist')));
 }
 
-// Test front-end / back-end code
-app.get('/api/message', (_req: Request, res: Response) => {
-  console.log('Message sent');
-  res.json('Message received!');
-});
-
-// Server index.html explicilty if grabbed
+// Server index.html explicilty if grabbed (production mode)
 app.get('/', (_req: Request, res: Response) => {
   console.log('Front page contact');
   res.sendFile(path.join(__dirname, '../index.html'));
 });
 
-app.get('/api/pithy', async (_, res: Response) => {
+app.get('/api/pithy', async (_req: Request, res: Response) => {
   const pithyRes = await fetch(
     'http://af4229dcba421469f98c7369c72e123c-566514288.us-east-2.elb.amazonaws.com/slow'
   );
