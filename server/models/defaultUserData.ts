@@ -4,16 +4,23 @@ const DEPLOYMENT_URL = 'http://localhost.com/9090';
 const userData = new UserData();
 userData.clusters.push(new Cluster('Testing Cluster', DEPLOYMENT_URL));
 
-userData.addMetric('CPU Idle By Cluster', LookupType.CPUIdleByCluster);
-userData.addMetric('Memory Idle Per Cluster', LookupType.MemoryIdleByCluster);
-userData.addMetric('Pod Count', LookupType.PodCount, {
-  duration: 2 * 60 * 60,
+userData.addMetric('CPU Idle by Cluster', LookupType.CPUIdleByCluster, {
+  duration: 5 * 60 * 60,
   stepSize: 5 * 60,
 });
-userData.addMetric('Total Percentage of Memory Used', LookupType.MemoryUsed);
-userData.addMetric('CPU Usage Per Container', LookupType.CPUUsedByContainer);
-userData.addMetric('Free Disk Usage', LookupType.FreeDiskUsage);
-userData.addMetric('Ready Nodes By Cluster', LookupType.ReadyNodesByCluster);
+userData.addMetric('Memory Idle by Cluster', LookupType.MemoryIdleByCluster);
+userData.addMetric('Pod Count by Node', LookupType.PodCount, {
+  duration: 3 * 60 * 60,
+  stepSize: 5 * 60,
+});
+userData.addMetric('% Memory Used by Node', LookupType.MemoryUsed);
+userData.addMetric('CPU Usage by Container', LookupType.CPUUsedByContainer);
+userData.addMetric('Disk Space by Container', LookupType.FreeDiskUsage);
+userData.addMetric('Ready Nodes by Cluster', LookupType.ReadyNodesByCluster, {
+  duration: 21 * 24 * 60 * 60,
+  stepSize: 8 * 60 * 60,
+});
+
 // userData.addMetric(
 //   'Nodes Readiness Flapping',
 //   LookupType.NodesReadinessFlapping,

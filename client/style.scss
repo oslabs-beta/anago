@@ -25,9 +25,7 @@ $highlight-bright: rgba(143, 166, 200, 0.9);
 .dashboard-title {
   font-family: 'Ubuntu', sans-serif;
 }
-.metric-title {
-  font-family: 'Ubuntu', sans-serif;
-}
+
 .dashboard-container {
   display: flex;
   flex-wrap: wrap;
@@ -40,13 +38,18 @@ $highlight-bright: rgba(143, 166, 200, 0.9);
 .metric-container {
   min-width: 400px;
   max-width: 500px;
-  min-height: 400px;
+  min-height: 300px;
   background-color: rgb(250, 250, 250);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   margin: 5px;
+  .metric-title {
+    font-family: 'Ubuntu', sans-serif;
+    margin: 5px;
+  }
+  margin-bottom: 15px;
 }
 
 header {

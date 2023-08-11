@@ -33,6 +33,15 @@ const MetricDisplay = ({ metricId }) => {
   const [open, setOpen]: any = useState(false);
   const [metricData, setMetricData]: any = useState({});
 
+// display options for metrics
+  const options = {
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+  };
+        
   //fetching data from Prometheus
   useEffect(() => {
     console.log('Current user in metric:', userData);
@@ -54,7 +63,8 @@ const MetricDisplay = ({ metricId }) => {
   return (
     <div className='metric-container'>
       <h4 className='metric-title'>{userData.metrics[metricId].metricName}</h4>
-      {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
+
+      {metricData.hasOwnProperty('labels') && <Line data={metricData} options={options} />}
       <div className='modal'>
         <button onClick={openModal}>See more</button>
         <Modal open={open} onClose={closeModal}>
@@ -64,6 +74,7 @@ const MetricDisplay = ({ metricId }) => {
           {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
         </Modal>
       </div>
+
     </div>
   );
 };

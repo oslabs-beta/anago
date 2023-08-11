@@ -12,6 +12,7 @@ dataRouter.get(
   async (_req: Request, res: Response) => {
     // make some data fetch
     // console.log(_req.body);
+
     return res.status(200).json(res.locals.promMetrics);
   }
 );
