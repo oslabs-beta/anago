@@ -3,37 +3,27 @@ import {
   Outlet,
   useRouteLoaderData,
   useNavigate,
-  redirect,
 } from 'react-router-dom';
 import { UserData } from '../types';
 import { useContext, useEffect } from 'react';
 import { StoreContext } from '../stateStore';
-import Dashboard from '../Components/Dashboard';
 import logo from '../assets/images/anago.png';
 
 export default function Home() {
+  //import data from loader
   const userData = useRouteLoaderData('home') as UserData;
   const navigate = useNavigate();
-  const {
-    hasFetchedUserData,
-    setHasFetchedUserData,
-    currentDashboard,
-    setCurrentDashboard,
-    setCurrentUser,
-  }: any = useContext(StoreContext);
+  const { setHasFetchedUserData, setCurrentDashboard }: any =
+    useContext(StoreContext);
 
   const dashboards = userData.dashboards;
-  // console.log('home dashboards check: ', dashboards);
 
+  //set default dashboard and route to that dashboard
   useEffect(() => {
-    setCurrentUser(userData);
     setHasFetchedUserData(true);
     setCurrentDashboard(dashboards[0]);
     navigate('0');
   }, []);
-
-  console.log('has fetched', hasFetchedUserData);
-  console.log('we are in home', currentDashboard);
 
   return (
     <div className='home-layout'>
@@ -61,5 +51,3 @@ export default function Home() {
     </div>
   );
 }
-//<Dashboard />
-//{redirect('/default')}
