@@ -8,7 +8,7 @@ import {
   Outlet,
   useLocation,
 } from 'react-router-dom';
-import StatusBar from './StatusBar';
+import AlertBar from './AlertBar';
 
 const Dashboard = () => {
   const userData = useRouteLoaderData('home') as UserData;
@@ -45,7 +45,7 @@ const Dashboard = () => {
           <h2 className='dashboard-title'>
             {userData.dashboards[id].dashboardName}
           </h2>
-          <StatusBar />
+          <AlertBar />
           <div className='dashboard-buttons'>
             <span>
               <button onClick={refresh}>Refresh</button>
