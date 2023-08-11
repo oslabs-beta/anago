@@ -83,8 +83,6 @@ const promApiController: any = {
     // console.log('here is the metricId', metricId);
     // prometheues query string components
     // TODO: use metric id to get the metric.searchQuery -> uncomment the line below and comment out the hard coded query
-    const query = userData.metrics[metricId].searchQuery;
-    const options = userData.metrics[metricId].queryOptions;
     //const query = 'sum by (namespace) (kube_pod_info)';
     const end = Math.floor(Date.now() / 1000); // current date and time
     //if there is not a duration on the options object, default to 24hrs
