@@ -1,5 +1,5 @@
 {
-  "6ed41bae-f519-4685-92ff-1b71c1413287": [
+  "0": [
     {
       "metric": {},
       "values": [
@@ -67,7 +67,7 @@
       ]
     }
   ],
-  "69337899-32d3-48ec-8a87-c02c2d694dfa": [
+  "1": [
     {
       "metric": {},
       "values": [
@@ -147,7 +147,7 @@
       ]
     }
   ],
-  "0ff2a954-ffe5-4e4f-a582-9d18751166c1": [
+  "2": [
     {
       "metric": { "namespace": "default" },
       "values": [
@@ -275,7 +275,7 @@
       ]
     }
   ],
-  "ce557056-3901-4913-8f9e-e7f65c145136": [
+  "3": [
     {
       "metric": {
         "container": "node-exporter",
@@ -449,7 +449,7 @@
       ]
     }
   ],
-  "9097acb2-c5f7-4ccf-a4d2-2e7db89670e4": [
+  "4": [
     {
       "metric": {
         "__name__": "container_cpu_usage_seconds_total",
@@ -7108,7 +7108,7 @@
       ]
     }
   ],
-  "2656d6a7-1c82-470e-a09a-2c06dd2e8f8d": [
+  "5": [
     {
       "metric": {
         "container": "node-exporter",
@@ -9066,7 +9066,7 @@
       ]
     }
   ],
-  "9ea2e20e-4ce3-42cf-b885-d806f58caef3": [
+  "6": [
     {
       "metric": {},
       "values": [

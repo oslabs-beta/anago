@@ -16,6 +16,18 @@ export class UserData {
     this.metrics[newMetric.metricId] = newMetric;
     return newMetric.metricId;
   }
+  addPlaceholderMetric(
+    metricName: string,
+    lookupType: LookupType,
+    placeholderId: string,
+    queryOptions?: any,
+  ): string {
+    const newMetric = new Metric(metricName, lookupType, queryOptions);
+    newMetric.metricId = placeholderId;
+    this.dashboards[0].metrics.push(newMetric.metricId);
+    this.metrics[newMetric.metricId] = newMetric;
+    return newMetric.metricId;
+  }
   constructor() {
     this.userId = randomUUID();
     this.clusters = [];

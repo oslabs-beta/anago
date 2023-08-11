@@ -68,11 +68,21 @@ const promApiController: any = {
     console.log('inside promAPI controller');
     // retrieve metricId from request query parameter
     const metricId = req.params.id;
+    const query = userData.metrics[metricId].searchQuery;
+    const options = userData.metrics[metricId].queryOptions;
+
+    // Read placeholder data instead of fetching
+    if (metricId.length < 2) {
+      console.log('Supplying Placeholder data for metricId ', metricId);
+      const placeholderFetch = placeholderData(metricId, options);
+      // console.log('Local data for metric ', metricId, ':\n', placeholderFetch);
+      res.locals.promMetrics = placeholderFetch;
+      return next();
+    }
+
     // console.log('here is the metricId', metricId);
     // prometheues query string components
     // TODO: use metric id to get the metric.searchQuery -> uncomment the line below and comment out the hard coded query
-    const query = userData.metrics[metricId].searchQuery;
-    const options = userData.metrics[metricId].queryOptions;
     //const query = 'sum by (namespace) (kube_pod_info)';
     const end = Math.floor(Date.now() / 1000); // current date and time
     const duration = options.hasOwnProperty('duration')
@@ -232,6 +242,48 @@ function namePlot(obj: any, type: LookupType) {
     default:
       return 'data';
   }
+}
+
+function placeholderData(metricId: string, options: any): any {
+  const promMetrics: plotData = {
+    labels: [],
+    datasets: [],
+  };
+
+  const readData = fs.readFileSync(
+    path.resolve(__dirname, '../models/demoData.json'),
+    'utf-8'
+  );
+  const parsedData = JSON.parse(readData);
+  const myMetrics = parsedData[metricId];
+
+  // Code is copied from above for consistency
+  // Note that changes to metrics will not affect results
+  myMetrics.forEach((obj: promResResultElements) => {
+    const yAxis: yAxis = {
+      label: '',
+      data: [],
+    };
+    // populate the data for the promMeterics x-axis one time
+    if (promMetrics.labels.length === 0) {
+      obj.values.forEach((arr: any[]) => {
+        const utcSeconds = arr[0];
+        const d = new Date(0); //  0 sets the date to the epoch
+        d.setUTCSeconds(utcSeconds);
+        const cleanedTime = cleanTime(d, options);
+        promMetrics.labels.push(cleanedTime);
+      });
+    }
+    // populate the y-axis object with the scraped metrics
+    // yAxis.label = obj.metric.toString();
+    yAxis.label = namePlot(obj, userData.metrics[metricId].lookupType);
+    obj.values.forEach((arr: any[]) => {
+      yAxis.data.push(Number(arr[1]));
+    });
+    promMetrics.datasets.push(yAxis);
+  });
+  // console.log(promMetrics);
+  return promMetrics;
 }
 
 export default promApiController;
