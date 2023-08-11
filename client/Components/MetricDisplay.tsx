@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { UserData } from '../types';
 import { Modal } from 'react-responsive-modal';
-// import 'react-responsive-modal/styles.css';
 
 import {
   Chart as ChartJS,
@@ -15,13 +14,7 @@ import {
   Colors,
 } from 'chart.js';
 import { Line, Chart } from 'react-chartjs-2';
-import {
-  useLocation,
-  useNavigate,
-  useRouteLoaderData,
-  Link,
-  useParams,
-} from 'react-router-dom';
+import { useRouteLoaderData } from 'react-router-dom';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -36,11 +29,11 @@ ChartJS.register(
 const MetricDisplay = ({ metricId }) => {
   const userData = useRouteLoaderData('home') as UserData;
 
-  const { id } = useParams();
-
+  //state to handle modal and handling fetched data router
   const [open, setOpen]: any = useState(false);
   const [metricData, setMetricData]: any = useState({});
 
+  //fetching data from Prometheus
   useEffect(() => {
     console.log('Current user in metric:', userData);
     fetch(`/api/data/metrics/${metricId}`, {
@@ -54,10 +47,9 @@ const MetricDisplay = ({ metricId }) => {
       .catch(err => console.log(err));
   }, []);
 
+  //modal handler functions
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
-
-  console.log('metric data: ', metricData);
 
   return (
     <div className='metric-container'>
@@ -75,31 +67,5 @@ const MetricDisplay = ({ metricId }) => {
     </div>
   );
 };
-// const MetricDisplay = ({ metricId }) => {
-//   const { currentUser }: any = useContext(StoreContext);
-//   const [metricData, setMetricData]: any = useState({});
-
-//   useEffect(() => {
-//     console.log('Current user:', currentUser);
-//     fetch(`/api/data/metrics/${metricId}`, {
-//       method: 'GET',
-//     })
-//       .then((data) => data.json())
-//       .then((data) => {
-//         console.log('fetched data', data);
-//         setMetricData(data);
-//       });
-//   }, []);
-
-//   console.log('metric data: ', metricData);
-//   return (
-//     <div className="metric-container">
-//       <h4 className="metric-title">
-//         {currentUser.metrics[metricId].metricName}
-//       </h4>
-//       {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
-//     </div>
-//   );
-// };
 
 export default MetricDisplay;
