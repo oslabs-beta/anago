@@ -83,8 +83,11 @@ const promApiController: any = {
     // console.log('here is the metricId', metricId);
     // prometheues query string components
     // TODO: use metric id to get the metric.searchQuery -> uncomment the line below and comment out the hard coded query
+    const query = userData.metrics[metricId].searchQuery;
+    const options = userData.metrics[metricId].queryOptions;
     //const query = 'sum by (namespace) (kube_pod_info)';
     const end = Math.floor(Date.now() / 1000); // current date and time
+    //if there is not a duration on the options object, default to 24hrs
     const duration = options.hasOwnProperty('duration')
       ? options.duration
       : 24 * 60 * 60; // default 24h
@@ -103,16 +106,14 @@ const promApiController: any = {
       datasets: [],
     };
     try {
-      //console.log('inside promAPI try');
       // query Prometheus
       const response = await fetch(
         promURLRange + query + startQuery + endQuery + stepQuery
       );
-      // TODO: should it have different helper functions that process the data depending on the "resultType"? will all range queries be of the type "matrix"? -> it seems so
       const data = await response.json();
 
       // if the prometheus query response indicates a failure, then send an error message
-      if (data.status === 'failure') {
+      if (data.status === 'error') {
         return next({
           log: `Prometheus fetch for data returned a failure response of "errorType": ${data.errorType} and "error": ${data.error}`,
           status: 500,
@@ -121,7 +122,7 @@ const promApiController: any = {
       }
       // if no metrics meet the query requirements, then no metrics data will be returned from prometheus
       else if (data.data.result.length === 0) {
-        res.locals.promMeterics = 'No metrics meet the scope of the query';
+        res.locals.promMetrics = 'No metrics meet the scope of the query';
         return next();
       }
       // if prometheus query response contains metric data, then filter data into an object of plotData type
