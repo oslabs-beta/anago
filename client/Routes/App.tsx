@@ -10,6 +10,7 @@ import Home from './Home';
 import Login from './Login';
 import Settings from './Settings';
 import Dashboard from '../Components/Dashboard';
+import ClusterView from './ClusterView';
 
 //import loaders
 import * as loaders from '../Loaders';
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
       <Route path=':id' element={<Dashboard />} />
       <Route path='login' element={<Login />} />
       <Route path='settings' element={<Settings />} />
+      <Route path='clusterview' element={<ClusterView />}/>
     </Route>,
   ),
 );

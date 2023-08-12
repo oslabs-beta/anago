@@ -39,6 +39,9 @@ export default function Home() {
           <NavLink to={'/settings'} className='nav-btn'>
             Settings
           </NavLink>
+          <NavLink to={'/clusterview'} className='nav-btn'>
+            Cluster View
+          </NavLink>
           <NavLink to={'/login'} className='nav-btn'>
             Log Out
           </NavLink>
