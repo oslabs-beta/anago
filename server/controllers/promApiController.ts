@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 
 //  types:
 import type { Request, Response, NextFunction } from 'express';
@@ -56,7 +57,7 @@ type promResponse = {
 };
 
 // prometheus http api url's to query
-const promURL = 'http://localhost:9090/api/v1/';
+const promURL = DEPLOYMENT_URL+'api/v1/';
 const promURLInstant = promURL + 'query?query=';
 const promURLRange = promURL + 'query_range?query=';
 // TODO: update alerts url if needed
@@ -72,7 +73,7 @@ const promApiController: any = {
     const options = userData.metrics[metricId].queryOptions;
 
     // Read placeholder data instead of fetching
-    if (metricId.length < 2) {
+    if (!ACTIVE_DEPLOYMENT) {
       console.log('Supplying Placeholder data for metricId ', metricId);
       const placeholderFetch = placeholderData(metricId, options);
       // console.log('Local data for metric ', metricId, ':\n', placeholderFetch);

@@ -1,5 +1,6 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import path from 'path';
+import { PITHY_URL } from '../user-config.js';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app: Express = express();
@@ -31,7 +32,7 @@ app.get('/', (_req: Request, res: Response) => {
 
 app.get('/api/pithy', async (_req: Request, res: Response) => {
   const pithyRes = await fetch(
-    'http://af4229dcba421469f98c7369c72e123c-566514288.us-east-2.elb.amazonaws.com/slow'
+    PITHY_URL
   );
   const pithyPrimes = await pithyRes.json();
   //console.log(pithyPrimes);
