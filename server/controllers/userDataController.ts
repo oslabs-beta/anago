@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { readUserData } from './helperfunctions.js';
+import { readUserData } from './helperFunctions.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';

@@ -10,7 +10,7 @@ import {
   cleanTime,
   namePlot,
   readUserData,
-} from './helperfunctions.js';
+} from './helperFunctions.js';
 import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 import type { Request, Response, NextFunction } from 'express';
 
