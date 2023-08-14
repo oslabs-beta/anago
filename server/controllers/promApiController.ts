@@ -75,12 +75,10 @@ const promApiController: any = {
     };
     try {
       // query Prometheus
-      console.log(promURLRange + query + startQuery + endQuery + stepQuery);
       const response = await fetch(
         promURLRange + query + startQuery + endQuery + stepQuery
       );
       const data = await response.json();
-
       // if the prometheus query response indicates a failure, then send an error message
       if (data.status === 'error') {
         return next({
