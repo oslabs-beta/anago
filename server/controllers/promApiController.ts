@@ -1,63 +1,21 @@
-import userData from '../models/defaultUserData.js';
-import { LookupType, Metric } from '../models/userDataClass.js';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { Metric } from '../models/userDataClass.js';
+import {
+  yAxis,
+  plotData,
+  promResponse,
+  promResResultElements,
+} from '../../types.js';
+import {
+  placeholderData,
+  cleanTime,
+  namePlot,
+  readUserData,
+} from './helperfunctions.js';
 import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
-
-//  types:
 import type { Request, Response, NextFunction } from 'express';
-// object containing graph label and y-axis values
-type yAxis = {
-  label: string;
-  data: number[];
-};
-// object to send to front end to plot on a graph
-type plotData = {
-  labels: string[];
-  datasets: yAxis[];
-  options?: any;
-};
-
-// represents the objects stored in the Prometheus query response results array
-type promResResultElements = {
-  metric: {
-    __name__?: string;
-    container?: string;
-    cpu?: string;
-    device?: string;
-    endpoint?: string;
-    fstype?: string;
-    id?: string;
-    image?: string;
-    instance?: string;
-    job?: string;
-    metrics_path?: string;
-    mountpoint?: string;
-    name?: string;
-    namespace?: string;
-    node?: string;
-    pod?: string;
-    service?: string;
-  };
-  values: any[][];
-};
-// object representing the Prometheus query response object
-type promResponse = {
-  status: 'success' | 'error';
-  // only returned if status is "error"
-  errorType?: string;
-  error?: string;
-  // may or may not be included if the status is an error
-  data?: {
-    resultType: string;
-    result: promResResultElements[];
-  };
-};
 
 // prometheus http api url's to query
-const promURL = DEPLOYMENT_URL+'api/v1/';
+const promURL = DEPLOYMENT_URL + 'api/v1/';
 const promURLInstant = promURL + 'query?query=';
 const promURLRange = promURL + 'query_range?query=';
 // TODO: update alerts url if needed
@@ -67,6 +25,17 @@ const promApiController: any = {
   // query prometheus for data over a specified range of time
   getRangeMetrics: async (req: Request, res: Response, next: NextFunction) => {
     console.log('inside promAPI controller');
+
+    // Fetch userData
+    const userData = readUserData();
+    if (!userData) {
+      next({
+        log: `Reading User Data failed in promApiController.getRangeMetrics.`,
+        status: 500,
+        message: { err: 'Error retreiving user data.' },
+      });
+    }
+
     // retrieve metricId from request query parameter
     const metricId = req.params.id;
     const query = userData.metrics[metricId].searchQuery;
@@ -75,7 +44,7 @@ const promApiController: any = {
     // Read placeholder data instead of fetching
     if (!ACTIVE_DEPLOYMENT) {
       console.log('Supplying Placeholder data for metricId ', metricId);
-      const placeholderFetch = placeholderData(metricId, options);
+      const placeholderFetch = placeholderData(metricId, userData, options);
       // console.log('Local data for metric ', metricId, ':\n', placeholderFetch);
       res.locals.promMetrics = placeholderFetch;
       return next();
@@ -184,107 +153,6 @@ const promApiController: any = {
   },
   // getSnapshotMetrics
 };
-
-function cleanTime(date: Date, options: any) {
-  const metricDuration = options.hasOwnProperty('duration')
-    ? options.duration
-    : 24 * 60 * 60;
-
-  if (metricDuration >= 2 * 7 * 24 * 60 * 60) {
-    // >= 2 week
-    return date.toLocaleDateString(); //date only
-  } else if (metricDuration <= 12 * 60 * 60) {
-    // < 12 h
-    const dateArr = date.toLocaleTimeString().split(':');
-    const pref = dateArr.slice(0, 2).join(':');
-    const suff = dateArr[2].split(' ')[1];
-    return pref + ' ' + suff; // time + AM/PM
-  } else {
-    // 12-2w
-    const arr = date.toLocaleString().split(',');
-    const dateStr = arr[0].split('/').slice(0, 2).join('/');
-    const timeArr = arr[1].split(':');
-    const pref = timeArr.slice(0, 2).join(':');
-    const suff = timeArr[2].split(' ')[1];
-    const timeStr = pref + ' ' + suff;
-    return dateStr + ': ' + timeStr; // MM/DD, TOD
-  }
-}
-
-function namePlot(obj: any, type: LookupType) {
-  switch (type) {
-    case LookupType.CPUIdleByCluster: {
-      return 'MVP-Cluster';
-    }
-    case LookupType.MemoryIdleByCluster: {
-      return 'MVP-Cluster';
-    }
-    case LookupType.MemoryUsed: {
-      return obj.metric.pod;
-    }
-    case LookupType.CPUUsedByContainer: {
-      return obj.metric.node;
-    }
-    case LookupType.FreeDiskUsage: {
-      return obj.metric.pod;
-    }
-    case LookupType.ReadyNodesByCluster: {
-      return 'MVP-Cluster';
-    }
-    case LookupType.NodesReadinessFlapping: {
-      console.log('NAMING', type);
-      console.log(obj.metric);
-      return 'data';
-    }
-    case LookupType.PodCount: {
-      return obj.metric.namespace;
-    }
-    default:
-      return 'data';
-  }
-}
-
-function placeholderData(metricId: string, options: any): any {
-  const promMetrics: plotData = {
-    labels: [],
-    datasets: [],
-  };
-
-  const readData = fs.readFileSync(
-    path.resolve(__dirname, '../models/demoData.json'),
-    'utf-8'
-  );
-  const parsedData = JSON.parse(readData);
-  const myMetrics = parsedData[metricId];
-
-  // Code is copied from above for consistency
-  // Note that changes to metrics will not affect results
-  myMetrics.forEach((obj: promResResultElements) => {
-    const yAxis: yAxis = {
-      label: '',
-      data: [],
-    };
-    // populate the data for the promMeterics x-axis one time
-    if (promMetrics.labels.length === 0) {
-      obj.values.forEach((arr: any[]) => {
-        const utcSeconds = arr[0];
-        const d = new Date(0); //  0 sets the date to the epoch
-        d.setUTCSeconds(utcSeconds);
-        const cleanedTime = cleanTime(d, options);
-        promMetrics.labels.push(cleanedTime);
-      });
-    }
-    // populate the y-axis object with the scraped metrics
-    // yAxis.label = obj.metric.toString();
-    yAxis.label = namePlot(obj, userData.metrics[metricId].lookupType);
-    obj.values.forEach((arr: any[]) => {
-      yAxis.data.push(Number(arr[1]));
-    });
-    promMetrics.datasets.push(yAxis);
-  });
-  // console.log(promMetrics);
-  return promMetrics;
-}
 
 export default promApiController;
 

@@ -8,7 +8,7 @@ const PORT: number = 3000;
 
 import dataRouter from './routers/dataRouter.js';
 import userRouter from './routers/userRouter.js';
-import { ServerError } from '../client/types.js';
+import { ServerError } from '../types.js';
 
 // json + form processing
 app.use(express.json());
@@ -31,9 +31,7 @@ app.get('/', (_req: Request, res: Response) => {
 });
 
 app.get('/api/pithy', async (_req: Request, res: Response) => {
-  const pithyRes = await fetch(
-    PITHY_URL
-  );
+  const pithyRes = await fetch(PITHY_URL);
   const pithyPrimes = await pithyRes.json();
   //console.log(pithyPrimes);
   console.log('Sending Pithy data');

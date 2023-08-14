@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { NEW_USER, ACTIVE_DEPLOYMENT } from '../../user-config.js';
-import newUserData from '../models/defaultUserData.js';
+import { readUserData } from './helperfunctions.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -13,42 +12,16 @@ userDataController.sendUserData = (
   res: Response,
   next: NextFunction
 ) => {
-  //userData = userId, clusters[], dashboards[], metrics{}
-  if (NEW_USER) {
-    // Create a new user from default data (for now?)
-    res.locals.userData = newUserData;
-    return next();
-  }
-  try {
-    const readData = fs.readFileSync(
-      path.resolve(__dirname, '../models/userData.json'),
-      'utf-8'
-    );
-    const userData = JSON.parse(readData);
-    if (
-      !userData.hasOwnProperty('userId') ||
-      !userData.hasOwnProperty('metrics')
-    ) {
-      console.log(
-        'Read UserData is missing metrics. Using and saving default data.'
-      );
-      res.locals.userData = newUserData;
-      fs.writeFileSync(
-        path.resolve(__dirname, '../models/userData.json'),
-        JSON.stringify(newUserData)
-      );
-      return next();
-    }
-    console.log('Successfully read user data, returning now.');
-    res.locals.userData = userData;
-    next();
-  } catch (err) {
-    return next({
+  const userData = readUserData();
+  if (!userData) {
+    next({
       log: `Reading User Data failed in userDataController.sendUserData.`,
       status: 500,
       message: { err: 'Error retreiving user data.' },
     });
   }
+  res.locals.userData = userData;
+  next();
 };
 
 userDataController.saveUserData = (

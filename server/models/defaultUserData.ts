@@ -1,4 +1,5 @@
-import { UserData, Cluster, LookupType } from './userDataClass.js';
+import { UserData, Cluster } from './userDataClass.js';
+import { LookupType } from '../../types.js';
 import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 
 const newUserData = new UserData();

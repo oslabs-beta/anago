@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import { LookupType } from '../../types.js';
 
 export class UserData {
   userId: string;
@@ -20,7 +21,7 @@ export class UserData {
     metricName: string,
     lookupType: LookupType,
     placeholderId: string,
-    queryOptions?: any,
+    queryOptions?: any
   ): string {
     const newMetric = new Metric(metricName, lookupType, queryOptions);
     newMetric.metricId = placeholderId;
@@ -92,17 +93,6 @@ enum GraphType {
   PrintValue, //0
   LineGraph, //1
   PieChart, //2
-}
-
-export enum LookupType {
-  CPUIdleByCluster, //0
-  MemoryIdleByCluster,
-  MemoryUsed,
-  CPUUsedByContainer,
-  FreeDiskUsage,
-  ReadyNodesByCluster, //5
-  NodesReadinessFlapping,
-  PodCount,
 }
 
 function graphForQuery(lookupType: LookupType): GraphType {

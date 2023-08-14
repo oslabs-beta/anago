@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import MetricDisplay from './MetricDisplay';
-import { MetricProps, UserData } from '../types';
+import { MetricProps, UserData } from '../../types';
 import {
   useRouteLoaderData,
   useParams,
@@ -26,8 +26,8 @@ const Dashboard = () => {
     console.log('fetch pithy');
     try {
       fetch('/api/pithy')
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           setTimeout(() => pithy(), 1000);
         });
     } catch {
@@ -38,15 +38,14 @@ const Dashboard = () => {
   const metricIds = Object.keys(userData.metrics);
   console.log('in dashboard', id);
   return (
-    <div className='dashboard-outer'>
-    
+    <div className="dashboard-outer">
       {id && (
         <>
-          <h2 className='dashboard-title'>
+          <h2 className="dashboard-title">
             {userData.dashboards[id].dashboardName}
           </h2>
           <AlertBar />
-          <div className='dashboard-buttons'>
+          <div className="dashboard-buttons">
             <span>
               <button onClick={refresh}>Refresh</button>
             </span>
@@ -54,8 +53,8 @@ const Dashboard = () => {
               <button onClick={pithy}>Pithy Loop</button>
             </span>
           </div>
-          <div className='dashboard-container'>
-            {metricIds.map(metricId => (
+          <div className="dashboard-container">
+            {metricIds.map((metricId) => (
               <MetricDisplay metricId={metricId} key={metricId + lastUpdate} />
             ))}
             <Outlet />
