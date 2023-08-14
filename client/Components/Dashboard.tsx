@@ -1,13 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import MetricDisplay from './MetricDisplay';
-import { MetricProps, UserData } from '../types';
-import {
-  useRouteLoaderData,
-  useParams,
-  Outlet,
-  useLocation,
-} from 'react-router-dom';
+import { UserData } from '../types';
+import { useRouteLoaderData, useParams, Outlet } from 'react-router-dom';
 import AlertBar from './AlertBar';
 
 const Dashboard = () => {
@@ -39,7 +34,6 @@ const Dashboard = () => {
   console.log('in dashboard', id);
   return (
     <div className='dashboard-outer'>
-    
       {id && (
         <>
           <h2 className='dashboard-title'>
