@@ -1,6 +1,6 @@
 import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
 import { useLoaderData } from 'react-router-dom';
-import Box from '../Components/Visualizer/main';
+import Icosahedron from '../Components/Visualizer/main';
 
 const ClusterView = () => {
   const clusterData = useLoaderData();
@@ -20,15 +20,16 @@ const ClusterView = () => {
   return (
     <div>
       <p>This is the ClusterView page</p>
-      <Canvas>
-        <ambientLight />
-        <pointLight position={[10, 10, 10]} />
-        <Box position={[-1.2, 0, 0]} />
-        <Box position={[1.2, 0, 0]} />
-      </Canvas>
-      ,
     </div>
   );
 };
 
 export default ClusterView;
+
+      // <Canvas>
+      //   <ambientLight />
+      //   <pointLight position={[10, 10, 10]} />
+      //   <Icosahedron position={[-1.2, 0, 0]} />
+      //   {/* <Box position={[1.2, 0, 0]} /> */}
+      // </Canvas>
+      // ,

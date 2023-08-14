@@ -8,7 +8,7 @@ import {
   Namespace,
   Cluster,
 } from '../../client/types';
-import * as net from 'net';
+
 
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
