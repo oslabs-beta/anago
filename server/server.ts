@@ -8,7 +8,9 @@ const PORT: number = 3000;
 import dataRouter from './routers/dataRouter.js';
 import userRouter from './routers/userRouter.js';
 import k8sRouter from './routers/k8sRouter.js';
+import configRouter from './routers/configRouter.js';
 import { ServerError } from '../client/types.js';
+import { config } from 'dotenv';
 
 // json + form processing
 app.use(express.json());
@@ -19,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/data', dataRouter);
 app.use('/api/user', userRouter);
 app.use('/api/k8s', k8sRouter);
+app.use('/api/config', configRouter);
 
 //Static handling for FULL BUILD ONLY (dev uses vite proxy);
 if (process.env.NODE_ENV !== 'dev') {
