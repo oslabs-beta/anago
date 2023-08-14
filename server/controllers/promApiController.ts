@@ -75,6 +75,7 @@ const promApiController: any = {
     };
     try {
       // query Prometheus
+      console.log(promURLRange + query + startQuery + endQuery + stepQuery);
       const response = await fetch(
         promURLRange + query + startQuery + endQuery + stepQuery
       );
