@@ -1,0 +1,27 @@
+V1Pod {
+    [1]     apiVersion: undefined,
+    [1]     kind: undefined,
+    [1]     metadata: V1ObjectMeta {
+    [1]       
+    [1]       creationTimestamp: 2023-08-14T15:25:40.000Z,
+    [1]       
+    [1]       labels: [Object],
+    [1]       managedFields: [Array],
+    [1]       name: 'coredns-8fd4db68f-qsrgs',
+    [1]       namespace: 'kube-system',
+ 
+    [1]       uid: 'eaa54208-a8e9-4516-8331-8dcd2c9bfe4d'
+    [1]     },
+    [1]
+    [1]     },
+    [1]     status: V1PodStatus {
+    [1]       conditions: [Array],
+    [1]       containerStatuses: [Array],
+    [1]       ephemeralContainerStatuses: undefined,
+    [1]       hostIP: '192.168.9.99',
+    [1]       
+    [1]       phase: 'Running',
+    [1]       podIP: '192.168.11.187',
+    [1]       
+    [1]     }
+    [1]   },

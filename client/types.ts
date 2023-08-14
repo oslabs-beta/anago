@@ -20,48 +20,84 @@ export interface UserData {
   metrics: {};
 }
 
+// export interface V1Node {
+//   metadata:  {
+//     creationTimestamp: any;
+//   labels: {}[];
+//   name: string;
+//   namespace: any;
+//   uid: string;
+//   };
+//   spec: {
+//     providerID: string;
+//   };
+//   status: {};
+// }
+
+// export interface k8sData {
+//   response: {};
+//   body: {
+//     items: V1Node[];
+//   };
+// }
+
 export interface Node {
-  name: string,
-  namespace: string,
-  
+  name: string;
+  namespace: any;
+  creationTimestamp: number | string;
+  labels: {}[];
+  uid: string;
+  providerID: string;
+  status: {};
 }
 
 export interface Pod {
-  name: string,
-  namespace: string,
-  nodeName: string,
-  serviceAccount: any,
-  containerStatuses: any,
-  podIP: string,
+  name: string;
+  namespace: string;
+  nodeName: string;
+  creationTimestamp: string;
+  labels: [];
+  containers: [];
+  conditions: [];
+  serviceAccount: string;
+  containerStatuses: any;
+  podIP: string;
+  phase: string;
+  uid: string;
 }
 
 export interface Namespace {
-  name: string,
-  id: string,
-  creationTimeStamp: any
+  name: string;
+  creationTimestamp: string;
+  labels: [];
+  uid: string;
+  phase: string;
 }
 
 export interface Service {
-  name: string,
-  creationTimeStamp: any,
-  namespace: string,
-  ports: number,
-
+  name: string;
+  namespace: string;
+  creationTimestamp: string;
+  labels: [];
+  uid: string;
+  ports: [];
+  loadBalancer: [];
 }
 
 export interface Deployment {
-  name: string,
-  creationTimeStamp: any,
-  namespace: string,
-  replicas: number,
-  availableReplicas: any,
+  name: string;
+  creationTimestamp: string;
+  labels: [];
+  namespace: string;
+  replicas: any;
+  uid: string;
+  status: {};
 }
 
-export interface ClusterInfo {
+export interface Cluster {
   nodes: Node[];
   pods: Pod[];
   namespaces: Namespace[];
   services: Service[];
   deployments: Deployment[];
-  
 }
