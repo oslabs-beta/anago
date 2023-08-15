@@ -10,12 +10,15 @@ const Pods = ({
   phase,
   podIP,
   serviceAccount,
-  uid,
+  id,
 }) => {
+  console.log(serviceAccount);
+
   return (
-    <div className='pod'>
+    <div className='pod' id={id}>
+      <p>Pod</p>
       <h3>{name}</h3>
-      <div>{containerStatuses}</div>
+      <p>{phase}</p>
     </div>
   );
 };

@@ -1,9 +1,10 @@
+import { Namespace } from '../../types';
 import Namespaces from './Namespaces';
 import { useRouteLoaderData } from 'react-router-dom';
 
 const Nodes = ({ name, creationTimestamp, labels, id, providerID, status }) => {
   const clusterData: any = useRouteLoaderData('cluster');
-  const namespaces = clusterData.namespaces;
+  const namespaces: any = clusterData.namespaces;
 
   console.log('in nodes', namespaces);
 
@@ -12,14 +13,15 @@ const Nodes = ({ name, creationTimestamp, labels, id, providerID, status }) => {
       <h2>{name}</h2>
       <div className='namespace-container'>
         <p>this is within the namespace container</p>
-        {namespaces.map(namespace => {
-          <Namespaces
-            id={namespace.uid}
-            name={namespace.name}
-            creationTimestamp={namespace.creationTimestamp}
-            phase={namespace.phase}
-          />;
-        })}
+        {clusterData &&
+          namespaces.map(namespace => (
+            <Namespaces
+              id={namespace.uid}
+              name={namespace.name}
+              creationTimestamp={namespace.creationTimestamp}
+              phase={namespace.phase}
+            />
+          ))}
       </div>
     </div>
   );

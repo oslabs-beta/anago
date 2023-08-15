@@ -23,29 +23,65 @@ const Namespaces = ({ id, name, creationTimestamp, phase }) => {
         <p>{creationTimestamp}</p>
       </div>
       <div className='namespace-contents'>
-        <div className="namespace-pods">
-        {clusterData && pods.map(pod => {
-            if (pod.namespace === name){
-                <Pods name={pod.name} conditions = {pod.conditions} containerStatuses = {pod.containerStatuses} containers={pod.containers} creationTimestamp = {pod.creationTimestamp} labels = {pod.labels} namespace = {pod.namespace} nodeName = {pod.nodeName} phase={pod.phase} podIP={pod.podIP} serviceAccount = {pod.serviceAccount} id={pod.uid}/>
-            }
-        })}
+        <div className='namespace-pods'>
+          {clusterData &&
+            pods.map(pod =>
+              pod.namespace === name ? (
+                <Pods
+                  name={pod.name}
+                  conditions={pod.conditions}
+                  containerStatuses={pod.containerStatuses}
+                  containers={pod.containers}
+                  creationTimestamp={pod.creationTimestamp}
+                  labels={pod.labels}
+                  namespace={pod.namespace}
+                  nodeName={pod.nodeName}
+                  phase={pod.phase}
+                  podIP={pod.podIP}
+                  serviceAccount={pod.serviceAccount}
+                  id={pod.uid}
+                />
+              ) : (
+                <></>
+              ),
+            )}
+          ;
         </div>
-        <div className="namespace-services">
-            {clusterData && services.map(service => {
-                if (service.namespace === name){
-                    <Services name={service.name} loadBalancer = {service.loadBalancer} creationTimestamp = {service.creationTimestamp} labels = {service.labels} namespace = {service.namespace} ports={service.ports} id={service.uid}/>
-                }
-            })}
+        <div className='namespace-services'>
+          {clusterData &&
+            services.map(service =>
+              service.namespace === name ? (
+                <Services
+                  name={service.name}
+                  loadBalancer={service.loadBalancer}
+                  creationTimestamp={service.creationTimestamp}
+                  labels={service.labels}
+                  namespace={service.namespace}
+                  ports={service.ports}
+                  id={service.uid}
+                />
+              ) : (
+                <></>
+              ),
+            )}
         </div>
-        <div className="namespace-deployments">
-            {clusterData && deployments.map(deployment => {
-                if (deployment.namespace === name){
-                    <Deployments name={deployment.name} replicas = {deployment.replicas} creationTimestamp = {deployment.creationTimestamp} labels = {deployment.labels} namespace = {deployment.namespace} id={deployment.uid}/>
-                }
-            })}
+        <div className='namespace-deployments'>
+          {clusterData &&
+            deployments.map(deployment =>
+              deployment.namespace === name ? (
+                <Deployments
+                  name={deployment.name}
+                  replicas={deployment.replicas}
+                  creationTimestamp={deployment.creationTimestamp}
+                  labels={deployment.labels}
+                  namespace={deployment.namespace}
+                  id={deployment.uid}
+                />
+              ) : (
+                <></>
+              ),
+            )}
         </div>
-
-
       </div>
     </div>
   );

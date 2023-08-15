@@ -1,4 +1,4 @@
-import { useRouteLoaderData } from 'react-router-dom';
+import { useRouteLoaderData, Outlet } from 'react-router-dom';
 import Clusters from '../Components/Visualizer/Cluster';
 
 import { Node } from '../types';
