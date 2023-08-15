@@ -21,16 +21,41 @@ export interface UserData {
 }
 
 export enum LookupType {
-  CPUIdleByCluster, //0
+  CustomEntry, //0
+  CPUIdleByCluster, //1
   MemoryIdleByCluster,
   MemoryUsed,
   CPUUsedByContainer,
   FreeDiskUsage,
-  ReadyNodesByCluster, //5
+  ReadyNodesByCluster,
   NodesReadinessFlapping,
   PodCount,
 }
 
+export const lookupName = (type: LookupType): string => {
+  switch (type) {
+    case LookupType.CustomEntry:
+      return 'Custom PromQL Entry';
+    case LookupType.CPUIdleByCluster:
+      return 'CPU Idle by Cluster';
+    case LookupType.MemoryIdleByCluster:
+      return 'Memory Idle by Cluster';
+    case LookupType.MemoryUsed:
+      return '% Memory Used by Node';
+    case LookupType.CPUUsedByContainer:
+      return 'CPU Usage by Container';
+    case LookupType.FreeDiskUsage:
+      return 'Disk Space by Container';
+    case LookupType.ReadyNodesByCluster:
+      return 'Ready Nodes by Cluster';
+    case LookupType.NodesReadinessFlapping:
+      return 'Node Readiness Flapping';
+    case LookupType.PodCount:
+      return 'Pod Count by Node';
+    default:
+      return 'Lookup Type Not Found';
+  }
+};
 
 //  types:
 // object containing graph label and y-axis values

@@ -8,6 +8,15 @@ userRouter.get('/', userDataController.sendUserData, (_, res: Response) => {
 });
 
 userRouter.post(
+  '/add-metric',
+  userDataController.addMetric,
+  (_, res: Response) => {
+    //send updated user data
+    return res.status(200).json(res.locals.userData);
+  }
+);
+
+userRouter.post(
   '/',
   userDataController.saveUserData,
   userDataController.sendUserData,

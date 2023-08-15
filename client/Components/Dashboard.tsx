@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import { Modal } from 'react-responsive-modal';
 import MetricDisplay from './MetricDisplay';
 import { MetricProps, UserData } from '../../types';
 import {
@@ -9,12 +9,14 @@ import {
   useLocation,
 } from 'react-router-dom';
 import AlertBar from './AlertBar';
+import AddMetric from './AddMetric';
 
 const Dashboard = () => {
   const userData = useRouteLoaderData('home') as UserData;
   const { id } = useParams();
 
   const [lastUpdate, setLastUpdate] = useState<Date>();
+  const [addMetricModal, setAddMetricModal] = useState(false);
 
   useEffect(() => {
     setLastUpdate(new Date());
@@ -47,10 +49,19 @@ const Dashboard = () => {
           <AlertBar />
           <div className="dashboard-buttons">
             <span>
-              <button onClick={refresh}>Refresh</button>
+              <button className="btn" onClick={refresh}>
+                Refresh
+              </button>
             </span>
             <span>
-              <button onClick={pithy}>Pithy Loop</button>
+              <button className="btn" onClick={pithy}>
+                Pithy Loop
+              </button>
+            </span>
+            <span>
+              <button className="btn" onClick={() => setAddMetricModal(true)}>
+                Add Metric
+              </button>
             </span>
           </div>
           <div className="dashboard-container">
@@ -64,6 +75,14 @@ const Dashboard = () => {
           </div>
         </>
       )}
+      <div className="modal">
+        <Modal
+          open={addMetricModal}
+          onClose={() => setAddMetricModal(false)}
+        >
+          <AddMetric dashboard={location} setAddMetricModal={setAddMetricModal} />
+        </Modal>
+      </div>
     </div>
   );
 };

@@ -121,6 +121,10 @@ function queryBuilder(lookupType: LookupType, queryOptions: any): string {
   // Creates a promQL search string for a given LookupType and set of options
   console.log(lookupType, queryOptions);
   switch (lookupType) {
+    case LookupType.CustomEntry: {
+      return queryOptions.customQuery;
+    }
+
     case LookupType.CPUIdleByCluster: {
       return 'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
     }

@@ -65,10 +65,10 @@ const MetricDisplay = ({ metricId }) => {
       <h4 className="metric-title">{userData.metrics[metricId].metricName}</h4>
 
       {metricData.hasOwnProperty('labels') && (
-        <Line data={metricData} options={options} />
+        <Line data={metricData} options={options} onClick={openModal} />
       )}
       <div className="modal">
-        <button onClick={openModal}>See more</button>
+        {/* {metricId && <button onClick={openModal}>See more</button>} */}
         <Modal open={open} onClose={closeModal}>
           <h4 className="metric-title">
             {userData.metrics[metricId].metricName}
