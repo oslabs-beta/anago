@@ -1,0 +1,54 @@
+import Deployments from './Deployments';
+import Pods from './Pods';
+import Services from './Services';
+import { useRouteLoaderData } from 'react-router-dom';
+
+import { Pod, Service, Deployment } from '../../types';
+
+const Namespaces = ({ id, name, creationTimestamp, phase }) => {
+  const clusterData: any = useRouteLoaderData('cluster');
+
+  const pods: Pod[] = clusterData.pods;
+  const services: Service[] = clusterData.services;
+  const deployments: Deployment[] = clusterData.deployments;
+
+  console.log('inside namespaces, ', pods, services, deployments);
+
+  return (
+    <div id={id} className='namespace'>
+      <div className='namespace-info'>
+        <h1>This is a namespace</h1>
+        <h3>{name}</h3>
+        <h6>{phase}</h6>
+        <p>{creationTimestamp}</p>
+      </div>
+      <div className='namespace-contents'>
+        <div className="namespace-pods">
+        {clusterData && pods.map(pod => {
+            if (pod.namespace === name){
+                <Pods name={pod.name} conditions = {pod.conditions} containerStatuses = {pod.containerStatuses} containers={pod.containers} creationTimestamp = {pod.creationTimestamp} labels = {pod.labels} namespace = {pod.namespace} nodeName = {pod.nodeName} phase={pod.phase} podIP={pod.podIP} serviceAccount = {pod.serviceAccount} id={pod.uid}/>
+            }
+        })}
+        </div>
+        <div className="namespace-services">
+            {clusterData && services.map(service => {
+                if (service.namespace === name){
+                    <Services name={service.name} loadBalancer = {service.loadBalancer} creationTimestamp = {service.creationTimestamp} labels = {service.labels} namespace = {service.namespace} ports={service.ports} id={service.uid}/>
+                }
+            })}
+        </div>
+        <div className="namespace-deployments">
+            {clusterData && deployments.map(deployment => {
+                if (deployment.namespace === name){
+                    <Deployments name={deployment.name} replicas = {deployment.replicas} creationTimestamp = {deployment.creationTimestamp} labels = {deployment.labels} namespace = {deployment.namespace} id={deployment.uid}/>
+                }
+            })}
+        </div>
+
+
+      </div>
+    </div>
+  );
+};
+
+export default Namespaces;

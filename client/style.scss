@@ -241,3 +241,19 @@ header nav {
     opacity: 0;
   }
 }
+
+.node {
+  height: min-content;
+  width: min-content;
+  border: 2px dashed black;
+}
+
+.namespace {
+  height: min-content;
+  width: min-content;
+  border: 2px dashed red;
+}
+
+.namespace p {
+  font-size: 12px;
+}

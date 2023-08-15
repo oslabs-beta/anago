@@ -22,7 +22,7 @@ const router = createBrowserRouter(
       <Route path=':id' element={<Dashboard />} />
       <Route path='login' element={<Login />} />
       <Route path='settings' element={<Settings />} />
-      <Route path='clusterview' element={<ClusterView />} loader={loaders.clusterLoader}/>
+      <Route path='clusterview' element={<ClusterView />} loader={loaders.clusterLoader} id='cluster'/>
     </Route>,
   ),
 );
