@@ -20,6 +20,67 @@ export interface UserData {
   metrics: {};
 }
 
+export interface Node {
+  name: string;
+  namespace: any;
+  creationTimestamp: number | string;
+  labels: {}[];
+  uid: string;
+  providerID: string;
+  status: {};
+}
+
+export interface Pod {
+  name: string;
+  namespace: string;
+  nodeName: string;
+  creationTimestamp: string;
+  labels: [];
+  containers: [];
+  conditions: [];
+  serviceAccount: string;
+  containerStatuses: any;
+  podIP: string;
+  phase: string;
+  uid: string;
+}
+
+export interface Namespace {
+  name: string;
+  creationTimestamp: string;
+  labels: [];
+  uid: string;
+  phase: string;
+}
+
+export interface Service {
+  name: string;
+  namespace: string;
+  creationTimestamp: string;
+  labels: [];
+  uid: string;
+  ports: [];
+  loadBalancer: [];
+}
+
+export interface Deployment {
+  name: string;
+  creationTimestamp: string;
+  labels: [];
+  namespace: string;
+  replicas: any;
+  uid: string;
+  status: {};
+}
+
+export interface Cluster {
+  nodes: Node[];
+  pods: Pod[];
+  namespaces: Namespace[];
+  services: Service[];
+  deployments: Deployment[];
+}
+
 export enum LookupType {
   CustomEntry, //0
   CPUIdleByCluster, //1
