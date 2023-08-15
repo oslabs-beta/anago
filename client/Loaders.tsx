@@ -5,3 +5,9 @@ export const userLoader = async () => {
   });
   return res.json();
 };
+
+export const clusterLoader =async () => {
+  const res = await fetch('api/k8s/cluster');
+  return res.json();
+}
+

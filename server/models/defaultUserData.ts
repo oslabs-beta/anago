@@ -1,6 +1,6 @@
 import { UserData, Cluster, LookupType } from './userDataClass.js';
 const DEPLOYMENT_URL = 'http://localhost.com/9090';
-const ACTIVE_DEPLOYMENT = false;
+const ACTIVE_DEPLOYMENT = true;
 
 const userData = new UserData();
 userData.clusters.push(new Cluster('Testing Cluster', DEPLOYMENT_URL));
