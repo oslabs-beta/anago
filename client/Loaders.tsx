@@ -5,10 +5,3 @@ export const userLoader = async () => {
   });
   return res.json();
 };
-
-export const alertLoader = async () => {
-  const res = await fetch('/api/alerts', {
-    method: 'GET',
-  });
-  return res.json();
-};
