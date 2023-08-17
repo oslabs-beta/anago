@@ -11,20 +11,26 @@ const Services = ({
   id,
 }) => {
   const [open, setOpen]: any = useState(false);
-  
-  
+
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
   return (
     <div className='service'>
-      <p>Service</p>
-      <h4>{name}</h4>
-      <p>{creationTimestamp}</p>
+      <img
+        src='client/assets/images/service.png'
+        className='k8logo'
+        id='service-logo'
+        onClick={openModal}
+      />
+      <h5>{name}</h5>
+
       <div className='modal'>
-        <button onClick={openModal}>See more</button>
         <Modal open={open} onClose={closeModal}>
-    
+          <div>
+            <h6>{name}</h6>
+            <p>{creationTimestamp}</p>
+          </div>
         </Modal>
       </div>
     </div>

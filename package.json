@@ -24,6 +24,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-responsive-modal": "^6.4.2",
+    "react-rnd": "^10.4.1",
     "react-router-dom": "^6.14.2"
   },
   "devDependencies": {

@@ -16,9 +16,6 @@ const Namespaces = ({ id, name, creationTimestamp, phase }) => {
   const deployments: Deployment[] = clusterData.deployments;
 
 
-  console.log('inside namespaces, ', pods, services, deployments);
-
-
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
@@ -26,8 +23,8 @@ const Namespaces = ({ id, name, creationTimestamp, phase }) => {
   return (
     <div id={id} className='namespace'>
       <div className='namespace-info'>
-        <h1>This is a namespace</h1>
-        <h3>{name}</h3>
+        <p>{name}</p>
+        <img className='k8logo' id='namespace-logo' src='client/assets/images/namespace.png' />
         <h6>{phase}</h6>
         <p>{creationTimestamp}</p>
       </div>

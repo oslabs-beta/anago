@@ -19,13 +19,16 @@ const Deployments = ({
 
   return (
     <div className='deployment'>
-      <p>Deployment</p>
-      <h3>{name}</h3>
-      <p>{creationTimestamp}</p>
+      <div>
+        <p>{name}</p>
+        <img className='k8logo' id='deployment-logo' src='client/assets/images/deployment.png' />
+      </div>
+      
+
       <div className='modal'>
         <button onClick={openModal}>See more</button>
         <Modal open={open} onClose={closeModal}>
-        
+              <p>{creationTimestamp}</p>
         </Modal>
       </div>
     </div>

@@ -253,17 +253,60 @@ header nav {
 }
 
 .node {
-  height: min-content;
-  width: min-content;
+  display: flex;
   border: 2px dashed black;
+  position: relative;
+  flex-direction: column;
+  flex-wrap: wrap;
+  padding: 0 20px 0 20px
 }
 
+.node-info{
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+#node-logo{
+  margin-bottom: 5px;
+}
+
+.namespace-container {
+  display: flex;
+  justify-content: space-around;
+  align-content: space-around;
+  flex-flow: row wrap;
+}
 .namespace {
   height: min-content;
-  width: min-content;
+  min-width: 3rem;
   border: 2px dashed red;
 }
 
 .namespace p {
   font-size: 12px;
+}
+
+
+.cluster-view {
+  display: flex;
+  width: 15rem; 
+  flex-direction: column; 
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: space-around;
+
+}
+
+.k8logo {
+  height: 75px;
+  width: 75px;
+} 
+
+.pod{
+
 }
