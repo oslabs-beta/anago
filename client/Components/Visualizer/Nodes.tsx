@@ -14,8 +14,10 @@ const Nodes = ({ name, creationTimestamp, labels, id, providerID, status }) => {
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
+  console.log(clusterData.deployments)
+
   return (
-    <Rnd className='node' id={id}>
+    <div className='node' id={id}>
       <p>{name}</p>
       <div className='node-info'>
         <img
@@ -92,7 +94,7 @@ const Nodes = ({ name, creationTimestamp, labels, id, providerID, status }) => {
             />
           ))}
       </div>
-    </Rnd>
+    </div>
   );
 };
 

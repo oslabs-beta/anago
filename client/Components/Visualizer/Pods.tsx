@@ -29,6 +29,7 @@ const Pods = ({
           id='pod-logo'
           onClick={openModal}
         />
+        <h5>{podIP}</h5>
       </div>
       <div className='modal'>
         <Modal open={open} onClose={closeModal}>

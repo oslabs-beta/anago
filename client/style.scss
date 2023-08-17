@@ -252,16 +252,25 @@ header nav {
   }
 }
 
+.cluster-view {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: space-around;
+}
+
 .node {
   display: flex;
   border: 2px dashed black;
   position: relative;
   flex-direction: column;
   flex-wrap: wrap;
-  padding: 0 20px 0 20px
+  padding: 0 20px 0 20px;
 }
 
-.node-info{
+.node-info {
   position: absolute;
   top: 0;
   right: 0;
@@ -271,7 +280,7 @@ header nav {
   align-items: center;
 }
 
-#node-logo{
+#node-logo {
   margin-bottom: 5px;
 }
 
@@ -282,31 +291,82 @@ header nav {
   flex-flow: row wrap;
 }
 .namespace {
-  height: min-content;
+  position: relative;
+  // height: min-content;
   min-width: 3rem;
   border: 2px dashed red;
 }
 
-.namespace p {
-  font-size: 12px;
+.namespace-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px
 }
 
+.namespace-info h3{
+  line-height: auto;
+  margin-bottom: 2px;
+}
+.namespace-info h4{
+  line-height: auto;
+  margin-bottom: 2px;
+}
 
-.cluster-view {
+.namespace-contents {
   display: flex;
-  width: 15rem; 
-  flex-direction: column; 
-  flex-wrap: wrap;
   justify-content: space-around;
   align-content: space-around;
+}
+
+.namespace-pods {
+  display: flex;
+  justify-content: space-around;
+  align-content: space-around;
+  flex-wrap: wrap;
+  background-color: rgb(173, 216, 230, 0.3);
+  padding: 10px;
+}
+.namespace-services {
+  display: flex;
+  justify-content: space-around;
+  align-content: space-around;
+  flex-wrap: wrap;
+  background-color: rgb(144, 238, 169, 0.3);
+  padding: 10px;
+}
+.namespace-deployments {
+  display: flex;
+  justify-content: space-around;
+  align-content: space-around;
+  flex-wrap: wrap;
+  background-color: rgb(230, 230, 250, 0.3);
+  padding: 10px;
 
 }
+
+#namespace-logo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+
 
 .k8logo {
   height: 75px;
   width: 75px;
-} 
+}
 
-.pod{
-
+.service h5 {
+  width: 90px;
+  word-wrap: break-word;
+  white-space: normal;
 }

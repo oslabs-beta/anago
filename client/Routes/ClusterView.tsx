@@ -12,8 +12,7 @@ const ClusterView = () => {
   console.log('cluster services', clusterData.services);
   return (
     <div className='cluster-view'>
-      <p>This is the ClusterView page</p>
-      <ControlPlane/>
+      {/* <ControlPlane/> */}
       {clusterData &&
         nodes.map(node => (
           <Nodes

@@ -15,19 +15,21 @@ const Namespaces = ({ id, name, creationTimestamp, phase }) => {
   const services: Service[] = clusterData.services;
   const deployments: Deployment[] = clusterData.deployments;
 
-
-
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
   return (
     <div id={id} className='namespace'>
       <div className='namespace-info'>
-        <p>{name}</p>
-        <img className='k8logo' id='namespace-logo' src='client/assets/images/namespace.png' />
-        <h6>{phase}</h6>
-        <p>{creationTimestamp}</p>
+        <h3>{`${name.toUpperCase()} Namespace Status: ${phase} `}</h3>
+        <h4>{creationTimestamp}</h4>
       </div>
+      <img
+        className='k8logo'
+        id='namespace-logo'
+        src='client/assets/images/namespace.png'
+      />
+
       <div className='namespace-contents'>
         <div className='namespace-pods'>
           {clusterData &&
@@ -51,7 +53,6 @@ const Namespaces = ({ id, name, creationTimestamp, phase }) => {
                 <></>
               ),
             )}
-          ;
         </div>
         <div className='namespace-services'>
           {clusterData &&

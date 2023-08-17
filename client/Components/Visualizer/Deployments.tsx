@@ -9,26 +9,46 @@ const Deployments = ({
   namespace,
   id,
 }) => {
-
   const [open, setOpen]: any = useState(false);
-
-
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
   return (
-    <div className='deployment'>
+    <div className='deployment' id={id}>
       <div>
-        <p>{name}</p>
-        <img className='k8logo' id='deployment-logo' src='client/assets/images/deployment.png' />
+        <img
+          className='k8logo'
+          id='deployment-logo'
+          src='client/assets/images/deployment.png'
+          onClick={openModal}
+        />
+        <h5>{name}</h5>
       </div>
-      
 
       <div className='modal'>
-        <button onClick={openModal}>See more</button>
         <Modal open={open} onClose={closeModal}>
-              <p>{creationTimestamp}</p>
+          <div>
+            <h2>Deployment Information:</h2>
+            <h3>Deployment Name:</h3>
+            <p>{name}</p>
+            <h3>Creation Timestamp:</h3>
+            <p>{creationTimestamp}</p>
+            <h3>Replicas:</h3>
+            <p>{replicas}</p>
+            <h3>Namespace</h3>
+            <p>{namespace}</p>
+            //!working on labels
+            {/* <div>
+              {() => {
+                for (let key in labels) {
+                  return <>
+                  <p>{key + ': ' + labels[key]}</p>
+                  </>;
+                }
+              }}
+            </div> */}
+          </div>
         </Modal>
       </div>
     </div>
