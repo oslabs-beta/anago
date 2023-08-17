@@ -95,6 +95,7 @@ const promApiController: any = {
       promURLRange + query + startQuery + endQuery + stepQuery;
 
     return next();
+    // TODO: add error handler
   },
 
   // get request querying prometheus http api that exists as an instance in kubernetes
