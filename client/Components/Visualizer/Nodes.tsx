@@ -1,5 +1,5 @@
 import { Namespace } from '../../types';
-import Namespaces from './Namespaces';
+import Namespaces from './Namespaces.tsx';
 import { useRouteLoaderData } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import { Rnd } from 'react-rnd';
@@ -14,11 +14,9 @@ const Nodes = ({ name, creationTimestamp, labels, id, providerID, status }) => {
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
-  console.log(clusterData.deployments)
 
   return (
     <div className='node' id={id}>
-      <p>{name}</p>
       <div className='node-info'>
         <img
         className='k8logo'
@@ -99,3 +97,5 @@ const Nodes = ({ name, creationTimestamp, labels, id, providerID, status }) => {
 };
 
 export default Nodes;
+
+

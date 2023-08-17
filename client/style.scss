@@ -255,7 +255,6 @@ header nav {
 .cluster-view {
   display: flex;
   width: 100%;
-  flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-around;
   align-content: space-around;
@@ -267,13 +266,16 @@ header nav {
   position: relative;
   flex-direction: column;
   flex-wrap: wrap;
-  padding: 0 20px 0 20px;
+  width: 40%;
+  padding: 100px 20px 0 20px;
+  margin-bottom: 10px;
 }
 
 .node-info {
   position: absolute;
   top: 0;
   right: 0;
+  margin-left: 20px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -281,6 +283,7 @@ header nav {
 }
 
 #node-logo {
+
   margin-bottom: 5px;
 }
 
@@ -289,12 +292,15 @@ header nav {
   justify-content: space-around;
   align-content: space-around;
   flex-flow: row wrap;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  gap: 10px;
 }
 .namespace {
   position: relative;
-  // height: min-content;
-  min-width: 3rem;
   border: 2px dashed red;
+  min-width: 20rem;
+
 }
 
 .namespace-info {

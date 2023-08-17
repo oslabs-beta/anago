@@ -4,6 +4,7 @@ import Services from './Services';
 import { useRouteLoaderData } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
+import { cleanTime } from '../../Routes/ClusterView';
 
 import { Pod, Service, Deployment } from '../../types';
 
@@ -21,8 +22,9 @@ const Namespaces = ({ id, name, creationTimestamp, phase }) => {
   return (
     <div id={id} className='namespace'>
       <div className='namespace-info'>
-        <h3>{`${name.toUpperCase()} Namespace Status: ${phase} `}</h3>
-        <h4>{creationTimestamp}</h4>
+        <h3>{`${name.toUpperCase()}`} </h3>
+        <h3>{`Status: ${phase} `}</h3>
+        <h4>{cleanTime(creationTimestamp)}</h4>
       </div>
       <img
         className='k8logo'
