@@ -9,7 +9,6 @@ import {
   Cluster,
 } from '../../client/types';
 
-
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
 
@@ -41,7 +40,7 @@ k8sController.getNodes = async (
       return node;
     });
     res.locals.nodes = nodes;
-    res.locals.cluster = {nodes: nodes};
+    res.locals.cluster = { nodes: nodes };
     return next();
   } catch (error) {
     console.log(error);
@@ -76,7 +75,7 @@ k8sController.getPods = async (
       return pod;
     });
     res.locals.pods = pods;
-    res.locals.cluster = {pods: pods}
+    res.locals.cluster = { pods: pods };
     next();
   } catch (error) {
     console.log(error);
@@ -103,7 +102,7 @@ k8sController.getNamespaces = async (
       return namespace;
     });
     res.locals.namespaces = namespaces;
-    res.locals.cluster = {namespaces: namespaces}
+    res.locals.cluster = { namespaces: namespaces };
     next();
   } catch (error) {
     console.log(error);
@@ -133,7 +132,7 @@ k8sController.getServices = async (
       return service;
     });
     res.locals.services = services;
-    res.locals.cluster = {services: services};
+    res.locals.cluster = { services: services };
     next();
   } catch (error) {
     console.log(error);
@@ -163,7 +162,7 @@ k8sController.getDeployments = async (
       return deployment;
     });
     res.locals.deployments = deployments;
-    res.locals.cluster = {deployments: deployments};
+    res.locals.cluster = { deployments: deployments };
     next();
   } catch (error) {
     console.log(error);
@@ -190,6 +189,41 @@ k8sController.getCluster = async (
     };
     //currently does not accounting for multiple clusters, just one cluster for now
     res.locals.cluster = cluster;
+    next();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+k8sController.getHpa = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const data: any = await k8sApi.listPodForAllNamespaces();
+    const pods: Pod[] = data.body.items.map(data => {
+      const { name, namespace, creationTimestamp, uid, labels } = data.metadata;
+      const { nodeName, containers, serviceAccount } = data.spec;
+      const { conditions, containerStatuses, phase, podIP } = data.status;
+      const pod: Pod = {
+        name,
+        namespace,
+        uid,
+        creationTimestamp,
+        labels,
+        nodeName,
+        containers,
+        serviceAccount,
+        conditions,
+        containerStatuses,
+        phase,
+        podIP,
+      };
+      return pod;
+    });
+    res.locals.pods = pods;
+    res.locals.cluster = { pods: pods };
     next();
   } catch (error) {
     console.log(error);

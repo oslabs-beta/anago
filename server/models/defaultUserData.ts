@@ -28,6 +28,37 @@ if (ACTIVE_DEPLOYMENT) {
   //   'Nodes Readiness Flapping',
   //   LookupType.NodesReadinessFlapping,
   // );
+  //
+  // HPA Monitoring pre-built Dashboard
+  userData.addMetric('HPA by Deployment', LookupType.HPAByDeployment);
+  // name/deployment: horizontalpodautoscaler="pithy-deployment",
+  // query by deployment: kube_horizontalpodautoscaler_metadata_generation{horizontalpodautoscaler="pithy-deployment"}
+  userData.addMetric('HPA Target Status', LookupType.HPATargetStatus);
+  // kube_horizontalpodautoscaler_status_target_metric{metric_target_type="utilization"}
+  userData.addMetric('HPA Target', LookupType.HPATargetSpec);
+  // kube_horizontalpodautoscaler_spec_target_metric;
+  userData.addMetric('HPA Minimum Replicas', LookupType.HPAMinReplicas);
+  // kube_horizontalpodautoscaler_spec_min_replicas
+  userData.addMetric('HPA Maximum Replicas', LookupType.HPAMaxReplicas);
+  // kube_horizontalpodautoscaler_spec_max_replicas
+  userData.addMetric('HPA Current Replicas', LookupType.HPACurrentReplicas);
+  // kube_horizontalpodautoscaler_status_current_replicas
+  userData.addMetric('HPA Desired Replicas', LookupTypeHPADesiredReplicas);
+  // kube_horizontalpodautoscaler_status_desired_replicas
+  // ! Utilization will be a calc of = current replicas/maxreplicas*100 (over time) OR retrive log of anytime this percentage reached 80+
+  // userData.addMetric('HPA Utilization', LookupType.HPAUtilization);
+  userData.addMetric('Total HTTP Requests', LookupType.HTTPRequests);
+  // can filter results for endpoints and method types
+  // increase(http_requests_total[24h])
+  // increase(http_requests_total{endpoint="https-metrics", method="GET"}[24h])
+  userData.addMetric('');
+  // kube_horizontalpodautoscaler_spec_target_metric
+  //
+  //  addMetric(
+  // metricName: string,
+  // lookupType: LookupType,
+  // queryOptions?: any,
+  // dashboardNumber = 0
 } else {
   // Use placeholder data instead
 
@@ -38,12 +69,12 @@ if (ACTIVE_DEPLOYMENT) {
     {
       duration: 5 * 60 * 60,
       stepSize: 5 * 60,
-    }
+    },
   );
   userData.addPlaceholderMetric(
     'Memory Idle by Cluster',
     LookupType.MemoryIdleByCluster,
-    '1'
+    '1',
   );
   userData.addPlaceholderMetric('Pod Count by Node', LookupType.PodCount, '2', {
     duration: 3 * 60 * 60,
@@ -52,17 +83,17 @@ if (ACTIVE_DEPLOYMENT) {
   userData.addPlaceholderMetric(
     '% Memory Used by Node',
     LookupType.MemoryUsed,
-    '3'
+    '3',
   );
   userData.addPlaceholderMetric(
     'CPU Usage by Container',
     LookupType.CPUUsedByContainer,
-    '4'
+    '4',
   );
   userData.addPlaceholderMetric(
     'Disk Space by Container',
     LookupType.FreeDiskUsage,
-    '5'
+    '5',
   );
   userData.addPlaceholderMetric(
     'Ready Nodes by Cluster',
@@ -71,7 +102,7 @@ if (ACTIVE_DEPLOYMENT) {
     {
       duration: 21 * 24 * 60 * 60,
       stepSize: 8 * 60 * 60,
-    }
+    },
   );
 }
 

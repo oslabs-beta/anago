@@ -163,6 +163,8 @@ function queryBuilder(lookupType: LookupType, queryOptions: any): string {
       return 'sum by (namespace) (kube_pod_info)';
     }
 
+    case LookupType.CPUUsagePerCluster
+
     default: {
       return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';
     }
