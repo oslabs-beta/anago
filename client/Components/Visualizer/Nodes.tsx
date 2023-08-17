@@ -1,12 +1,20 @@
 import { Namespace } from '../../types';
 import Namespaces from './Namespaces';
 import { useRouteLoaderData } from 'react-router-dom';
+import { Modal } from 'react-responsive-modal';
+import { useState } from 'react';
 
 const Nodes = ({ name, creationTimestamp, labels, id, providerID, status }) => {
   const clusterData: any = useRouteLoaderData('cluster');
   const namespaces: any = clusterData.namespaces;
+  const [open, setOpen]: any = useState(false);
 
   console.log('in nodes', namespaces);
+
+
+
+  const openModal = () => setOpen(true);
+  const closeModal = () => setOpen(false);
 
   return (
     <div className='node'>
@@ -22,6 +30,7 @@ const Nodes = ({ name, creationTimestamp, labels, id, providerID, status }) => {
               phase={namespace.phase}
             />
           ))}
+          
       </div>
     </div>
   );

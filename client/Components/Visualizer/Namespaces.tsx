@@ -2,17 +2,26 @@ import Deployments from './Deployments';
 import Pods from './Pods';
 import Services from './Services';
 import { useRouteLoaderData } from 'react-router-dom';
+import { Modal } from 'react-responsive-modal';
+import { useState } from 'react';
 
 import { Pod, Service, Deployment } from '../../types';
 
 const Namespaces = ({ id, name, creationTimestamp, phase }) => {
   const clusterData: any = useRouteLoaderData('cluster');
+  const [open, setOpen]: any = useState(false);
 
   const pods: Pod[] = clusterData.pods;
   const services: Service[] = clusterData.services;
   const deployments: Deployment[] = clusterData.deployments;
 
+
   console.log('inside namespaces, ', pods, services, deployments);
+
+
+
+  const openModal = () => setOpen(true);
+  const closeModal = () => setOpen(false);
 
   return (
     <div id={id} className='namespace'>
