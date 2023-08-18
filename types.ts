@@ -112,7 +112,7 @@ export const lookupName = (type: LookupType): string => {
     case LookupType.NodesReadinessFlapping:
       return 'Node Readiness Flapping';
     case LookupType.PodCount:
-      return 'Pod Count by Node';
+      return 'Pod Count by Namespace';
     default:
       return 'Lookup Type Not Found';
   }

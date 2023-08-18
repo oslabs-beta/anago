@@ -6,7 +6,6 @@ import MetricDisplay from './MetricDisplay';
 const AddMetric = (props): any => {
   const userData = useRouteLoaderData('home') as UserData;
   const lookupOptions = [
-    LookupType.CustomEntry,
     LookupType.CPUIdleByCluster,
     LookupType.MemoryIdleByCluster,
     LookupType.MemoryUsed,

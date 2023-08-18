@@ -11,18 +11,28 @@ if (ACTIVE_DEPLOYMENT) {
     duration: 5 * 60 * 60,
     stepSize: 5 * 60,
   });
-  newUserData.addMetric('Memory Idle by Cluster', LookupType.MemoryIdleByCluster);
-  newUserData.addMetric('Pod Count by Node', LookupType.PodCount, {
+  newUserData.addMetric(
+    'Memory Idle by Cluster',
+    LookupType.MemoryIdleByCluster
+  );
+  newUserData.addMetric('Pod Count by Namespace', LookupType.PodCount, {
     duration: 3 * 60 * 60,
     stepSize: 5 * 60,
   });
   newUserData.addMetric('% Memory Used by Node', LookupType.MemoryUsed);
-  newUserData.addMetric('CPU Usage by Container', LookupType.CPUUsedByContainer);
+  newUserData.addMetric(
+    'CPU Usage by Container',
+    LookupType.CPUUsedByContainer
+  );
   newUserData.addMetric('Disk Space by Container', LookupType.FreeDiskUsage);
-  newUserData.addMetric('Ready Nodes by Cluster', LookupType.ReadyNodesByCluster, {
-    duration: 21 * 24 * 60 * 60,
-    stepSize: 8 * 60 * 60,
-  });
+  newUserData.addMetric(
+    'Ready Nodes by Cluster',
+    LookupType.ReadyNodesByCluster,
+    {
+      duration: 21 * 24 * 60 * 60,
+      stepSize: 8 * 60 * 60,
+    }
+  );
   // Verify before using Flapping Metric
   // userData.addMetric(
   //   'Nodes Readiness Flapping',
@@ -45,10 +55,15 @@ if (ACTIVE_DEPLOYMENT) {
     LookupType.MemoryIdleByCluster,
     '1'
   );
-  newUserData.addPlaceholderMetric('Pod Count by Node', LookupType.PodCount, '2', {
-    duration: 3 * 60 * 60,
-    stepSize: 5 * 60,
-  });
+  newUserData.addPlaceholderMetric(
+    'Pod Count by Namespace',
+    LookupType.PodCount,
+    '2',
+    {
+      duration: 3 * 60 * 60,
+      stepSize: 5 * 60,
+    }
+  );
   newUserData.addPlaceholderMetric(
     '% Memory Used by Node',
     LookupType.MemoryUsed,
