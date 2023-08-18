@@ -40,7 +40,11 @@ const HPADisplay = () => {
       : doubleLineGraph.push(id);
   });
 
-  return <div>{/* <TableDisplay metricIds={table} /> */}</div>;
+  return (
+    <div>
+      <TableDisplay metricIds={table} />
+    </div>
+  );
 };
 
 export default HPADisplay;

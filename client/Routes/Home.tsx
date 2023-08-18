@@ -21,9 +21,8 @@ export default function Home() {
   //set default dashboard and route to that dashboard
   useEffect(() => {
     setHasFetchedUserData(true);
-    setCurrentDashboard(dashboards[0]);
-
-    navigate('0');
+    // setCurrentDashboard(dashboards[0]);
+    if (window.location.pathname === '/') return navigate('0');
   }, []);
 
   return (

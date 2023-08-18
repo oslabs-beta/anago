@@ -44,7 +44,7 @@ const Dashboard = () => {
   console.log(id === '1');
 
   // metric display type
-  // render the HPA Test/Monitoring dashboard layout for that dashboard. Render the default metric dahsboard layout for all others
+  // render the HPA Test/Monitoring layout for that dashboard. Render the default metric dahsboard layout for all others
   const displayType =
     id === '1' ? (
       <div className='dashboard-container'>

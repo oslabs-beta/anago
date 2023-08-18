@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { UserData } from '../../types';
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -39,7 +38,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 // );
 
 const TableDisplay = ({ metricIds }) => {
-  const [metricData, setMetricData]: any = useState({});
+  const [metricData, setMetricData]: any = useState({}[]);
 
   //   // display options for metrics
   //   const options = {
@@ -49,28 +48,23 @@ const TableDisplay = ({ metricIds }) => {
   //       },
   //     },
   //   };
-
+    
   //fetching data from Prometheus
   useEffect(() => {
-    //console.log('Current user in metric:', userData);
-    metricIds.forEach(async (id) => {
-        try {
-            
-        }
-    })
-    fetch(`/api/data/metrics/${metricId}`, {
-      method: 'GET',
-    })
-      .then(data => data.json())
-      .then(data => {
-        //console.log('fetched data', data);
-        setMetricData(data);
-      })
-      .catch(err => console.log(err));
+    metricIds.forEach(async id => {
+      try {
+        const response = await fetch(`/api/data/metrics/${id}`, {
+          method: 'GET',
+        });
+        const data = await response.json();
+        console.log('fetched data', id, data);
+        setMetricData(metricData.push(data));
+      } catch (err) {
+        console.log(err);
+      }
+    });
   }, []);
-  useEffect(() => {
-    const response = await fetch();
-  }, []);
+
   return <div></div>;
 };
 
