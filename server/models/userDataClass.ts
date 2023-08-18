@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
-import { LookupType } from '../../types.js';
+import { LookupType, ScopeType, GraphType } from '../../types.js';
+import { Scope } from 'eslint';
 
 export class UserData {
   userId: string;
@@ -10,10 +11,11 @@ export class UserData {
   addMetric(
     metricName: string,
     lookupType: LookupType,
+    scopeType = ScopeType.Range,
     queryOptions?: any,
     dashboardNumber = 0
   ): string {
-    const newMetric = new Metric(metricName, lookupType, queryOptions);
+    const newMetric = new Metric(metricName, lookupType, scopeType, queryOptions);
     this.dashboards[dashboardNumber].metrics.push(newMetric.metricId);
     this.metrics[newMetric.metricId] = newMetric;
     return newMetric.metricId;
@@ -21,10 +23,11 @@ export class UserData {
   addPlaceholderMetric(
     metricName: string,
     lookupType: LookupType,
+    scopeType: ScopeType.Range,
     placeholderId: string,
     queryOptions?: any
   ): string {
-    const newMetric = new Metric(metricName, lookupType, queryOptions);
+    const newMetric = new Metric(metricName, lookupType, scopeType, queryOptions);
     newMetric.metricId = placeholderId;
     this.dashboards[0].metrics.push(newMetric.metricId);
     this.metrics[newMetric.metricId] = newMetric;
@@ -71,34 +74,44 @@ export class Metric {
   metricId: string;
   metricName: string;
   lookupType: LookupType;
+  scopeType: ScopeType;
   graphType: GraphType;
   queryOptions: any;
   searchQuery: string;
   constructor(
     metricName: string,
     lookupType: LookupType,
+    scopeType = ScopeType.Range,
     queryOptions: any = {}
   ) {
     this.metricId = randomUUID();
     this.metricName = metricName;
     this.lookupType = lookupType; // LookupType.MemoryUsed
-    this.graphType = graphForQuery(lookupType); // GraphyType.LineGraph
+    this.scopeType = scopeType;
     this.queryOptions = Object.assign(
       { duration: 24 * 60 * 60, stepSize: 20 * 60 },
       queryOptions
     );
+    this.graphType = graphForQuery(
+      this.lookupType,
+      this.scopeType,
+      this.queryOptions
+    ); // GraphyType.LineGraph
     this.searchQuery = queryBuilder(this.lookupType, this.queryOptions);
   }
 }
 
-enum GraphType {
-  PrintValue, //0
-  LineGraph, //1
-  PieChart, //2
-}
 
-function graphForQuery(lookupType: LookupType): GraphType {
+
+function graphForQuery(
+  lookupType: LookupType,
+  scopeType: ScopeType,
+  options: any
+): GraphType {
   // Assigns a graph type to a query type
+  // Ranged lookups yield line graphs
+  if (scopeType == ScopeType.Range) return GraphType.LineGraph;
+  //
   switch (lookupType) {
     case LookupType.CPUIdleByCluster:
       return GraphType.LineGraph;
@@ -106,7 +119,7 @@ function graphForQuery(lookupType: LookupType): GraphType {
       return GraphType.LineGraph;
     case LookupType.MemoryUsed:
       return GraphType.LineGraph;
-    case LookupType.CPUUsedByContainer:
+    case LookupType.CPUUsage:
       return GraphType.LineGraph;
     case LookupType.FreeDiskUsage:
       return GraphType.LineGraph;
@@ -139,7 +152,7 @@ function queryBuilder(lookupType: LookupType, queryOptions: any): string {
       return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';
     }
 
-    case LookupType.CPUUsedByContainer: {
+    case LookupType.CPUUsage: {
       return 'container_cpu_usage_seconds_total';
     }
 

@@ -5,11 +5,13 @@ export type ServerError = {
 };
 
 export type MetricProps = {
-  graphType: number;
-  lookupType: number;
-  metricId: string;
-  metricName: string;
-  searchQuery: string;
+  graphType: GraphType;
+  lookupType: LookupType;
+  scopeType: ScopeType;
+  metricId?: string;
+  metricName?: string;
+  searchQuery?: string;
+  queryOptions?: any;
 };
 
 export interface UserData {
@@ -86,11 +88,22 @@ export enum LookupType {
   CPUIdleByCluster, //1
   MemoryIdleByCluster,
   MemoryUsed,
-  CPUUsedByContainer,
+  CPUUsage, //4 
   FreeDiskUsage,
   ReadyNodesByCluster,
-  NodesReadinessFlapping,
+  NodesReadinessFlapping, //7 
   PodCount,
+}
+
+export enum ScopeType {
+  Range,
+  Instant,
+}
+
+export enum GraphType {
+  PrintValue, //0 Print Value or Bar Chart
+  LineGraph, //1
+  PieChart, //2
 }
 
 export const lookupName = (type: LookupType): string => {
@@ -103,8 +116,8 @@ export const lookupName = (type: LookupType): string => {
       return 'Memory Idle by Cluster';
     case LookupType.MemoryUsed:
       return '% Memory Used by Node';
-    case LookupType.CPUUsedByContainer:
-      return 'CPU Usage by Container';
+    case LookupType.CPUUsage:
+      return 'CPU Usage';
     case LookupType.FreeDiskUsage:
       return 'Disk Space by Container';
     case LookupType.ReadyNodesByCluster:

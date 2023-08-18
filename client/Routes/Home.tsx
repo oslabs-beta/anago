@@ -22,7 +22,7 @@ export default function Home() {
   useEffect(() => {
     setHasFetchedUserData(true);
     setCurrentDashboard(dashboards[0]);
-    navigate('0');
+    if (window.location.pathname === '/') navigate('0');
   }, []);
 
   return (
@@ -39,10 +39,10 @@ export default function Home() {
           <NavLink to={'/settings'} className="nav-btn">
             Settings
           </NavLink>
-          <NavLink to={'/clusterview'} className='nav-btn'>
+          <NavLink to={'/clusterview'} className="nav-btn">
             Cluster View
           </NavLink>
-          <NavLink to={'/login'} className='nav-btn'>
+          <NavLink to={'/login'} className="nav-btn">
             Log Out
           </NavLink>
         </nav>

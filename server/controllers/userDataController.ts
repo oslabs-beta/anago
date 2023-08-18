@@ -15,13 +15,13 @@ userDataController.sendUserData = (
 ) => {
   try {
     const userData = readUserData();
-  if (!userData) {
-    next({
-      log: `Reading User Data failed in userDataController.sendUserData.`,
-      status: 500,
-      message: { err: 'Error retreiving user data.' },
-    });
-  }
+    if (!userData) {
+      next({
+        log: `Reading User Data failed in userDataController.sendUserData.`,
+        status: 500,
+        message: { err: 'Error retreiving user data.' },
+      });
+    }
     res.locals.userData = userData;
     next();
   } catch (err) {
@@ -100,10 +100,15 @@ userDataController.addMetric = (
   console.log('Read Data:', updatedUserData);
   console.log('Dashboard Size: ', updatedUserData.dashboards[0].metrics.length);
 
-  const newMetric = new Metric(newMetricInfo.name, newMetricInfo.type, {
-    duration: newMetricInfo.duration,
-    stepSize: newMetricInfo.stepSize,
-  });
+  const newMetric = new Metric(
+    newMetricInfo.name,
+    newMetricInfo.type,
+    newMetricInfo.scope,
+    {
+      duration: newMetricInfo.duration,
+      stepSize: newMetricInfo.stepSize,
+    }
+  );
   updatedUserData.dashboards[0].metrics.push(newMetric);
   updatedUserData.metrics[newMetric.metricId] = newMetric;
 

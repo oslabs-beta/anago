@@ -83,7 +83,7 @@ export function namePlot(obj: any, type: LookupType) {
     case LookupType.MemoryUsed: {
       return obj.metric.pod;
     }
-    case LookupType.CPUUsedByContainer: {
+    case LookupType.CPUUsage: {
       return obj.metric.node;
     }
     case LookupType.FreeDiskUsage: {

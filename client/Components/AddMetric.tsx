@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouteLoaderData } from 'react-router-dom';
-import { LookupType, lookupName, UserData } from '../../types';
+import { LookupType, ScopeType, lookupName, UserData } from '../../types';
 import MetricDisplay from './MetricDisplay';
 
 const AddMetric = (props): any => {
@@ -9,13 +9,17 @@ const AddMetric = (props): any => {
     LookupType.CPUIdleByCluster,
     LookupType.MemoryIdleByCluster,
     LookupType.MemoryUsed,
-    LookupType.CPUUsedByContainer,
+    LookupType.CPUUsage,
     LookupType.FreeDiskUsage,
     LookupType.ReadyNodesByCluster,
     LookupType.PodCount,
   ];
 
-  const [type, setType] = useState(LookupType.CustomEntry);
+  const [types, setTypes] = useState([
+    ScopeType.Range,
+    'entry-precon',
+    LookupType.CPUIdleByCluster,
+  ]);
   const [fields, setFields] = useState({
     name: '',
     duration: '',
@@ -31,7 +35,7 @@ const AddMetric = (props): any => {
     setMessageText('Saving New Metric...');
     const newMetric = {
       name: fields.name,
-      type: type,
+      type: types[2],
       customQuery: fields.customQuery,
       duration: timeConverter(fields.duration),
       stepSize: timeConverter(fields.step),
@@ -48,7 +52,7 @@ const AddMetric = (props): any => {
       .then((res) => {
         console.log('Received reply', res);
         setMessageText('New Metric Saved!');
-        setType(LookupType.CustomEntry);
+        setTypes([types[0], types[1], LookupType.CustomEntry]);
         setFields({
           name: '',
           duration: '',
@@ -61,8 +65,20 @@ const AddMetric = (props): any => {
       });
   };
   const typeChanged = (e) => {
-    setType(e.target.value);
+    const scope =
+      document.querySelector('input[name="scope"]:checked')?.id ===
+      'scope-range'
+        ? ScopeType.Range
+        : ScopeType.Instant;
+    const entryType =
+      document.querySelector('input[name="entryType"]:checked')?.id ||
+      'entry-precon';
+    const searchType =
+      e.target.id === 'new-metric-type' ? Number(e.target.value) : types[2];
+    console.log([scope, entryType, searchType]);
+    setTypes([scope, entryType, searchType]);
   };
+
   const textChanged = (e, field: string) => {
     const newFields = { ...fields };
     newFields[field] = e.target.value;
@@ -72,6 +88,8 @@ const AddMetric = (props): any => {
   return (
     <div className="new-metric-modal">
       <h2>New Metric</h2>
+
+      {/* METRIC NAME */}
       <div className="new-metric-container">
         <div className="new-metric-form">
           <h3>Select Metric Options</h3>
@@ -80,23 +98,104 @@ const AddMetric = (props): any => {
             <input
               id="new-metric-name"
               value={fields.name}
-              placeholder={lookupName(Number(type))}
+              placeholder={types[1]=='entry-precon' ? lookupName(Number(types[2])) : 'Custom Query Name'}
               onChange={(e) => textChanged(e, 'name')}
             ></input>
           </div>
-          <div>
-            <label htmlFor="new-metric-type">Metric Type: </label>
-            <select id="new-metric-type" onChange={typeChanged} value={type}>
-              {lookupOptions.map((el) => {
-                return (
-                  <option value={el} key={'option' + el}>
-                    {lookupName(el)}
-                  </option>
-                );
-              })}
-            </select>
+
+          {/* SCOPE RADIO BUTTON */}
+          <div className="radio-container">
+            <label htmlFor="new-metric-scope">Scope:</label>
+            <label className="radio-button-container">
+              Time-Range Query
+              <input
+                type="radio"
+                id="scope-range"
+                defaultChecked
+                onChange={typeChanged}
+                name="scope"
+              ></input>
+              <span className="checkmark"></span>
+            </label>
+            <label className="radio-button-container">
+              Instant Query
+              <input
+                type="radio"
+                id="scope-instant"
+                onChange={typeChanged}
+                name="scope"
+              ></input>
+              <span className="checkmark"></span>
+            </label>
           </div>
-          {Number(type) > 0 && (
+
+          {/* PRECON / CUSTOM RADIO BUTTON */}
+          <div className="radio-container">
+            <label htmlFor="new-metric-scope">Query:</label>
+            <label className="radio-button-container">
+              Preconfigured
+              <input
+                type="radio"
+                id="entry-precon"
+                defaultChecked
+                onChange={typeChanged}
+                name="entryType"
+              ></input>
+              <span className="checkmark"></span>
+            </label>
+            <label className="radio-button-container">
+              Custom
+              <input
+                type="radio"
+                id="entry-custom"
+                onChange={typeChanged}
+                name="entryType"
+              ></input>
+              <span className="checkmark"></span>
+            </label>
+          </div>
+
+          {/* PRECON METRIC TYPE */}
+          {types[1] == 'entry-precon' && (
+            <div>
+              <label htmlFor="new-metric-type">Metric Type: </label>
+              <select
+                id="new-metric-type"
+                onChange={typeChanged}
+                value={types[2]}
+              >
+                {lookupOptions.map((el) => {
+                  return (
+                    <option value={el} key={'option' + el}>
+                      {lookupName(el)}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          )}
+
+          {/* METRIC CONTEXT */}
+          {types[1] == 'entry-precon' && [2, 3, 4].includes(Number(types[2])) && (
+            <div>
+              <label>Context: </label>{' '}
+              <input
+                id="context"
+                value={fields.color}
+                placeholder="Blue"
+                onChange={(e) => textChanged(e, 'color')}
+              ></input>
+              <input
+                id="new-metric-color"
+                value={fields.color}
+                placeholder="Blue"
+                onChange={(e) => textChanged(e, 'color')}
+              ></input>
+            </div>
+          )}
+
+          {/* RANGE METRIC DURATION */}
+          {types[0] == ScopeType.Range && (
             <div>
               <label>Total Time: </label>{' '}
               <input
@@ -107,7 +206,9 @@ const AddMetric = (props): any => {
               ></input>
             </div>
           )}
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].includes(Number(type)) && (
+
+          {/* RANGE METRIC STEPSIZE */}
+          {types[0] == ScopeType.Range && (
             <div>
               <label>Time Interval: </label>{' '}
               <input
@@ -118,18 +219,9 @@ const AddMetric = (props): any => {
               ></input>
             </div>
           )}
-          {[2, 3, 4].includes(Number(type)) && (
-            <div>
-              <label>Pod Color: </label>{' '}
-              <input
-                id="new-metric-color"
-                value={fields.color}
-                placeholder="Blue"
-                onChange={(e) => textChanged(e, 'color')}
-              ></input>
-            </div>
-          )}
-          {Number(type) == 0 && (
+
+          {/* CUSTOM QUERY STRING */}
+          {types[1] == 'entry-custom' && (
             <div className="metric-text-area">
               <label>Custom Query: </label>{' '}
               <textarea
@@ -141,6 +233,7 @@ const AddMetric = (props): any => {
             </div>
           )}
         </div>
+
         <div className="new-metric-preview">
           <div className="new-metric-status">
             <h4 className="new-metric-status-message">{messageText}</h4>
