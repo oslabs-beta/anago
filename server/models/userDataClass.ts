@@ -9,7 +9,7 @@ export class UserData {
     metricName: string,
     lookupType: LookupType,
     queryOptions?: any,
-    dashboardNumber = 0
+    dashboardNumber = 0,
   ): string {
     const newMetric = new Metric(metricName, lookupType, queryOptions);
     this.dashboards[dashboardNumber].metrics.push(newMetric.metricId);
@@ -74,7 +74,7 @@ export class Metric {
   constructor(
     metricName: string,
     lookupType: LookupType,
-    queryOptions: any = {}
+    queryOptions: any = {},
   ) {
     this.metricId = randomUUID();
     this.metricName = metricName;
@@ -82,7 +82,7 @@ export class Metric {
     this.graphType = graphForQuery(lookupType); // GraphyType.LineGraph
     this.queryOptions = Object.assign(
       { duration: 24 * 60 * 60, stepSize: 20 * 60 },
-      queryOptions
+      queryOptions,
     );
     this.searchQuery = queryBuilder(this.lookupType, this.queryOptions);
   }
@@ -103,6 +103,16 @@ export enum LookupType {
   ReadyNodesByCluster, //5
   NodesReadinessFlapping,
   PodCount,
+  HPAByDeployment, //8
+  HPATargetStatus, //9
+  HPATargetSpec, //10
+  HPAMinReplicas, //11
+  HPAMaxReplicas, //12
+  HPACurrentReplicas, //13
+  HPADesiredReplicas, //14
+  HPAUtilization, //15
+  HTTPRequests, //16
+  PodCountByHPA, //17
 }
 
 function graphForQuery(lookupType: LookupType): GraphType {
@@ -121,6 +131,26 @@ function graphForQuery(lookupType: LookupType): GraphType {
     case LookupType.ReadyNodesByCluster:
       return GraphType.LineGraph;
     case LookupType.NodesReadinessFlapping:
+      return GraphType.LineGraph;
+    case LookupType.HPAByDeployment:
+      return GraphType.PrintValue;
+    case LookupType.HPATargetStatus:
+      return GraphType.PrintValue;
+    case LookupType.HPATargetSpec:
+      return GraphType.PrintValue;
+    case LookupType.HPAMinReplicas:
+      return GraphType.PrintValue;
+    case LookupType.HPAMaxReplicas:
+      return GraphType.PrintValue;
+    case LookupType.HPACurrentReplicas:
+      return GraphType.PrintValue;
+    case LookupType.HPADesiredReplicas:
+      return GraphType.PrintValue;
+    case LookupType.HPAUtilization:
+      return GraphType.PrintValue;
+    case LookupType.HTTPRequests:
+      return GraphType.LineGraph;
+    case LookupType.PodCountByHPA:
       return GraphType.LineGraph;
     default:
       return GraphType.LineGraph;
@@ -163,7 +193,45 @@ function queryBuilder(lookupType: LookupType, queryOptions: any): string {
       return 'sum by (namespace) (kube_pod_info)';
     }
 
-    case LookupType.CPUUsagePerCluster
+    case LookupType.HPAByDeployment: {
+      return 'kube_horizontalpodautoscaler_metadata_generation';
+    }
+
+    case LookupType.HPATargetStatus: {
+      return 'kube_horizontalpodautoscaler_status_target_metric{metric_target_type="utilization"}';
+    }
+
+    case LookupType.HPATargetSpec: {
+      return 'kube_horizontalpodautoscaler_spec_target_metric';
+    }
+
+    case LookupType.HPAMinReplicas: {
+      return 'kube_horizontalpodautoscaler_spec_min_replicas';
+    }
+
+    case LookupType.HPAMaxReplicas: {
+      return 'kube_horizontalpodautoscaler_spec_max_replicas';
+    }
+
+    case LookupType.HPACurrentReplicas: {
+      return 'kube_horizontalpodautoscaler_status_current_replicas';
+    }
+
+    case LookupType.HPADesiredReplicas: {
+      return 'kube_horizontalpodautoscaler_status_desired_replicas';
+    }
+
+    case LookupType.HPAUtilization: {
+      return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 >= 90';
+    }
+
+    case LookupType.HTTPRequests: {
+      return 'increase(http_requests_total[1m])';
+    }
+
+    case LookupType.PodCountByHPA: {
+      return 'sum by (created_by_name) (kube_pod_info)';
+    }
 
     default: {
       return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';

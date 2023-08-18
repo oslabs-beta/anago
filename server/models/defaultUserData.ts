@@ -29,39 +29,79 @@ if (ACTIVE_DEPLOYMENT) {
   //   LookupType.NodesReadinessFlapping,
   // );
   //
-  // HPA Monitoring pre-built Dashboard
-  userData.addMetric('HPA by Deployment', LookupType.HPAByDeployment);
-  // name/deployment: horizontalpodautoscaler="pithy-deployment",
-  // query by deployment: kube_horizontalpodautoscaler_metadata_generation{horizontalpodautoscaler="pithy-deployment"}
-  userData.addMetric('HPA Target Status', LookupType.HPATargetStatus);
-  // kube_horizontalpodautoscaler_status_target_metric{metric_target_type="utilization"}
-  userData.addMetric('HPA Target', LookupType.HPATargetSpec);
-  // kube_horizontalpodautoscaler_spec_target_metric;
-  userData.addMetric('HPA Minimum Replicas', LookupType.HPAMinReplicas);
-  // kube_horizontalpodautoscaler_spec_min_replicas
-  userData.addMetric('HPA Maximum Replicas', LookupType.HPAMaxReplicas);
-  // kube_horizontalpodautoscaler_spec_max_replicas
-  userData.addMetric('HPA Current Replicas', LookupType.HPACurrentReplicas);
-  // kube_horizontalpodautoscaler_status_current_replicas
-  userData.addMetric('HPA Desired Replicas', LookupTypeHPADesiredReplicas);
-  // kube_horizontalpodautoscaler_status_desired_replicas
-  // ! Utilization will be a calc of = current replicas/maxreplicas*100 (over time) OR retrive log of anytime this percentage reached 80+
-  // userData.addMetric('HPA Utilization', LookupType.HPAUtilization);
-  userData.addMetric('Total HTTP Requests', LookupType.HTTPRequests);
-  // can filter results for endpoints and method types
-  // increase(http_requests_total[24h])
-  // increase(http_requests_total{endpoint="https-metrics", method="GET"}[24h])
-  userData.addMetric('');
-  // kube_horizontalpodautoscaler_spec_target_metric
-  //
-  //  addMetric(
-  // metricName: string,
-  // lookupType: LookupType,
-  // queryOptions?: any,
-  // dashboardNumber = 0
+  // ! HPA Monitoring pre-built Dashboard
+  userData.addMetric('HPA by Deployment', LookupType.HPAByDeployment, null, 1);
+  // TODO: filter by deployment: kube_horizontalpodautoscaler_metadata_generation{horizontalpodautoscaler="pithy-deployment"}
+  userData.addMetric('HPA Target Status', LookupType.HPATargetStatus, null, 1);
+  userData.addMetric('HPA Target', LookupType.HPATargetSpec, null, 1);
+  userData.addMetric(
+    'HPA Minimum Replicas',
+    LookupType.HPAMinReplicas,
+    null,
+    1,
+  );
+  userData.addMetric(
+    'HPA Maximum Replicas',
+    LookupType.HPAMaxReplicas,
+    null,
+    1,
+  );
+  userData.addMetric(
+    'HPA Current Replicas',
+    LookupType.HPACurrentReplicas,
+    null,
+    1,
+  );
+  userData.addMetric(
+    'HPA Desired Replicas',
+    LookupType.HPADesiredReplicas,
+    null,
+    1,
+  );
+  userData.addMetric(
+    'HPA Utilization <= 90%',
+    LookupType.HPAUtilization,
+    {
+      duration: 5 * 60 * 60,
+      stepSize: 5 * 60,
+    },
+    1,
+  );
+  userData.addMetric(
+    'Total HTTP Requests',
+    LookupType.HTTPRequests,
+    {
+      duration: 5 * 60 * 60,
+      stepSize: 5 * 60,
+    },
+    1,
+  );
+  // TODO filter by endpt, method type, job, app, namespace
+  /*
+  userData.addMetric(
+    'HTTP Requests by Endpoint',
+    LookupType.HTTPRequestsEndpoints,
+    {
+      duration: 5 * 60 * 60,
+      stepSize: 5 * 60,
+    },
+    1,
+  );
+  can filter results for endpoints and method types
+  increase(http_requests_total{endpoint="https-metrics", method="GET"}[24h])
+  */
+  userData.addMetric(
+    'Pod Count by HPA Deployment',
+    LookupType.PodCountByHPA,
+    {
+      duration: 5 * 60 * 60,
+      stepSize: 5 * 60,
+    },
+    1,
+  );
+  // TODO -will give: {created_by_name="pithy-deployment-f77bd655c"} SO NEED TO GET HPA FROM HPA METADATA TO FILTER FIRST PART OF CREATED_BY STRING
 } else {
   // Use placeholder data instead
-
   userData.addPlaceholderMetric(
     'CPU Idle by Cluster',
     LookupType.CPUIdleByCluster,
