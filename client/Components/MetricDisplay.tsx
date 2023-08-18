@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { UserData } from '../types';
+import { UserData } from '../../types';
 import { Modal } from 'react-responsive-modal';
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -62,12 +61,11 @@ const MetricDisplay = ({ metricId }) => {
   return (
     <div className="metric-container">
       <h4 className="metric-title">{userData.metrics[metricId].metricName}</h4>
-
       {metricData.hasOwnProperty('labels') && (
-        <Line data={metricData} options={options} />
+        <Line data={metricData} options={options} onClick={openModal} />
       )}
-      <div className='modal'>
-        <button onClick={openModal}>See more</button>
+      <div className="modal">
+        {/* {metricId && <button onClick={openModal}>See more</button>} */}
         <Modal open={open} onClose={closeModal}>
           <h4 className="metric-title">
             {userData.metrics[metricId].metricName}

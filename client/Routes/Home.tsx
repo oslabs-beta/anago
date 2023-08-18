@@ -4,7 +4,7 @@ import {
   useRouteLoaderData,
   useNavigate,
 } from 'react-router-dom';
-import { UserData } from '../types';
+import { UserData } from '../../types';
 import { useContext, useEffect } from 'react';
 import { StoreContext } from '../stateStore';
 import logo from '../assets/images/anago.png';
@@ -26,19 +26,19 @@ export default function Home() {
   }, []);
 
   return (
-    <div className='home-layout'>
+    <div className="home-layout">
       <header>
-        <span className='logo-container'>
-          <img src={logo} alt='logo' className='logo-image' />
-          <h3 className='app-title'>Anago</h3>
+        <span className="logo-container">
+          <img src={logo} alt="logo" className="logo-image" />
+          <h3 className="app-title">Anago</h3>
         </span>
         <nav>
-          <NavLink to={'/0'} className='nav-btn'>
+          <NavLink to={'/'} className='nav-btn'>
             Dashboards
           </NavLink>
           {/* <NavLink to={'/settings'} className='nav-btn'>
             Settings
-          </NavLink> */}
+          </NavLink> */} 
           <NavLink to={'/clusterview'} className='nav-btn'>
             Cluster View
           </NavLink>
@@ -48,7 +48,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <div className='main-body'>
+      <div className="main-body">
         <Outlet />
       </div>
     </div>
