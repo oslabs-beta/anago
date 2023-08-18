@@ -42,6 +42,7 @@ k8sController.getNodes = async (
   try {
     const data: any = await k8sApi.listNode();
     const nodes: Node[] = data.body.items.map(data => {
+      console.log(data.metadata)
       const { name, namespace, creationTimestamp, labels, uid } = data.metadata;
       const { providerID } = data.spec;
       const { status } = data;
