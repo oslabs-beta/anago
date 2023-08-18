@@ -1,12 +1,8 @@
 import express, { Request, Response } from 'express';
 
-import k8sController from '../controllers/k8sApiController.js';
+import k8sController from '../controllers/k8sApiController.ts';
 
 const k8sRouter = express.Router();
-
-k8sRouter.get('/test', k8sController.test,async (_, res: Response) => {
-  return res.status(200).json(res.locals);
-})
 
 k8sRouter.get('/nodes', k8sController.getNodes, async (_, res: Response) => {
   //console.log('in k8s router get nodes after fetch', res.locals.nodes);

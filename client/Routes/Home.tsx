@@ -7,7 +7,6 @@ import {
 import { UserData } from '../../types';
 import { useContext, useEffect } from 'react';
 import { StoreContext } from '../stateStore';
-import logo from 'client/assets/images/anago.png';
 import React from 'react';
 
 export default function Home() {
@@ -30,7 +29,7 @@ export default function Home() {
     <div className="home-layout">
       <header>
         <span className="logo-container">
-          <img src={logo} alt="logo" className="logo-image" />
+          <img src={'client/assets/images/anago.png'} alt="logo" className="logo-image" />
           <h3 className="app-title">Anago</h3>
         </span>
         <nav>

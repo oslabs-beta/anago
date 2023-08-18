@@ -7,7 +7,7 @@ import {
   Service,
   Namespace,
   Cluster,
-} from '../../types.js';
+} from '../../types';
 
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
@@ -17,23 +17,6 @@ const k8sApi2 = kc.makeApiClient(k8s.AppsV1Api);
 
 const k8sController: any = {};
 
-k8sController.test = async (
-  _req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const data: any = await k8sApi.listComponentStatus();
-    const test: any = data.body.items.map(item => {
-      console.log(item);
-    });
-
-    next();
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 k8sController.getNodes = async (
   _req: Request,
   res: Response,
@@ -42,7 +25,6 @@ k8sController.getNodes = async (
   try {
     const data: any = await k8sApi.listNode();
     const nodes: Node[] = data.body.items.map(data => {
-      console.log(data.metadata)
       const { name, namespace, creationTimestamp, labels, uid } = data.metadata;
       const { providerID } = data.spec;
       const { status } = data;
@@ -73,7 +55,6 @@ k8sController.getPods = async (
   try {
     const data: any = await k8sApi.listPodForAllNamespaces();
     const pods: Pod[] = data.body.items.map(data => {
-      console.log(data.spec);
       const { name, namespace, creationTimestamp, uid, labels } = data.metadata;
       const { nodeName, containers, serviceAccount } = data.spec;
       const { conditions, containerStatuses, phase, podIP } = data.status;
@@ -109,7 +90,6 @@ k8sController.getNamespaces = async (
   try {
     const data: any = await k8sApi.listNamespace();
     const namespaces = data.body.items.map(data => {
-      console.log(data.metadata);
       const { name, creationTimestamp, labels, uid } = data.metadata;
       const { phase } = data.status;
       const nodeName = '';
@@ -119,7 +99,7 @@ k8sController.getNamespaces = async (
         creationTimestamp,
         labels,
         phase,
-        nodeName
+        nodeName,
       };
       return namespace;
     });
@@ -212,7 +192,6 @@ k8sController.getCluster = async (
       deployments,
     };
     //currently does not accounting for multiple clusters, just one cluster for now
-    console.log(cluster);
     res.locals.cluster = cluster;
     next();
   } catch (error) {

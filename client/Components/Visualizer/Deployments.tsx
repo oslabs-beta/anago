@@ -1,6 +1,7 @@
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
 import { cleanName } from '../../functions';
+import React from 'react';
 
 const Deployments = ({
   name,
@@ -16,7 +17,7 @@ const Deployments = ({
   const closeModal = () => setOpen(false);
 
   return (
-    <div className='deployment' id={id}>
+    <div className='deployment' id={id} key={id}>
       <div>
         <img
           className='k8logo'

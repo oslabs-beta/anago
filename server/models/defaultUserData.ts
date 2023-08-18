@@ -1,6 +1,6 @@
-import { UserData, Cluster } from './userDataClass.js';
-import { LookupType } from '../../types.js';
-import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
+import { UserData, Cluster } from './userDataClass.ts';
+import { LookupType } from '../../types.ts';
+import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.ts';
 
 const newUserData = new UserData();
 newUserData.clusters.push(new Cluster('Testing Cluster', DEPLOYMENT_URL));

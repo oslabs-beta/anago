@@ -1,20 +1,20 @@
 import { useRouteLoaderData, Outlet } from 'react-router-dom';
 
-import { Node } from '../types';
+import { Node } from '../../types';
 import Nodes from '../Components/Visualizer/Nodes';
 import ControlPlane from '../Components/Visualizer/ControlPlane';
-
+import React from 'react';
 
 const ClusterView = () => {
   const clusterData: any = useRouteLoaderData('cluster');
   console.log('retrieved clusterData', clusterData);
   const nodes: Node[] = clusterData.nodes;
 
-  console.log(clusterData)
+  console.log(clusterData);
 
   return (
-    <div className='cluster-view'>
-      <ControlPlane/>
+    <div className='cluster-view' key={'cluster-view'}>
+      <ControlPlane />
       {clusterData &&
         nodes.map(node => (
           <Nodes
@@ -24,6 +24,8 @@ const ClusterView = () => {
             id={node.uid}
             providerID={node.providerID}
             status={node.status}
+            nodeName={undefined}
+            key={node.uid}
           />
         ))}
     </div>

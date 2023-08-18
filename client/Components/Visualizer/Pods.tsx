@@ -23,7 +23,7 @@ const Pods = ({
   const closeModal = () => setOpen(false);
 
   return (
-    <div className='pod' id={id}>
+    <div className='pod' id={id} key={id}>
       <div>
         <img
           src='client/assets/images/pod.png'
@@ -87,7 +87,6 @@ const Pods = ({
                     }
                   })}
                 </div> */}
-
                 <div>
                   {container.ports ? (
                     container.ports.map(port => {
@@ -105,7 +104,6 @@ const Pods = ({
                     <></>
                   )}
                 </div>
-
                 <h3>Volume Mounts:</h3>
                 {container.volumeMounts.map(element => {
                   return (

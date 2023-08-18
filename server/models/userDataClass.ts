@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { LookupType } from '../../types.js';
+import { LookupType } from '../../types.ts';
 
 export class UserData {
   userId: string;

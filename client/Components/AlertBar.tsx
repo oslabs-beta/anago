@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { UserData } from '../types';
+import React, { useEffect, useState } from 'react';
+import { UserData } from '../../types';
 import { useRouteLoaderData } from 'react-router-dom';
 
 const AlertBar = () => {

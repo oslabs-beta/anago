@@ -5,10 +5,11 @@ import { useRouteLoaderData } from 'react-router-dom';
 import { useState } from 'react';
 import { cleanTime } from '../../functions';
 
-import { Pod, Service, Deployment } from '../../types';
+import { Pod, Service, Deployment } from '../../../types';
 import React from 'react';
 
 const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
+  console.log('in namespaces', nodeName);
   const clusterData: any = useRouteLoaderData('cluster');
   const [open, setOpen]: any = useState(false);
 
@@ -20,7 +21,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   const closeModal = () => setOpen(false);
 
   return (
-    <div id={id} className='namespace'>
+    <div id={id} className='namespace' key={id}>
       <div className='namespace-info'>
         <h3>{`${name[0].toUpperCase().concat(name.slice(1))}`} </h3>
         <h3>{`Status: ${phase} `}</h3>
@@ -44,6 +45,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
                   labels={deployment.labels}
                   namespace={deployment.namespace}
                   id={deployment.uid}
+                  key={deployment.uid}
                 />
               ) : (
                 <></>
@@ -51,27 +53,27 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
             )}
         </div>
         <div className='namespace-pods'>
-          {clusterData &&
-            pods.map(pod =>
-              (pod.namespace === name && pod.nodeName === nodeName)? (
-                <Pods
-                  name={pod.name}
-                  conditions={pod.conditions}
-                  containerStatuses={pod.containerStatuses}
-                  containers={pod.containers}
-                  creationTimestamp={pod.creationTimestamp}
-                  labels={pod.labels}
-                  namespace={pod.namespace}
-                  nodeName={pod.nodeName}
-                  phase={pod.phase}
-                  podIP={pod.podIP}
-                  serviceAccount={pod.serviceAccount}
-                  id={pod.uid}
-                />
-              ) : (
-                <></>
-              ),
-            )}
+          {pods.map(pod =>
+            pod.namespace === name && pod.nodeName === nodeName ? (
+              <Pods
+                name={pod.name}
+                conditions={pod.conditions}
+                containerStatuses={pod.containerStatuses}
+                containers={pod.containers}
+                creationTimestamp={pod.creationTimestamp}
+                labels={pod.labels}
+                namespace={pod.namespace}
+                nodeName={pod.nodeName}
+                phase={pod.phase}
+                podIP={pod.podIP}
+                serviceAccount={pod.serviceAccount}
+                id={pod.uid}
+                key={pod.uid}
+              />
+            ) : (
+              <></>
+            ),
+          )}
         </div>
         <div className='namespace-services'>
           {clusterData &&
@@ -85,6 +87,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
                   namespace={service.namespace}
                   ports={service.ports}
                   id={service.uid}
+                  key={service.uid}
                 />
               ) : (
                 <></>

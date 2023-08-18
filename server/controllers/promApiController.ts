@@ -1,17 +1,17 @@
-import { Metric } from '../models/userDataClass.js';
+import { Metric } from '../models/userDataClass.ts';
 import {
   yAxis,
   plotData,
   promResponse,
   promResResultElements,
-} from '../../types.js';
+} from '../../types';
 import {
   placeholderData,
   cleanTime,
   namePlot,
   readUserData,
-} from './helperFuncs.js';
-import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
+} from './helperFuncs.ts';
+import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.ts';
 import type { Request, Response, NextFunction } from 'express';
 
 // prometheus http api url's to query

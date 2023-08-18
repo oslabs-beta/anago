@@ -3,9 +3,9 @@ import {
   yAxis,
   plotData,
   promResResultElements,
-} from '../../types.js';
-import newUserData from '../models/defaultUserData.js';
-import { NEW_USER, ACTIVE_DEPLOYMENT } from '../../user-config.js';
+} from '../../types.ts';
+import newUserData from '../models/defaultUserData.ts';
+import { NEW_USER, ACTIVE_DEPLOYMENT } from '../../user-config.ts';
 // File Read/Write
 import fs from 'fs';
 import path from 'path';
@@ -36,7 +36,7 @@ export function readUserData(): any {
       );
       return newUserData;
     }
-    console.log('Successfully read user data, returning now.');
+    //console.log('Successfully read user data, returning now.');
     return userData;
   } catch (err) {
     console.log(

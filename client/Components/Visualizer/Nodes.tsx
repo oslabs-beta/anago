@@ -4,28 +4,33 @@ import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
 import React from 'react';
 
-const Nodes = ({ name, creationTimestamp, labels, id, providerID, status, nodeName }) => {
+const Nodes = ({
+  name,
+  creationTimestamp,
+  labels,
+  id,
+  providerID,
+  status,
+  nodeName,
+}) => {
   const clusterData: any = useRouteLoaderData('cluster');
   const namespaces: any = clusterData.namespaces;
   const [open, setOpen]: any = useState(false);
 
-
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
-
-
+  console.log('in nodes', nodeName);
   return (
-    <div className='node' id={id}>
+    <div className='node' id={id} key={id}>
       <div className='node-info'>
         <img
-        className='k8logo'
-        id='node-logo'
-        src='client/assets/images/node.png'
-        onClick={openModal}
-      />
-      {/* <button onClick={openModal}>More Info</button> */}
+          className='k8logo'
+          id='node-logo'
+          src='client/assets/images/node.png'
+          onClick={openModal}
+        />
+        {/* <button onClick={openModal}>More Info</button> */}
       </div>
-    
 
       <div className='modal'>
         <Modal open={open} onClose={closeModal}>
@@ -89,7 +94,8 @@ const Nodes = ({ name, creationTimestamp, labels, id, providerID, status, nodeNa
               name={namespace.name}
               creationTimestamp={namespace.creationTimestamp}
               phase={namespace.phase}
-              nodeName = {name}
+              nodeName={name}
+              key={namespace.uid}
             />
           ))}
       </div>
@@ -98,5 +104,3 @@ const Nodes = ({ name, creationTimestamp, labels, id, providerID, status, nodeNa
 };
 
 export default Nodes;
-
-

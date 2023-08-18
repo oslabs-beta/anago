@@ -1,6 +1,7 @@
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
 import { cleanName } from '../../functions';
+import React from 'react';
 
 const Services = ({
   name,
@@ -16,11 +17,10 @@ const Services = ({
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
-
   name = cleanName(name);
 
   return (
-    <div className='service' id={id}>
+    <div className='service' id={id} key={id}>
       <div>
         <img
           src='client/assets/images/service.png'
@@ -41,23 +41,24 @@ const Services = ({
             <p>{creationTimestamp}</p>
             <h3>Ports:</h3>
             <div>
-               {ports.map(port => {
-              return (<>
-                <h4>Name: </h4>
-                <p>{port.name}</p>
-                <h4>Port: </h4>
-                <p>{port.port}</p>
-                <h4>Target Port: </h4>
-                <p>{port.targetPort}</p>
-                <h4>Protocol: </h4>
-                <p>{port.protocol}</p>
-              </>)
-            })}
+              {ports.map(port => {
+                return (
+                  <>
+                    <h4>Name: </h4>
+                    <p>{port.name}</p>
+                    <h4>Port: </h4>
+                    <p>{port.port}</p>
+                    <h4>Target Port: </h4>
+                    <p>{port.targetPort}</p>
+                    <h4>Protocol: </h4>
+                    <p>{port.protocol}</p>
+                  </>
+                );
+              })}
             </div>
-           
+
             <h3>Namespace</h3>
             <p>{namespace}</p>
-
           </div>
         </Modal>
       </div>
