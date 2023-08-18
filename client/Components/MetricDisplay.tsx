@@ -23,7 +23,7 @@ ChartJS.register(
   Colors,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
 const MetricDisplay = ({ metricId }) => {
@@ -33,7 +33,7 @@ const MetricDisplay = ({ metricId }) => {
   const [open, setOpen]: any = useState(false);
   const [metricData, setMetricData]: any = useState({});
 
-// display options for metrics
+  // display options for metrics
   const options = {
     plugins: {
       legend: {
@@ -41,19 +41,19 @@ const MetricDisplay = ({ metricId }) => {
       },
     },
   };
-        
+
   //fetching data from Prometheus
   useEffect(() => {
-    console.log('Current user in metric:', userData);
+    //console.log('Current user in metric:', userData);
     fetch(`/api/data/metrics/${metricId}`, {
       method: 'GET',
     })
-      .then(data => data.json())
-      .then(data => {
-        console.log('fetched data', data);
+      .then((data) => data.json())
+      .then((data) => {
+        //console.log('fetched data', data);
         setMetricData(data);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }, []);
 
   //modal handler functions
@@ -61,20 +61,21 @@ const MetricDisplay = ({ metricId }) => {
   const closeModal = () => setOpen(false);
 
   return (
-    <div className='metric-container'>
-      <h4 className='metric-title'>{userData.metrics[metricId].metricName}</h4>
+    <div className="metric-container">
+      <h4 className="metric-title">{userData.metrics[metricId].metricName}</h4>
 
-      {metricData.hasOwnProperty('labels') && <Line data={metricData} options={options} />}
-      <div className='modal'>
+      {metricData.hasOwnProperty('labels') && (
+        <Line data={metricData} options={options} />
+      )}
+      <div className="modal">
         <button onClick={openModal}>See more</button>
         <Modal open={open} onClose={closeModal}>
-          <h4 className='metric-title'>
+          <h4 className="metric-title">
             {userData.metrics[metricId].metricName}
           </h4>
           {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
         </Modal>
       </div>
-
     </div>
   );
 };

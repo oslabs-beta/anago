@@ -115,6 +115,8 @@ header nav {
 
 //status bar initial styling
 .status-bar {
+  display: flex;
+  flex-direction: column;
   padding-left: 10px;
   padding-right: 15px;
   display: flex;
@@ -126,13 +128,18 @@ header nav {
   background-color: rgb(0, 139, 139, 0.2);
   margin-bottom: 1rem;
   overflow-y: auto;
+  color: rgb(219, 28, 28);
+}
+.critical {
   color: red;
 }
 
-.individualAlert {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+.warning {
+  color: rgb(131, 17, 17);
+}
+
+.hidden {
+  color: grey;
 }
 
 .status-bar:hover {

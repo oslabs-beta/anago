@@ -93,22 +93,22 @@ NOTE: after the Helm chart has been installed, you should see this:
    local port into the Cluster with the service name. Example (with a service
    name):
    `kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n [namespace] 9090`
-6. navigate to http://localhost:9090 in your browser. NOTE: you should see the
-   Prometheus web UI. Click Status, then Targets to see a list of preconfigured
-   scrape targets.
+6. navigate to http://localhost:9090 in your browser. NOTE: you should see the Prometheus web UI. Click Status, then Targets to see a list of preconfigured scrape targets.
 
 ## setting up AlertManager
 
-NOTE: you have already downloaded the AlertManager helm repo, we just need to port forward
+NOTE: the prometheus-community/kube-prometheus-stack includes configuration files for AlertManager.
 
-1. to access your alertManager instance, use the kubectl port-forward to forward a
+1. to access the alertManager UI, use the kubectl port-forward to forward a
    local port into the Cluster with the service name. Example (with a service
    name):
    `kubectl port-forward svc/prometheus-kube-prometheus-alertmanager  -n monitoring 9093`
 2. navigate to http://localhost:9093 in your browser. NOTE: you should see the
    AlertManager web UI. You can see the active alerts.
 
-## sending metrics to grafana cloud
+NOTE: if more customization regarding alerts is needed, the configuration files may be adjusted and applied.
+
+## sending metrics to grafana cloud (NOTE: this is to use the Grafana web UI)
 
 Prereqs: Set up a grafana cloud account NOTES: To find your remote write
 endpoint, username, and password, navigate to your stack in the Cloud portal,
