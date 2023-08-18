@@ -8,6 +8,7 @@ $shadow2: rgba(0, 0, 0, 0.55) 0px 5px 25px;
 $shadow3: rgba(0, 0, 0, 0.25) 0px 3px 15px;
 $btnrad: 70px;
 $highlight: rgba(97, 145, 215, 1);
+$highlight-dark: rgb(33, 81, 155);
 $highlight-light: rgba(97, 145, 215, 0.7);
 $highlight-bright: rgba(143, 166, 200, 0.9);
 
@@ -81,7 +82,7 @@ header nav {
     font-size: 18px;
     font-family: 'Ubuntu', sans-serif;
     padding: 6px;
-    border-radius: 18px;
+    border-radius: 24px;
     margin: 2px;
   }
   .nav-btn:hover {
@@ -142,16 +143,88 @@ header nav {
   color: grey;
 }
 
-.status-bar:hover {
-  height: 10rem;
-  overflow-y: auto;
-}
 .status-bar:active {
+  overflow-y: scroll;
+}
+// .status-bar:hover {
+//   height: 10rem;
+// }
+.status-bar:click {
   height: 10rem;
   overflow-y: auto;
 }
 
-//modal styling
+// Add Metric styling
+.new-metric-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  h2 {
+    font-family: 'Ubuntu', sans-serif;
+  }
+  h3 {
+    font-family: 'Ubuntu', sans-serif;
+  }
+  .new-metric-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: stretch;
+    .new-metric-form {
+      min-width: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      > div {
+        margin: 10px;
+      }
+      label,
+      input,
+      select,
+      option {
+        font-family: 'Ubuntu', sans-serif;
+        font-size: 16px;
+        margin: 5px;
+      }
+    }
+    .new-metric-preview {
+      min-width: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+      .new-metric-status {
+        .new-metric-status-message {
+          height: 30px;
+          font-family: 'Ubuntu', sans-serif;
+          width: 100%;
+          text-align: center;
+        }
+      }
+      .new-metric-preview-image {
+        min-height: 300px;
+      }
+    }
+    .metric-text-area {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      #new-metric-custom-query {
+        width: 330px;
+        height: 120px;
+      }
+    }
+  }
+  .new-metric-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+//universal modal styling
 .react-responsive-modal-root {
   position: fixed;
   top: 0;
@@ -257,4 +330,59 @@ header nav {
     transform: scale(0.96);
     opacity: 0;
   }
+}
+
+/* CSS */
+.btn {
+  align-items: center;
+  background-color: $highlight;
+  border: 0;
+  border-radius: 100px;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 20px;
+  margin: 10px;
+  // max-width: 480px;
+  // min-height: 40px;
+  // min-width: 0px;
+  width: 140px;
+  height: 45px;
+  overflow: hidden;
+  padding: 0px;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: center;
+  touch-action: manipulation;
+  transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
+    box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
+    color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+}
+
+.btn:hover {
+  background-color: $highlight-dark;
+  color: #ffffff;
+}
+// .btn:focus {
+//   background-color: $highlight-dark;
+//   color: #ffffff;
+// }
+
+.btn:active {
+  background: $highlight-dark;
+  color: rgb(255, 255, 255, 0.7);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.3);
 }

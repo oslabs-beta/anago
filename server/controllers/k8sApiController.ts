@@ -7,7 +7,7 @@ import {
   Service,
   Namespace,
   Cluster,
-} from '../../client/types';
+} from '../../types.js';
 
 
 const kc = new k8s.KubeConfig();
