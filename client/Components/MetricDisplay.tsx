@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserData } from '../../types';
 import { Modal } from 'react-responsive-modal';
 import {
@@ -22,7 +22,7 @@ ChartJS.register(
   Colors,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 const MetricDisplay = ({ metricId }) => {
@@ -47,12 +47,12 @@ const MetricDisplay = ({ metricId }) => {
     fetch(`/api/data/metrics/${metricId}`, {
       method: 'GET',
     })
-      .then((data) => data.json())
-      .then((data) => {
+      .then(data => data.json())
+      .then(data => {
         //console.log('fetched data', data);
         setMetricData(data);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }, []);
 
   //modal handler functions
@@ -60,15 +60,15 @@ const MetricDisplay = ({ metricId }) => {
   const closeModal = () => setOpen(false);
 
   return (
-    <div className="metric-container">
-      <h4 className="metric-title">{userData.metrics[metricId].metricName}</h4>
+    <div className='metric-container'>
+      <h4 className='metric-title'>{userData.metrics[metricId].metricName}</h4>
       {metricData.hasOwnProperty('labels') && (
         <Line data={metricData} options={options} onClick={openModal} />
       )}
-      <div className="modal">
+      <div className='modal'>
         {/* {metricId && <button onClick={openModal}>See more</button>} */}
         <Modal open={open} onClose={closeModal}>
-          <h4 className="metric-title">
+          <h4 className='metric-title'>
             {userData.metrics[metricId].metricName}
           </h4>
           {metricData.hasOwnProperty('labels') && <Line data={metricData} />}

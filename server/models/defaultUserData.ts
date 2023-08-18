@@ -1,9 +1,11 @@
-import { UserData, Cluster } from './userDataClass.js';
+import { UserData, Cluster, Dashboard } from './userDataClass.js';
 import { LookupType } from '../../types.js';
 import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 
 const newUserData = new UserData();
 newUserData.clusters.push(new Cluster('Testing Cluster', DEPLOYMENT_URL));
+const hpaDash = new Dashboard('HPA Monitoring');
+newUserData.dashboards.push(hpaDash);
 
 if (ACTIVE_DEPLOYMENT) {
   // Build live demo clusters
@@ -96,6 +98,7 @@ if (ACTIVE_DEPLOYMENT) {
     },
     1,
   );
+
   // TODO filter by endpt, method type, job, app, namespace
   /*
   userData.addMetric(
@@ -119,6 +122,7 @@ if (ACTIVE_DEPLOYMENT) {
     },
     1,
   );
+
   // TODO -will give: {created_by_name="pithy-deployment-f77bd655c"} SO NEED TO GET HPA FROM HPA METADATA TO FILTER FIRST PART OF CREATED_BY STRING
 } else {
   // Use placeholder data instead
