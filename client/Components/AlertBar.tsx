@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { UserData } from '../types';
 import { useRouteLoaderData } from 'react-router-dom';
 
+//TODO: add displayed to the state store
+
 const AlertBar = () => {
   //keep track of active alerts
   const [alerts, setAlerts]: any = useState([]);
@@ -10,6 +12,7 @@ const AlertBar = () => {
   //save this hidden with userData
   const [hidden, setHidden] = useState<string[]>([]);
   const [restored, setRestored] = useState<any[]>([]);
+  const userData = useRouteLoaderData('home') as UserData;
   //make sure this local host address gives the alert JSON object
   const alertsAPI = 'http://localhost:9093/api/v2/alerts';
 
@@ -20,16 +23,18 @@ const AlertBar = () => {
     // setHidden(userData.hiddenAlerts);
     console.log('fetching...');
     try {
-      const response = await fetch(alertsAPI);
-      const data = await response.json();
+      const alertResponse = await fetch(alertsAPI);
+      const alertData = await alertResponse.json();
       // check to see if there are any alerts returned
-      if (data.length > 0) {
-        setAlerts(data);
+      if (alertData.length > 0) {
+        setAlerts(alertData);
         setFetched(true);
       } else {
         setFetched(true);
         setNoErrors(true);
       }
+      setHidden(userData.hiddenAlerts);
+      console.log('hidden alerts: ', userData.hiddenAlerts);
     } catch (err) {
       console.log(err);
     }
@@ -67,16 +72,25 @@ const AlertBar = () => {
   // onclick to hide alert
   async function handleHide(id: string) {
     setHidden((prev) => [...prev, id]);
-    // save it to user data
-    // const response = await fetch(`/api/user/hiddenAlert`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     // 'Content-Type': 'application/x-www-form-urlencoded',
-    //   },
-    //   body: JSON.stringify(id),
-    // });
-    // return response.json();
+    try {
+      const response = await fetch(`/api/user/hiddenAlert`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(id),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        console.error('POST request error:', error);
+      } else {
+        const responseData = await response.json();
+        console.log('responseData', responseData);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   //onclick to restore alert
@@ -88,14 +102,24 @@ const AlertBar = () => {
     setRestored((prev) => prev.filter((alert) => alert.startsAt !== id));
     // remove it from user data
     // save it to user data
-    // const response = await fetch(`/api/user/hiddenAlert`, {
-    //   method: 'DELETE',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify(id),
-    // });
-    // return response.json();
+    try {
+      const response = await fetch(`/api/user/hiddenAlert`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(id),
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        console.error('DELETE request error:', error);
+      } else {
+        const responseData = await response.json();
+        console.log('responseData', responseData);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -148,7 +172,7 @@ const AlertBar = () => {
           {hidden.length > 0 && (
             <div>
               {['critical', 'warning'].map((severity) => (
-                <div className="hidden">
+                <div className="hidden" key={`${severity}+H`}>
                   {[...hidden].map((hiddenId) => {
                     const alertObj = alerts.find(
                       (alertObj) =>

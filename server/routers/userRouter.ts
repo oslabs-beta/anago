@@ -3,18 +3,26 @@ import userDataController from '../controllers/userDataController.js';
 
 const userRouter = express.Router();
 
+console.log('in userRouter')
 userRouter.get('/', userDataController.sendUserData, (_, res: Response) => {
   return res.status(200).json(res.locals.userData);
 });
 
-// userRouter.post('/newMetric')
-userRouter.post('/hiddenAlert', userDataController.saveHiddenAlert, (_, res: Response) => {
-  return res.sendStatus(200)
-})
+userRouter.post(
+  '/hiddenAlert',
+  userDataController.saveHiddenAlert,
+  (_, res: Response) => {
+    return res.sendStatus(200);
+  }
+);
 
-userRouter.delete('/hiddenAlert', userDataController.deleteHiddenAlert, (_, res: Response) => {
-  return res.sendStatus(200)
-})
+userRouter.delete(
+  '/hiddenAlert',
+  userDataController.deleteHiddenAlert,
+  (_, res: Response) => {
+    return res.sendStatus(200);
+  }
+);
 
 userRouter.post(
   '/add-metric',
