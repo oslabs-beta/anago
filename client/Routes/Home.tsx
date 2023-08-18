@@ -7,7 +7,8 @@ import {
 import { UserData } from '../../types';
 import { useContext, useEffect } from 'react';
 import { StoreContext } from '../stateStore';
-import logo from '../assets/images/anago.png';
+import logo from 'client/assets/images/anago.png';
+import React from 'react';
 
 export default function Home() {
   //import data from loader

@@ -1,6 +1,7 @@
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
 import { cleanName } from '../../functions';
+import React from 'react';
 
 const Pods = ({
   conditions,

@@ -1,9 +1,10 @@
-import Namespaces from './Namespaces.tsx';
+import Namespaces from './Namespaces';
 import { useRouteLoaderData } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
+import React from 'react';
 
-const Nodes = ({ name, creationTimestamp, labels, id, providerID, status }) => {
+const Nodes = ({ name, creationTimestamp, labels, id, providerID, status, nodeName }) => {
   const clusterData: any = useRouteLoaderData('cluster');
   const namespaces: any = clusterData.namespaces;
   const [open, setOpen]: any = useState(false);

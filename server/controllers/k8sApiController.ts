@@ -119,7 +119,7 @@ k8sController.getNamespaces = async (
         creationTimestamp,
         labels,
         phase,
-        nodeName,
+        nodeName
       };
       return namespace;
     });

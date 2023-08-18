@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { cleanTime } from '../../functions';
 
 import { Pod, Service, Deployment } from '../../types';
+import React from 'react';
 
 const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   const clusterData: any = useRouteLoaderData('cluster');
