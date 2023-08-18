@@ -1,6 +1,5 @@
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
-import { Rnd } from 'react-rnd';
 
 const ControlPlane = () => {
   const [open, setOpen]: any = useState(false);

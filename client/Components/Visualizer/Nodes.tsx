@@ -1,8 +1,6 @@
-import { Namespace } from '../../types';
 import Namespaces from './Namespaces.tsx';
 import { useRouteLoaderData } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
-import { Rnd } from 'react-rnd';
 import { useState } from 'react';
 
 const Nodes = ({ name, creationTimestamp, labels, id, providerID, status }) => {
@@ -90,6 +88,7 @@ const Nodes = ({ name, creationTimestamp, labels, id, providerID, status }) => {
               name={namespace.name}
               creationTimestamp={namespace.creationTimestamp}
               phase={namespace.phase}
+              nodeName = {name}
             />
           ))}
       </div>

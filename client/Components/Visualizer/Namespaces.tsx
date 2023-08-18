@@ -2,13 +2,12 @@ import Deployments from './Deployments';
 import Pods from './Pods';
 import Services from './Services';
 import { useRouteLoaderData } from 'react-router-dom';
-import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
 import { cleanTime } from '../../functions';
 
 import { Pod, Service, Deployment } from '../../types';
 
-const Namespaces = ({ id, name, creationTimestamp, phase }) => {
+const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   const clusterData: any = useRouteLoaderData('cluster');
   const [open, setOpen]: any = useState(false);
 
@@ -53,7 +52,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase }) => {
         <div className='namespace-pods'>
           {clusterData &&
             pods.map(pod =>
-              pod.namespace === name ? (
+              (pod.namespace === name && pod.nodeName === nodeName)? (
                 <Pods
                   name={pod.name}
                   conditions={pod.conditions}
