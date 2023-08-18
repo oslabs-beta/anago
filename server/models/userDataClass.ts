@@ -1,9 +1,11 @@
 import { randomUUID } from 'crypto';
+import { LookupType } from '../../types.js';
 
 export class UserData {
   userId: string;
   clusters: Cluster[];
   dashboards: Dashboard[];
+  hiddenAlerts?: string[];
   metrics: any;
   addMetric(
     metricName: string,
@@ -33,6 +35,7 @@ export class UserData {
     this.clusters = [];
     this.dashboards = [];
     this.metrics = {};
+    this.hiddenAlerts = [];
     const firstDash = new Dashboard('Kubernetes Dashboard');
     this.dashboards.push(firstDash);
   }
@@ -94,27 +97,6 @@ enum GraphType {
   PieChart, //2
 }
 
-export enum LookupType {
-  CPUIdleByCluster, //0
-  MemoryIdleByCluster,
-  MemoryUsed,
-  CPUUsedByContainer,
-  FreeDiskUsage,
-  ReadyNodesByCluster, //5
-  NodesReadinessFlapping,
-  PodCount,
-  HPAByDeployment, //8
-  HPATargetStatus, //9
-  HPATargetSpec, //10
-  HPAMinReplicas, //11
-  HPAMaxReplicas, //12
-  HPACurrentReplicas, //13
-  HPADesiredReplicas, //14
-  HPAUtilization, //15
-  HTTPRequests, //16
-  PodCountByHPA, //17
-}
-
 function graphForQuery(lookupType: LookupType): GraphType {
   // Assigns a graph type to a query type
   switch (lookupType) {
@@ -161,6 +143,10 @@ function queryBuilder(lookupType: LookupType, queryOptions: any): string {
   // Creates a promQL search string for a given LookupType and set of options
   console.log(lookupType, queryOptions);
   switch (lookupType) {
+    case LookupType.CustomEntry: {
+      return queryOptions.customQuery;
+    }
+
     case LookupType.CPUIdleByCluster: {
       return 'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
     }

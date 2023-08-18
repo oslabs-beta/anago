@@ -1,15 +1,22 @@
 import { useEffect, useState } from 'react';
-
+import { Modal } from 'react-responsive-modal';
 import MetricDisplay from './MetricDisplay';
-import { UserData } from '../types';
-import { useRouteLoaderData, useParams, Outlet } from 'react-router-dom';
+import { MetricProps, UserData } from '../../types';
+import {
+  useRouteLoaderData,
+  useParams,
+  Outlet,
+  useLocation,
+} from 'react-router-dom';
 import AlertBar from './AlertBar';
+import AddMetric from './AddMetric';
 
 const Dashboard = () => {
   const userData = useRouteLoaderData('home') as UserData;
   const { id } = useParams();
 
   const [lastUpdate, setLastUpdate] = useState<Date>();
+  const [addMetricModal, setAddMetricModal] = useState(false);
 
   useEffect(() => {
     setLastUpdate(new Date());
@@ -21,8 +28,8 @@ const Dashboard = () => {
     console.log('fetch pithy');
     try {
       fetch('/api/pithy')
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           setTimeout(() => pithy(), 1000);
         });
     } catch {
@@ -33,23 +40,32 @@ const Dashboard = () => {
   const metricIds = Object.keys(userData.metrics);
   console.log('in dashboard', id);
   return (
-    <div className='dashboard-outer'>
+    <div className="dashboard-outer">
       {id && (
         <>
-          <h2 className='dashboard-title'>
+          <h2 className="dashboard-title">
             {userData.dashboards[id].dashboardName}
           </h2>
           <AlertBar />
-          <div className='dashboard-buttons'>
+          <div className="dashboard-buttons">
             <span>
-              <button onClick={refresh}>Refresh</button>
+              <button className="btn" onClick={refresh}>
+                Refresh
+              </button>
             </span>
             <span>
-              <button onClick={pithy}>Pithy Loop</button>
+              <button className="btn" onClick={pithy}>
+                Pithy Loop
+              </button>
+            </span>
+            <span>
+              <button className="btn" onClick={() => setAddMetricModal(true)}>
+                Add Metric
+              </button>
             </span>
           </div>
-          <div className='dashboard-container'>
-            {metricIds.map(metricId => (
+          <div className="dashboard-container">
+            {metricIds.map((metricId) => (
               <MetricDisplay metricId={metricId} key={metricId + lastUpdate} />
             ))}
             <Outlet />
@@ -59,6 +75,14 @@ const Dashboard = () => {
           </div>
         </>
       )}
+      <div className="modal">
+        <Modal
+          open={addMetricModal}
+          onClose={() => setAddMetricModal(false)}
+        >
+          <AddMetric dashboard={location} setAddMetricModal={setAddMetricModal} />
+        </Modal>
+      </div>
     </div>
   );
 };
