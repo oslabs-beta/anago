@@ -24,6 +24,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend
+  Legend
 );
 
 const MetricDisplay = ({ metricId }) => {
@@ -44,15 +45,16 @@ const MetricDisplay = ({ metricId }) => {
 
   //fetching data from Prometheus
   useEffect(() => {
-    console.log('Current user in metric:', userData);
+    //console.log('Current user in metric:', userData);
     fetch(`/api/data/metrics/${metricId}`, {
       method: 'GET',
     })
       .then((data) => data.json())
       .then((data) => {
-        console.log('fetched data', data);
+        //console.log('fetched data', data);
         setMetricData(data);
       })
+      .catch((err) => console.log(err));
       .catch((err) => console.log(err));
   }, []);
 
@@ -61,6 +63,8 @@ const MetricDisplay = ({ metricId }) => {
   const closeModal = () => setOpen(false);
 
   return (
+    <div className="metric-container">
+      <h4 className="metric-title">{userData.metrics[metricId].metricName}</h4>
     <div className="metric-container">
       <h4 className="metric-title">{userData.metrics[metricId].metricName}</h4>
 

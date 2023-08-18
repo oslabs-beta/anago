@@ -13,7 +13,8 @@ userDataController.sendUserData = (
   res: Response,
   next: NextFunction
 ) => {
-  const userData = readUserData();
+  try {
+    const userData = readUserData();
   if (!userData) {
     next({
       log: `Reading User Data failed in userDataController.sendUserData.`,
@@ -21,8 +22,49 @@ userDataController.sendUserData = (
       message: { err: 'Error retreiving user data.' },
     });
   }
-  res.locals.userData = userData;
-  next();
+    res.locals.userData = userData;
+    next();
+  } catch (err) {
+    next({
+      log: `error in userDataController.sendUserData: ${err}`,
+      status: 500,
+      message: { err: 'Error retreiving user data' },
+    });
+  }
+};
+
+userDataController.saveHiddenAlert = (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // add hidden alert!
+    next();
+  } catch (err) {
+    next({
+      log: `error in userDataController.saveHiddenAlert: ${err}`,
+      status: 500,
+      message: { err: 'Error sending hidden alert' },
+    });
+  }
+};
+
+userDataController.deleteHiddenAlert = (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // delete hidden alert!
+    next();
+  } catch (err) {
+    next({
+      log: `error in userDataController.deleteHiddenAlert: ${err}`,
+      status: 500,
+      message: { err: 'Error deleting hidden alert' },
+    });
+  }
 };
 
 userDataController.saveUserData = (

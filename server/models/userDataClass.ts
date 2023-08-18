@@ -5,6 +5,7 @@ export class UserData {
   userId: string;
   clusters: Cluster[];
   dashboards: Dashboard[];
+  hiddenAlerts?: string[];
   metrics: any;
   addMetric(
     metricName: string,
@@ -34,6 +35,7 @@ export class UserData {
     this.clusters = [];
     this.dashboards = [];
     this.metrics = {};
+    this.hiddenAlerts = [];
     const firstDash = new Dashboard('Kubernetes Dashboard');
     this.dashboards.push(firstDash);
   }

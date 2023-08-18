@@ -22,9 +22,9 @@ const promURLRange = promURL + 'query_range?query=';
 const promURLAlerts = promURL + 'alerts';
 
 const promApiController: any = {
-  // query prometheus for data over a specified range of time
-  getRangeMetrics: async (req: Request, res: Response, next: NextFunction) => {
-    console.log('inside promAPI controller');
+    // build the query to send to the prometheus http api
+  queryBuilder: (req: Request, res: Response, next: NextFunction) => {
+    // TODO: REQS SHOULD BE COMING IN ON BODY NOW
 
     // Fetch userData
     const userData = readUserData();
@@ -35,13 +35,24 @@ const promApiController: any = {
         message: { err: 'Error retreiving user data.' },
       });
     }
-
+    
     // retrieve metricId from request query parameter
     const metricId = req.params.id;
+    
+
+    // prometheus http api url's to query
+    const promURL = 'http://localhost:9090/api/v1/';
+    const promURLInstant = promURL + 'query?query=';
+    const promURLRange = promURL + 'query_range?query=';
+    // TODO: update alerts url if needed
+    const promURLAlerts = promURL + 'alerts';
+
+    // prometheues query string components
+    // TODO: IS QUERY PRECONFIGURED OR CUSTOM:
     const query = userData.metrics[metricId].searchQuery;
     const options = userData.metrics[metricId].queryOptions;
 
-    // Read placeholder data instead of fetching
+    // Placeholder Data for Offline Development
     if (!ACTIVE_DEPLOYMENT) {
       console.log('Supplying Placeholder data for metricId ', metricId);
       const placeholderFetch = placeholderData(metricId, userData, options);
@@ -50,34 +61,54 @@ const promApiController: any = {
       return next();
     }
 
-    // console.log('here is the metricId', metricId);
-    // prometheues query string components
-    // TODO: use metric id to get the metric.searchQuery -> uncomment the line below and comment out the hard coded query
-    //const query = 'sum by (namespace) (kube_pod_info)';
+
+    // TODO: IF INSTANT QUERY:
+    // res.locals.promQuery = promURLInstant + query;
+
+    // TODO: IF RANGE QUERY:
     const end = Math.floor(Date.now() / 1000); // current date and time
-    //if there is not a duration on the options object, default to 24hrs
+    const endQuery = `&end=${end}`;
     const duration = options.hasOwnProperty('duration')
       ? options.duration
       : 24 * 60 * 60; // default 24h
     const start = end - duration;
-    const endQuery = `&end=${end}`;
     const startQuery = `&start=${start}`;
     const stepSize = options.hasOwnProperty('stepSize')
       ? options.stepSize
       : 20 * 60; // default 20 min
     const stepQuery = `&step=${stepSize}s`; // data interval
 
-    // initialize object to store scraped metrics
+    res.locals.queryOptions = options;
+    res.locals.promQuery =
+      promURLRange + query + startQuery + endQuery + stepQuery;
 
+    return next();
+    // TODO: add error handler
+  },
+
+  // get request querying prometheus http api that exists as an instance in kubernetes
+  getMetrics: async (req: Request, res: Response, next: NextFunction) => {
+    // retrieve metricId from request query parameter
+    const metricId = req.params.id;
+    // Read placeholder data instead of fetching- if the cluster is not currently running on AWS
+    if (metricId.length < 2) {
+      console.log('Supplying Placeholder data for metricId ', metricId);
+      const placeholderFetch = placeholderData(
+        metricId,
+        res.locals.queryOptions,
+      );
+      res.locals.promMetrics = placeholderFetch;
+      return next();
+    }
+
+    // initialize object to store scraped metrics. This object shape is required by ChartJS to graph
     const promMetrics: plotData = {
       labels: [],
       datasets: [],
     };
     try {
       // query Prometheus
-      const response = await fetch(
-        promURLRange + query + startQuery + endQuery + stepQuery
-      );
+      const response = await fetch(res.locals.promQuery);
       const data = await response.json();
       // if the prometheus query response indicates a failure, then send an error message
       if (data.status === 'error') {
@@ -113,7 +144,6 @@ const promApiController: any = {
         */
 
         data.data.result.forEach((obj: promResResultElements) => {
-          // console.log('received object ', obj);
           // initialize object to store in promMetrics datasets
           const yAxis: yAxis = {
             label: '',
@@ -125,7 +155,7 @@ const promApiController: any = {
               const utcSeconds = arr[0];
               const d = new Date(0); //  0 sets the date to the epoch
               d.setUTCSeconds(utcSeconds);
-              const cleanedTime = cleanTime(d, options);
+              const cleanedTime = cleanTime(d, res.locals.queryOptions);
               promMetrics.labels.push(cleanedTime);
             });
           }
@@ -139,7 +169,6 @@ const promApiController: any = {
         });
 
         res.locals.promMetrics = promMetrics;
-        // TODO: should i also send a graph title? could make an object with titles assigned to queries
         return next();
       }
     } catch (err) {
@@ -150,7 +179,6 @@ const promApiController: any = {
       });
     }
   },
-  // getSnapshotMetrics
 };
 
 export default promApiController;
