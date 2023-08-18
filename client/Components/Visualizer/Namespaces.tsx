@@ -9,7 +9,6 @@ import { Pod, Service, Deployment } from '../../../types';
 import React from 'react';
 
 const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
-  console.log('in namespaces', nodeName);
   const clusterData: any = useRouteLoaderData('cluster');
   const [open, setOpen]: any = useState(false);
 
@@ -17,82 +16,82 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   const services: Service[] = clusterData.services;
   const deployments: Deployment[] = clusterData.deployments;
 
+  console.log('deployments', deployments);
+
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
   return (
     <div id={id} className='namespace' key={id}>
-      <div className='namespace-info'>
-        <h3>{`${name[0].toUpperCase().concat(name.slice(1))}`} </h3>
-        <h3>{`Status: ${phase} `}</h3>
-        <h4>{cleanTime(creationTimestamp)}</h4>
-      </div>
       <img
         className='k8logo'
         id='namespace-logo'
         src='client/assets/images/namespace.png'
       />
 
-      <div className='namespace-contents'>
-        <div className='namespace-deployments'>
-          {clusterData &&
-            deployments.map(deployment =>
-              deployment.namespace === name ? (
-                <Deployments
-                  name={deployment.name}
-                  replicas={deployment.replicas}
-                  creationTimestamp={deployment.creationTimestamp}
-                  labels={deployment.labels}
-                  namespace={deployment.namespace}
-                  id={deployment.uid}
-                  key={deployment.uid}
-                />
-              ) : (
-                <></>
-              ),
-            )}
+      <div className='ns-inner-border'>
+        <div className='namespace-info'>
+          <h3>{`${name[0].toUpperCase().concat(name.slice(1))}`} </h3>
+          <h3 style={phase === 'Active' ? {color: 'green'} : {color: 'red'}}>Status: {phase}</h3>
+          <h4>{'Created: ' + cleanTime(creationTimestamp)}</h4>
         </div>
-        <div className='namespace-pods'>
-          {pods.map(pod =>
-            pod.namespace === name && pod.nodeName === nodeName ? (
-              <Pods
-                name={pod.name}
-                conditions={pod.conditions}
-                containerStatuses={pod.containerStatuses}
-                containers={pod.containers}
-                creationTimestamp={pod.creationTimestamp}
-                labels={pod.labels}
-                namespace={pod.namespace}
-                nodeName={pod.nodeName}
-                phase={pod.phase}
-                podIP={pod.podIP}
-                serviceAccount={pod.serviceAccount}
-                id={pod.uid}
-                key={pod.uid}
-              />
-            ) : (
-              <></>
-            ),
-          )}
-        </div>
-        <div className='namespace-services'>
-          {clusterData &&
-            services.map(service =>
-              service.namespace === name ? (
-                <Services
-                  name={service.name}
-                  loadBalancer={service.loadBalancer}
-                  creationTimestamp={service.creationTimestamp}
-                  labels={service.labels}
-                  namespace={service.namespace}
-                  ports={service.ports}
-                  id={service.uid}
-                  key={service.uid}
-                />
-              ) : (
-                <></>
-              ),
-            )}
+
+        <div className='namespace-contents'>
+          <div className='namespace-deployments'>
+            {clusterData &&
+              deployments.map(deployment =>
+                deployment.namespace === name ? (
+                  <Deployments
+                    key={deployment.uid}
+                    name={deployment.name}
+                    replicas={deployment.replicas}
+                    creationTimestamp={deployment.creationTimestamp}
+                    labels={deployment.labels}
+                    namespace={deployment.namespace}
+                    id={deployment.uid}
+                  />
+                ) : null,
+              )}
+          </div>
+          <div className='namespace-pods'>
+            {pods.map(pod => {
+              if (pod.namespace === name && pod.nodeName === nodeName)
+                return (
+                  <Pods
+                    name={pod.name}
+                    conditions={pod.conditions}
+                    containerStatuses={pod.containerStatuses}
+                    containers={pod.containers}
+                    creationTimestamp={pod.creationTimestamp}
+                    labels={pod.labels}
+                    namespace={pod.namespace}
+                    nodeName={pod.nodeName}
+                    phase={pod.phase}
+                    podIP={pod.podIP}
+                    serviceAccount={pod.serviceAccount}
+                    id={pod.uid}
+                    key={pod.uid}
+                  />
+                );
+            })}
+          </div>
+          <div className='namespace-services'>
+            {clusterData &&
+              services.map(service =>
+                service.namespace === name ? (
+                  <Services
+                    name={service.name}
+                    loadBalancer={service.loadBalancer}
+                    creationTimestamp={service.creationTimestamp}
+                    labels={service.labels}
+                    namespace={service.namespace}
+                    ports={service.ports}
+                    id={service.uid}
+                    key={service.uid}
+                  />
+                ) : null,
+              )}
+          </div>
         </div>
       </div>
     </div>

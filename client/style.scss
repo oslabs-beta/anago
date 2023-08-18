@@ -407,8 +407,8 @@ h5{
   display: flex;
   width: 100%;
   flex-wrap: wrap;
-  justify-content: space-around;
-  align-content: space-around;
+  margin-left: 2em;
+  margin-right: 2em;
 }
 
 .control-plane{
@@ -416,26 +416,26 @@ h5{
   margin-bottom: 5px;
 }
 
-
 .node {
   display: flex;
-  border: 2px dashed black;
   position: relative;
   flex-direction: column;
   flex-wrap: wrap;
-  width: 40%;
-  padding: 70px 20px 0 20px;
-  margin-bottom: 10px;
+  width: 45%;
+  padding: 25px 
 }
-
 .node-info {
   position: absolute;
   top: 0;
   right: 0;
   margin-bottom: 2px;
 }
-
-
+.node-inner-border {
+  border: 3px dashed rgb(0, 42, 255, 0.6);
+  border-radius: 10px;
+  padding: 20px 5px 5px 5px;
+  margin-bottom: 10px;
+}
 
 
 .namespace-container {
@@ -449,9 +449,20 @@ h5{
 }
 .namespace {
   position: relative;
-  border: 2px dashed red;
-  min-width: 20rem;
+  min-width: 13rem;
+  padding: 15px;
+}
 
+.ns-inner-border{
+  border: 2px dashed rgba(255, 170, 0, 0.3);
+  border-radius: 10px;
+}
+
+#namespace-logo{
+  height: 60px;
+  width: 60px;
+  margin-bottom: 10px;
+  margin-left: 10px;
 }
 
 .namespace-info {
@@ -460,7 +471,7 @@ h5{
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
-  padding: 10px
+  padding: 5px
 }
 
 .namespace-info h3{
@@ -480,28 +491,35 @@ h5{
 
 .namespace-pods {
   display: flex;
-  justify-content: space-around;
-  align-content: space-around;
+  justify-content: center;
+  align-content: center;
   flex-wrap: wrap;
   background-color: rgb(173, 216, 230, 0.3);
-  padding: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 25px
+
 }
+
 .namespace-services {
   display: flex;
-  justify-content: space-around;
-  align-content: space-around;
+  justify-content: center;
+  align-content: center;
   flex-wrap: wrap;
   background-color: rgb(144, 238, 169, 0.3);
-  padding: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 25px
 }
 .namespace-deployments {
   display: flex;
-  justify-content: space-around;
-  align-content: space-around;
+  justify-content: center;
+  align-content: center;
   flex-wrap: wrap;
   background-color: rgb(230, 230, 250, 0.3);
-  padding: 10px;
-
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 25px
 }
 .status-bar:hover {
   height: 10rem;

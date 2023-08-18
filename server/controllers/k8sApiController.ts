@@ -56,6 +56,7 @@ k8sController.getPods = async (
     const data: any = await k8sApi.listPodForAllNamespaces();
     const pods: Pod[] = data.body.items.map(data => {
       const { name, namespace, creationTimestamp, uid, labels } = data.metadata;
+      console.log(data.spec.containers)
       const { nodeName, containers, serviceAccount } = data.spec;
       const { conditions, containerStatuses, phase, podIP } = data.status;
       const pod: Pod = {
@@ -121,7 +122,7 @@ k8sController.getServices = async (
 
     const services: Service[] = data.body.items.map(data => {
       const { name, namespace, uid, creationTimestamp, labels } = data.metadata;
-      const { ports } = data.spec;
+      const { ports, clusterIP } = data.spec;
       const { loadBalancer } = data.status;
       const service: Service = {
         name,
@@ -131,6 +132,7 @@ k8sController.getServices = async (
         labels,
         ports,
         loadBalancer,
+        clusterIP
       };
       return service;
     });

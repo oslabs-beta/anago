@@ -13,6 +13,8 @@ const AlertBar = () => {
   //make sure this local host address gives the alert JSON object
   const alertsAPI = 'http://localhost:9093/api/v2/alerts';
 
+
+
   //fetching function
   const fetching = async () => {
     //import data from loader
@@ -97,6 +99,9 @@ const AlertBar = () => {
     // });
     // return response.json();
   }
+
+
+
 
   return (
     <div className="status-bar">

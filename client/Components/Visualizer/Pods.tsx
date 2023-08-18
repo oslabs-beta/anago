@@ -24,7 +24,7 @@ const Pods = ({
 
   return (
     <div className='pod' id={id} key={id}>
-      <div>
+
         <img
           src='client/assets/images/pod.png'
           className='k8logo'
@@ -32,7 +32,7 @@ const Pods = ({
           onClick={openModal}
         />
         <h5>{cleanName(name)}</h5>
-      </div>
+
       <div className='modal'>
         <Modal open={open} onClose={closeModal}>
           <h2>Pod Information:</h2>
@@ -58,7 +58,7 @@ const Pods = ({
           <h3>Conditions: </h3>
           {conditions.map(condition => {
             return (
-              <div>
+              <div key={condition.type+id}>
                 <h4>{condition.type + ': ' + condition.status}</h4>
                 <p>{'Last Transition Time: ' + condition.lastTransitionTime}</p>
                 <p>{'Last Probe Time: ' + condition.lastProbeTime}</p>
@@ -69,7 +69,7 @@ const Pods = ({
           <h2>Container Information: </h2>
           {containers.map(container => {
             return (
-              <div>
+              <div key={container.name+id}>
                 <h3>Container Name:</h3>
                 <p>{container.name}</p>
                 <h3>Image:</h3>
@@ -91,26 +91,26 @@ const Pods = ({
                   {container.ports ? (
                     container.ports.map(port => {
                       return (
-                        <>
+                        <div key={port.name+id}>
                           <h3>Ports:</h3>
                           <p>{'Name: ' + port.name}</p>
                           <p>{'Container Port: ' + port.containerPort}</p>
                           <p>{'Host Port: ' + port.hostPort}</p>
                           <p>{'Protocol: ' + port.protocol}</p>
-                        </>
+                        </div>
                       );
                     })
                   ) : (
-                    <></>
+                    undefined
                   )}
                 </div>
                 <h3>Volume Mounts:</h3>
                 {container.volumeMounts.map(element => {
                   return (
-                    <>
+                    <div key={element.name+id}>
                       <p>{'Name: ' + element.name}</p>
                       <p>{'Path: ' + element.mountPath}</p>
-                    </>
+                    </div>
                   );
                 })}
               </div>

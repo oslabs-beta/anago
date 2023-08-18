@@ -62,6 +62,7 @@ export interface Service {
   uid: string;
   ports: [];
   loadBalancer: [];
+  clusterIP
 }
 
 export interface Deployment {
