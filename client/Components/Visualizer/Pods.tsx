@@ -1,5 +1,6 @@
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
+import { cleanName } from '../../functions';
 
 const Pods = ({
   conditions,
@@ -29,7 +30,7 @@ const Pods = ({
           id='pod-logo'
           onClick={openModal}
         />
-        <h5>{podIP}</h5>
+        <h5>{cleanName(name)}</h5>
       </div>
       <div className='modal'>
         <Modal open={open} onClose={closeModal}>

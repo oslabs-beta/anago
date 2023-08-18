@@ -33,18 +33,18 @@ export default function Home() {
           <h3 className='app-title'>Anago</h3>
         </span>
         <nav>
-          <NavLink to={'/home'} className='nav-btn'>
+          <NavLink to={'/0'} className='nav-btn'>
             Dashboards
           </NavLink>
-          <NavLink to={'/settings'} className='nav-btn'>
+          {/* <NavLink to={'/settings'} className='nav-btn'>
             Settings
-          </NavLink>
+          </NavLink> */}
           <NavLink to={'/clusterview'} className='nav-btn'>
             Cluster View
           </NavLink>
-          <NavLink to={'/login'} className='nav-btn'>
+          {/* <NavLink to={'/login'} className='nav-btn'>
             Log Out
-          </NavLink>
+          </NavLink> */}
         </nav>
       </header>
 

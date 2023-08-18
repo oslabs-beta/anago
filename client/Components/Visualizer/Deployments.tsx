@@ -1,5 +1,6 @@
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
+import { cleanName } from '../../functions';
 
 const Deployments = ({
   name,
@@ -23,7 +24,7 @@ const Deployments = ({
           src='client/assets/images/deployment.png'
           onClick={openModal}
         />
-        <h5>{name}</h5>
+        <h5>{cleanName(name)}</h5>
       </div>
 
       <div className='modal'>

@@ -22,8 +22,9 @@ const Nodes = ({ name, creationTimestamp, labels, id, providerID, status }) => {
         className='k8logo'
         id='node-logo'
         src='client/assets/images/node.png'
+        onClick={openModal}
       />
-      <button onClick={openModal}>More Info</button>
+      {/* <button onClick={openModal}>More Info</button> */}
       </div>
     
 

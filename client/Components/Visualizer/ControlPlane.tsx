@@ -8,33 +8,17 @@ const ControlPlane = () => {
   const closeModal = () => setOpen(false);
   return (
     <div className='control-plane'>
-      <div>
-        <Rnd
-          default={{
-            x: 150,
-            y: 205,
-            width: 500,
-            height: 190,
-          }}
-          minWidth={500}
-          minHeight={190}
-          bounds='window'>
-          <img
-            className='k8logo'
-            id='control-plane-logo'
-            src='client/assets/images/control-plane.png'
-            
-          />
-          <button onClick={openModal}></button>
-        </Rnd>
-        <p>Cluster Name</p>
-        
-      </div>
+      <img
+        className='k8logo'
+        id='control-plane-logo'
+        src='client/assets/images/control-plane.png'
+        onClick={openModal}
+      />
 
       <div className='modal'>
         <Modal open={open} onClose={closeModal}>
           <div>
-            <p>information about your AWS host?</p>
+            <p>information about your AWS Cluster/Host</p>
           </div>
         </Modal>
       </div>

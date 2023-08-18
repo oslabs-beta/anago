@@ -4,7 +4,7 @@ import Services from './Services';
 import { useRouteLoaderData } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
-import { cleanTime } from '../../Routes/ClusterView';
+import { cleanTime } from '../../functions';
 
 import { Pod, Service, Deployment } from '../../types';
 
@@ -22,7 +22,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase }) => {
   return (
     <div id={id} className='namespace'>
       <div className='namespace-info'>
-        <h3>{`${name.toUpperCase()}`} </h3>
+        <h3>{`${name[0].toUpperCase().concat(name.slice(1))}`} </h3>
         <h3>{`Status: ${phase} `}</h3>
         <h4>{cleanTime(creationTimestamp)}</h4>
       </div>
@@ -33,6 +33,23 @@ const Namespaces = ({ id, name, creationTimestamp, phase }) => {
       />
 
       <div className='namespace-contents'>
+        <div className='namespace-deployments'>
+          {clusterData &&
+            deployments.map(deployment =>
+              deployment.namespace === name ? (
+                <Deployments
+                  name={deployment.name}
+                  replicas={deployment.replicas}
+                  creationTimestamp={deployment.creationTimestamp}
+                  labels={deployment.labels}
+                  namespace={deployment.namespace}
+                  id={deployment.uid}
+                />
+              ) : (
+                <></>
+              ),
+            )}
+        </div>
         <div className='namespace-pods'>
           {clusterData &&
             pods.map(pod =>
@@ -68,23 +85,6 @@ const Namespaces = ({ id, name, creationTimestamp, phase }) => {
                   namespace={service.namespace}
                   ports={service.ports}
                   id={service.uid}
-                />
-              ) : (
-                <></>
-              ),
-            )}
-        </div>
-        <div className='namespace-deployments'>
-          {clusterData &&
-            deployments.map(deployment =>
-              deployment.namespace === name ? (
-                <Deployments
-                  name={deployment.name}
-                  replicas={deployment.replicas}
-                  creationTimestamp={deployment.creationTimestamp}
-                  labels={deployment.labels}
-                  namespace={deployment.namespace}
-                  id={deployment.uid}
                 />
               ) : (
                 <></>

@@ -1,5 +1,6 @@
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
+import { cleanName } from '../../functions';
 
 const Services = ({
   name,
@@ -14,6 +15,9 @@ const Services = ({
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
+
+
+  name = cleanName(name);
 
   return (
     <div className='service' id={id}>

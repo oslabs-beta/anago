@@ -252,6 +252,14 @@ header nav {
   }
 }
 
+h5{
+  margin-bottom: 5px;
+  margin-top: 2px;
+  word-wrap: break-word;
+  white-space: normal;
+  width: 80px;
+}
+
 .cluster-view {
   display: flex;
   width: 100%;
@@ -260,6 +268,12 @@ header nav {
   align-content: space-around;
 }
 
+.control-plane{
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+
 .node {
   display: flex;
   border: 2px dashed black;
@@ -267,7 +281,7 @@ header nav {
   flex-direction: column;
   flex-wrap: wrap;
   width: 40%;
-  padding: 100px 20px 0 20px;
+  padding: 70px 20px 0 20px;
   margin-bottom: 10px;
 }
 
@@ -275,17 +289,11 @@ header nav {
   position: absolute;
   top: 0;
   right: 0;
-  margin-left: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
+  margin-bottom: 2px;
 }
 
-#node-logo {
 
-  margin-bottom: 5px;
-}
+
 
 .namespace-container {
   display: flex;
@@ -309,16 +317,15 @@ header nav {
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
-  margin-bottom: 10px;
   padding: 10px
 }
 
 .namespace-info h3{
-  line-height: auto;
+  margin-top: 2px;
   margin-bottom: 2px;
 }
 .namespace-info h4{
-  line-height: auto;
+  margin-top: 2px;
   margin-bottom: 2px;
 }
 
@@ -353,6 +360,13 @@ header nav {
   padding: 10px;
 
 }
+.status-bar:hover {
+  height: 10rem;
+  overflow-y: auto;
+}
+.status-bar:active {
+  
+}
 
 #namespace-logo {
   position: absolute;
@@ -364,15 +378,17 @@ header nav {
   align-items: center;
 }
 
+// #namespace-logo:checked{
+//   height: 10rem;
+// }
 
+// #namespace-logo:active{
+// height: 10rem;
+//   overflow-y: auto;
+// }
 
 .k8logo {
   height: 75px;
   width: 75px;
 }
 
-.service h5 {
-  width: 90px;
-  word-wrap: break-word;
-  white-space: normal;
-}
