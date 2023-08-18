@@ -11,6 +11,7 @@ import Login from './Login';
 import Settings from './Settings';
 import Dashboard from '../Components/Dashboard';
 import ClusterView from './ClusterView';
+import HPADashboard from '../Components/HPADashboard';
 
 //import loaders
 import * as loaders from '../Loaders';
@@ -19,6 +20,7 @@ import * as loaders from '../Loaders';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Home />} loader={loaders.userLoader} id='home'>
+      <Route path='hpa' element={<HPADashboard />} />
       <Route path=':id' element={<Dashboard />} />
       <Route path='login' element={<Login />} />
       <Route path='settings' element={<Settings />} />

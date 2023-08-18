@@ -22,21 +22,22 @@ export default function Home() {
   useEffect(() => {
     setHasFetchedUserData(true);
     setCurrentDashboard(dashboards[0]);
+
     navigate('0');
   }, []);
 
   return (
-    <div className="home-layout">
+    <div className='home-layout'>
       <header>
-        <span className="logo-container">
-          <img src={logo} alt="logo" className="logo-image" />
-          <h3 className="app-title">Anago</h3>
+        <span className='logo-container'>
+          <img src={logo} alt='logo' className='logo-image' />
+          <h3 className='app-title'>Anago</h3>
         </span>
         <nav>
-          <NavLink to={'/home'} className="nav-btn">
+          <NavLink to={'/home'} className='nav-btn'>
             Dashboards
           </NavLink>
-          <NavLink to={'/settings'} className="nav-btn">
+          <NavLink to={'/settings'} className='nav-btn'>
             Settings
           </NavLink>
           <NavLink to={'/clusterview'} className='nav-btn'>
@@ -48,7 +49,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <div className="main-body">
+      <div className='main-body'>
         <Outlet />
       </div>
     </div>

@@ -81,7 +81,7 @@ if (ACTIVE_DEPLOYMENT) {
     1,
   );
   newUserData.addMetric(
-    'HPA Utilization <= 90%',
+    'HPA Utilization <= 20% or >= 80%',
     LookupType.HPAUtilization,
     {
       duration: 5 * 60 * 60,
