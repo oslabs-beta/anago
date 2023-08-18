@@ -5,7 +5,6 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-console.log('in userDataController');
 const userDataController: any = {};
 
 userDataController.sendUserData = (
@@ -13,7 +12,7 @@ userDataController.sendUserData = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('in sendUserData')
+  console.log('in sendUserData');
   try {
     const userData = readUserData();
     if (!userData) {
@@ -34,23 +33,49 @@ userDataController.sendUserData = (
   }
 };
 
+userDataController.getHiddenAlerts = (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userData = readUserData();
+    if (!userData) {
+      next({
+        log: `Reading User Data failed in userDataController.getHiddenAlerts.`,
+        status: 500,
+        message: { err: 'Error retreiving user data.' },
+      });
+    }
+    res.locals.hiddenAlerts = userData.hiddenAlerts;
+    next();
+  } catch (err) {
+    next({
+      log: `error in userDataController.getHiddenAlerts: ${err}`,
+      status: 500,
+      message: { err: 'Error retreiving hidden alerts' },
+    });
+  }
+};
+
 userDataController.saveHiddenAlert = (
   req: Request,
   _res: Response,
   next: NextFunction
 ) => {
-  console.log('inside saveHiddenAlert');
   try {
-    const newHiddenAlert = req.body;
+    // grab just the string from the {hidden: string} param
+    const newHiddenAlert = req.body.hidden;
     //grab the current userData
     const updatedUserData = readUserData();
-    updatedUserData.hiddenAlerts.push(newHiddenAlert);
-
+    // if the current user does not have this saved error, add it
+    if (!updatedUserData.hiddenAlerts.includes(newHiddenAlert)) {
+      updatedUserData.hiddenAlerts.push(newHiddenAlert);
+    }
     fs.writeFileSync(
       path.resolve(__dirname, '../models/userData.json'),
       JSON.stringify(updatedUserData)
     );
-    console.log('new hidden alert added to userData');
     next();
   } catch (err) {
     next({
@@ -66,18 +91,18 @@ userDataController.deleteHiddenAlert = (
   _res: Response,
   next: NextFunction
 ) => {
-  console.log('inside deleteHiddenAlert');
   try {
-    const unhideAlert = req.body;
+    const unhideAlert = req.body.hidden;
     const updatedUserData = readUserData();
-    //remove the alert
-    updatedUserData.hiddenAlerts.filter((el) => el !== unhideAlert);
+    //filter the current hiddenAlerts array
+    updatedUserData.hiddenAlerts = updatedUserData.hiddenAlerts.filter(
+      (value) => value !== unhideAlert
+    );
 
     fs.writeFileSync(
       path.resolve(__dirname, '../models/userData.json'),
       JSON.stringify(updatedUserData)
     );
-    console.log('hidden alert removed from userData');
     next();
   } catch (err) {
     next({
@@ -93,7 +118,6 @@ userDataController.saveUserData = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('Saving updated user data.');
   const updatedUserData = req.body;
   try {
     fs.writeFileSync(

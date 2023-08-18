@@ -1,14 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { UserData } from '../types';
 import { useRouteLoaderData } from 'react-router-dom';
+import { StoreContext } from '../stateStore';
 
 //TODO: add displayed to the state store
 
 const AlertBar = () => {
   //keep track of active alerts
+  const { displayedAlerts, setDisplayedAlerts }: any = useContext(StoreContext);
   const [alerts, setAlerts]: any = useState([]);
-  const [fetched, setFetched] = useState(false);
-  const [noErrors, setNoErrors] = useState(false);
+  const [fetched, setFetched] = useState(true);
+  const [noErrors, setNoErrors] = useState(true);
   //save this hidden with userData
   const [hidden, setHidden] = useState<string[]>([]);
   const [restored, setRestored] = useState<any[]>([]);
@@ -39,16 +41,6 @@ const AlertBar = () => {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    // initial fetch on load
-    fetching();
-    // fetch errors every 5 minutes (common alert interval)
-    const interval: NodeJS.Timer = setInterval(fetching, 5 * 60 * 1000);
-    // clear interval so it only runs the setInterval when component is mounted
-    return () => clearInterval(interval);
-  }, []);
-
   //sort the errors by severity (critical before warning)
   const sorted = [...alerts].sort(function (a, b) {
     let A = a.labels.severity.toUpperCase();
@@ -69,6 +61,30 @@ const AlertBar = () => {
       return unique;
     }, []);
 
+  useEffect(() => {
+    // initial fetch on load
+    fetching();
+    // fetch errors every 5 minutes (common alert interval)
+    const interval: NodeJS.Timer = setInterval(fetching, 5 * 60 * 1000);
+
+    const noAlertTitleElement = document.getElementById('noAlertTitle');
+
+    if (noAlertTitleElement) {
+      noAlertTitleElement.addEventListener('mouseover', () => {
+        const statusBar = noAlertTitleElement.parentNode as HTMLElement;
+        if (statusBar) {
+          statusBar.style.height = '3.5rem';
+          statusBar.style.overflowY = 'hidden';
+          statusBar.style.cursor = 'auto';
+          statusBar.style.backgroundColor = '#008a8a33';
+        }
+      });
+    }
+    setDisplayedAlerts(displayed);
+    // clear interval so it only runs the setInterval when component is mounted
+    return () => clearInterval(interval);
+  }, [alerts, hidden, displayed, setDisplayedAlerts]);
+
   // onclick to hide alert
   async function handleHide(id: string) {
     setHidden((prev) => [...prev, id]);
@@ -78,15 +94,11 @@ const AlertBar = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(id),
+        body: JSON.stringify({ hidden: id }),
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        console.error('POST request error:', error);
-      } else {
-        const responseData = await response.json();
-        console.log('responseData', responseData);
+        throw new Error('failed to add new hidden alert');
       }
     } catch (err) {
       console.log(err);
@@ -108,14 +120,10 @@ const AlertBar = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(id),
+        body: JSON.stringify({ hidden: id }),
       });
       if (!response.ok) {
-        const error = await response.json();
-        console.error('DELETE request error:', error);
-      } else {
-        const responseData = await response.json();
-        console.log('responseData', responseData);
+        throw new Error('failed to remove hidden alert');
       }
     } catch (err) {
       console.log(err);
@@ -127,7 +135,7 @@ const AlertBar = () => {
       {/* if data was fetched and there are errors */}
       {fetched && !noErrors && (
         <div>
-          <h3>
+          <h3 id="alertTitle">
             <strong>ALERTS:</strong>
           </h3>
           {['critical', 'warning'].map((severity) => (
@@ -202,7 +210,9 @@ const AlertBar = () => {
         </div>
       )}
       {/* if data was fetched and there are no errors */}
-      {noErrors && fetched && <h3>Currently, you have no active alerts!</h3>}
+      {noErrors && fetched && (
+        <h3 id="noAlertTitle">Currently, you have no active alerts!</h3>
+      )}
     </div>
   );
 };
