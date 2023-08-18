@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { readUserData } from './helperFunctions.js';
+import { readUserData } from './helperFuncs.js';
 import { Metric } from '../models/userDataClass.js';
 import fs from 'fs';
 import path from 'path';

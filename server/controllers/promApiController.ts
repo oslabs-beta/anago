@@ -10,7 +10,7 @@ import {
   cleanTime,
   namePlot,
   readUserData,
-} from './helperFunctions.js';
+} from './helperFuncs.js';
 import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 import type { Request, Response, NextFunction } from 'express';
 
@@ -22,7 +22,7 @@ const promURLRange = promURL + 'query_range?query=';
 const promURLAlerts = promURL + 'alerts';
 
 const promApiController: any = {
-    // build the query to send to the prometheus http api
+  // build the query to send to the prometheus http api
   queryBuilder: (req: Request, res: Response, next: NextFunction) => {
     // TODO: REQS SHOULD BE COMING IN ON BODY NOW
 
@@ -35,10 +35,9 @@ const promApiController: any = {
         message: { err: 'Error retreiving user data.' },
       });
     }
-    
+
     // retrieve metricId from request query parameter
     const metricId = req.params.id;
-    
 
     // prometheus http api url's to query
     const promURL = 'http://localhost:9090/api/v1/';
@@ -51,15 +50,6 @@ const promApiController: any = {
     // TODO: IS QUERY PRECONFIGURED OR CUSTOM:
     const query = userData.metrics[metricId].searchQuery;
     const options = userData.metrics[metricId].queryOptions;
-
-    // Placeholder Data for Offline Development
-    if (!ACTIVE_DEPLOYMENT) {
-      console.log('Supplying Placeholder data for metricId ', metricId);
-      const placeholderFetch = placeholderData(metricId, userData, options);
-      // console.log('Local data for metric ', metricId, ':\n', placeholderFetch);
-      res.locals.promMetrics = placeholderFetch;
-      return next();
-    }
 
 
     // TODO: IF INSTANT QUERY:
@@ -78,6 +68,7 @@ const promApiController: any = {
       : 20 * 60; // default 20 min
     const stepQuery = `&step=${stepSize}s`; // data interval
 
+    res.locals.userData = userData;
     res.locals.queryOptions = options;
     res.locals.promQuery =
       promURLRange + query + startQuery + endQuery + stepQuery;
@@ -91,12 +82,11 @@ const promApiController: any = {
     // retrieve metricId from request query parameter
     const metricId = req.params.id;
     // Read placeholder data instead of fetching- if the cluster is not currently running on AWS
-    if (metricId.length < 2) {
+    // Placeholder Data for Offline Development
+    if (!ACTIVE_DEPLOYMENT) {
       console.log('Supplying Placeholder data for metricId ', metricId);
-      const placeholderFetch = placeholderData(
-        metricId,
-        res.locals.queryOptions,
-      );
+      const placeholderFetch = placeholderData(metricId, res.locals.userData, res.locals.queryOptions);
+      // console.log('Local data for metric ', metricId, ':\n', placeholderFetch);
       res.locals.promMetrics = placeholderFetch;
       return next();
     }
@@ -161,7 +151,7 @@ const promApiController: any = {
           }
           // populate the y-axis object with the scraped metrics
           // yAxis.label = obj.metric.toString();
-          yAxis.label = namePlot(obj, userData.metrics[metricId].lookupType);
+          yAxis.label = namePlot(obj, res.locals.userData.metrics[metricId].lookupType);
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));
           });

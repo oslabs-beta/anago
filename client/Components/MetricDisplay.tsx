@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { UserData } from '../../types';
 import { Modal } from 'react-responsive-modal';
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,7 +22,6 @@ ChartJS.register(
   Colors,
   Title,
   Tooltip,
-  Legend
   Legend
 );
 
@@ -55,7 +53,6 @@ const MetricDisplay = ({ metricId }) => {
         setMetricData(data);
       })
       .catch((err) => console.log(err));
-      .catch((err) => console.log(err));
   }, []);
 
   //modal handler functions
@@ -65,9 +62,6 @@ const MetricDisplay = ({ metricId }) => {
   return (
     <div className="metric-container">
       <h4 className="metric-title">{userData.metrics[metricId].metricName}</h4>
-    <div className="metric-container">
-      <h4 className="metric-title">{userData.metrics[metricId].metricName}</h4>
-
       {metricData.hasOwnProperty('labels') && (
         <Line data={metricData} options={options} onClick={openModal} />
       )}
