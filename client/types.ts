@@ -18,6 +18,7 @@ export interface UserData {
   clusterName: string;
   dashboards: {}[];
   metrics: {};
+  hiddenAlerts: [];
 }
 
 // export interface V1Node {
