@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserData } from '../types';
 import { useRouteLoaderData } from 'react-router-dom';
 import { StoreContext } from '../stateStore';
@@ -9,8 +9,8 @@ const AlertBar = () => {
   //keep track of active alerts
   const { displayedAlerts, setDisplayedAlerts }: any = useContext(StoreContext);
   const [alerts, setAlerts]: any = useState([]);
-  const [fetched, setFetched] = useState(true);
-  const [noErrors, setNoErrors] = useState(true);
+  const [fetched, setFetched] = useState(false);
+  const [noErrors, setNoErrors] = useState(false);
   //save this hidden with userData
   const [hidden, setHidden] = useState<string[]>([]);
   const [restored, setRestored] = useState<any[]>([]);
@@ -20,9 +20,6 @@ const AlertBar = () => {
 
   //fetching function
   const fetching = async () => {
-    //import data from loader
-    // const userData = useRouteLoaderData('home') as UserData;
-    // setHidden(userData.hiddenAlerts);
     console.log('fetching...');
     try {
       const alertResponse = await fetch(alertsAPI);
@@ -41,6 +38,30 @@ const AlertBar = () => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    // initial fetch on load
+    fetching();
+    // fetch errors every 5 minutes (common alert interval)
+    const interval: NodeJS.Timer = setInterval(fetching, 5 * 60 * 1000);
+
+    // if there are no alerts, I dont want the "current, you have no alerts" box to still have a drop down or change colors
+    const noAlertTitleElement = document.getElementById('noAlertTitle');
+    if (noAlertTitleElement) {
+      noAlertTitleElement.addEventListener('mouseover', () => {
+        const statusBar = noAlertTitleElement.parentNode as HTMLElement;
+        if (statusBar) {
+          statusBar.style.height = '3.5rem';
+          statusBar.style.overflowY = 'hidden';
+          statusBar.style.cursor = 'auto';
+          statusBar.style.backgroundColor = '#008a8a33';
+        }
+      });
+    }
+    // clear interval so it only runs the setInterval when component is mounted
+    return () => clearInterval(interval);
+  }, []);
+
   //sort the errors by severity (critical before warning)
   const sorted = [...alerts].sort(function (a, b) {
     let A = a.labels.severity.toUpperCase();
@@ -61,30 +82,10 @@ const AlertBar = () => {
       return unique;
     }, []);
 
+  //make sure the displayedAlerts state updates whenever displayed changes
   useEffect(() => {
-    // initial fetch on load
-    fetching();
-    // fetch errors every 5 minutes (common alert interval)
-    const interval: NodeJS.Timer = setInterval(fetching, 5 * 60 * 1000);
-
-    const noAlertTitleElement = document.getElementById('noAlertTitle');
-
-    if (noAlertTitleElement) {
-      noAlertTitleElement.addEventListener('mouseover', () => {
-        const statusBar = noAlertTitleElement.parentNode as HTMLElement;
-        if (statusBar) {
-          statusBar.style.height = '3.5rem';
-          statusBar.style.overflowY = 'hidden';
-          statusBar.style.cursor = 'auto';
-          statusBar.style.backgroundColor = '#008a8a33';
-        }
-      });
-    }
     setDisplayedAlerts(displayed);
-    // clear interval so it only runs the setInterval when component is mounted
-    return () => clearInterval(interval);
-  }, [alerts, hidden, displayed, setDisplayedAlerts]);
-
+  }, [displayed]);
   // onclick to hide alert
   async function handleHide(id: string) {
     setHidden((prev) => [...prev, id]);
