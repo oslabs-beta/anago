@@ -160,9 +160,6 @@ const AlertBar = () => {
     }
   }
 
-
-
-
   return (
     <div
       className="status-bar"

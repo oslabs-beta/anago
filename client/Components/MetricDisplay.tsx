@@ -26,7 +26,7 @@ ChartJS.register(
   Legend
 );
 
-const MetricDisplay = ({ metricId }) => {
+const MetricDisplay = ({ metricId, editMode }) => {
   const userData = useRouteLoaderData('home') as UserData;
 
   //state to handle modal and handling fetched data router
@@ -48,11 +48,28 @@ const MetricDisplay = ({ metricId }) => {
     fetch(`/api/data/metrics/${metricId}`, {
       method: 'GET',
     })
-      .then(data => data.json())
-      .then(data => {
+      .then((data) => data.json())
+      .then((data) => {
         setMetricData(data);
       })
       .catch((err) => console.log(err));
+  }
+
+  async function deleteMetric() {
+    try {
+      // send request to backend
+      const response = await fetch(`/api/user/metric/${metricId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error('failed to delete metric from user data');
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   useEffect(
@@ -91,19 +108,32 @@ const MetricDisplay = ({ metricId }) => {
   const closeModal = () => setOpen(false);
 
   return (
-    <div className="metric-container">
-      <h4 className="metric-title">{userData.metrics[metricId].metricName}</h4>
-      {metricData.hasOwnProperty('labels') && (
-        <Line data={metricData} options={options} onClick={openModal} />
-      )}
-      <div className="modal">
-        {/* {metricId && <button onClick={openModal}>See more</button>} */}
-        <Modal open={open} onClose={closeModal}>
-          <h4 className="metric-title">
-            {userData.metrics[metricId].metricName}
-          </h4>
-          {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
-        </Modal>
+    <div>
+      <div className="metric-container">
+        <h4 className="metric-title">
+          {userData.metrics[metricId].metricName}{' '}
+          {editMode && (
+            <img
+              id="trash-can"
+              src="client/assets/images/trash-can.png"
+              onClick={deleteMetric}
+              height="22px"
+              width="20px"
+            />
+          )}
+        </h4>
+        {metricData.hasOwnProperty('labels') && (
+          <Line data={metricData} options={options} onClick={openModal} />
+        )}
+        <div className="modal">
+          {/* {metricId && <button onClick={openModal}>See more</button>} */}
+          <Modal open={open} onClose={closeModal}>
+            <h4 className="metric-title">
+              {userData.metrics[metricId].metricName}
+            </h4>
+            {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
+          </Modal>
+        </div>
       </div>
     </div>
   );

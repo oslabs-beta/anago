@@ -54,6 +54,16 @@ $highlight-bright: rgba(143, 166, 200, 0.9);
     margin: 5px;
   }
   margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.metric-title {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+}
+#trash-can {
+  padding-left: 5px;
 }
 
 header {
@@ -207,6 +217,7 @@ header nav {
   h3 {
     font-family: 'Ubuntu', sans-serif;
   }
+
   .new-metric-container {
     display: flex;
     flex-wrap: wrap;

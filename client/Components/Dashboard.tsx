@@ -17,6 +17,8 @@ const Dashboard = () => {
 
   const [lastUpdate, setLastUpdate] = useState<Date>();
   const [addMetricModal, setAddMetricModal] = useState(false);
+  //edit mode
+  const [editMode, setEditMode] = useState<Boolean>(true);
 
   useEffect(() => {
     setLastUpdate(new Date());
@@ -65,7 +67,11 @@ const Dashboard = () => {
           </div>
           <div className="dashboard-container">
             {metricIds.map((metricId) => (
-              <MetricDisplay metricId={metricId} key={metricId + lastUpdate} />
+              <MetricDisplay
+                metricId={metricId}
+                key={metricId + lastUpdate}
+                editMode={editMode}
+              />
             ))}
             <Outlet />
           </div>
@@ -75,11 +81,11 @@ const Dashboard = () => {
         </>
       )}
       <div className="modal">
-        <Modal
-          open={addMetricModal}
-          onClose={() => setAddMetricModal(false)}
-        >
-          <AddMetric dashboard={location} setAddMetricModal={setAddMetricModal} />
+        <Modal open={addMetricModal} onClose={() => setAddMetricModal(false)}>
+          <AddMetric
+            dashboard={location}
+            setAddMetricModal={setAddMetricModal}
+          />
         </Modal>
       </div>
     </div>

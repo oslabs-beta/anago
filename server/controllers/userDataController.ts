@@ -134,6 +134,32 @@ userDataController.saveUserData = (
   }
 };
 
+userDataController.deleteMetric = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const metricId = req.params.id;
+  try {
+    const updatedUserData = readUserData();
+
+    if (updatedUserData.metrics.hasOwnProperty(metricId)) {
+      delete updatedUserData.metrics[metricId];
+    }
+    fs.writeFileSync(
+      path.resolve(__dirname, '../models/userData.json'),
+      JSON.stringify(updatedUserData)
+    );
+    next();
+  } catch (err) {
+    return next({
+      log: `failed in userDataController.deleteMetric.`,
+      status: 500,
+      message: { err: `Error: ${err}}` },
+    });
+  }
+};
+
 userDataController.addMetric = (
   req: Request,
   res: Response,

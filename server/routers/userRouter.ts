@@ -32,6 +32,10 @@ userRouter.post(
   }
 );
 
+userRouter.delete('/metrics/:id', userDataController.deleteMetric, (_, res: Response) => {
+  return res.sendStatus(200)
+})
+
 userRouter.delete(
   '/hiddenAlert',
   userDataController.deleteHiddenAlert,
