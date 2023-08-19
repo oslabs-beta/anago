@@ -18,6 +18,7 @@ export interface UserData {
   clusterName: string;
   dashboards: {}[];
   metrics: {};
+  hiddenAlerts: [];
 }
 
 export interface Node {
@@ -62,7 +63,7 @@ export interface Service {
   uid: string;
   ports: [];
   loadBalancer: [];
-  clusterIP
+  clusterIP;
 }
 
 export interface Deployment {
