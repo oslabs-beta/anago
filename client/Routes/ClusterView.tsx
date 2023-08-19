@@ -10,9 +10,6 @@ const ClusterView = () => {
   console.log('retrieved clusterData', clusterData);
   const nodes: Node[] = clusterData.nodes;
 
-  console.log(clusterData);
-  
-
   return (
     <div className='cluster-view' key={'cluster-view'}>
       {clusterData && <Dropdown />}

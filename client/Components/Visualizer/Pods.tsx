@@ -22,6 +22,8 @@ const Pods = ({
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
+  console.log('container statuses', containerStatuses);
+
   return (
     <div className='pod' id={id} key={id}>
       <img
@@ -34,8 +36,9 @@ const Pods = ({
 
       <div className='modal'>
         <Modal open={open} onClose={closeModal}>
+          {}
+          <h2>Pod Information:</h2>
           <div className='modal-content'>
-            <h2>Pod Information:</h2>
             <div className='info-item'>
               <h3>Pod Name:</h3>
               <p>{name}</p>
@@ -69,69 +72,119 @@ const Pods = ({
               <p>{nodeName}</p>
             </div>
             <div className='info-item'>
-              <h3>Conditions: </h3>
-              {conditions.map(condition => {
-                return (
-                  <div key={condition.type + id}>
-                    <h4>{condition.type + ': ' + condition.status}</h4>
-                    <p>
-                      {'Last Transition Time: ' + condition.lastTransitionTime}
-                    </p>
-                    <p>{'Last Probe Time: ' + condition.lastProbeTime}</p>
-                  </div>
-                );
-              })}
+              <table className='conditions'>
+                <h3>Conditions: </h3>
+
+                <tr className='column-names'>
+                  {conditions.map(condition => {
+                    return (
+                      <th key={condition.type}>
+                        {' '}
+                        {`${condition.type} Status: ${condition.status}`}
+                      </th>
+                    );
+                  })}
+                </tr>
+                <tr className='table-row'>
+                  {conditions.map(condition => {
+                    return (
+                      <td key={condition.type + id}>
+                        {'Last Transition Time: ' +
+                          condition.lastTransitionTime}
+                      </td>
+                    );
+                  })}
+                </tr>
+                <tr className='table-row'>
+                  {conditions.map(condition => {
+                    return (
+                      <td key={condition.type + podIP}>
+                        {'Last Probe Time: ' + condition.lastProbeTime}
+                      </td>
+                    );
+                  })}
+                </tr>
+              </table>
             </div>
-            <div className='info-item'>
-              <h2>Container Information: </h2>
-              {containers.map(container => {
-                return (
-                  <div key={container.name + id}>
-                    <h3>Container Name:</h3>
-                    <p>{container.name}</p>
-                    <h3>Image:</h3>
-                    <p>{container.image}</p>
-                    //!container statuses showing undefined
-                    {/* <div>
-                  {containerStatuses.forEach(status => {
-                    if (status.name === container.name) {
-                      return (
-                        <div>
-                          <h3>Restart Count:</h3>
-                          <p>{containerStatuses.restartCount}</p>
-                          </div>
-                          );
-                        }
-                      })}
-                    </div> */}
-                    <div>
-                      {container.ports
-                        ? container.ports.map(port => {
-                            return (
-                              <div key={port.name + id}>
-                                <h3>Ports:</h3>
-                                <p>{'Name: ' + port.name}</p>
-                                <p>{'Container Port: ' + port.containerPort}</p>
-                                <p>{'Host Port: ' + port.hostPort}</p>
-                                <p>{'Protocol: ' + port.protocol}</p>
-                              </div>
-                            );
-                          })
-                        : undefined}
+            <h2>Container Information: </h2>
+            {containers.map(container => {
+              return (
+                <div key={container.name + id}>
+                    <div className='info-item'>
+                      <h3>Container Name:</h3>
+                      <p>{container.name}</p>
                     </div>
+
+                    {containerStatuses.map(status => {
+                      if (status.name === container.name) {
+                        return (
+                          <div key={status.id}>
+                            <div className='info-item'>
+                              <h3>Image:</h3>
+                              <p>{status.image}</p>
+                            </div>
+                            <div className='info-item'>
+                              <h3>Status:</h3>
+                              <p>{Object.keys(status.state)}</p>
+                            </div>
+                            <div className='info-item'>
+                              <h3>Restart Count:</h3>
+                              <p>{status.restartCount}</p>
+                            </div>
+                          </div>
+                        );
+                      }
+                    })}
+
+                  <div className='info-item'>
+                    <table>
+                      <h3>Ports:</h3>
+                      <tr className='column-name'>
+                        <th>Name:</th>
+                        <th>Container Port:</th>
+                        <th>Host Port:</th>
+                        <th>Protocol:</th>
+                      </tr>
+
+                      {container.ports ? (
+                        container.ports.map(port => {
+                          return (
+                            <tr className='table-row' key={port.name + id}>
+                              <td>{port.name}</td>
+
+                              <td>{port.containerPort}</td>
+
+                              <td>{port.hostPort}</td>
+
+                              <td>{port.protocol}</td>
+                            </tr>
+                          );
+                        })
+                      ) : (
+                        <td>{null}</td>
+                      )}
+                    </table>
+                  </div>
+                  <div className='info-item'>
+                  <table>
                     <h3>Volume Mounts:</h3>
+                    <tr className='column-name'>
+                      <th>Name:</th>
+                      <th>Path:</th>
+                    </tr>
                     {container.volumeMounts.map(element => {
                       return (
-                        <div key={element.name + id}>
-                          <p>{'Name: ' + element.name}</p>
-                          <p>{'Path: ' + element.mountPath}</p>
-                        </div>
+                        <tr className='table-row' key={element.name + id}>
+                          <td>{element.name}</td>
+                          <td>{element.mountPath}</td>
+                        </tr>
                       );
                     })}
-                  </div>
-                );
-              })}
-            </div>
+                  </table>
+                      </div>
+                </div>
+              );
+            })}
           </div>
         </Modal>
       </div>

@@ -20,7 +20,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   const closeModal = () => setOpen(false);
 
 
-  console.log('in namespaces', displayedAlerts);
+  console.log('displayed alerts in namespaces', displayedAlerts);
 
   const numNamespaces = Object.keys(selectedStates).filter(
     item => item.charAt(0) !== 'i' && selectedStates[item] === true,

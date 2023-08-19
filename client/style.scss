@@ -315,16 +315,39 @@ header nav {
   overflow-y: auto;
 }
 
-.modal-content{
+.modal-content {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
   word-wrap: break-word;
 }
 
-.info-item{
+.modal-content h2 {
+  display: inline-block;
+  padding-right: 500px;
+}
+
+.info-item {
   display: flex;
-  
+  justify-content:first baseline;
+  align-items: first baseline;
+  line-height: 100%;
+  padding-right: 30px;
+}
+.info-item h3 {
+  padding-right: 10px;
+}
+.info-item p {
+  font-size: 20px;
+}
+.info-item table {
+  width: 100%;
+}
+
+.info-item th,
+td {
+  border: 1px solid black;
+  padding: 5px;
 }
 
 .react-responsive-modal-closeButton {
@@ -484,11 +507,12 @@ header nav {
 }
 
 h5 {
+  font-family: sans-serif;
   margin-bottom: 5px;
   margin-top: 2px;
   word-wrap: break-word;
   white-space: normal;
-  width: 80px;
+  width: 85px;
 }
 
 .cluster-view {
@@ -630,7 +654,7 @@ h5 {
 
 .dropdown {
   position: absolute;
-  border: 2px black; 
+  border: 2px black;
 }
 
 .dropdown button {
@@ -656,13 +680,13 @@ h5 {
   z-index: 100;
   font-family: 'Ubuntu', sans-serif;
 }
-.panel fieldset{
+.panel fieldset {
   border: none;
   display: flex;
   justify-content: flex-start;
   margin-bottom: 5px;
 }
-.dropdown-sublabel{
+.dropdown-sublabel {
   font-size: 16px;
   display: flex;
   margin: 0;
@@ -677,7 +701,7 @@ h5 {
   padding-left: 5px;
 }
 
-.panel fieldset.selected{
+.panel fieldset.selected {
   background: rgb(173, 216, 230, 0.7);
   width: 100%;
 }

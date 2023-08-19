@@ -16,6 +16,18 @@ const Deployments = ({
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
+  const fixLabels = labels => {
+    let labelArr: any = [];
+    for (let label in labels) {
+      const newObj = {};
+      newObj[label] = labels[label];
+      labelArr.push(newObj);
+    }
+    return labelArr;
+  };
+
+  const deploymentLabels = Object.keys(labels);
+
   return (
     <div className='deployment' id={id} key={id}>
       <div>
@@ -48,18 +60,38 @@ const Deployments = ({
               <h3>Namespace</h3>
               <p>{namespace}</p>
             </div>
-            <div className='info-item'>
-              //!working on labels
-              {/* <div>
-              {() => {
-                for (let key in labels) {
-                  return <>
-                  <p>{key + ': ' + labels[key]}</p>
-                  </>;
+            {deploymentLabels.map(label => {
+              if (label === 'app' || label === 'k8s-app' || label === 'app.kubernetes.io/name') {
+                return (
+                  <div key={id} className='info-item'>
+                    <h3>App:</h3>
+                    <p>{labels['app'] || labels['k8s-app'] || labels['app.kubernetes.io/name']}</p>
+                  </div>
+                );
+              }
+            })}
+            {deploymentLabels.map(label => {
+              {
+                if (label === 'app.kubernetes.io/managed-by') {
+                  return (
+                    <div key={creationTimestamp} className='info-item'>
+                      <h3>Managed By:</h3>
+                      <p>{labels['app.kubernetes.io/managed-by']}</p>
+                    </div>
+                  );
                 }
-              }}
-            </div> */}
-            </div>
+              }
+            })}
+            {deploymentLabels.map(label => {
+              if (label === 'chart' || label === 'helm.sh/chart') {
+                return (
+                  <div key={id + creationTimestamp} className='info-item'>
+                    <h3>Chart:</h3>
+                    <p>{labels.chart || labels['helm.sh/chart']}</p>
+                  </div>
+                );
+              }
+            })}
           </div>
         </Modal>
       </div>

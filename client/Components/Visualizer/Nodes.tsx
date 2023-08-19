@@ -22,7 +22,6 @@ const Nodes = ({
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
-  console.log('in node', displayedAlerts);
 
   const numNodes = Object.keys(selectedStates).filter(
     item => item.charAt(0) === 'i' && selectedStates[item] === true,
@@ -41,8 +40,8 @@ const Nodes = ({
       <div className='node-inner-border'>
         <div className='modal'>
           <Modal open={open} onClose={closeModal}>
+            <h2>Node Information:</h2>
             <div className='modal-content'>
-              <h2>Node Information:</h2>
               <div className='info-item'>
                 <h3>Node Name:</h3>
                 <p>{name}</p>
@@ -69,8 +68,8 @@ const Nodes = ({
                 <p>{labels['kubernetes.io/arch']}</p>
               </div>
               <div className='info-item'>
-                <h3>Addresses: </h3>
-                <table>
+                <table className='addresses'>
+                  <h3>Addresses: </h3>
                   <tr className='column-names'>
                     {clusterData &&
                       status.addresses.map(address => {
@@ -94,54 +93,68 @@ const Nodes = ({
                 </table>
               </div>
               <div className='info-item'>
-                <h3>Capacity: </h3>
-                <table>
+                <table className='capacity'>
+                  <h3>Capacity: </h3>
                   <tr className='column-names'>
-                      <th>Number of Pods:</th>
-                      <th>Total Memory Capacity:</th>
-                      <th>Available Memory:</th>
-                      <th>Total CPU Capacity:</th>
-                      <th>Available CPU:</th>
-                      <th>Attachable Volumes:</th>
+                    <th>Number of Pods:</th>
+                    <th>Total Memory Capacity:</th>
+                    <th>Available Memory:</th>
+                    <th>Total CPU Capacity:</th>
+                    <th>Available CPU:</th>
+                    <th>Attachable Volumes:</th>
                   </tr>
                   <tr className='table-row'>
-                      <td>{status.capacity.pods}</td>
-                      <td>{status.capacity.memory}</td>
-                      <td>{status.allocatable.memory}</td>
-                      <td>{status.capacity.cpu}</td>
-                      <td>{status.allocatable.cpu}</td>
-                      <td>{status.capacity['attachable-volumes-aws-ebs']}</td>
+                    <td>{status.capacity.pods}</td>
+                    <td>{status.capacity.memory}</td>
+                    <td>{status.allocatable.memory}</td>
+                    <td>{status.capacity.cpu}</td>
+                    <td>{status.allocatable.cpu}</td>
+                    <td>{status.capacity['attachable-volumes-aws-ebs']}</td>
                   </tr>
                 </table>
               </div>
               <div className='info-item'>
-                <h3>Conditions: </h3>
-                
-                <table>
-                  <tr className="column-names">
-                    {clusterData && status.conditions.map(condition => {
-                      console.log(condition)
-                      return (
-                        <th key={condition.id}>{condition.type}</th>
-                      )
-                    })}
+                <table className='conditions'>
+                  <h3>Conditions: </h3>
+                  <tr className='column-names'>
+                    {clusterData &&
+                      status.conditions.map(condition => {
+                        return <th key={condition.type}>{condition.type}</th>;
+                      })}
+                  </tr>
+
+                  <tr className='table-row'>
+                    {clusterData &&
+                      status.conditions.map(condition => {
+                        return (
+                          <td key={condition.message}>{condition.message}</td>
+                        );
+                      })}
                   </tr>
                   <tr className='table-row'>
-
-                {clusterData &&
-                  status.conditions.map(condition => {
-                    return (
-                      <div key={condition.type+condition.id}>
-                        <td>{condition.message}</td>
-                        <td>{'Last Heartbeat Time: ' +
-                            condition.lastHeartbeatTime}</td>
-                        <td>{'Last Transition Time: ' +
-                            condition.lastTransitionTime}</td>
-                      </div>
-                    );
-                  })}
+                    {clusterData &&
+                      status.conditions.map(condition => {
+                        return (
+                          <td
+                            key={condition.type + condition.lastHeartbeatTime}>
+                            {'Last Heartbeat Time: ' +
+                              condition.lastHeartbeatTime}
+                          </td>
+                        );
+                      })}
                   </tr>
-
+                  <tr className='table-row'>
+                    {clusterData &&
+                      status.conditions.map(condition => {
+                        return (
+                          <td
+                            key={condition.type + condition.lastTransitionTime}>
+                            {'Last Transition Time: ' +
+                              condition.lastTransitionTime}
+                          </td>
+                        );
+                      })}
+                  </tr>
                 </table>
               </div>
             </div>
