@@ -1,5 +1,5 @@
 import { useRouteLoaderData, Outlet } from 'react-router-dom';
-import { DropdownState } from '../Components/Visualizer/DD';
+import { Dropdown } from '../Components/Visualizer/Dropdown';
 import { Node } from '../../types';
 import Nodes from '../Components/Visualizer/Nodes';
 import ControlPlane from '../Components/Visualizer/ControlPlane';
@@ -15,7 +15,7 @@ const ClusterView = () => {
 
   return (
     <div className='cluster-view' key={'cluster-view'}>
-      {clusterData && <DropdownState />}
+      {clusterData && <Dropdown />}
       <ControlPlane />
       {clusterData &&
         nodes.map(node => (

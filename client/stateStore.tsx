@@ -13,6 +13,8 @@ export default ({ children }: Props) => {
   const [currentDashboard, setCurrentDashboard] = useState<String[]>([]);
   const [hasFetchedUserData, setHasFetchedUserData] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Number>();
+  const [displayedNodes, setDisplayedNodes] = useState({});
+  const [displayedNamespaces, setDisplayedNamespaces] = useState({});
 
   const States = {
     currentDashboard: currentDashboard,
@@ -23,6 +25,10 @@ export default ({ children }: Props) => {
     setCurrentMetrics: setCurrentMetrics,
     lastUpdate: lastUpdate,
     setLastUpdate: setLastUpdate,
+    displayedNodes: displayedNodes,
+    setDisplayedNodes: setDisplayedNodes,
+    displayedNamespaces: displayedNamespaces,
+    setDisplayedNamespaces: setDisplayedNamespaces,
   };
 
   return (
