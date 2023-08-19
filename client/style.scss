@@ -289,6 +289,18 @@ header nav {
   overflow-y: auto;
 }
 
+.modal-content{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  word-wrap: break-word;
+}
+
+.info-item{
+  display: flex;
+  
+}
+
 .react-responsive-modal-closeButton {
   position: absolute;
   top: 14px;

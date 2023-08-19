@@ -18,8 +18,6 @@ const AlertBar = () => {
   //make sure this local host address gives the alert JSON object
   const alertsAPI = 'http://localhost:9093/api/v2/alerts';
 
-
-
   //fetching function
   const fetching = async () => {
     console.log('fetching...');
@@ -73,11 +71,11 @@ const AlertBar = () => {
 
   //filter out any alerts that are supposed to be hidden and also any repeats!
   const displayed = sorted
-    .filter((alert) => !hidden.includes(alert.startsAt))
+    .filter(alert => !hidden.includes(alert.startsAt))
     .reduce((unique, alert) => {
       // filtering out repeats based on a property on the object in the array
       if (
-        !unique.find((uniqueAlert) => uniqueAlert.startsAt === alert.startsAt)
+        !unique.find(uniqueAlert => uniqueAlert.startsAt === alert.startsAt)
       ) {
         unique.push(alert);
       }
@@ -85,12 +83,12 @@ const AlertBar = () => {
     }, []);
 
   //make sure the displayedAlerts state updates whenever displayed changes
-  useEffect(() => {
-    setDisplayedAlerts(displayed);
-  }, [displayed]);
+  // useEffect(() => {
+  //   setDisplayedAlerts(displayed);
+  // }, [displayed]);
   // onclick to hide alert
   async function handleHide(id: string) {
-    setHidden((prev) => [...prev, id]);
+    setHidden(prev => [...prev, id]);
     try {
       const response = await fetch(`/api/user/hiddenAlert`, {
         method: 'POST',
@@ -111,10 +109,10 @@ const AlertBar = () => {
   //onclick to restore alert
   async function handleRestore(id: string) {
     //remove the id from the hidden array
-    setHidden((prev) => prev.filter((alertId) => alertId !== id));
+    setHidden(prev => prev.filter(alertId => alertId !== id));
 
     // remove it from the restored array
-    setRestored((prev) => prev.filter((alert) => alert.startsAt !== id));
+    setRestored(prev => prev.filter(alert => alert.startsAt !== id));
     // remove it from user data
     // save it to user data
     try {
@@ -133,28 +131,24 @@ const AlertBar = () => {
     }
   }
 
-
-
-
   return (
-    <div className="status-bar">
+    <div className='status-bar'>
       {/* if data was fetched and there are errors */}
       {fetched && !noErrors && (
         <div>
-          <h3 id="alertTitle">
+          <h3 id='alertTitle'>
             <strong>ALERTS:</strong>
           </h3>
-          {['critical', 'warning'].map((severity) => (
+          {['critical', 'warning'].map(severity => (
             <div id={severity} key={severity}>
               {[...displayed].map(
-                (alertObj) =>
+                alertObj =>
                   alertObj.labels.severity === severity &&
                   !hidden.includes(alertObj.startsAt) && (
                     <p
                       className={alertObj.labels.severity}
                       key={alertObj.startsAt}
-                      id={alertObj.startsAt}
-                    >
+                      id={alertObj.startsAt}>
                       <strong>{severity.toUpperCase()}:</strong>{' '}
                       {alertObj.annotations.description}
                       <br />
@@ -162,36 +156,35 @@ const AlertBar = () => {
                         hide
                       </button>
                     </p>
-                  )
+                  ),
               )}
               {[...restored].map(
-                (alertObj) =>
+                alertObj =>
                   alertObj.labels.severity === severity &&
                   !hidden.includes(alertObj.startsAt) && (
                     <p
                       className={alertObj.labels.severity}
                       key={alertObj.startsAt}
-                      id={alertObj.startsAt}
-                    >
+                      id={alertObj.startsAt}>
                       {alertObj.annotations.description}
                       <br />
                       <button onClick={() => handleHide(alertObj.startsAt)}>
                         hide
                       </button>
                     </p>
-                  )
+                  ),
               )}
             </div>
           ))}
           {hidden.length > 0 && (
             <div>
-              {['critical', 'warning'].map((severity) => (
-                <div className="hidden" key={`${severity}+H`}>
-                  {[...hidden].map((hiddenId) => {
+              {['critical', 'warning'].map(severity => (
+                <div className='hidden' key={`${severity}+H`}>
+                  {[...hidden].map(hiddenId => {
                     const alertObj = alerts.find(
-                      (alertObj) =>
+                      alertObj =>
                         alertObj.startsAt === hiddenId &&
-                        alertObj.labels.severity === severity
+                        alertObj.labels.severity === severity,
                     );
                     return (
                       alertObj && (
@@ -201,8 +194,7 @@ const AlertBar = () => {
                             {alertObj.annotations.description}{' '}
                           </em>
                           <button
-                            onClick={() => handleRestore(alertObj.startsAt)}
-                          >
+                            onClick={() => handleRestore(alertObj.startsAt)}>
                             restore
                           </button>
                         </p>
@@ -217,7 +209,7 @@ const AlertBar = () => {
       )}
       {/* if data was fetched and there are no errors */}
       {noErrors && fetched && (
-        <h3 id="noAlertTitle">Currently, you have no active alerts!</h3>
+        <h3 id='noAlertTitle'>Currently, you have no active alerts!</h3>
       )}
     </div>
   );

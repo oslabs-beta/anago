@@ -30,18 +30,27 @@ const Deployments = ({
 
       <div className='modal'>
         <Modal open={open} onClose={closeModal}>
-          <div>
+          <div className='modal-content'>
             <h2>Deployment Information:</h2>
-            <h3>Deployment Name:</h3>
-            <p>{name}</p>
-            <h3>Creation Timestamp:</h3>
-            <p>{creationTimestamp}</p>
-            <h3>Replicas:</h3>
-            <p>{replicas}</p>
-            <h3>Namespace</h3>
-            <p>{namespace}</p>
-            //!working on labels
-            {/* <div>
+            <div className='info-item'>
+              <h3>Deployment Name:</h3>
+              <p>{name}</p>
+            </div>
+            <div className='info-item'>
+              <h3>Creation Timestamp:</h3>
+              <p>{creationTimestamp}</p>
+            </div>
+            <div className='info-item'>
+              <h3>Replicas:</h3>
+              <p>{replicas}</p>
+            </div>
+            <div className='info-item'>
+              <h3>Namespace</h3>
+              <p>{namespace}</p>
+            </div>
+            <div className='info-item'>
+              //!working on labels
+              {/* <div>
               {() => {
                 for (let key in labels) {
                   return <>
@@ -50,6 +59,7 @@ const Deployments = ({
                 }
               }}
             </div> */}
+            </div>
           </div>
         </Modal>
       </div>

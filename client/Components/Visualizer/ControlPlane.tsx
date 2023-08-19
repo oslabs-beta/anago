@@ -17,7 +17,7 @@ const ControlPlane = () => {
 
       <div className='modal'>
         <Modal open={open} onClose={closeModal}>
-          <div>
+          <div className='modal-content'>
             <p>information about your AWS Cluster/Host</p>
           </div>
         </Modal>

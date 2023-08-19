@@ -28,9 +28,9 @@ const Dashboard = () => {
     console.log('fetch pithy');
     try {
       fetch('/api/pithy')
-        .then((res) => res.json())
-        .then((res) => {
-          setTimeout(() => pithy(), 1000);
+        .then(res => res.json())
+        .then(res => {
+          setTimeout(() => pithy(), 100000);
         });
     } catch {
       console.log('failed to fetch pithy');
@@ -40,31 +40,31 @@ const Dashboard = () => {
   const metricIds = Object.keys(userData.metrics);
 
   return (
-    <div className="dashboard-outer">
+    <div className='dashboard-outer'>
       {id && (
         <>
-          <h2 className="dashboard-title">
+          <h2 className='dashboard-title'>
             {userData.dashboards[id].dashboardName}
           </h2>
-          <div className="dashboard-buttons">
+          <div className='dashboard-buttons'>
             <span>
-              <button className="btn" onClick={refresh}>
+              <button className='btn' onClick={refresh}>
                 Refresh
               </button>
             </span>
             <span>
-              <button className="btn" onClick={pithy}>
+              <button className='btn' onClick={pithy}>
                 Pithy Loop
               </button>
             </span>
             <span>
-              <button className="btn" onClick={() => setAddMetricModal(true)}>
+              <button className='btn' onClick={() => setAddMetricModal(true)}>
                 Add Metric
               </button>
             </span>
           </div>
-          <div className="dashboard-container">
-            {metricIds.map((metricId) => (
+          <div className='dashboard-container'>
+            {metricIds.map(metricId => (
               <MetricDisplay metricId={metricId} key={metricId + lastUpdate} />
             ))}
             <Outlet />
@@ -74,12 +74,12 @@ const Dashboard = () => {
           </div>
         </>
       )}
-      <div className="modal">
-        <Modal
-          open={addMetricModal}
-          onClose={() => setAddMetricModal(false)}
-        >
-          <AddMetric dashboard={location} setAddMetricModal={setAddMetricModal} />
+      <div className='modal'>
+        <Modal open={addMetricModal} onClose={() => setAddMetricModal(false)}>
+          <AddMetric
+            dashboard={location}
+            setAddMetricModal={setAddMetricModal}
+          />
         </Modal>
       </div>
     </div>
