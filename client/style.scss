@@ -142,13 +142,26 @@ header nav {
   flex-direction: column;
   text-align: left;
 }
+.status-bar #mouseNotOver {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
 
-#alertTitle {
+#alertTitle,
+#mouseNotOver {
   color: rgb(219, 28, 28);
   cursor: pointer;
   display: flex;
   flex-direction: column;
 }
+
+#mouseNotOver {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+}
+
 #noAlertTitle {
   color: rgb(145, 143, 143);
 }
@@ -167,7 +180,7 @@ header nav {
   color: rgb(238, 92, 70);
 }
 
-.hidden {
+#hidden {
   color: rgb(145, 143, 143);
 }
 
@@ -409,13 +422,10 @@ header nav {
   justify-content: center;
   line-height: 20px;
   margin: 10px;
-  // max-width: 480px;
-  // min-height: 40px;
-  // min-width: 0px;
+  padding-top: 2px;
   width: 50px;
   height: 25px;
   overflow: hidden;
-  padding: 0px;
   padding-left: 20px;
   padding-right: 20px;
   text-align: center;
