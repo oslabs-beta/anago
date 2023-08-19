@@ -18,13 +18,14 @@ import type { Request, Response, NextFunction } from 'express';
 const promURL = DEPLOYMENT_URL + 'api/v1/';
 const promURLInstant = promURL + 'query?query=';
 const promURLRange = promURL + 'query_range?query=';
-// TODO: update alerts url if needed
+// TODO: update alerts url if need
 const promURLAlerts = promURL + 'alerts';
 
 const promApiController: any = {
   // build the query to send to the prometheus http api
   queryBuilder: (req: Request, res: Response, next: NextFunction) => {
     // TODO: REQS SHOULD BE COMING IN ON BODY NOW
+    console.log('entered queryBuilder');
 
     // Fetch userData
     const userData = readUserData();
@@ -38,6 +39,11 @@ const promApiController: any = {
 
     // retrieve metricId from request query parameter
     const metricId = req.params.id;
+    let metricDuration = '';
+    if (req.body) {
+      metricDuration = req.body.duration;
+      console.log('metricDuration:', metricDuration);
+    }
 
     // prometheus http api url's to query
     const promURL = 'http://localhost:9090/api/v1/';
@@ -51,9 +57,12 @@ const promApiController: any = {
     const query = userData.metrics[metricId].searchQuery;
     const options = userData.metrics[metricId].queryOptions;
 
-
     // TODO: IF INSTANT QUERY:
-    // res.locals.promQuery = promURLInstant + query;
+    if (metricDuration === 'instant') {
+      console.log('instant query');
+      res.locals.promQuery = promURLInstant + query;
+      return next();
+    }
 
     // TODO: IF RANGE QUERY:
     const end = Math.floor(Date.now() / 1000); // current date and time
@@ -85,12 +94,15 @@ const promApiController: any = {
     // Placeholder Data for Offline Development
     if (!ACTIVE_DEPLOYMENT) {
       console.log('Supplying Placeholder data for metricId ', metricId);
-      const placeholderFetch = placeholderData(metricId, res.locals.userData, res.locals.queryOptions);
+      const placeholderFetch = placeholderData(
+        metricId,
+        res.locals.userData,
+        res.locals.queryOptions,
+      );
       // console.log('Local data for metric ', metricId, ':\n', placeholderFetch);
       res.locals.promMetrics = placeholderFetch;
       return next();
     }
-
     // initialize object to store scraped metrics. This object shape is required by ChartJS to graph
     const promMetrics: plotData = {
       labels: [],
@@ -112,6 +124,14 @@ const promApiController: any = {
       else if (data.data.result.length === 0) {
         res.locals.promMetrics = 'No metrics meet the scope of the query';
         return next();
+      }
+      // if instant query type
+      else if (req.body) {
+        if (req.body.duration === 'instant') {
+          console.log('instant promql response', data.data.result);
+          res.locals.promMetrics = data.data.result;
+          return next();
+        }
       }
       // if prometheus query response contains metric data, then filter data into an object of plotData type
       else {
@@ -151,7 +171,10 @@ const promApiController: any = {
           }
           // populate the y-axis object with the scraped metrics
           // yAxis.label = obj.metric.toString();
-          yAxis.label = namePlot(obj, res.locals.userData.metrics[metricId].lookupType);
+          yAxis.label = namePlot(
+            obj,
+            res.locals.userData.metrics[metricId].lookupType,
+          );
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));
           });
@@ -163,7 +186,7 @@ const promApiController: any = {
       }
     } catch (err) {
       next({
-        log: `error in promApiController.getRangeMetrics: ${err}`,
+        log: `error in promApiController.getMetrics: ${err}`,
         status: 500,
         message: { err: 'Error retreiving metrics' },
       });
