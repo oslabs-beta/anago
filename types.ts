@@ -20,18 +20,6 @@ export interface UserData {
   metrics: {};
 }
 
-export interface ClusterData {
-  deployments: [{}],
-  namespaces: [{
-    name: ''
-  }],
-  nodes: [{
-    name: ''
-  }],
-  pods: [{}],
-  services: [{}],
-}
-
 export interface Node {
   name: string;
   namespace: any;

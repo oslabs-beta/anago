@@ -9,12 +9,13 @@ export type Props = {
 
 //declaring the parameter type Props to assign children to a ReactNode type
 export default ({ children }: Props) => {
+
   const [currentMetrics, setCurrentMetrics] = useState([]);
   const [currentDashboard, setCurrentDashboard] = useState<String[]>([]);
   const [hasFetchedUserData, setHasFetchedUserData] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Number>();
-  const [displayedNodes, setDisplayedNodes] = useState({});
-  const [displayedNamespaces, setDisplayedNamespaces] = useState({});
+  const [selectedStates, setSelectedStates] = useState({})
+
 
   const States = {
     currentDashboard: currentDashboard,
@@ -25,10 +26,8 @@ export default ({ children }: Props) => {
     setCurrentMetrics: setCurrentMetrics,
     lastUpdate: lastUpdate,
     setLastUpdate: setLastUpdate,
-    displayedNodes: displayedNodes,
-    setDisplayedNodes: setDisplayedNodes,
-    displayedNamespaces: displayedNamespaces,
-    setDisplayedNamespaces: setDisplayedNamespaces,
+    selectedStates: selectedStates,
+    setSelectedStates: setSelectedStates,
   };
 
   return (

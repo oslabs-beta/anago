@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useRouteLoaderData } from 'react-router-dom';
 import { StoreContext } from '../../stateStore';
-import { ClusterData } from '../../../types';
+
 
 export function Dropdown() {
   const [isDropdownDisplayed, setIsDropdownDisplayed] = useState(false);
   const clusterData: any = useRouteLoaderData('cluster');
-  const [selectedStates, setSelectedStates] = useState(() => {
+  const { selectedStates, setSelectedStates }: any = useContext(StoreContext);
+
+  const defaultStates = () => {
     let obj = {};
     clusterData.nodes.map(node => {
       obj[node.name] = false;
@@ -15,10 +17,7 @@ export function Dropdown() {
       obj[namespace.name] = false;
     });
     return obj;
-  });
-  const {setDisplayedNodes, setDisplayedNamespaces}:any = useContext(StoreContext);
-
-  console.log('selectedStates', selectedStates);
+  };
 
   const numSelected = Object.values(selectedStates).filter(Boolean).length;
   const numNodes = Object.keys(selectedStates).filter(
@@ -30,6 +29,23 @@ export function Dropdown() {
   const totalNodes = clusterData.nodes.length;
   const totalNamespaces = clusterData.namespaces.length;
 
+  // const nodeNames = clusterData.nodes.map(node => {
+  //   return node.name;
+  // });
+  // const namespaceNames = clusterData.namespaces.map(namespace => {
+  //   return namespace.name;
+  // });
+
+  // const selectedNodes: String[] | any  = Object.keys(selectedStates).filter(
+  //   element => element.charAt(0) === 'i',
+  // );
+  // const selectedNamespaces: String[] | any = Object.keys(selectedStates).filter(
+  //   element => element.charAt(0) !== 'i',
+  // );
+
+  // const unselected = Object.values(nodeNames).filter(el => !selectedNodes.includes(el))
+  // const hiddenNamespaces = Object.values(namespaceNames).filter(el => !selectedNamespaces.includes(el))
+
   const dropdownRef = useRef(null);
   const onClick = e => {
     if (e.target !== dropdownRef.current) {
@@ -38,17 +54,22 @@ export function Dropdown() {
   };
 
   useEffect(() => {
+    const base = defaultStates();
+    setSelectedStates(base);
     document.addEventListener('click', onClick);
+
     return () => {
       document.removeEventListener('click', onClick);
     };
-  });
+  }, []);
 
+
+  console.log('selectedStates', selectedStates);
   return (
     <fieldset className='dropdown'>
       <button
         className='state-dropdown'
-        onClick={(e) => {
+        onClick={e => {
           e.stopPropagation();
           setIsDropdownDisplayed(prevState => !prevState);
         }}>

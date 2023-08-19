@@ -2,16 +2,16 @@ import Deployments from './Deployments';
 import Pods from './Pods';
 import Services from './Services';
 import { useRouteLoaderData } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { cleanTime } from '../../functions';
-
+import { StoreContext } from '../../stateStore';
 import { Pod, Service, Deployment } from '../../../types';
 import React from 'react';
 
 const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   const clusterData: any = useRouteLoaderData('cluster');
   const [open, setOpen]: any = useState(false);
-
+  const { selectedStates }: any = useContext(StoreContext);
   const pods: Pod[] = clusterData.pods;
   const services: Service[] = clusterData.services;
   const deployments: Deployment[] = clusterData.deployments;
@@ -19,7 +19,14 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
+  const numNamespaces = Object.keys(selectedStates).filter(
+    item => item.charAt(0) !== 'i' && selectedStates[item] === true,
+  ).length;
+
+
   return (
+    numNamespaces === 0 || selectedStates[name] ? 
+     (
     <div id={id} className='namespace' key={id}>
       <img
         className='k8logo'
@@ -93,7 +100,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
         </div>
       </div>
     </div>
-  );
+  ): null);
 };
 
 export default Namespaces;

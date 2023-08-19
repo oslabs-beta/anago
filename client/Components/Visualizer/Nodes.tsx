@@ -1,8 +1,9 @@
 import Namespaces from './Namespaces';
 import { useRouteLoaderData } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import React from 'react';
+import { StoreContext } from '../../stateStore';
 
 const Nodes = ({
   name,
@@ -16,20 +17,33 @@ const Nodes = ({
   const clusterData: any = useRouteLoaderData('cluster');
   const namespaces: any = clusterData.namespaces;
   const [open, setOpen]: any = useState(false);
+  const { selectedStates }: any = useContext(StoreContext);
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
-  return (
-    <div className='node' id={id} key={id}>
+
+  const numNodes = Object.keys(selectedStates).filter(
+    item => item.charAt(0) === 'i' && selectedStates[item] === true,
+  ).length;
+
+
+return (
+  numNodes === 0 || selectedStates[name] ? 
+   (
+    <div
+      className='node'
+      id={id}
+      key={id}
+      >
       <div className='node-info'>
-          <img
-            className='k8logo'
-            id='node-logo'
-            src='client/assets/images/node.png'
-            onClick={openModal}
-          />
-        </div>
+        <img
+          className='k8logo'
+          id='node-logo'
+          src='client/assets/images/node.png'
+          onClick={openModal}
+        />
+      </div>
       <div className='node-inner-border'>
         <div className='modal'>
           <Modal open={open} onClose={closeModal}>
@@ -105,7 +119,7 @@ const Nodes = ({
         </div>
       </div>
     </div>
-  );
+  ) : null);
 };
 
 export default Nodes;
