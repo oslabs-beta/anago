@@ -54,7 +54,8 @@ const MetricDisplay = ({ metricId }) => {
       })
       .catch((err) => console.log(err));
   }, []);
-
+  //make the fetch and then set an interval based on each step side with metric id
+  //else use refresh as the number of seconds
   //modal handler functions
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);

@@ -85,7 +85,8 @@ const AlertBar = () => {
   //make sure the displayedAlerts state updates whenever displayed changes
   useEffect(() => {
     setDisplayedAlerts(displayed);
-  }, [displayed]);
+  }, []);
+
   // onclick to hide alert
   async function handleHide(id: string) {
     setHidden((prev) => [...prev, id]);
@@ -152,8 +153,10 @@ const AlertBar = () => {
                     >
                       <strong>{severity.toUpperCase()}:</strong>{' '}
                       {alertObj.annotations.description}
-                      <br />
-                      <button onClick={() => handleHide(alertObj.startsAt)}>
+                      <button
+                        onClick={() => handleHide(alertObj.startsAt)}
+                        className="btn-small"
+                      >
                         hide
                       </button>
                     </p>
@@ -169,9 +172,11 @@ const AlertBar = () => {
                       id={alertObj.startsAt}
                     >
                       {alertObj.annotations.description}
-                      <br />
-                      <button onClick={() => handleHide(alertObj.startsAt)}>
-                        hide
+                      <button
+                        onClick={() => handleHide(alertObj.startsAt)}
+                        className="btn-small"
+                      >
+                        Hide
                       </button>
                     </p>
                   )
@@ -196,9 +201,10 @@ const AlertBar = () => {
                             {alertObj.annotations.description}{' '}
                           </em>
                           <button
+                            className="btn-small"
                             onClick={() => handleRestore(alertObj.startsAt)}
                           >
-                            restore
+                            Restore
                           </button>
                         </p>
                       )
