@@ -1,9 +1,8 @@
 import { useRouteLoaderData, Outlet } from 'react-router-dom';
-
+import Dropdown from '../Components/Visualizer/Dropdown';
 import { Node } from '../../types';
 import Nodes from '../Components/Visualizer/Nodes';
 import ControlPlane from '../Components/Visualizer/ControlPlane';
-import { Filter } from '../Components/Visualizer/Filter';
 import React from 'react';
 
 const ClusterView = () => {
@@ -12,11 +11,11 @@ const ClusterView = () => {
   const nodes: Node[] = clusterData.nodes;
 
   console.log(clusterData);
-
+  
 
   return (
     <div className='cluster-view' key={'cluster-view'}>
-      <Filter />
+      {clusterData && <Dropdown />}
       <ControlPlane />
       {clusterData &&
         nodes.map(node => (

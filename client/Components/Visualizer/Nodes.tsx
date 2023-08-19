@@ -17,8 +17,6 @@ const Nodes = ({
   const namespaces: any = clusterData.namespaces;
   const [open, setOpen]: any = useState(false);
 
-  console.log('data', clusterData);
-
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 

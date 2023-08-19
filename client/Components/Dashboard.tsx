@@ -39,7 +39,7 @@ const Dashboard = () => {
   };
 
   const metricIds = Object.keys(userData.metrics);
-  console.log('in dashboard', id);
+
   return (
     <div className="dashboard-outer">
       {id && (
