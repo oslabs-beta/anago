@@ -40,13 +40,13 @@ const AddMetric = (props): any => {
   const [domains, setDomains] = useState([
     ['Cluster', 'Namespace', 'Node', 'Deployment'],
     ['Pithy-Depl', 'Kube-QL', '192.168.9.99', 'Prom-Prom-Prom-Prom'],
-    ['Namespaces', 'Deployments', 'Containers'],
+    ['View All', 'Namespaces', 'Deployments', 'Containers'],
   ]);
   // Currently selected choices for the above domains
   const [chosenDomains, setChosenDomains] = useState([
     'Cluster',
     'Pithy-Depl',
-    'Namespaces',
+    'View All',
   ]);
 
   // Output status data
@@ -63,26 +63,33 @@ const AddMetric = (props): any => {
     setMessageText('Querying Preview Metric...');
     const newMetric = formData();
     console.log('Trying to make a preview for metric:\n', newMetric);
-    fetch('/api/data/metric', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newMetric),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log('Received reply', res);
+    try {
+      fetch('/api/data/metric', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newMetric),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.ok) console.log('Received reply', res);
+          else {
+            console.log('some error fetching data');
+          }
 
-        // Should verify query validity as part of this process
-        setMessageText('Metric Preview Successful');
+          // Should verify query validity as part of this process
+          setMessageText('Metric Preview Successful');
 
-        setMetricData(res.metricData);
-        setQueryPromQL('PromQL Lookup: "' + res.searchQuery + '"');
+          setMetricData(res.metricData);
+          setQueryPromQL('PromQL Lookup: "' + res.searchQuery + '"');
 
-        // Dismiss message
-        setTimeout(() => setMessageText(''), 2500);
-      });
+          // Dismiss message
+          setTimeout(() => setMessageText(''), 2500);
+        });
+    } catch (err) {
+      console.log('Error receiving metric preview: ', err);
+    }
   };
 
   // Save the user's current query, if valid
@@ -403,7 +410,7 @@ const AddMetric = (props): any => {
           {/* METRIC TARGET */}
           {types[1] == 'entry-precon' && domains[2].length > 0 && (
             <div>
-              <label htmlFor="new-metric-target">Target: </label>
+              <label htmlFor="new-metric-target">View by: </label>
               <select
                 id="new-metric-target"
                 onChange={typeChanged}
@@ -474,14 +481,14 @@ const AddMetric = (props): any => {
         </div>
 
         <div className="new-metric-preview">
-          <div className="new-metric-status">
-            <h4 className="new-metric-status-message">{messageText}</h4>
-          </div>
           <div className="new-metric-preview-image">
             <h3>Query Preview</h3>
             {metricData.hasOwnProperty('labels') && (
               <MetricDisplayPreview metricData={metricData} />
             )}
+          </div>
+          <div className="new-metric-status">
+            <h4 className="new-metric-status-message">{messageText}</h4>
           </div>
         </div>
       </div>
@@ -572,15 +579,15 @@ const contextMatrix = [
 
 const targetMatrix = [
   [],
-  ['Namespaces', 'Nodes', 'Deployments', 'Containers'],
+  ['View All', 'Namespaces', 'Nodes', 'Deployments', 'Containers'],
   [],
   [],
   [],
   [],
-  ['Namespaces', 'Nodes', 'Deployments', 'Containers'],
+  ['View All', 'Namespaces', 'Nodes', 'Deployments', 'Containers'],
   [],
   [],
   [],
   [],
-  ['Namespaces', 'Nodes', 'Deployments'],
+  ['View All', 'Namespaces', 'Nodes', 'Deployments'],
 ];

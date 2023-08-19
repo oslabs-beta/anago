@@ -1,6 +1,5 @@
 import { randomUUID } from 'crypto';
 import { LookupType, ScopeType, GraphType } from '../../types.js';
-import { Scope } from 'eslint';
 
 export class UserData {
   userId: string;

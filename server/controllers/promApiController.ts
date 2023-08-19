@@ -13,6 +13,7 @@ import {
 } from './helperFuncs.js';
 import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 import type { Request, Response, NextFunction } from 'express';
+import { optionsBuilder, queryBuilder } from '../models/queryBuilder.js';
 
 // prometheus http api url's to query
 const promURL = DEPLOYMENT_URL + 'api/v1/';
@@ -35,6 +36,7 @@ const promApiController: any = {
     res.locals.userData = userData;
 
     const metricId = req.params.id;
+    res.locals.lookupType = userData.metrics[metricId].lookupType;
     res.locals.searchQuery = userData.metrics[metricId].searchQuery;
     res.locals.queryOptions = userData.metrics[metricId].queryOptions;
     next();
@@ -52,9 +54,20 @@ const promApiController: any = {
     }
     res.locals.userData = userData;
 
-    console.log('In query base builder with req.body', req.body);
-    res.locals.searchQuery = 'sum by (namespace) (kube_pod_info)';
-    res.locals.queryOptions = { duration: 24 * 60 * 60, stepSize: 60 * 20 };
+    res.locals.lookupType = req.body.lookupType;
+    res.locals.queryOptions = optionsBuilder(req.body);
+    res.locals.searchQuery = queryBuilder(
+      req.body.lookupType,
+      res.locals.queryOptions
+    );
+    console.log(
+      'In query base builder with req.body',
+      req.body,
+      '\nBuilt query Options',
+      res.locals.queryOptions,
+      '\nBuilt searchQuery',
+      res.locals.searchQuery
+    );
     next();
   },
 
@@ -70,7 +83,6 @@ const promApiController: any = {
     const promURLRange = promURL + 'query_range?query=';
     // TODO: update alerts url if needed
     const promURLAlerts = promURL + 'alerts';
-
 
     // TODO: IF RANGE QUERY:
     const end = Math.floor(Date.now() / 1000); // current date and time
@@ -91,7 +103,7 @@ const promApiController: any = {
 
   // get request querying prometheus http api that exists as an instance in kubernetes
   getMetrics: async (req: Request, res: Response, next: NextFunction) => {
-    console.log('Get Metrics with res.locals', res.locals);
+    // console.log('Get Metrics with res.locals', res.locals);
     // Read placeholder data instead of fetching- if the cluster is not currently running on AWS
     // Placeholder Data for Offline Development
     if (!ACTIVE_DEPLOYMENT) {
@@ -167,11 +179,8 @@ const promApiController: any = {
             });
           }
           // populate the y-axis object with the scraped metrics
-          yAxis.label = obj.metric.toString();
-          // yAxis.label = namePlot(
-          //   obj,
-          //   res.locals.userData.metrics[metricId].lookupType
-          // );
+          // yAxis.label = obj.metric.toString();
+          yAxis.label = namePlot(obj, res.locals.lookupType);
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));
           });
