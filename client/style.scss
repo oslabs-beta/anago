@@ -139,9 +139,11 @@ header nav {
 #alertTitle {
   color: rgb(219, 28, 28);
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
 }
 #noAlertTitle {
-  color: green;
+  color: rgb(145, 143, 143);
 }
 
 .status-bar:hover {
@@ -403,7 +405,7 @@ header nav {
   // max-width: 480px;
   // min-height: 40px;
   // min-width: 0px;
-  width: 45px;
+  width: 50px;
   height: 25px;
   overflow: hidden;
   padding: 0px;

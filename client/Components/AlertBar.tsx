@@ -13,7 +13,7 @@ const AlertBar = () => {
   const [noErrors, setNoErrors] = useState(false);
   //save this hidden with userData
   const [hidden, setHidden] = useState<string[]>([]);
-  const [restored, setRestored] = useState<any[]>([]);
+  // const [restored, setRestored] = useState<any[]>([]);
   const userData = useRouteLoaderData('home') as UserData;
   //make sure this local host address gives the alert JSON object
   const alertsAPI = 'http://localhost:9093/api/v2/alerts';
@@ -113,7 +113,7 @@ const AlertBar = () => {
     setHidden((prev) => prev.filter((alertId) => alertId !== id));
 
     // remove it from the restored array
-    setRestored((prev) => prev.filter((alert) => alert.startsAt !== id));
+    // setRestored((prev) => prev.filter((alert) => alert.startsAt !== id));
     // remove it from user data
     // save it to user data
     try {
@@ -151,8 +151,11 @@ const AlertBar = () => {
                       key={alertObj.startsAt}
                       id={alertObj.startsAt}
                     >
-                      <strong>{severity.toUpperCase()}:</strong>{' '}
+                      <strong className="message">
+                        {severity.toUpperCase()}:
+                      </strong>{' '}
                       {alertObj.annotations.description}
+                      <br></br>
                       <button
                         onClick={() => handleHide(alertObj.startsAt)}
                         className="btn-small"
@@ -162,7 +165,7 @@ const AlertBar = () => {
                     </p>
                   )
               )}
-              {[...restored].map(
+              {/* {[...restored].map(
                 (alertObj) =>
                   alertObj.labels.severity === severity &&
                   !hidden.includes(alertObj.startsAt) && (
@@ -172,6 +175,7 @@ const AlertBar = () => {
                       id={alertObj.startsAt}
                     >
                       {alertObj.annotations.description}
+                      <br></br>
                       <button
                         onClick={() => handleHide(alertObj.startsAt)}
                         className="btn-small"
@@ -180,7 +184,7 @@ const AlertBar = () => {
                       </button>
                     </p>
                   )
-              )}
+              )} */}
             </div>
           ))}
           {hidden.length > 0 && (
@@ -200,6 +204,7 @@ const AlertBar = () => {
                             {severity.toUpperCase()}:{' '}
                             {alertObj.annotations.description}{' '}
                           </em>
+                          <br></br>
                           <button
                             className="btn-small"
                             onClick={() => handleRestore(alertObj.startsAt)}
