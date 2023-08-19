@@ -41,10 +41,9 @@ const MetricDisplay = ({ metricId }) => {
       },
     },
   };
-
-
   //fetching data from Prometheus
-  useEffect(() => {
+  function fetchFromProm() {
+    //console.log('Current user in metric:', userData);
     fetch(`/api/data/metrics/${metricId}`, {
       method: 'GET',
     })
@@ -53,7 +52,38 @@ const MetricDisplay = ({ metricId }) => {
         setMetricData(data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }
+
+  useEffect(
+    () => {
+      //initial fetch request
+      //this is made on the assumption of this structure:
+      //{userData: metrics: metricId: queryOptions: stepSize/Refresh}
+      fetchFromProm();
+      // auto refresh section:
+      // let intervalTime: number;
+      // // check to see if it is a range metric
+      // if (userData.metrics[metricId].scopeType === 'ScopeType.Range') {
+      //   // find the interval time for that metric based on the stepSize
+      //   intervalTime = userData.metrics[metricId].queryOptions.stepSize;
+      // } else {
+      //   // if it is not a range metric (i.e. no stepSize), use the refresh property
+      //   intervalTime = userData.metrics[metricId].queryOptions.refresh;
+      // }
+      // // set interval to update data based on intervalTime in ms
+      // const interval: NodeJS.Timer = setInterval(
+      //   fetchFromProm,
+      //   intervalTime * 1000
+      // );
+      // // clear interval so it only runs the setInterval when component is mounted
+      // return () => clearInterval(interval);
+    },
+    [
+      // userData.metrics[metricId].scopeType,
+      // userData.metrics[metricId].queryOptions.stepSize,
+      // userData.metrics[metricId].queryOptions.refresh,
+    ]
+  );
 
   //modal handler functions
   const openModal = () => setOpen(true);
