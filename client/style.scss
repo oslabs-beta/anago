@@ -13,7 +13,7 @@ $highlight-light: rgba(97, 145, 215, 0.7);
 $highlight-bright: rgba(143, 166, 200, 0.9);
 
 #root {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -33,7 +33,7 @@ $highlight-bright: rgba(143, 166, 200, 0.9);
   align-items: center;
   justify-content: space-between;
   margin: 10px;
-  width: 95%;
+  width: 90%;
 }
 
 .metric-container {
@@ -341,7 +341,7 @@ header nav {
 }
 
 /* CSS */
-.btn { 
+.btn {
   align-items: center;
   background-color: $highlight;
   border: 0;
@@ -395,7 +395,7 @@ header nav {
   color: rgba(0, 0, 0, 0.3);
 }
 
-h5{
+h5 {
   margin-bottom: 5px;
   margin-top: 2px;
   word-wrap: break-word;
@@ -407,11 +407,9 @@ h5{
   display: flex;
   width: 100%;
   flex-wrap: wrap;
-  margin-left: 2em;
-  margin-right: 2em;
 }
 
-.control-plane{
+.control-plane {
   width: 100%;
   margin-bottom: 5px;
 }
@@ -421,8 +419,8 @@ h5{
   position: relative;
   flex-direction: column;
   flex-wrap: wrap;
-  width: 45%;
-  padding: 25px 
+  width: 46%;
+  padding: 20px;
 }
 .node-info {
   position: absolute;
@@ -436,7 +434,6 @@ h5{
   padding: 20px 5px 5px 5px;
   margin-bottom: 10px;
 }
-
 
 .namespace-container {
   display: flex;
@@ -453,12 +450,12 @@ h5{
   padding: 15px;
 }
 
-.ns-inner-border{
+.ns-inner-border {
   border: 2px dashed rgba(255, 170, 0, 0.3);
   border-radius: 10px;
 }
 
-#namespace-logo{
+#namespace-logo {
   height: 60px;
   width: 60px;
   margin-bottom: 10px;
@@ -471,14 +468,14 @@ h5{
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
-  padding: 5px
+  padding: 5px;
 }
 
-.namespace-info h3{
+.namespace-info h3 {
   margin-top: 2px;
   margin-bottom: 2px;
 }
-.namespace-info h4{
+.namespace-info h4 {
   margin-top: 2px;
   margin-bottom: 2px;
 }
@@ -497,8 +494,7 @@ h5{
   background-color: rgb(173, 216, 230, 0.3);
   margin-left: 5px;
   margin-right: 5px;
-  border-radius: 25px
-
+  border-radius: 25px;
 }
 
 .namespace-services {
@@ -509,7 +505,7 @@ h5{
   background-color: rgb(144, 238, 169, 0.3);
   margin-left: 5px;
   margin-right: 5px;
-  border-radius: 25px
+  border-radius: 25px;
 }
 .namespace-deployments {
   display: flex;
@@ -519,14 +515,13 @@ h5{
   background-color: rgb(230, 230, 250, 0.3);
   margin-left: 5px;
   margin-right: 5px;
-  border-radius: 25px
+  border-radius: 25px;
 }
 .status-bar:hover {
   height: 10rem;
   overflow-y: auto;
 }
 .status-bar:active {
-  
 }
 
 #namespace-logo {
@@ -552,4 +547,3 @@ h5{
   height: 75px;
   width: 75px;
 }
-

@@ -16,8 +16,6 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   const services: Service[] = clusterData.services;
   const deployments: Deployment[] = clusterData.deployments;
 
-  console.log('deployments', deployments);
-
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
