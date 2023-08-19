@@ -9,7 +9,7 @@ if (ACTIVE_DEPLOYMENT) {
   // Build live demo clusters
   newUserData.addMetric(
     'CPU Idle by Cluster',
-    LookupType.CPUIdleByCluster,
+    LookupType.CPUIdle,
     ScopeType.Range,
     {
       duration: 5 * 60 * 60,
@@ -18,7 +18,7 @@ if (ACTIVE_DEPLOYMENT) {
   );
   newUserData.addMetric(
     'Memory Idle by Cluster',
-    LookupType.MemoryIdleByCluster
+    LookupType.MemoryIdle
   );
   newUserData.addMetric(
     'Pod Count by Namespace',
@@ -41,7 +41,7 @@ if (ACTIVE_DEPLOYMENT) {
   );
   newUserData.addMetric(
     'Disk Space by Container',
-    LookupType.FreeDiskUsage,
+    LookupType.FreeDiskinNode,
     ScopeType.Range
   );
   newUserData.addMetric(
@@ -63,7 +63,7 @@ if (ACTIVE_DEPLOYMENT) {
 
   newUserData.addPlaceholderMetric(
     'CPU Idle by Cluster',
-    LookupType.CPUIdleByCluster,
+    LookupType.CPUIdle,
     ScopeType.Range,
     '0',
     {
@@ -73,7 +73,7 @@ if (ACTIVE_DEPLOYMENT) {
   );
   newUserData.addPlaceholderMetric(
     'Memory Idle by Cluster',
-    LookupType.MemoryIdleByCluster,
+    LookupType.MemoryIdle,
     ScopeType.Range,
     '1'
   );
@@ -101,7 +101,7 @@ if (ACTIVE_DEPLOYMENT) {
   );
   newUserData.addPlaceholderMetric(
     'Disk Space by Container',
-    LookupType.FreeDiskUsage,
+    LookupType.FreeDiskinNode,
     ScopeType.Range,
     '5'
   );

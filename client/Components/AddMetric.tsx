@@ -1,45 +1,72 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouteLoaderData } from 'react-router-dom';
 import { LookupType, ScopeType, lookupName, UserData } from '../../types';
 import MetricDisplay from './MetricDisplay';
 
 const AddMetric = (props): any => {
   const userData = useRouteLoaderData('home') as UserData;
+  // The preconfiged queries to show in the selector
   const lookupOptions = [
-    LookupType.CPUIdleByCluster,
-    LookupType.MemoryIdleByCluster,
-    LookupType.MemoryUsed,
     LookupType.CPUUsage,
-    LookupType.FreeDiskUsage,
+    LookupType.CPUIdle,
+    LookupType.MemoryUsed,
+    LookupType.MemoryFreeInNode,
+    LookupType.MemoryIdle,
+    LookupType.DiskUsage,
+    LookupType.FreeDiskinNode,
     LookupType.ReadyNodesByCluster,
+    LookupType.NodesReadinessFlapping,
+    LookupType.PodRestarts,
     LookupType.PodCount,
   ];
 
+  // Radio / selector fields
   const [types, setTypes] = useState([
-    ScopeType.Range,
-    'entry-precon',
-    LookupType.CPUIdleByCluster,
+    ScopeType.Range, // Default Ranged Values
+    'entry-precon', // Default preconstructed queries
+    LookupType.CPUUsage, // Default to CPU Usage lookup
   ]);
+
+  // User entry fields
   const [fields, setFields] = useState({
     name: '',
     duration: '',
     step: '',
     customQuery: '',
-    color: '',
+    refresh: '',
   });
-  const [messageText, setMessageText] = useState('');
-  const [metricData, setMetricData]: any = useState({});
 
-  const previewMetric = () => {};
+  // User configurable options that vary by lookup preconfigs
+  const [domains, setDomains] = useState([
+    ['Cluster', 'Namespace', 'Node', 'Deployment'],
+    ['Pithy-Depl', 'Kube-QL', '192.168.9.99', 'Prom-Prom-Prom-Prom'],
+    ['Namespaces', 'Deployments', 'Containers'],
+  ]);
+  // Currently selected choices for the above domains
+  const [chosenDomains, setChosenDomains] = useState([
+    'Cluster',
+    'Pithy-Depl',
+    'Namespaces',
+  ]);
+
+  // Output status data
+  const [messageText, setMessageText] = useState('');
+  // Metric data to show in a preview graph
+  const [metricData, setMetricData]: any = useState({});
+  // Query Summary Text
+  const [querySummary, setQuerySummary] = useState('');
+
+  // Preview the user's current query, if possible
+  const previewMetric = () => {
+    // Mostly same as Save Metric, but different route, get back data + promQL
+    setMessageText('Querying Preview Metric...');
+    const newMetric = formData();
+  };
+
+  // Save the user's current query, if valid
   const saveMetric = () => {
     setMessageText('Saving New Metric...');
-    const newMetric = {
-      name: fields.name,
-      type: types[2],
-      customQuery: fields.customQuery,
-      duration: timeConverter(fields.duration),
-      stepSize: timeConverter(fields.step),
-    };
+    const newMetric = formData();
 
     fetch('/api/user/add-metric', {
       method: 'POST',
@@ -51,39 +78,151 @@ const AddMetric = (props): any => {
       .then((res) => res.json())
       .then((res) => {
         console.log('Received reply', res);
+
+        // Should verify query validity as part of this process
         setMessageText('New Metric Saved!');
+
+        // Restore defaults
         setTypes([types[0], types[1], LookupType.CustomEntry]);
         setFields({
           name: '',
           duration: '',
           step: '',
           customQuery: '',
-          color: '',
+          refresh: '',
         });
         setMetricData({});
+        // Refetch user data for updated Dashboard[0] ?
+
+        // Dismiss message
         setTimeout(() => setMessageText(''), 2500);
       });
   };
+
+  // Generate data object for previewing or saving query
+  function formData(): any {
+    // Standard Metrics
+    const newMetric = {
+      name: fields.name,
+      lookupType: types[2],
+      scopeType: types[0],
+    };
+    // Custom entry: set LookupType to .CustomEntry and save the query
+    // customQuery: fields.customQuery,
+
+    // Context: If there is a context, save it
+
+    // Target: If there is a target, save it
+
+    // Timing: For Range / Instant scope, save entered (or def) vals
+
+    return newMetric;
+  }
+
+  // Query type options have changed and may change the form fields
   const typeChanged = (e) => {
+    // Check Scope Radio
     const scope =
       document.querySelector('input[name="scope"]:checked')?.id ===
       'scope-range'
         ? ScopeType.Range
         : ScopeType.Instant;
+    // Check Entry Type Radio
     const entryType =
       document.querySelector('input[name="entryType"]:checked')?.id ||
       'entry-precon';
+    // If Search Type was Updated, Update it
     const searchType =
       e.target.id === 'new-metric-type' ? Number(e.target.value) : types[2];
+
+    // If chosenDomains were updated, update them
+    const newChosenDomains = [...chosenDomains];
+    if (e.target.id == 'new-metric-context')
+      newChosenDomains[0] = e.target.value;
+    if (e.target.id == 'new-metric-context-picker')
+      newChosenDomains[1] = e.target.value;
+    if (e.target.id == 'new-metric-target')
+      newChosenDomains[2] = e.target.value;
+
     console.log([scope, entryType, searchType]);
+    // Update state values
     setTypes([scope, entryType, searchType]);
+    setDomains([
+      contextMatrix[searchType],
+      ['Pithy-Depl', 'Kube-QL', '192.168.9.99', 'Prom-Prom-Prom-Prom'],
+      targetMatrix[searchType],
+    ]);
+    setChosenDomains(newChosenDomains);
   };
 
+  // Form text has changed and should be updated in state
   const textChanged = (e, field: string) => {
     const newFields = { ...fields };
     newFields[field] = e.target.value;
     setFields(newFields);
   };
+
+  // Generate summary text to show:
+  useEffect(() => {
+    let str = 'Query Summary: A ';
+
+    if (types[1] == 'entry-precon') str += 'preconfigured, ';
+    else str += 'Custom, ';
+
+    if (types[0] == ScopeType.Range) str += 'time-range query ';
+    else str += 'instant query ';
+
+    // Branch over precon vs. custom
+    if (types[1] == 'entry-precon') {
+      str += `for ${lookupName(Number(types[2]))}`;
+      if (targetMatrix[types[2]].length) {
+        // there is a target + context
+        str += `, showing all ${chosenDomains[2]} in the ${chosenDomains[1]} ${chosenDomains[0]}`;
+      } else if (contextMatrix[types[2]].length) {
+        // there is context/no-target
+        str += `, throughout the ${chosenDomains[1]} ${chosenDomains[0]},`;
+      } // else -> no context/target, continue on
+    } else {
+      const customQuery = fields.customQuery
+        ? '"' + fields.customQuery + '"'
+        : '<your query>';
+      str += 'for ' + customQuery;
+    }
+
+    // Examples
+    // Query Summary: A preconfigured, time-range query for CPU Usage, showing _target_ throughout the ___ namespace, over the last _time_.
+
+    // Query Summary: A preconfigured, time-range query for CPU Usage over the last _time_.
+
+    // Query Summary: A preconfigured, time-range query for CPU Usage, throughout the ___ namespace, over the last _time_.
+
+    // Branch over time-range
+    if (types[0] == ScopeType.Range) {
+      str += ' over the last ';
+      const timeSec = fields.duration
+        ? timeConverter(fields.duration)
+        : 24 * 60 * 60;
+      if (timeSec > 1 * 60 * 60 * 24 * 365) {
+        str += `${Math.round((timeSec / 60 / 60 / 24 / 365) * 10) / 10} years.`;
+      } else if (timeSec > 60 * 60 * 24 * 90) {
+        str += `${Math.round((timeSec / 60 / 60 / 24 / 30) * 10) / 10} months.`;
+      } else if (timeSec > 60 * 60 * 24 * 20) {
+        str += `${Math.round((timeSec / 60 / 60 / 24 / 7) * 10) / 10} weeks.`;
+      } else if (timeSec > 60 * 60 * 24 * 3.5) {
+        str += `${Math.round((timeSec / 60 / 60 / 24) * 10) / 10} days.`;
+      } else if (timeSec > 60 * 60 * 3.5) {
+        str += `${Math.round((timeSec / 60 / 60) * 10) / 10} hours.`;
+      } else if (timeSec > 60 * 3.5) {
+        str += `${Math.round((timeSec / 60) * 10) / 10} minutes.`;
+      } else {
+        str += `${timeSec} seconds.`;
+      }
+    } else {
+      str += '.';
+    }
+
+    setQuerySummary(str);
+  }, [types, fields, chosenDomains]);
 
   return (
     <div className="new-metric-modal">
@@ -98,35 +237,13 @@ const AddMetric = (props): any => {
             <input
               id="new-metric-name"
               value={fields.name}
-              placeholder={types[1]=='entry-precon' ? lookupName(Number(types[2])) : 'Custom Query Name'}
+              placeholder={
+                types[1] == 'entry-precon'
+                  ? lookupName(Number(types[2]))
+                  : 'Custom Query Name'
+              }
               onChange={(e) => textChanged(e, 'name')}
             ></input>
-          </div>
-
-          {/* SCOPE RADIO BUTTON */}
-          <div className="radio-container">
-            <label htmlFor="new-metric-scope">Scope:</label>
-            <label className="radio-button-container">
-              Time-Range Query
-              <input
-                type="radio"
-                id="scope-range"
-                defaultChecked
-                onChange={typeChanged}
-                name="scope"
-              ></input>
-              <span className="checkmark"></span>
-            </label>
-            <label className="radio-button-container">
-              Instant Query
-              <input
-                type="radio"
-                id="scope-instant"
-                onChange={typeChanged}
-                name="scope"
-              ></input>
-              <span className="checkmark"></span>
-            </label>
           </div>
 
           {/* PRECON / CUSTOM RADIO BUTTON */}
@@ -155,6 +272,32 @@ const AddMetric = (props): any => {
             </label>
           </div>
 
+          {/* SCOPE RADIO BUTTON */}
+          <div className="radio-container">
+            <label htmlFor="new-metric-scope">Scope:</label>
+            <label className="radio-button-container">
+              Time-Range Query
+              <input
+                type="radio"
+                id="scope-range"
+                defaultChecked
+                onChange={typeChanged}
+                name="scope"
+              ></input>
+              <span className="checkmark"></span>
+            </label>
+            <label className="radio-button-container">
+              Instant Query
+              <input
+                type="radio"
+                id="scope-instant"
+                onChange={typeChanged}
+                name="scope"
+              ></input>
+              <span className="checkmark"></span>
+            </label>
+          </div>
+
           {/* PRECON METRIC TYPE */}
           {types[1] == 'entry-precon' && (
             <div>
@@ -176,21 +319,56 @@ const AddMetric = (props): any => {
           )}
 
           {/* METRIC CONTEXT */}
-          {types[1] == 'entry-precon' && [2, 3, 4].includes(Number(types[2])) && (
+          {types[1] == 'entry-precon' && domains[0].length > 0 && (
             <div>
-              <label>Context: </label>{' '}
-              <input
-                id="context"
-                value={fields.color}
-                placeholder="Blue"
-                onChange={(e) => textChanged(e, 'color')}
-              ></input>
-              <input
-                id="new-metric-color"
-                value={fields.color}
-                placeholder="Blue"
-                onChange={(e) => textChanged(e, 'color')}
-              ></input>
+              <label htmlFor="new-metric-context">Context: </label>
+              <select
+                id="new-metric-context"
+                onChange={typeChanged}
+                value={chosenDomains[0]}
+              >
+                {domains[0].map((el, index) => {
+                  return (
+                    <option value={el} key={'metric' + el}>
+                      {domains[0][index]}
+                    </option>
+                  );
+                })}
+              </select>{' '}
+              –
+              <select
+                id="new-metric-context-picker"
+                onChange={typeChanged}
+                value={chosenDomains[1]}
+              >
+                {domains[1].map((el, index) => {
+                  return (
+                    <option value={el} key={'metric-pick' + el}>
+                      {domains[1][index]}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          )}
+
+          {/* METRIC TARGET */}
+          {types[1] == 'entry-precon' && domains[2].length > 0 && (
+            <div>
+              <label htmlFor="new-metric-target">Target: </label>
+              <select
+                id="new-metric-target"
+                onChange={typeChanged}
+                value={chosenDomains[2]}
+              >
+                {domains[2].map((el, index) => {
+                  return (
+                    <option value={el} key={'target' + el}>
+                      {domains[2][index]}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
           )}
 
@@ -220,6 +398,19 @@ const AddMetric = (props): any => {
             </div>
           )}
 
+          {/* INSTANT METRIC REFRESH */}
+          {types[0] == ScopeType.Instant && (
+            <div>
+              <label>Refresh Interval: </label>{' '}
+              <input
+                id="new-metric-refresh"
+                value={fields.refresh}
+                placeholder="2 mins"
+                onChange={(e) => textChanged(e, 'step')}
+              ></input>
+            </div>
+          )}
+
           {/* CUSTOM QUERY STRING */}
           {types[1] == 'entry-custom' && (
             <div className="metric-text-area">
@@ -243,6 +434,9 @@ const AddMetric = (props): any => {
             {/* {metricData.hasOwnProperty('labels') && <Line data={metricData} />} */}
           </div>
         </div>
+      </div>
+      <div className="summary-container">
+        <p>{querySummary}</p>
       </div>
       <div className="new-metric-buttons">
         <button className="btn" onClick={saveMetric}>
@@ -303,3 +497,39 @@ function timeConverter(input: string): number {
       return numPart;
   }
 }
+
+function generateSummary() {
+  let str = '';
+
+  return str;
+}
+
+const contextMatrix = [
+  [],
+  ['Cluster', 'Namespace', 'Node', 'Deployment'],
+  ['Cluster', 'Namespace', 'Node', 'Deployment'],
+  ['Cluster', 'Namespace', 'Node'],
+  [],
+  ['Cluster', 'Namespace', 'Node', 'Deployment'],
+  ['Cluster', 'Namespace', 'Node', 'Deployment'],
+  [],
+  [],
+  ['Cluster', 'Namespace', 'Node', 'Deployment'],
+  ['Cluster', 'Namespace', 'Node', 'Deployment'],
+  ['Cluster', 'Namespace', 'Node', 'Deployment'],
+];
+
+const targetMatrix = [
+  [],
+  ['Namespaces', 'Deployments', 'Containers'],
+  [],
+  [],
+  [],
+  [],
+  ['Namespaces', 'Deployments', 'Containers'],
+  [],
+  [],
+  [],
+  [],
+  ['Namespaces', 'Nodes', 'Deployments'],
+];

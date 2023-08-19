@@ -11,6 +11,7 @@ $highlight: rgba(97, 145, 215, 1);
 $highlight-dark: rgb(33, 81, 155);
 $highlight-light: rgba(97, 145, 215, 0.7);
 $highlight-bright: rgba(143, 166, 200, 0.9);
+$highlight-gray: rgba(143, 166, 200, 0.5);
 
 #root {
   max-width: 1280px;
@@ -221,6 +222,23 @@ header nav {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+}
+
+.summary-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  margin: 20px;
+  margin-left: 15%;
+  background-color: $highlight-gray;
+
+  p {
+    padding: 20px;
+    font-size: 16px;
+    font-family: 'Ubuntu', sans-serif;
+    text-align: justify;
   }
 }
 

@@ -85,14 +85,17 @@ export interface Cluster {
 
 export enum LookupType {
   CustomEntry, //0
-  CPUIdleByCluster, //1
-  MemoryIdleByCluster,
-  MemoryUsed,
-  CPUUsage, //4 
-  FreeDiskUsage,
-  ReadyNodesByCluster,
-  NodesReadinessFlapping, //7 
-  PodCount,
+  CPUUsage, // 1 - Current CPU Usage
+  CPUIdle, // 2 - Rylie help fill this out
+  MemoryUsed, // 3
+  MemoryFreeInNode, // 4 - Needs work
+  MemoryIdle, // 5 - Rylie help!
+  DiskUsage, // 6
+  FreeDiskinNode, // 7
+  ReadyNodesByCluster, // 8
+  NodesReadinessFlapping, // 9
+  PodRestarts, //10
+  PodCount, // 111
 }
 
 export enum ScopeType {
@@ -110,22 +113,28 @@ export const lookupName = (type: LookupType): string => {
   switch (type) {
     case LookupType.CustomEntry:
       return 'Custom PromQL Entry';
-    case LookupType.CPUIdleByCluster:
-      return 'CPU Idle by Cluster';
-    case LookupType.MemoryIdleByCluster:
-      return 'Memory Idle by Cluster';
-    case LookupType.MemoryUsed:
-      return '% Memory Used by Node';
     case LookupType.CPUUsage:
       return 'CPU Usage';
-    case LookupType.FreeDiskUsage:
-      return 'Disk Space by Container';
+    case LookupType.CPUIdle:
+      return 'CPU Idle Tracking';
+    case LookupType.MemoryUsed:
+      return 'Memory Usage by Container';
+    case LookupType.MemoryFreeInNode:
+      return 'Memory Available in Node';
+    case LookupType.MemoryIdle:
+      return 'Memory Idle Tracking';
+    case LookupType.DiskUsage:
+      return 'Disk Usage';
+    case LookupType.FreeDiskinNode:
+      return 'Disk Space on Node';
     case LookupType.ReadyNodesByCluster:
       return 'Ready Nodes by Cluster';
     case LookupType.NodesReadinessFlapping:
       return 'Node Readiness Flapping';
+    case LookupType.PodRestarts:
+      return 'Pod Restart Rates';
     case LookupType.PodCount:
-      return 'Pod Count by Namespace';
+      return 'Pod Counts';
     default:
       return 'Lookup Type Not Found';
   }

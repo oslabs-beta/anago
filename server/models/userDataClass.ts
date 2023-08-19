@@ -113,15 +113,15 @@ function graphForQuery(
   if (scopeType == ScopeType.Range) return GraphType.LineGraph;
   //
   switch (lookupType) {
-    case LookupType.CPUIdleByCluster:
+    case LookupType.CPUIdle:
       return GraphType.LineGraph;
-    case LookupType.MemoryIdleByCluster:
+    case LookupType.MemoryIdle:
       return GraphType.LineGraph;
     case LookupType.MemoryUsed:
       return GraphType.LineGraph;
     case LookupType.CPUUsage:
       return GraphType.LineGraph;
-    case LookupType.FreeDiskUsage:
+    case LookupType.FreeDiskinNode:
       return GraphType.LineGraph;
     case LookupType.ReadyNodesByCluster:
       return GraphType.LineGraph;
@@ -140,11 +140,11 @@ function queryBuilder(lookupType: LookupType, queryOptions: any): string {
       return queryOptions.customQuery;
     }
 
-    case LookupType.CPUIdleByCluster: {
+    case LookupType.CPUIdle: {
       return 'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
     }
 
-    case LookupType.MemoryIdleByCluster: {
+    case LookupType.MemoryIdle: {
       return 'sum((container_memory_usage_bytes{container!="POD",container!=""} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
     }
 
@@ -156,7 +156,7 @@ function queryBuilder(lookupType: LookupType, queryOptions: any): string {
       return 'container_cpu_usage_seconds_total';
     }
 
-    case LookupType.FreeDiskUsage: {
+    case LookupType.FreeDiskinNode: {
       return 'node_filesystem_avail_bytes/node_filesystem_size_bytes*100';
     }
 

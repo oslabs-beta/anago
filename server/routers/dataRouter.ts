@@ -8,6 +8,7 @@ dataRouter.get(
   // TODO: eventually reconfigure this because we will be sending metric id, along with other info, in the req body in the future
   '/metrics/:id',
   //metricsController.verifyMetric,
+  // read the query from the saved queries using the metric id from params -> 
   promApiController.queryBuilder,
   promApiController.getMetrics,
   async (_req: Request, res: Response) => {
@@ -22,3 +23,6 @@ dataRouter.get(
 
 export default dataRouter;
 
+  // build the basic query string from the complicated FE object
+  // promApiController.queryBuilder,
+  // promApiController.getMetrics,

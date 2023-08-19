@@ -74,10 +74,10 @@ export function cleanTime(date: Date, options: any) {
 
 export function namePlot(obj: any, type: LookupType) {
   switch (type) {
-    case LookupType.CPUIdleByCluster: {
+    case LookupType.CPUIdle: {
       return 'MVP-Cluster';
     }
-    case LookupType.MemoryIdleByCluster: {
+    case LookupType.MemoryIdle: {
       return 'MVP-Cluster';
     }
     case LookupType.MemoryUsed: {
@@ -86,7 +86,7 @@ export function namePlot(obj: any, type: LookupType) {
     case LookupType.CPUUsage: {
       return obj.metric.node;
     }
-    case LookupType.FreeDiskUsage: {
+    case LookupType.DiskUsage: {
       return obj.metric.pod;
     }
     case LookupType.ReadyNodesByCluster: {
