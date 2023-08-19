@@ -8,6 +8,8 @@ import { UserData } from '../../types';
 import { useContext, useEffect } from 'react';
 import { StoreContext } from '../stateStore';
 import React from 'react';
+import logo from '../assets/images/anago.png';
+import AlertBar from '../Components/AlertBar';
 
 export default function Home() {
   //import data from loader
@@ -49,6 +51,7 @@ export default function Home() {
       </header>
 
       <div className="main-body">
+      <AlertBar />
         <Outlet />
       </div>
     </div>

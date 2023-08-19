@@ -126,18 +126,25 @@ header nav {
   border-radius: 8px;
   height: 3.5rem;
   margin: auto;
-  background-color: rgb(0, 139, 139, 0.2);
+  background-color: #008a8a33;
   margin-bottom: 1rem;
   overflow-y: hidden;
-  transition: height 0.3s ease;
-  cursor: pointer;
-  color: rgb(219, 28, 28);
+  transition: height 0.3s;
 }
+
+#alertTitle {
+  color: rgb(219, 28, 28);
+  cursor: pointer;
+}
+#noAlertTitle {
+  color: green;
+}
+
 .status-bar:hover {
   background-color: rgba(0, 139, 139, 0.356);
-  color: rgb(219, 28, 28);
   height: 10rem;
   overflow-y: auto;
+  cursor: pointer;
 }
 .critical {
   color: red;
