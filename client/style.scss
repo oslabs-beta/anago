@@ -532,19 +532,18 @@ h5 {
   flex-direction: column;
   flex-wrap: wrap;
   flex-grow: 1;
-  width: 46%;
-  padding: 20px;
+  width: 45%;
+  padding: 25px;
 }
 .node-info {
   position: absolute;
   top: 0;
   right: 0;
-  margin-bottom: 2px;
 }
 .node-inner-border {
   border: 3px dashed rgb(0, 42, 255, 0.6);
   border-radius: 10px;
-  padding: 20px 5px 5px 5px;
+  padding: 25px 5px 5px 5px;
   margin-bottom: 10px;
 }
 
