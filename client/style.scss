@@ -547,7 +547,7 @@ h5 {
 
 .dropdown button{
   height: 30px;
-  width: 30px;
+  width: 200px;
   display: flex;
   justify-content: center;
   padding-left: 10px;
@@ -556,5 +556,6 @@ h5 {
 .panel {
   position: absolute;
   padding: 10px;
-  width: 100%
+  display: flex;
+  align-items: start;
 }
