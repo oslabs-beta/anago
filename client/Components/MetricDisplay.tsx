@@ -41,6 +41,7 @@ const MetricDisplay = ({ metricId }) => {
       },
     },
   };
+
   //fetching data from Prometheus
   function fetchFromProm() {
     //console.log('Current user in metric:', userData);
