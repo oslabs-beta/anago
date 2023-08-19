@@ -16,6 +16,7 @@ export default ({ children }: Props) => {
   const [currentDashboard, setCurrentDashboard] = useState<String[]>([]);
   const [hasFetchedUserData, setHasFetchedUserData] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Number>();
+  const [displayedAlerts, setDisplayedAlerts] = useState<Object>([]);
 
   const States = {
     currentCluster: currentCluster,
@@ -32,6 +33,8 @@ export default ({ children }: Props) => {
     setCurrentMetrics: setCurrentMetrics,
     lastUpdate: lastUpdate,
     setLastUpdate: setLastUpdate,
+    displayedAlerts: displayedAlerts,
+    setDisplayedAlerts: setDisplayedAlerts,
   };
 
   return (

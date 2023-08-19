@@ -8,7 +8,6 @@ import {
   Outlet,
   useLocation,
 } from 'react-router-dom';
-import AlertBar from './AlertBar';
 import AddMetric from './AddMetric';
 
 const Dashboard = () => {
@@ -46,7 +45,6 @@ const Dashboard = () => {
           <h2 className="dashboard-title">
             {userData.dashboards[id].dashboardName}
           </h2>
-          <AlertBar />
           <div className="dashboard-buttons">
             <span>
               <button className="btn" onClick={refresh}>

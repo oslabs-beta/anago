@@ -58,9 +58,10 @@ app.use(
       message: { err: 'An error occured' },
     };
     const errorObj = Object.assign({}, defaultErr, err);
-    console.log(errorObj.log);
+    console.log(err);
+    console.log(errorObj.message);
     return res.status(errorObj.status).json(errorObj.message);
-  },
+  }
 );
 
 app.listen(PORT, () => {
