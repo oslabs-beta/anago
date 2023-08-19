@@ -613,7 +613,7 @@ h5 {
 
 .dropdown {
   position: absolute;
-  border: 2px black; 
+  border: 2px black;
 }
 
 .dropdown button {
@@ -639,13 +639,13 @@ h5 {
   z-index: 100;
   font-family: 'Ubuntu', sans-serif;
 }
-.panel fieldset{
+.panel fieldset {
   border: none;
   display: flex;
   justify-content: flex-start;
   margin-bottom: 5px;
 }
-.dropdown-sublabel{
+.dropdown-sublabel {
   font-size: 16px;
   display: flex;
   margin: 0;
@@ -660,6 +660,7 @@ h5 {
   padding-left: 5px;
 }
 
-.panel fieldset.selected{
+.panel fieldset.selected {
   background: rgb(173, 216, 230, 0.7);
   width: 100%;
+}
