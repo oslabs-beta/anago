@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import userData from '../models/defaultUserData.js';
+import userData from '../models/defaultUserData';
 
 //    userData = {
 //      userId = randomUUID();

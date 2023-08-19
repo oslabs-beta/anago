@@ -14,6 +14,7 @@ import {
 } from 'chart.js';
 import { Line, Chart } from 'react-chartjs-2';
 import { useRouteLoaderData } from 'react-router-dom';
+import React from 'react';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -40,15 +41,15 @@ const MetricDisplay = ({ metricId }) => {
       },
     },
   };
+
   //fetching data from Prometheus
   function fetchFromProm() {
     //console.log('Current user in metric:', userData);
     fetch(`/api/data/metrics/${metricId}`, {
       method: 'GET',
     })
-      .then((data) => data.json())
-      .then((data) => {
-        //console.log('fetched data', data);
+      .then(data => data.json())
+      .then(data => {
         setMetricData(data);
       })
       .catch((err) => console.log(err));

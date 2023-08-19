@@ -7,8 +7,7 @@ import {
   Service,
   Namespace,
   Cluster,
-} from '../../types.js';
-
+} from '../../types';
 
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
@@ -41,7 +40,7 @@ k8sController.getNodes = async (
       return node;
     });
     res.locals.nodes = nodes;
-    res.locals.cluster = {nodes: nodes};
+    res.locals.cluster = { nodes: nodes };
     return next();
   } catch (error) {
     console.log(error);
@@ -57,6 +56,7 @@ k8sController.getPods = async (
     const data: any = await k8sApi.listPodForAllNamespaces();
     const pods: Pod[] = data.body.items.map(data => {
       const { name, namespace, creationTimestamp, uid, labels } = data.metadata;
+      console.log(data.spec.containers)
       const { nodeName, containers, serviceAccount } = data.spec;
       const { conditions, containerStatuses, phase, podIP } = data.status;
       const pod: Pod = {
@@ -76,7 +76,7 @@ k8sController.getPods = async (
       return pod;
     });
     res.locals.pods = pods;
-    res.locals.cluster = {pods: pods}
+    res.locals.cluster = { pods: pods };
     next();
   } catch (error) {
     console.log(error);
@@ -93,17 +93,19 @@ k8sController.getNamespaces = async (
     const namespaces = data.body.items.map(data => {
       const { name, creationTimestamp, labels, uid } = data.metadata;
       const { phase } = data.status;
+      const nodeName = '';
       const namespace: Namespace = {
         name,
         uid,
         creationTimestamp,
         labels,
         phase,
+        nodeName,
       };
       return namespace;
     });
     res.locals.namespaces = namespaces;
-    res.locals.cluster = {namespaces: namespaces}
+    res.locals.cluster = { namespaces: namespaces };
     next();
   } catch (error) {
     console.log(error);
@@ -117,9 +119,10 @@ k8sController.getServices = async (
 ) => {
   try {
     const data: any = await k8sApi.listServiceForAllNamespaces();
+
     const services: Service[] = data.body.items.map(data => {
       const { name, namespace, uid, creationTimestamp, labels } = data.metadata;
-      const { ports } = data.spec;
+      const { ports, clusterIP } = data.spec;
       const { loadBalancer } = data.status;
       const service: Service = {
         name,
@@ -129,11 +132,12 @@ k8sController.getServices = async (
         labels,
         ports,
         loadBalancer,
+        clusterIP
       };
       return service;
     });
     res.locals.services = services;
-    res.locals.cluster = {services: services};
+    res.locals.cluster = { services: services };
     next();
   } catch (error) {
     console.log(error);
@@ -147,6 +151,7 @@ k8sController.getDeployments = async (
 ) => {
   try {
     const data: any = await k8sApi2.listDeploymentForAllNamespaces();
+
     const deployments: Deployment[] = data.body.items.map(data => {
       const { name, creationTimestamp, labels, namespace, uid } = data.metadata;
       const { replicas } = data.spec;
@@ -163,7 +168,7 @@ k8sController.getDeployments = async (
       return deployment;
     });
     res.locals.deployments = deployments;
-    res.locals.cluster = {deployments: deployments};
+    res.locals.cluster = { deployments: deployments };
     next();
   } catch (error) {
     console.log(error);

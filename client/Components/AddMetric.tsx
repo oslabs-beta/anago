@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouteLoaderData } from 'react-router-dom';
 import { LookupType, lookupName, UserData } from '../../types';
 import MetricDisplay from './MetricDisplay';
+import React from 'react';
 
 const AddMetric = (props): any => {
   const userData = useRouteLoaderData('home') as UserData;

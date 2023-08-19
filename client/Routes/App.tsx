@@ -14,6 +14,7 @@ import ClusterView from './ClusterView';
 
 //import loaders
 import * as loaders from '../Loaders';
+import React from 'react';
 
 //create router to pass into router provider component returned from app. createBrowserRouter recommended for all latest React Router web projects.
 const router = createBrowserRouter(
@@ -21,8 +22,8 @@ const router = createBrowserRouter(
     <Route path='/' element={<Home />} loader={loaders.userLoader} id='home'>
       <Route path=':id' element={<Dashboard />} />
       <Route path='login' element={<Login />} />
-      <Route path='settings' element={<Settings />} />
-      <Route path='clusterview' element={<ClusterView />} loader={loaders.clusterLoader}/>
+      {/* <Route path='settings' element={<Settings />} /> */}
+      <Route path='clusterview' element={<ClusterView />} loader={loaders.clusterLoader} id='cluster'/>
     </Route>,
   ),
 );

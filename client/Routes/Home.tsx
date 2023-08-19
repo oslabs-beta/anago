@@ -7,6 +7,7 @@ import {
 import { UserData } from '../../types';
 import { useContext, useEffect } from 'react';
 import { StoreContext } from '../stateStore';
+import React from 'react';
 import logo from '../assets/images/anago.png';
 import AlertBar from '../Components/AlertBar';
 
@@ -30,22 +31,22 @@ export default function Home() {
     <div className="home-layout">
       <header>
         <span className="logo-container">
-          <img src={logo} alt="logo" className="logo-image" />
+          <img src={'client/assets/images/anago.png'} alt="logo" className="logo-image" />
           <h3 className="app-title">Anago</h3>
         </span>
         <nav>
-          <NavLink to={'/home'} className="nav-btn">
+          <NavLink to={'/'} className='nav-btn'>
             Dashboards
           </NavLink>
-          <NavLink to={'/settings'} className="nav-btn">
+          {/* <NavLink to={'/settings'} className='nav-btn'>
             Settings
-          </NavLink>
+          </NavLink> */} 
           <NavLink to={'/clusterview'} className='nav-btn'>
             Cluster View
           </NavLink>
-          <NavLink to={'/login'} className='nav-btn'>
+          {/* <NavLink to={'/login'} className='nav-btn'>
             Log Out
-          </NavLink>
+          </NavLink> */}
         </nav>
       </header>
 

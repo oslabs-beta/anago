@@ -16,7 +16,7 @@ $highlight-bright: rgba(143, 166, 200, 0.9);
   font-family: 'Ubuntu', sans-serif;
 }
 #root {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -36,7 +36,7 @@ $highlight-bright: rgba(143, 166, 200, 0.9);
   align-items: center;
   justify-content: space-between;
   margin: 10px;
-  width: 95%;
+  width: 90%;
 }
 
 .metric-container {
@@ -465,8 +465,201 @@ header nav {
   background: rgba(0, 0, 0, 0.08);
   color: rgba(0, 0, 0, 0.3);
 }
-.btn-small:disabled {
-  cursor: not-allowed;
-  background: rgba(0, 0, 0, 0.08);
-  color: rgba(0, 0, 0, 0.3);
+
+h5 {
+  margin-bottom: 5px;
+  margin-top: 2px;
+  word-wrap: break-word;
+  white-space: normal;
+  width: 80px;
 }
+
+.cluster-view {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.control-plane {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.node {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  width: 46%;
+  padding: 20px;
+}
+.node-info {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-bottom: 2px;
+}
+.node-inner-border {
+  border: 3px dashed rgb(0, 42, 255, 0.6);
+  border-radius: 10px;
+  padding: 20px 5px 5px 5px;
+  margin-bottom: 10px;
+}
+
+.namespace-container {
+  display: flex;
+  justify-content: space-around;
+  align-content: space-around;
+  flex-flow: row wrap;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+.namespace {
+  position: relative;
+  min-width: 13rem;
+  padding: 15px;
+}
+
+.ns-inner-border {
+  border: 2px dashed rgba(255, 170, 0, 0.3);
+  border-radius: 10px;
+}
+
+#namespace-logo {
+  height: 60px;
+  width: 60px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+.namespace-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  padding: 5px;
+}
+
+.namespace-info h3 {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+.namespace-info h4 {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.namespace-contents {
+  display: flex;
+  justify-content: space-around;
+  align-content: space-around;
+}
+
+.namespace-pods {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  background-color: rgb(173, 216, 230, 0.3);
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 25px;
+}
+
+.namespace-services {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  background-color: rgb(144, 238, 169, 0.3);
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 25px;
+}
+.namespace-deployments {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  background-color: rgb(230, 230, 250, 0.3);
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 25px;
+}
+.status-bar:hover {
+  height: 10rem;
+  overflow-y: auto;
+}
+.status-bar:active {
+}
+
+#namespace-logo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.k8logo {
+  height: 75px;
+  width: 75px;
+}
+
+.dropdown {
+  position: absolute;
+  border: 2px black; 
+}
+
+.dropdown button {
+  min-height: 40px;
+  min-width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 5px;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.panel {
+  position: absolute;
+  padding: 10px;
+  background-color: rgb(210, 233, 248);
+  height: 260;
+  width: max-content;
+  overflow-y: auto;
+  margin-top: 5px;
+  z-index: 100;
+  font-family: 'Ubuntu', sans-serif;
+}
+.panel fieldset{
+  border: none;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 5px;
+}
+.dropdown-sublabel{
+  font-size: 16px;
+  display: flex;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+.dropdown-items {
+  display: flex;
+  justify-content: flex-start;
+}
+.dropdown-items label {
+  padding-left: 5px;
+}
+
+.panel fieldset.selected{
+  background: rgb(173, 216, 230, 0.7);
+  width: 100%;

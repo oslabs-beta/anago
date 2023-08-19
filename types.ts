@@ -51,6 +51,7 @@ export interface Namespace {
   labels: [];
   uid: string;
   phase: string;
+  nodeName: string;
 }
 
 export interface Service {
@@ -61,6 +62,7 @@ export interface Service {
   uid: string;
   ports: [];
   loadBalancer: [];
+  clusterIP
 }
 
 export interface Deployment {

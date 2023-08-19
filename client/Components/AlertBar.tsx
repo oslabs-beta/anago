@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { UserData } from '../types';
+import React, { useContext, useEffect, useState } from 'react';
+import { UserData } from '../../types';
 import { useRouteLoaderData } from 'react-router-dom';
 import { StoreContext } from '../stateStore';
 
@@ -159,6 +159,9 @@ const AlertBar = () => {
       console.log(err);
     }
   }
+
+
+
 
   return (
     <div

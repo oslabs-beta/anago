@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
-import metricsController from '../controllers/metricsController.js';
-import promApiController from '../controllers/promApiController.js';
+import metricsController from '../controllers/metricsController.ts';
+import promApiController from '../controllers/promApiController.ts';
 const dataRouter = express.Router();
 
 //id = metric-id
