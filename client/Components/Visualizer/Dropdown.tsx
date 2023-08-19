@@ -1,22 +1,48 @@
-import React, { useState } from 'react';
-import DropdownTreeSelect from 'react-dropdown-tree-select';
-import { useRouteLoaderData } from 'react-router-dom';
+import MenuItems from './MenuItems';
+const Dropdown = ({ submenus, dropdown, depthLevel }) => {
+  depthLevel = depthLevel + 1;
+  const dropdownClass = depthLevel > 1 ? 'dropdown-submenu' : '';
+  return (
+    <ul
+      className={`dropdown ${dropdownClass} ${
+        dropdown ? 'show' : ''
+      }`}
+    >
+      {submenus.map((submenu, index) => (
+        <MenuItems
+          items={submenu}
+          key={index}
+          depthLevel={depthLevel}
+        />
+      ))}
+    </ul>
+  );
+};
 
-const Dropdown = () => {
-  const clusterData: any = useRouteLoaderData('cluster');
+export default Dropdown;
 
-  const [data, setData] = useState([]);
 
-  // const prepareData = data => {
-  //   data.splice(0, 0, {
-  //     label: 'Select All',
-  //     value: 'selectAll',
-  //     className: 'select-all',
-  //   });
-  //   setData(data);
-  // };
 
-  //prepareData(clusterData);
+
+
+
+
+
+
+
+
+
+
+// import React, { useState } from 'react';
+// import DropdownTreeSelect from 'react-dropdown-tree-select';
+// import { useRouteLoaderData } from 'react-router-dom';
+
+// const Dropdown = () => {
+//   const clusterData: any = useRouteLoaderData('cluster');
+
+//   const [data, setData] = useState([]);
+
+
 
   const dataItems = data => {
     let dataObj = [{}];
@@ -45,28 +71,28 @@ const Dropdown = () => {
     return dataObj = [nodes, namespaces]
   }
 
-  const dropdownItems = dataItems(clusterData);
+//   const dropdownItems = dataItems(clusterData);
 
-  console.log('prepared data', dropdownItems);
+//   console.log('prepared data', dropdownItems);
 
-  const toggleAll = checked => {
-    const dataArr:any = [...data]
-    for (let i = 1; i < dataArr.length; i++) {
-      dataArr[i].checked = checked;
-    }
-    setData(dataArr)
-  };
+//   const toggleAll = checked => {
+//     const dataArr:any = [...data]
+//     for (let i = 1; i < dataArr.length; i++) {
+//       dataArr[i].checked = checked;
+//     }
+//     setData(dataArr)
+//   };
 
-  const handleChange:any = ({ value, checked }) => {
-    if (value === 'selectAll') toggleAll(checked);
-  };
+//   const handleChange:any = ({ value, checked }) => {
+//     if (value === 'selectAll') toggleAll(checked);
+//   };
 
-  return (
-    <div>
-      <DropdownTreeSelect data={data} onChange={handleChange} />
-    </div>
-  );
-};
+//   return (
+//     <div>
+//       <DropdownTreeSelect data={data} onChange={handleChange} />
+//     </div>
+//   );
+// };
 
 
-export default Dropdown;
+// export default Dropdown;

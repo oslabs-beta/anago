@@ -539,3 +539,22 @@ h5 {
   height: 75px;
   width: 75px;
 }
+
+.dropdown{
+  position: relative;
+  border: none;
+}
+
+.dropdown button{
+  height: 30px;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  padding-left: 10px;
+}
+
+.panel {
+  position: absolute;
+  padding: 10px;
+  width: 100%
+}

@@ -1,42 +1,59 @@
-import React, { useState } from 'react';
-import DropdownTreeSelect from 'react-dropdown-tree-select';
+import React, {useState} from 'react';
 import { useRouteLoaderData } from 'react-router-dom';
+import { ClusterData } from '../../../types';
 
-const Dropdown = () => {
+
+export function DropdownState () {
+  const [isDropdownDisplayed, setIsDropdownDisplayed] = useState(false)
   const clusterData: any = useRouteLoaderData('cluster');
 
-  const [data, setData] = useState([]);
 
-  const prepareData = data => {
-    data.splice(0, 0, {
-      label: 'Select All',
-      value: 'selectAll',
-      className: 'select-all',
-    });
-    setData(data);
-  };
 
-  prepareData(clusterData);
-  console.log('prepared data', data);
 
-  const toggleAll = checked => {
-    const dataArr:any = [...data]
-    for (let i = 1; i < dataArr.length; i++) {
-      dataArr[i].checked = checked;
-    }
-    setData(dataArr)
-  };
+  const dataItems = (data :ClusterData) => {
+    let dataObj = [{}];
+    
+    const nodeArray= data.nodes.map(node => {node.name})
+    const namespaceArray = data.namespaces.map(namespace => {namespace.name})
+    
+    dataObj.push({Nodes: nodeArray}, {Namespaces: namespaceArray})
 
-  const handleChange:any = ({ value, checked }) => {
-    if (value === 'selectAll') toggleAll(checked);
-  };
+    console.log(dataObj)
+    return dataObj;
+  }
+
+  const data = dataItems(clusterData);
+  
+
+
 
   return (
-    <div>
-      <DropdownTreeSelect data={data} onChange={handleChange} />
-    </div>
-  );
-};
+    <fieldset className="dropdown">
+      <button className="state-dropdown" onClick={()=>setIsDropdownDisplayed((prevState)=> !prevState)}> --Filter Your Cluster View--</button>
+    {isDropdownDisplayed && 
+    (<div className="panel">
+      {clusterData.nodes.map(node => {
+        return (
+          <div> 
+  
+            <input type='checkbox' key={node.uid}/>
+            <label htmlFor={node.uid}>{node.name}</label>
 
+          </div>
+        )
+      })}
+      {clusterData.namespaces.map(namespace => {
+        return (
+          <div> 
+  
+            <input type='checkbox' key={namespace.uid}/>
+            <label htmlFor={namespace.uid}>{namespace.name}</label>
 
-export default Dropdown;
+          </div>
+        )
+      })}
+      </div>)
+      }
+    </fieldset>
+  )
+}
