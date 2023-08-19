@@ -87,7 +87,7 @@ export function namePlot(obj: any, type: LookupType) {
       return obj.metric.node;
     }
     case LookupType.DiskUsage: {
-      return obj.metric.pod;
+      return obj.metric.pod; 
     }
     case LookupType.ReadyNodesByCluster: {
       return 'MVP-Cluster';

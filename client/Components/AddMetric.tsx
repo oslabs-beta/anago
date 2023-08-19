@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouteLoaderData } from 'react-router-dom';
 import { LookupType, ScopeType, lookupName, UserData } from '../../types';
-import MetricDisplay from './MetricDisplay';
+import MetricDisplayPreview from './MetricDisplayPreview';
 
 const AddMetric = (props): any => {
   const userData = useRouteLoaderData('home') as UserData;
@@ -55,12 +55,34 @@ const AddMetric = (props): any => {
   const [metricData, setMetricData]: any = useState({});
   // Query Summary Text
   const [querySummary, setQuerySummary] = useState('');
+  const [queryPromQL, setQueryPromQL] = useState('');
 
   // Preview the user's current query, if possible
   const previewMetric = () => {
     // Mostly same as Save Metric, but different route, get back data + promQL
     setMessageText('Querying Preview Metric...');
     const newMetric = formData();
+    console.log('Trying to make a preview for metric:\n', newMetric);
+    fetch('/api/data/metric', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newMetric),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log('Received reply', res);
+
+        // Should verify query validity as part of this process
+        setMessageText('Metric Preview Successful');
+
+        setMetricData(res.metricData);
+        setQueryPromQL('PromQL Lookup: "' + res.searchQuery + '"');
+
+        // Dismiss message
+        setTimeout(() => setMessageText(''), 2500);
+      });
   };
 
   // Save the user's current query, if valid
@@ -102,19 +124,42 @@ const AddMetric = (props): any => {
   // Generate data object for previewing or saving query
   function formData(): any {
     // Standard Metrics
-    const newMetric = {
+    const newMetric: any = {
       name: fields.name,
       lookupType: types[2],
       scopeType: types[0],
     };
-    // Custom entry: set LookupType to .CustomEntry and save the query
-    // customQuery: fields.customQuery,
 
-    // Context: If there is a context, save it
-
-    // Target: If there is a target, save it
+    if (types[1] == 'entry-precon') {
+      // Preconfigured Query - get target/context, if applicable
+      // Context: If there is a context, save it
+      if (contextMatrix[types[2]].length) {
+        newMetric.context = chosenDomains[0];
+        newMetric.contextChoice = chosenDomains[1];
+      }
+      // Target: If there is a target, save it
+      if (targetMatrix[types[2]].length) newMetric.target = chosenDomains[2];
+    } else {
+      // Custom entry: set LookupType to .CustomEntry and save the query
+      newMetric.lookupType = LookupType.CustomEntry;
+      newMetric.customQuery = fields.customQuery;
+    }
 
     // Timing: For Range / Instant scope, save entered (or def) vals
+    if (newMetric.scopeType === ScopeType.Range) {
+      // Range Query - get values or use defaults
+      newMetric.duration = fields.duration.length
+        ? timeConverter(fields.duration)
+        : 24 * 60 * 60;
+      newMetric.stepSize = fields.step ? timeConverter(fields.step) : 60 * 20;
+    } else {
+      // Instant Query - get refresh rate or supply default
+      newMetric.refresh = fields.refresh ? timeConverter(fields.refresh) : 60;
+    }
+
+    // Add default name if unfilled values
+    if (newMetric.name.length === 0)
+      newMetric.name = lookupName(newMetric.lookupType);
 
     return newMetric;
   }
@@ -144,13 +189,23 @@ const AddMetric = (props): any => {
     if (e.target.id == 'new-metric-target')
       newChosenDomains[2] = e.target.value;
 
-    console.log([scope, entryType, searchType]);
+    // Filter Targets based on current Context
+    let filteredTargets = targetMatrix[searchType];
+    if (filteredTargets.length) {
+      if (newChosenDomains[0] == 'Node')
+        filteredTargets = filteredTargets.slice(1);
+      // Can't query Namespaces in Node
+      else if (newChosenDomains[0] == 'Deployment') {
+        filteredTargets = filteredTargets.slice(2); //Can't q NS/Node in Depl
+      }
+    }
+
     // Update state values
     setTypes([scope, entryType, searchType]);
     setDomains([
       contextMatrix[searchType],
       ['Pithy-Depl', 'Kube-QL', '192.168.9.99', 'Prom-Prom-Prom-Prom'],
-      targetMatrix[searchType],
+      filteredTargets,
     ]);
     setChosenDomains(newChosenDomains);
   };
@@ -167,7 +222,7 @@ const AddMetric = (props): any => {
     let str = 'Query Summary: A ';
 
     if (types[1] == 'entry-precon') str += 'preconfigured, ';
-    else str += 'Custom, ';
+    else str += 'custom, ';
 
     if (types[0] == ScopeType.Range) str += 'time-range query ';
     else str += 'instant query ';
@@ -188,13 +243,6 @@ const AddMetric = (props): any => {
         : '<your query>';
       str += 'for ' + customQuery;
     }
-
-    // Examples
-    // Query Summary: A preconfigured, time-range query for CPU Usage, showing _target_ throughout the ___ namespace, over the last _time_.
-
-    // Query Summary: A preconfigured, time-range query for CPU Usage over the last _time_.
-
-    // Query Summary: A preconfigured, time-range query for CPU Usage, throughout the ___ namespace, over the last _time_.
 
     // Branch over time-range
     if (types[0] == ScopeType.Range) {
@@ -405,8 +453,8 @@ const AddMetric = (props): any => {
               <input
                 id="new-metric-refresh"
                 value={fields.refresh}
-                placeholder="2 mins"
-                onChange={(e) => textChanged(e, 'step')}
+                placeholder="60 secs"
+                onChange={(e) => textChanged(e, 'refresh')}
               ></input>
             </div>
           )}
@@ -430,13 +478,16 @@ const AddMetric = (props): any => {
             <h4 className="new-metric-status-message">{messageText}</h4>
           </div>
           <div className="new-metric-preview-image">
-            <h3>Preview Query</h3>
-            {/* {metricData.hasOwnProperty('labels') && <Line data={metricData} />} */}
+            <h3>Query Preview</h3>
+            {metricData.hasOwnProperty('labels') && (
+              <MetricDisplayPreview metricData={metricData} />
+            )}
           </div>
         </div>
       </div>
       <div className="summary-container">
         <p>{querySummary}</p>
+        <p>{queryPromQL}</p>
       </div>
       <div className="new-metric-buttons">
         <button className="btn" onClick={saveMetric}>
@@ -521,12 +572,12 @@ const contextMatrix = [
 
 const targetMatrix = [
   [],
-  ['Namespaces', 'Deployments', 'Containers'],
+  ['Namespaces', 'Nodes', 'Deployments', 'Containers'],
   [],
   [],
   [],
   [],
-  ['Namespaces', 'Deployments', 'Containers'],
+  ['Namespaces', 'Nodes', 'Deployments', 'Containers'],
   [],
   [],
   [],

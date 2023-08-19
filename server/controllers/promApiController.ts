@@ -22,10 +22,7 @@ const promURLRange = promURL + 'query_range?query=';
 const promURLAlerts = promURL + 'alerts';
 
 const promApiController: any = {
-  // build the query to send to the prometheus http api
-  queryBuilder: (req: Request, res: Response, next: NextFunction) => {
-    // TODO: REQS SHOULD BE COMING IN ON BODY NOW
-
+  metricQueryLookup: (req: Request, res: Response, next: NextFunction) => {
     // Fetch userData
     const userData = readUserData();
     if (!userData) {
@@ -35,9 +32,37 @@ const promApiController: any = {
         message: { err: 'Error retreiving user data.' },
       });
     }
+    res.locals.userData = userData;
 
-    // retrieve metricId from request query parameter
     const metricId = req.params.id;
+    res.locals.searchQuery = userData.metrics[metricId].searchQuery;
+    res.locals.queryOptions = userData.metrics[metricId].queryOptions;
+    next();
+  },
+
+  queryBaseBuilder: (req: Request, res: Response, next: NextFunction) => {
+    // Fetch userData
+    const userData = readUserData();
+    if (!userData) {
+      next({
+        log: `Reading User Data failed in promApiController.getRangeMetrics.`,
+        status: 500,
+        message: { err: 'Error retreiving user data.' },
+      });
+    }
+    res.locals.userData = userData;
+
+    console.log('In query base builder with req.body', req.body);
+    res.locals.searchQuery = 'sum by (namespace) (kube_pod_info)';
+    res.locals.queryOptions = { duration: 24 * 60 * 60, stepSize: 60 * 20 };
+    next();
+  },
+
+  // build the query to send to the prometheus http api
+  queryBuilder: (req: Request, res: Response, next: NextFunction) => {
+    // TODO: REQS SHOULD BE COMING IN ON BODY NOW
+    // const query = res.locals.searchQuery;
+    // const options = res.locals.queryOptions;
 
     // prometheus http api url's to query
     const promURL = 'http://localhost:9090/api/v1/';
@@ -46,46 +71,38 @@ const promApiController: any = {
     // TODO: update alerts url if needed
     const promURLAlerts = promURL + 'alerts';
 
-    // prometheues query string components
-    // TODO: IS QUERY PRECONFIGURED OR CUSTOM:
-    const query = userData.metrics[metricId].searchQuery;
-    const options = userData.metrics[metricId].queryOptions;
-
-
-    // TODO: IF INSTANT QUERY:
-    // res.locals.promQuery = promURLInstant + query;
 
     // TODO: IF RANGE QUERY:
     const end = Math.floor(Date.now() / 1000); // current date and time
     const endQuery = `&end=${end}`;
-    const duration = options.hasOwnProperty('duration')
-      ? options.duration
-      : 24 * 60 * 60; // default 24h
+    const duration = res.locals.queryOptions.duration;
     const start = end - duration;
     const startQuery = `&start=${start}`;
-    const stepSize = options.hasOwnProperty('stepSize')
-      ? options.stepSize
-      : 20 * 60; // default 20 min
+    const stepSize = res.locals.queryOptions.stepSize;
     const stepQuery = `&step=${stepSize}s`; // data interval
 
-    res.locals.userData = userData;
-    res.locals.queryOptions = options;
     res.locals.promQuery =
-      promURLRange + query + startQuery + endQuery + stepQuery;
+      promURLRange + res.locals.searchQuery + startQuery + endQuery + stepQuery;
 
+    console.log('Query: ', res.locals.promQuery);
     return next();
     // TODO: add error handler
   },
 
   // get request querying prometheus http api that exists as an instance in kubernetes
   getMetrics: async (req: Request, res: Response, next: NextFunction) => {
-    // retrieve metricId from request query parameter
-    const metricId = req.params.id;
+    console.log('Get Metrics with res.locals', res.locals);
     // Read placeholder data instead of fetching- if the cluster is not currently running on AWS
     // Placeholder Data for Offline Development
     if (!ACTIVE_DEPLOYMENT) {
+      // retrieve metricId from request query parameter
+      const metricId = req.params.id;
       console.log('Supplying Placeholder data for metricId ', metricId);
-      const placeholderFetch = placeholderData(metricId, res.locals.userData, res.locals.queryOptions);
+      const placeholderFetch = placeholderData(
+        metricId,
+        res.locals.userData,
+        res.locals.queryOptions
+      );
       // console.log('Local data for metric ', metricId, ':\n', placeholderFetch);
       res.locals.promMetrics = placeholderFetch;
       return next();
@@ -150,8 +167,11 @@ const promApiController: any = {
             });
           }
           // populate the y-axis object with the scraped metrics
-          // yAxis.label = obj.metric.toString();
-          yAxis.label = namePlot(obj, res.locals.userData.metrics[metricId].lookupType);
+          yAxis.label = obj.metric.toString();
+          // yAxis.label = namePlot(
+          //   obj,
+          //   res.locals.userData.metrics[metricId].lookupType
+          // );
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));
           });
