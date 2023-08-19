@@ -12,6 +12,9 @@ $highlight-dark: rgb(33, 81, 155);
 $highlight-light: rgba(97, 145, 215, 0.7);
 $highlight-bright: rgba(143, 166, 200, 0.9);
 
+* {
+  font-family: 'Ubuntu', sans-serif;
+}
 #root {
   max-width: 100%;
   margin: 0 auto;
@@ -118,44 +121,67 @@ header nav {
 .status-bar {
   display: flex;
   flex-direction: column;
-  padding-left: 10px;
-  padding-right: 15px;
-  display: flex;
+  align-items: flex-start;
+  // justify-content: flex-start;
+  padding-left: 10%;
+  padding-right: 10%;
   width: auto;
-  border: 2px solid rgb(0, 139, 139, 0.4);
+  border: 2px solid rgba(0, 44, 139, 0.4);
   border-radius: 8px;
   height: 3.5rem;
   margin: auto;
-  background-color: #008a8a33;
+  background-color: #2f72cf33;
   margin-bottom: 1rem;
   overflow-y: hidden;
   transition: height 0.3s;
 }
+#critical,
+#warning,
+#hidden {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.status-bar #mouseNotOver {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
 
-#alertTitle {
+#alertTitle,
+#mouseNotOver {
   color: rgb(219, 28, 28);
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
 }
+
+#mouseNotOver {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+}
+
 #noAlertTitle {
-  color: green;
+  color: rgb(145, 143, 143);
 }
 
 .status-bar:hover {
-  background-color: rgba(0, 139, 139, 0.356);
-  height: 10rem;
+  background-color: #2f72cf4f;
   overflow-y: auto;
+  height: 10rem;
   cursor: pointer;
 }
 .critical {
-  color: red;
-}
-
-.warning {
   color: rgb(131, 17, 17);
 }
 
-.hidden {
-  color: grey;
+.warning {
+  color: rgb(238, 92, 70);
+}
+
+#hidden {
+  color: rgb(145, 143, 143);
 }
 
 .status-bar:active {
@@ -381,6 +407,36 @@ header nav {
   -webkit-user-select: none;
   vertical-align: middle;
 }
+.btn-small {
+  align-self: center;
+  background-color: $highlight;
+  border: 0;
+  border-radius: 100px;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  justify-content: center;
+  line-height: 20px;
+  margin: 10px;
+  padding-top: 2px;
+  width: 50px;
+  height: 25px;
+  overflow: hidden;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: center;
+  touch-action: manipulation;
+  transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
+    box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
+    color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+}
 
 .btn:hover {
   background-color: $highlight-dark;
@@ -390,8 +446,16 @@ header nav {
 //   background-color: $highlight-dark;
 //   color: #ffffff;
 // }
+.btn-small:hover {
+  background-color: $highlight-dark;
+  color: #ffffff;
+}
 
 .btn:active {
+  background: $highlight-dark;
+  color: rgb(255, 255, 255, 0.7);
+}
+.btn-small:active {
   background: $highlight-dark;
   color: rgb(255, 255, 255, 0.7);
 }
@@ -599,4 +663,3 @@ h5 {
 .panel fieldset.selected{
   background: rgb(173, 216, 230, 0.7);
   width: 100%;
-}
