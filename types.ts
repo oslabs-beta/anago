@@ -93,6 +93,17 @@ export interface Cluster {
   deployments: Deployment[];
 }
 
+export interface CleanAlert{
+  name: string,
+  description: string,
+  summary: string,
+  severity: string,
+  affectedPod?: string | undefined,
+  affectedNamespace?: string | undefined,
+  startTime: string,
+  lastUpdated: string,
+}
+
 export enum LookupType {
   CustomEntry, //0
   CPUIdleByCluster, //1

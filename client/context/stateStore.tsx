@@ -17,6 +17,7 @@ export default ({ children }: Props) => {
   const [selectedStates, setSelectedStates] = useState({})
   //manages currently displayed alerts
   const [displayedAlerts, setDisplayedAlerts] = useState<Object>([]);
+  
 
   const States = {
     currentDashboard: currentDashboard,
