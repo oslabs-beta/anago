@@ -9,7 +9,6 @@ import {
   useLocation,
 } from 'react-router-dom';
 import AddMetric from './AddMetric';
-import React from 'react';
 
 const Dashboard = () => {
   const userData = useRouteLoaderData('home') as UserData;

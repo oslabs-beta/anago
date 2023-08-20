@@ -2,29 +2,26 @@ import Deployments from './Deployments';
 import Pods from './Pods';
 import Services from './Services';
 import { useRouteLoaderData } from 'react-router-dom';
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import { cleanTime } from '../../context/functions';
 import { StoreContext } from '../../context/stateStore';
 import { Pod, Service, Deployment } from '../../../types';
-import React from 'react';
 
 const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   const clusterData: any = useRouteLoaderData('cluster');
-  const [open, setOpen]: any = useState(false);
   const { selectedStates, displayedAlerts }: any = useContext(StoreContext);
   const pods: Pod[] = clusterData.pods;
   const services: Service[] = clusterData.services;
   const deployments: Deployment[] = clusterData.deployments;
 
-  const openModal = () => setOpen(true);
-  const closeModal = () => setOpen(false);
+  //console.log('displayed alerts in namespaces', displayedAlerts);
 
-  console.log('displayed alerts in namespaces', displayedAlerts);
-
+  //determine the number of namespaces selected in the dropdown menu by filtering the selectedStates stateful array
   const numNamespaces = Object.keys(selectedStates).filter(
     item => item.charAt(0) !== 'i' && selectedStates[item] === true,
   ).length;
 
+  //if the number of namespaces selected is zero (default, every namespace is displayed, or if the current namespace name is selected, render the namespace and its child components, or else render null)
   return numNamespaces === 0 || selectedStates[name] ? (
     <div id={id} className='namespace' key={id}>
       <img

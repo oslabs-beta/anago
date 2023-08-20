@@ -3,7 +3,7 @@ import { useState } from 'react';
 import React from 'react';
 
 const ControlPlane = () => {
-  const [open, setOpen]: any = useState(false);
+  const [open, setOpen] = useState(false);
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
   return (

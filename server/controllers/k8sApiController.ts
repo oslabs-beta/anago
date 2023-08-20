@@ -18,16 +18,6 @@ const k8sApi2 = kc.makeApiClient(k8s.AppsV1Api);
 
 const k8sController: any = {};
 
-// k8sController.getControlPlane = async ( _req: Request,
-//   res: Response,
-//   next: NextFunction,) => {
-// try {
-//   const data: any = await k8sApi.
-// } catch (error) {
-//   console.log(error)
-// }
-// }
-
 k8sController.getNodes = async (
   _req: Request,
   res: Response,
@@ -130,7 +120,6 @@ k8sController.getServices = async (
 ) => {
   try {
     const data: any = await k8sApi.listServiceForAllNamespaces();
-
     const services: Service[] = data.body.items.map(data => {
       const { name, namespace, uid, creationTimestamp, labels } = data.metadata;
       const { ports, clusterIP } = data.spec;

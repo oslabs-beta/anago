@@ -1,7 +1,6 @@
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
 import { cleanName } from '../../context/functions';
-import React from 'react';
 
 const Pods = ({
   conditions,
@@ -19,10 +18,10 @@ const Pods = ({
 }) => {
   const [open, setOpen]: any = useState(false);
 
+  //modal handler functions
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
-  console.log('container statuses', containerStatuses);
 
   return (
     <div className='pod' id={id} key={id}>
@@ -79,7 +78,6 @@ const Pods = ({
                   {conditions.map(condition => {
                     return (
                       <th key={condition.type}>
-                        {' '}
                         {`${condition.type} Status: ${condition.status}`}
                       </th>
                     );

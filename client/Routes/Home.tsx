@@ -7,12 +7,10 @@ import {
 import { UserData } from '../../types';
 import { useContext, useEffect } from 'react';
 import { StoreContext } from '../context/stateStore';
-import React from 'react';
 import logo from '../assets/images/anago.png';
 import AlertBar from '../Components/AlertBar';
 
 export default function Home() {
-  //import data from loader
   const userData = useRouteLoaderData('home') as UserData;
   const navigate = useNavigate();
   const { setHasFetchedUserData, setCurrentDashboard }: any =
@@ -42,11 +40,11 @@ export default function Home() {
           <NavLink to={'/'} className='nav-btn'>
             Dashboards
           </NavLink>
-          {/* <NavLink to={'/settings'} className='nav-btn'>
-            Settings
-          </NavLink> */}
           <NavLink to={'/clusterview'} className='nav-btn'>
             Cluster View
+          </NavLink>
+          <NavLink to={'/setup'} className='nav-btn'>
+            Getting Started
           </NavLink>
           {/* <NavLink to={'/login'} className='nav-btn'>
             Log Out
