@@ -17,29 +17,40 @@ import { promResResultElements } from '../../types';
 
 // table:
 // [hpa name, status target, desired target, min pods, max pods, replicas ]
-type row = {
-  name: string;
-  statusTarget: number;
-  desiredTarget: number;
-  minPods: number;
-  maxPods: number;
-  currReplicas: number;
-  desiredReplicas: number;
-};
 
 const Row = (props: { hpa: string; row: string | number[] }) => {
   const { hpa, row } = props;
   const [open, setOpen] = React.useState(false);
+
+  const getHPAUtilization = async () => {
+    fetch(`/api/data/metrics/74a9ac72-1bd8-4eb6-9b77-570cc0876147`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        duration: 'instant',
+      }),
+    })
+      .then(data => {
+        data.json();
+      })
+      .then(data => console.log(data))
+      .catch(err => console.log(err));
+  };
+
+  useEffect(() => {
+    getHPAUtilization();
+  }, []);
+
   return (
     <>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell>
-          {/* <IconButton
-              aria-label='expand row'
-              size='small'
-              onClick={() => setOpen(!open)}>
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton> */}
+          <IconButton
+            aria-label='expand row'
+            size='small'
+            onClick={() => setOpen(!open)}>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
         </TableCell>
         {/* <TableCell component='th' scope='row'>
           {row.name}
@@ -57,13 +68,13 @@ const Row = (props: { hpa: string; row: string | number[] }) => {
           <Collapse in={open} timeout='auto' unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant='h6' gutterBottom component='div'>
-                HPA Utlization
+                {`HPA Utlization >= 80%`}
               </Typography>
               <Table size='small' aria-label='purchases'>
                 <TableHead>
                   <TableRow>
                     <TableCell>Timestamp</TableCell>
-                    <TableCell>Percent Utilization</TableCell>
+                    <TableCell>Utilization %</TableCell>
                     {/* <TableCell align='right'>Amount</TableCell>
                       <TableCell align='right'>Total price ($)</TableCell> */}
                   </TableRow>

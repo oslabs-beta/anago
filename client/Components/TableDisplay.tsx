@@ -69,10 +69,10 @@ const TableDisplay = ({ tableData }) => {
       column += 1;
     }
   };
-
-  useEffect(() => {
-    filterTableData();
-  }, []);
+  // ! WHAT IS HAPPENING - data stream is being sent back from the server with a status of 200. json parse it, then it says undefined?
+  // useEffect(() => {
+  //   filterTableData();
+  // }, []);
 
   // TODO GET METRICS FOR HPA UTILIZATION (final element in array) and display when click the down arrow on table
 
@@ -84,8 +84,8 @@ const TableDisplay = ({ tableData }) => {
             <TableRow>
               <TableCell />
               <TableCell>HPA</TableCell>
-              <TableCell align='right'>Target Status</TableCell>
-              <TableCell align='right'>Target Spec</TableCell>
+              <TableCell align='right'>Target Status %</TableCell>
+              <TableCell align='right'>Target Spec %</TableCell>
               <TableCell align='right'>Min Pods</TableCell>
               <TableCell align='right'>Max Pods</TableCell>
               <TableCell align='right'>Current Replicas</TableCell>
@@ -96,6 +96,7 @@ const TableDisplay = ({ tableData }) => {
             {/* {Object.keys(rows).forEach(hpa => {
               <Row key={hpa} hpa={hpa} row={rows[hpa]} />;
             })} */}
+            <Row key={'hpa'} hpa={'hpa'} row={[1, 2, 3, 4, 5, 6]} />
           </TableBody>
         </Table>
       </TableContainer>

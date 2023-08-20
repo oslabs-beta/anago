@@ -71,7 +71,8 @@ const HPADisplay = () => {
             setTableData(tableOrder);
             count += 1;
             setFetchCount(count);
-          });
+          })
+          .catch(err => console.log('err', err));
       });
     } catch (err) {
       console.log(err);
