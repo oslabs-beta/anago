@@ -8,12 +8,12 @@ import {
 //import routes
 import Home from './Home';
 import Login from './Login';
-import Settings from './Settings';
+import Settings from './SetUp';
 import Dashboard from '../Components/Dashboard';
 import ClusterView from './ClusterView';
 
 //import loaders
-import * as loaders from '../Loaders';
+import * as loaders from '../loaders';
 import React from 'react';
 
 //create router to pass into router provider component returned from app. createBrowserRouter recommended for all latest React Router web projects.
