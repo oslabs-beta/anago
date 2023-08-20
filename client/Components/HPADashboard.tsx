@@ -28,6 +28,7 @@ ChartJS.register(
 
 const HPADisplay = () => {
   const [tableData, setTableData]: any = useState(new Map());
+  const [fetchCount, setFetchCount] = useState(0);
 
   const userData = useRouteLoaderData('home') as UserData;
   const metricIds: string[] = Object.keys(userData.metrics).slice(7);
@@ -48,7 +49,7 @@ const HPADisplay = () => {
     console.log('getTableData');
     // perserve the order of the metric results after fetching
     const tableOrder = tableData;
-    // let count = 0;
+    let count = 0;
     try {
       table.forEach(async id => {
         tableOrder.set(id, null);
@@ -62,11 +63,14 @@ const HPADisplay = () => {
         })
           .then(data => {
             data.json();
+            console.log(data);
           })
           .then(data => {
+            console.log('data', data);
             tableOrder.set(id, data);
             setTableData(tableOrder);
-            // setFetchCount(++count);
+            count += 1;
+            setFetchCount(count);
           });
       });
     } catch (err) {
@@ -80,7 +84,7 @@ const HPADisplay = () => {
 
   return (
     <div>
-      <TableDisplay tableData={tableData} />
+      {fetchCount === 7 && <TableDisplay tableData={tableData} />}
       {/* log component */}
       {/* double line graph component */}
       {/* reccomendations */}

@@ -23,9 +23,7 @@ dataRouter.post(
   promApiController.queryBuilder,
   promApiController.getMetrics,
   async (_req: Request, res: Response) => {
-    // make some data fetch
-    // console.log(_req.body);
-
+    console.log('dataRouter response:', res.locals.promMetrics);
     return res.status(200).json(res.locals.promMetrics);
   },
 );

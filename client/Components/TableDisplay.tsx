@@ -14,6 +14,7 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { promResResultElements } from '../../types';
+import Row from './TableRow';
 
 const TableDisplay = ({ tableData }) => {
   // const [tableData, setTableData]: any = useState(new Map());
@@ -50,55 +51,56 @@ const TableDisplay = ({ tableData }) => {
   };
   */
 
+  const rows: {} = {};
   const filterTableData = () => {
-    const rows: {} = {};
+    // initialize object to store hpa's as keys and all associated metrics as values to eliminate potential errors due to lack of order preservation
     const tableIterator = tableData.values();
-    try {
-      console.log('iterator', tableIterator);
-
-      // initialize a row for each active hpa
+    console.log('iterator', tableIterator);
+    // initialize a key for each active hpa, representing a row in the table
+    tableIterator.next().value.forEach(metricObj => {
+      rows[metricObj.metric.horizontalpodautoscaler] = [];
+    });
+    // filter metrics into specific hpa row and associated table columns
+    let column = 1;
+    while (column < 7) {
       tableIterator.next().value.forEach(metricObj => {
-        rows[metricObj.metric.horizontalpodautoscaler] = [];
+        rows[metricObj.metric.horizontalpodautoscaler].push(metricObj.value[1]);
       });
-      // filter metrics into specific hpa row and associated table columns
-      let column = 1;
-      while (column < 7) {
-        tableIterator.next().value.forEach(metricObj => {
-          rows[metricObj.metric.horizontalpodautoscaler].push(
-            metricObj.value[1],
-          );
-        });
-        column += 1;
-      }
-
-      console.log('rows', rows);
-    } catch (err) {
-      console.log(err);
+      column += 1;
     }
   };
-  /*
-  //  retrieve hpa table data on mount
-  useEffect(() => {
-    getTableData();
-  }, []);
-  */
-  /*
-  // filter and shape the metrics to be put in a table only after they have all been received
-  useEffect(() => {
-    if (fetchCount === 7) return filterTableData();
-  }, [fetchCount]);
-  */
+
   useEffect(() => {
     filterTableData();
   }, []);
-  // metadata to retrieve all active HPAs. Filter them out by name
-  // const metaData = tableData[0];
 
   // TODO GET METRICS FOR HPA UTILIZATION (final element in array) and display when click the down arrow on table
 
-  // table:
-  // [hpa name, status target, desired target, min pods, max pods, replicas ]
-  return <div>hi</div>;
+  return (
+    <div>
+      <TableContainer component={Paper}>
+        <Table aria-label='collapsible table'>
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell>HPA</TableCell>
+              <TableCell align='right'>Target Status</TableCell>
+              <TableCell align='right'>Target Spec</TableCell>
+              <TableCell align='right'>Min Pods</TableCell>
+              <TableCell align='right'>Max Pods</TableCell>
+              <TableCell align='right'>Current Replicas</TableCell>
+              <TableCell align='right'>Desired Replicas</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {/* {Object.keys(rows).forEach(hpa => {
+              <Row key={hpa} hpa={hpa} row={rows[hpa]} />;
+            })} */}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+  );
 };
 
 export default TableDisplay;
