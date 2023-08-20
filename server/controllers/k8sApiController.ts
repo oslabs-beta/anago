@@ -15,7 +15,18 @@ kc.loadFromDefault();
 const k8sApi = kc.makeApiClient(k8s.CoreV1Api);
 const k8sApi2 = kc.makeApiClient(k8s.AppsV1Api);
 
+
 const k8sController: any = {};
+
+// k8sController.getControlPlane = async ( _req: Request,
+//   res: Response,
+//   next: NextFunction,) => {
+// try {
+//   const data: any = await k8sApi.
+// } catch (error) {
+//   console.log(error)
+// }
+// }
 
 k8sController.getNodes = async (
   _req: Request,

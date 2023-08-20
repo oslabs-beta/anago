@@ -17,8 +17,8 @@ const ControlPlane = () => {
 
       <div className='modal'>
         <Modal open={open} onClose={closeModal}>
-          <div>
-            <p>information about your AWS Cluster/Host</p>
+          <div className='modal-content'>
+            <p>Your Cluster is hosted on Amazon Web Services' Elastic Kubernetes Service (EKS)</p>
           </div>
         </Modal>
       </div>

@@ -120,7 +120,7 @@ const AlertBar = () => {
 
   // onclick to hide alerts
   async function handleHide(id: string) {
-    setHidden((prev) => [...prev, id]);
+    setHidden(prev => [...prev, id]);
     try {
       // send request to backend
       const response = await fetch(`/api/user/hiddenAlert`, {
@@ -160,9 +160,6 @@ const AlertBar = () => {
     }
   }
 
-
-
-
   return (
     <div
       className="status-bar"
@@ -172,10 +169,10 @@ const AlertBar = () => {
       {/* if data was fetched and there are errors and mouse is over*/}
       {fetched && !noErrors && mouseOver && (
         <div>
-          <h3 id="alertTitle">
+          <h3 id='alertTitle'>
             <strong>ALERTS:</strong>
           </h3>
-          {['critical', 'warning'].map((severity) => (
+          {['critical', 'warning'].map(severity => (
             <div id={severity} key={severity}>
               {[...displayedAlerts].map(
                 (alertObj) =>
@@ -198,7 +195,7 @@ const AlertBar = () => {
                         hide
                       </button>
                     </p>
-                  )
+                  ),
               )}
             </div>
           ))}
@@ -208,9 +205,9 @@ const AlertBar = () => {
                 <div id="hidden" key={`${severity}+H`}>
                   {[...hidden].map((hiddenId) => {
                     const alertObj = alerts.find(
-                      (alertObj) =>
+                      alertObj =>
                         alertObj.startsAt === hiddenId &&
-                        alertObj.labels.severity === severity
+                        alertObj.labels.severity === severity,
                     );
                     return (
                       alertObj && (
@@ -246,7 +243,7 @@ const AlertBar = () => {
       )}
       {/* if data was fetched AND there are no errors */}
       {noErrors && fetched && (
-        <h3 id="noAlertTitle">Currently, you have no active alerts!</h3>
+        <h3 id='noAlertTitle'>Currently, you have no active alerts!</h3>
       )}
     </div>
   );

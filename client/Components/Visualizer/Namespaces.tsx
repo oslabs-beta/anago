@@ -11,13 +11,16 @@ import React from 'react';
 const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   const clusterData: any = useRouteLoaderData('cluster');
   const [open, setOpen]: any = useState(false);
-  const { selectedStates }: any = useContext(StoreContext);
+  const { selectedStates, displayedAlerts }: any = useContext(StoreContext);
   const pods: Pod[] = clusterData.pods;
   const services: Service[] = clusterData.services;
   const deployments: Deployment[] = clusterData.deployments;
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
+
+
+  console.log('displayed alerts in namespaces', displayedAlerts);
 
   const numNamespaces = Object.keys(selectedStates).filter(
     item => item.charAt(0) !== 'i' && selectedStates[item] === true,
