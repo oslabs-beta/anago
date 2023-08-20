@@ -3,7 +3,7 @@ import { useRouteLoaderData } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import { useContext, useState } from 'react';
 import React from 'react';
-import { StoreContext } from '../../stateStore';
+import { StoreContext } from '../../context/stateStore';
 
 const Nodes = ({
   name,
@@ -21,7 +21,6 @@ const Nodes = ({
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
-
 
   const numNodes = Object.keys(selectedStates).filter(
     item => item.charAt(0) === 'i' && selectedStates[item] === true,

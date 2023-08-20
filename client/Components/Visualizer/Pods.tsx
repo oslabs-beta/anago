@@ -1,6 +1,6 @@
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
-import { cleanName } from '../../functions';
+import { cleanName } from '../../context/functions';
 import React from 'react';
 
 const Pods = ({
@@ -110,31 +110,31 @@ const Pods = ({
             {containers.map(container => {
               return (
                 <div key={container.name + id}>
-                    <div className='info-item'>
-                      <h3>Container Name:</h3>
-                      <p>{container.name}</p>
-                    </div>
+                  <div className='info-item'>
+                    <h3>Container Name:</h3>
+                    <p>{container.name}</p>
+                  </div>
 
-                    {containerStatuses.map(status => {
-                      if (status.name === container.name) {
-                        return (
-                          <div key={status.id}>
-                            <div className='info-item'>
-                              <h3>Image:</h3>
-                              <p>{status.image}</p>
-                            </div>
-                            <div className='info-item'>
-                              <h3>Status:</h3>
-                              <p>{Object.keys(status.state)}</p>
-                            </div>
-                            <div className='info-item'>
-                              <h3>Restart Count:</h3>
-                              <p>{status.restartCount}</p>
-                            </div>
+                  {containerStatuses.map(status => {
+                    if (status.name === container.name) {
+                      return (
+                        <div key={status.id}>
+                          <div className='info-item'>
+                            <h3>Image:</h3>
+                            <p>{status.image}</p>
                           </div>
-                        );
-                      }
-                    })}
+                          <div className='info-item'>
+                            <h3>Status:</h3>
+                            <p>{Object.keys(status.state)}</p>
+                          </div>
+                          <div className='info-item'>
+                            <h3>Restart Count:</h3>
+                            <p>{status.restartCount}</p>
+                          </div>
+                        </div>
+                      );
+                    }
+                  })}
 
                   <div className='info-item'>
                     <table>
@@ -166,22 +166,22 @@ const Pods = ({
                     </table>
                   </div>
                   <div className='info-item'>
-                  <table>
-                    <h3>Volume Mounts:</h3>
-                    <tr className='column-name'>
-                      <th>Name:</th>
-                      <th>Path:</th>
-                    </tr>
-                    {container.volumeMounts.map(element => {
-                      return (
-                        <tr className='table-row' key={element.name + id}>
-                          <td>{element.name}</td>
-                          <td>{element.mountPath}</td>
-                        </tr>
-                      );
-                    })}
-                  </table>
-                      </div>
+                    <table>
+                      <h3>Volume Mounts:</h3>
+                      <tr className='column-name'>
+                        <th>Name:</th>
+                        <th>Path:</th>
+                      </tr>
+                      {container.volumeMounts.map(element => {
+                        return (
+                          <tr className='table-row' key={element.name + id}>
+                            <td>{element.name}</td>
+                            <td>{element.mountPath}</td>
+                          </tr>
+                        );
+                      })}
+                    </table>
+                  </div>
                 </div>
               );
             })}

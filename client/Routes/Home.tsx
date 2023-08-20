@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import { UserData } from '../../types';
 import { useContext, useEffect } from 'react';
-import { StoreContext } from '../stateStore';
+import { StoreContext } from '../context/stateStore';
 import React from 'react';
 import logo from '../assets/images/anago.png';
 import AlertBar from '../Components/AlertBar';
@@ -28,11 +28,15 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="home-layout">
+    <div className='home-layout'>
       <header>
-        <span className="logo-container">
-          <img src={'client/assets/images/anago.png'} alt="logo" className="logo-image" />
-          <h3 className="app-title">Anago</h3>
+        <span className='logo-container'>
+          <img
+            src={'client/assets/images/anago.png'}
+            alt='logo'
+            className='logo-image'
+          />
+          <h3 className='app-title'>Anago</h3>
         </span>
         <nav>
           <NavLink to={'/'} className='nav-btn'>
@@ -40,7 +44,7 @@ export default function Home() {
           </NavLink>
           {/* <NavLink to={'/settings'} className='nav-btn'>
             Settings
-          </NavLink> */} 
+          </NavLink> */}
           <NavLink to={'/clusterview'} className='nav-btn'>
             Cluster View
           </NavLink>
@@ -50,8 +54,8 @@ export default function Home() {
         </nav>
       </header>
 
-      <div className="main-body">
-      <AlertBar />
+      <div className='main-body'>
+        <AlertBar />
         <Outlet />
       </div>
     </div>

@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useRouteLoaderData } from 'react-router-dom';
-import { StoreContext } from '../../stateStore';
-
+import { StoreContext } from '../../context/stateStore';
 
 export function Dropdown() {
   const [isDropdownDisplayed, setIsDropdownDisplayed] = useState(false);
@@ -62,7 +61,6 @@ export function Dropdown() {
       document.removeEventListener('click', onClick);
     };
   }, []);
-
 
   console.log('selectedStates', selectedStates);
   return (

@@ -3,8 +3,8 @@ import Pods from './Pods';
 import Services from './Services';
 import { useRouteLoaderData } from 'react-router-dom';
 import { useState, useContext } from 'react';
-import { cleanTime } from '../../functions';
-import { StoreContext } from '../../stateStore';
+import { cleanTime } from '../../context/functions';
+import { StoreContext } from '../../context/stateStore';
 import { Pod, Service, Deployment } from '../../../types';
 import React from 'react';
 
@@ -19,17 +19,13 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
-
   console.log('displayed alerts in namespaces', displayedAlerts);
 
   const numNamespaces = Object.keys(selectedStates).filter(
     item => item.charAt(0) !== 'i' && selectedStates[item] === true,
   ).length;
 
-
-  return (
-    numNamespaces === 0 || selectedStates[name] ? 
-     (
+  return numNamespaces === 0 || selectedStates[name] ? (
     <div id={id} className='namespace' key={id}>
       <img
         className='k8logo'
@@ -40,7 +36,10 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
       <div className='ns-inner-border'>
         <div className='namespace-info'>
           <h3>{`${name[0].toUpperCase().concat(name.slice(1))}`} </h3>
-          <h3 style={phase === 'Active' ? {color: 'green'} : {color: 'red'}}>Status: {phase}</h3>
+          <h3
+            style={phase === 'Active' ? { color: 'green' } : { color: 'red' }}>
+            Status: {phase}
+          </h3>
           <h4>{'Created: ' + cleanTime(creationTimestamp)}</h4>
         </div>
 
@@ -103,7 +102,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
         </div>
       </div>
     </div>
-  ): null);
+  ) : null;
 };
 
 export default Namespaces;

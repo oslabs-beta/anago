@@ -1,6 +1,6 @@
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
-import { cleanName } from '../../functions';
+import { cleanName } from '../../context/functions';
 import React from 'react';
 
 const Deployments = ({
@@ -61,11 +61,19 @@ const Deployments = ({
               <p>{namespace}</p>
             </div>
             {deploymentLabels.map(label => {
-              if (label === 'app' || label === 'k8s-app' || label === 'app.kubernetes.io/name') {
+              if (
+                label === 'app' ||
+                label === 'k8s-app' ||
+                label === 'app.kubernetes.io/name'
+              ) {
                 return (
                   <div key={id} className='info-item'>
                     <h3>App:</h3>
-                    <p>{labels['app'] || labels['k8s-app'] || labels['app.kubernetes.io/name']}</p>
+                    <p>
+                      {labels['app'] ||
+                        labels['k8s-app'] ||
+                        labels['app.kubernetes.io/name']}
+                    </p>
                   </div>
                 );
               }

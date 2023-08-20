@@ -1,6 +1,6 @@
 import { Modal } from 'react-responsive-modal';
 import { useState } from 'react';
-import { cleanName } from '../../functions.ts';
+import { cleanName } from '../../context/functions.ts';
 import React from 'react';
 
 const Services = ({

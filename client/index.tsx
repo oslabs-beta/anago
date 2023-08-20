@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './Routes/App';
-import StoreProvider from './stateStore';
+import App from './App';
+import StoreProvider from './context/stateStore';
 import './style.scss';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -9,5 +9,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <StoreProvider>
       <App />
     </StoreProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
