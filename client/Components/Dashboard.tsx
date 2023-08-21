@@ -18,7 +18,7 @@ const Dashboard = () => {
   const [lastUpdate, setLastUpdate] = useState<Date>();
   const [addMetricModal, setAddMetricModal] = useState(false);
   //edit mode
-  const [editMode, setEditMode] = useState<Boolean>(true);
+  const [editMode, setEditMode] = useState<Boolean>(false);
 
   useEffect(() => {
     setLastUpdate(new Date());
@@ -64,6 +64,20 @@ const Dashboard = () => {
                 Add Metric
               </button>
             </span>
+            {!editMode && (
+              <span>
+                <button className="btn" onClick={() => setEditMode(true)}>
+                  Edit Metrics
+                </button>
+              </span>
+            )}
+            {editMode && (
+              <span>
+                <button className="btn" onClick={() => setEditMode(false)}>
+                  Save Metrics
+                </button>
+              </span>
+            )}
           </div>
           <div className="dashboard-container">
             {metricIds.map((metricId) => (

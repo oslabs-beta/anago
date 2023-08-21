@@ -116,7 +116,7 @@ const MetricDisplay = ({ metricId, editMode }) => {
             <img
               id="trash-can"
               src="client/assets/images/trash-can.png"
-              onClick={deleteMetric}
+              onClick= {() => deleteMetric}
               height="22px"
               width="20px"
             />
