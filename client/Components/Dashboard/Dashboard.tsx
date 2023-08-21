@@ -16,6 +16,8 @@ const Dashboard = () => {
 
   const [lastUpdate, setLastUpdate] = useState<Date>();
   const [addMetricModal, setAddMetricModal] = useState(false);
+  //edit mode
+  const [editMode, setEditMode] = useState<Boolean>(false);
 
   useEffect(() => {
     setLastUpdate(new Date());
@@ -27,8 +29,8 @@ const Dashboard = () => {
     console.log('fetch pithy');
     try {
       fetch('/api/pithy')
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           setTimeout(() => pithy(), 100000);
         });
     } catch {
@@ -36,35 +38,59 @@ const Dashboard = () => {
     }
   };
 
+  function saveMetricsAndReload() {
+    setEditMode(false);
+    window.location.reload();
+    return;
+  }
+
   const metricIds = Object.keys(userData.metrics);
 
   return (
-    <div className='dashboard-outer'>
+    <div className="dashboard-outer">
       {id && (
         <>
-          <h2 className='dashboard-title'>
+          <h2 className="dashboard-title">
             {userData.dashboards[id].dashboardName}
           </h2>
-          <div className='dashboard-buttons'>
+          <div className="dashboard-buttons">
             <span>
-              <button className='btn' onClick={refresh}>
+              <button className="btn" onClick={refresh}>
                 Refresh
               </button>
             </span>
             <span>
-              <button className='btn' onClick={pithy}>
+              <button className="btn" onClick={pithy}>
                 Pithy Loop
               </button>
             </span>
             <span>
-              <button className='btn' onClick={() => setAddMetricModal(true)}>
+              <button className="btn" onClick={() => setAddMetricModal(true)}>
                 Add Metric
               </button>
             </span>
+            {!editMode && (
+              <span>
+                <button className="btn" onClick={() => setEditMode(true)}>
+                  Edit Mode
+                </button>
+              </span>
+            )}
+            {editMode && (
+              <span>
+                <button className="btn" onClick={saveMetricsAndReload}>
+                  Save Metrics
+                </button>
+              </span>
+            )}
           </div>
-          <div className='dashboard-container'>
-            {metricIds.map(metricId => (
-              <MetricDisplay metricId={metricId} key={metricId + lastUpdate} />
+          <div className="dashboard-container">
+            {metricIds.map((metricId) => (
+              <MetricDisplay
+                metricId={metricId}
+                key={metricId + lastUpdate}
+                editMode={editMode}
+              />
             ))}
             <Outlet />
           </div>
@@ -73,7 +99,7 @@ const Dashboard = () => {
           </div>
         </>
       )}
-      <div className='modal'>
+      <div className="modal">
         <Modal open={addMetricModal} onClose={() => setAddMetricModal(false)}>
           <AddMetric
             dashboard={location}

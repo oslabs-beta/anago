@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { readUserData } from './helperFuncs.ts';
-import { Metric, UserData } from '../models/userDataClass.ts';
+import { readUserData } from './helperFuncs.js';
+import { Metric, UserData } from '../models/userDataClass.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -130,6 +130,40 @@ userDataController.saveUserData = (
       log: `Writing updated User Data failed in userDataController.saveUserData.`,
       status: 500,
       message: { err: 'Error saving user data.' },
+    });
+  }
+};
+
+userDataController.deleteMetric = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const metricId = req.params.id;
+  console.log('metricId: ', metricId);
+  try {
+    const updatedUserData = readUserData();
+
+    //filter the metric from the dashboard section
+    updatedUserData.dashboards[0].metrics =
+      updatedUserData.dashboards[0].metrics.filter(
+        (value) => value !== metricId
+      );
+    // filter the metric from the metrics object
+    if (updatedUserData.metrics.hasOwnProperty(metricId)) {
+      delete updatedUserData.metrics[metricId];
+    }
+
+    fs.writeFileSync(
+      path.resolve(__dirname, '../models/userData.json'),
+      JSON.stringify(updatedUserData)
+    );
+    next();
+  } catch (err) {
+    return next({
+      log: `failed in userDataController.deleteMetric.`,
+      status: 500,
+      message: { err: `Error: ${err}}` },
     });
   }
 };

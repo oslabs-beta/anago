@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UserData } from '../../../types';
 import { Modal } from 'react-responsive-modal';
 import {
@@ -14,7 +14,7 @@ import {
 } from 'chart.js';
 import { Line, Chart } from 'react-chartjs-2';
 import { useRouteLoaderData } from 'react-router-dom';
-
+import React from 'react';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -23,28 +23,44 @@ ChartJS.register(
   Colors,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
-const MetricDisplay = ({ metricId }) => {
+const MetricDisplay = ({ metricId, editMode }) => {
   const userData = useRouteLoaderData('home') as UserData;
 
   //state to handle modal and handling fetched data router
   const [open, setOpen]: any = useState(false);
   const [metricData, setMetricData]: any = useState({});
+  const [trashCanClicked, setTrashCanClicked] = useState<Boolean>(false);
 
   // display options for metrics
-  const options: any = {
+  const options = {
     plugins: {
       legend: {
         display: false,
       },
     },
-    interaction: {
-      intersect: false,
-      mode: 'nearest',
-    },
   };
+
+  async function deleteMetric() {
+    try {
+      // send request to backend
+      const response = await fetch(`/api/user/metrics/${metricId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error('failed to delete metric from user data');
+      } else {
+        setTrashCanClicked(true);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   //fetching data from Prometheus
   function fetchFromProm() {
@@ -52,11 +68,11 @@ const MetricDisplay = ({ metricId }) => {
     fetch(`/api/data/metrics/${metricId}`, {
       method: 'GET',
     })
-      .then(data => data.json())
-      .then(data => {
+      .then((data) => data.json())
+      .then((data) => {
         setMetricData(data);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
 
   useEffect(
@@ -87,7 +103,7 @@ const MetricDisplay = ({ metricId }) => {
       // userData.metrics[metricId].scopeType,
       // userData.metrics[metricId].queryOptions.stepSize,
       // userData.metrics[metricId].queryOptions.refresh,
-    ],
+    ]
   );
 
   //modal handler functions
@@ -95,26 +111,44 @@ const MetricDisplay = ({ metricId }) => {
   const closeModal = () => setOpen(false);
 
   return (
-    <div className='metric-container'>
-      <h4 className='metric-title'>{userData.metrics[metricId].metricName}</h4>
-      {metricData.hasOwnProperty('labels') && (
-        <Line data={metricData} options={options} onClick={openModal} />
-      )}
-      <div className='modal'>
-        <Modal open={open} onClose={closeModal}>
-          <h4 className='metric-title'>
-            {userData.metrics[metricId].metricName}
-          </h4>
-          {metricData.hasOwnProperty('labels') && (
-            <Line
-              data={metricData}
-              options={{
-                ...options,
-                plugins: { legend: { display: true } },
-              }}
+    <div>
+      <div
+        className={`metric-container${
+          trashCanClicked ? '-trash-can-clicked' : ''
+        }`}
+      >
+        <h4 className="metric-title">
+          {userData.metrics[metricId].metricName}{' '}
+          {editMode && !trashCanClicked && (
+            <img
+              id="trash-can"
+              src="client/assets/images/trash-can.png"
+              onClick={deleteMetric}
+              height="22px"
+              width="20px"
             />
           )}
-        </Modal>
+        </h4>
+        {metricData.hasOwnProperty('labels') && (
+          <Line data={metricData} options={options} onClick={openModal} />
+        )}
+        <div className="modal">
+          {/* {metricId && <button onClick={openModal}>See more</button>} */}
+          <Modal open={open} onClose={closeModal}>
+            <h4 className="metric-title">
+              {userData.metrics[metricId].metricName}
+            </h4>
+            {metricData.hasOwnProperty('labels') && (
+              <Line
+                data={metricData}
+                options={{
+                  ...options,
+                  plugins: { legend: { display: true } },
+                }}
+              />
+            )}
+          </Modal>
+        </div>
       </div>
     </div>
   );
