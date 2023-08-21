@@ -116,13 +116,13 @@ export const lookupName = (type: LookupType): string => {
     case LookupType.CPUUsage:
       return 'CPU Usage';
     case LookupType.CPUIdle:
-      return 'CPU Idle Tracking';
+      return 'CPU Underutilization';
     case LookupType.MemoryUsed:
       return 'Memory Usage by Container';
     case LookupType.MemoryFreeInNode:
       return 'Memory Available in Nodes (%)';
     case LookupType.MemoryIdle:
-      return 'Memory Idle Tracking';
+      return 'Memory Underutilization';
     case LookupType.DiskUsage:
       return 'Disk Usage';
     case LookupType.FreeDiskinNode:

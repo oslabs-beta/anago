@@ -38,13 +38,13 @@ const AddMetric = (props): any => {
   // User configurable options that vary by lookup preconfigs
   const [domains, setDomains] = useState([
     ['Cluster', 'Namespace', 'Node', 'Deployment'],
-    ['Pithy-Depl', 'Kube-QL', '192.168.9.99', 'Prom-Prom-Prom-Prom'],
-    ['View All', 'Namespaces', 'Deployments', 'Containers'],
+    [''],
+    ['View All', 'Namespaces', 'Nodes', 'Containers'],
   ]);
   // Currently selected choices for the above domains
   const [chosenDomains, setChosenDomains] = useState([
     'Cluster',
-    'Pithy-Depl',
+    '',
     'View All',
   ]);
 
@@ -393,7 +393,7 @@ const AddMetric = (props): any => {
                   );
                 })}
               </select>{' '}
-              –
+              {chosenDomains[0]!=='Cluster' &&
               <select
                 id="new-metric-context-picker"
                 onChange={typeChanged}
@@ -406,7 +406,7 @@ const AddMetric = (props): any => {
                     </option>
                   );
                 })}
-              </select>
+              </select>}
             </div>
           )}
 
@@ -565,10 +565,10 @@ function timeConverter(input: string): number {
 const contextMatrix = [
   [],
   ['Cluster', 'Namespace', 'Node'],
-  ['Cluster', 'Namespace', 'Node'],
+  ['Cluster', 'Namespace'],
   ['Cluster', 'Namespace', 'Node'],
   [],
-  ['Cluster', 'Namespace', 'Node'],
+  ['Cluster', 'Namespace'],
   ['Cluster', 'Namespace', 'Node'],
   [],
   [],

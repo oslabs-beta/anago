@@ -85,14 +85,14 @@ export function queryBuilder(
 
     case LookupType.CPUUsage: {
       // Full Cluster default
-      let str = 'rate (container_cpu_usage_seconds_total[10m])';
+      let str = 'rate (container_cpu_usage_seconds_total{mode!="idle"}[10m])';
       // Restricted Context
       if (
         queryOptions.hasOwnProperty('context') &&
         queryOptions.context !== 'cluster'
       )
         str =
-          'rate (container_cpu_usage_seconds_total{' +
+          'rate (container_cpu_usage_seconds_total{mode!="idle",' +
           queryOptions.context +
           '="' +
           queryOptions.contextChoice +
@@ -108,7 +108,25 @@ export function queryBuilder(
     }
 
     case LookupType.CPUIdle: {
-      return 'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
+      // Tracks difference between requested CPU resources and actual CPU usage
+      let str =
+        'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""';
+      // Check for filtering by namespace
+      if (
+        queryOptions.hasOwnProperty('context') &&
+        queryOptions.context !== 'cluster'
+      ) {
+        str +=
+          ', ' +
+          queryOptions.context +
+          '=' +
+          queryOptions.contextChoice +
+          '}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
+      } else {
+        str +=
+          '}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
+      }
+      return str;
     }
 
     case LookupType.MemoryUsed: {
@@ -131,6 +149,8 @@ export function queryBuilder(
         queryOptions.target !== 'all'
       )
         str = 'sum (' + str + ') by (' + queryOptions.target + ')';
+      // Convert to GB
+      str += '/ (1024*1024*1024)';
       return str;
     }
 
@@ -139,7 +159,25 @@ export function queryBuilder(
     }
 
     case LookupType.MemoryIdle: {
-      return 'sum((container_memory_usage_bytes{container!="POD",container!=""} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
+      // Tracks difference between requested ram resources and actual ram usage
+      let str =
+        'sum((container_memory_usage_bytes{container!="POD",container!=""';
+      // Check for filtering by namespace
+      if (
+        queryOptions.hasOwnProperty('context') &&
+        queryOptions.context !== 'cluster'
+      ) {
+        str +=
+          ', ' +
+          queryOptions.context +
+          '=' +
+          queryOptions.contextChoice +
+          '} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
+      } else {
+        str +=
+          '} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
+      }
+      return str;
     }
 
     case LookupType.DiskUsage: {

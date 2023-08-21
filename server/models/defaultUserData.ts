@@ -1,4 +1,4 @@
-import { UserData, Cluster } from './userDataClass.js';
+import { UserData, Cluster, Metric } from './userDataClass.js';
 import { LookupType, ScopeType } from '../../types.js';
 import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 
@@ -18,7 +18,12 @@ if (ACTIVE_DEPLOYMENT) {
   );
   newUserData.addMetric(
     'Memory Idle by Cluster',
-    LookupType.MemoryIdle
+    LookupType.MemoryIdle,
+    ScopeType.Range,
+    {
+      duration: 5 * 60 * 60,
+      stepSize: 5 * 60,
+    }
   );
   newUserData.addMetric(
     'Pod Count by Namespace',
@@ -32,17 +37,29 @@ if (ACTIVE_DEPLOYMENT) {
   newUserData.addMetric(
     '% Memory Used by Node',
     LookupType.MemoryUsed,
-    ScopeType.Range
+    ScopeType.Range,
+    {
+      duration: 5 * 60 * 60,
+      stepSize: 5 * 60,
+    }
   );
   newUserData.addMetric(
     'CPU Usage by Container',
     LookupType.CPUUsage,
-    ScopeType.Range
+    ScopeType.Range,
+    {
+      duration: 5 * 60 * 60,
+      stepSize: 5 * 60,
+    }
   );
   newUserData.addMetric(
     'Disk Space by Container',
     LookupType.FreeDiskinNode,
-    ScopeType.Range
+    ScopeType.Range,
+    {
+      duration: 5 * 60 * 60,
+      stepSize: 5 * 60,
+    }
   );
   newUserData.addMetric(
     'Ready Nodes by Cluster',
@@ -61,60 +78,75 @@ if (ACTIVE_DEPLOYMENT) {
 } else {
   // Use placeholder data instead
 
-  newUserData.addPlaceholderMetric(
-    'CPU Idle by Cluster',
-    LookupType.CPUIdle,
-    ScopeType.Range,
-    '0',
-    {
+  const placeHolderMetrics: any = [];
+  placeHolderMetrics.push(
+    new Metric('CPU Idle by Cluster', LookupType.CPUIdle, ScopeType.Range, {
       duration: 5 * 60 * 60,
       stepSize: 5 * 60,
-    }
+    })
   );
-  newUserData.addPlaceholderMetric(
-    'Memory Idle by Cluster',
-    LookupType.MemoryIdle,
-    ScopeType.Range,
-    '1'
+  placeHolderMetrics.push(
+    new Metric(
+      'Memory Idle by Cluster',
+      LookupType.MemoryIdle,
+      ScopeType.Range,
+      {
+        duration: 24 * 60 * 60,
+        stepSize: 20 * 60,
+      }
+    )
   );
-  newUserData.addPlaceholderMetric(
-    'Pod Count by Namespace',
-    LookupType.PodCount,
-    ScopeType.Range,
-    '2',
-    {
+  placeHolderMetrics.push(
+    new Metric('Pod Count by Namespace', LookupType.PodCount, ScopeType.Range, {
       duration: 3 * 60 * 60,
       stepSize: 5 * 60,
-    }
+    })
   );
-  newUserData.addPlaceholderMetric(
-    '% Memory Used by Node',
-    LookupType.MemoryUsed,
-    ScopeType.Range,
-    '3'
+  placeHolderMetrics.push(
+    new Metric(
+      '% Memory Used by Node',
+      LookupType.MemoryUsed,
+      ScopeType.Range,
+      {
+        duration: 24 * 60 * 60,
+        stepSize: 20 * 60,
+      }
+    )
   );
-  newUserData.addPlaceholderMetric(
-    'CPU Usage by Container',
-    LookupType.CPUUsage,
-    ScopeType.Range,
-    '4'
+  placeHolderMetrics.push(
+    new Metric('CPU Usage by Container', LookupType.CPUUsage, ScopeType.Range, {
+      duration: 24 * 60 * 60,
+      stepSize: 20 * 60,
+    })
   );
-  newUserData.addPlaceholderMetric(
-    'Disk Space by Container',
-    LookupType.FreeDiskinNode,
-    ScopeType.Range,
-    '5'
+  placeHolderMetrics.push(
+    new Metric(
+      'Disk Space by Container',
+      LookupType.FreeDiskinNode,
+      ScopeType.Range,
+      {
+        duration: 24 * 60 * 60,
+        stepSize: 20 * 60,
+      }
+    )
   );
-  newUserData.addPlaceholderMetric(
-    'Ready Nodes by Cluster',
-    LookupType.ReadyNodesByCluster,
-    ScopeType.Range,
-    '6',
-    {
-      duration: 21 * 24 * 60 * 60,
-      stepSize: 8 * 60 * 60,
-    }
+  placeHolderMetrics.push(
+    new Metric(
+      'Ready Nodes by Cluster',
+      LookupType.ReadyNodesByCluster,
+      ScopeType.Range,
+      {
+        duration: 21 * 24 * 60 * 60,
+        stepSize: 8 * 60 * 60,
+      }
+    )
   );
+
+  placeHolderMetrics.forEach((el, index) => {
+    el.metricId = index;
+    newUserData.dashboards[0].metrics.push(el.metricId);
+    newUserData.metrics[el.metricId] = el;
+  });
 }
 
 export default newUserData;

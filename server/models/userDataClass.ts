@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
 import { LookupType, ScopeType, GraphType } from '../../types.js';
+import { queryBuilder } from './queryBuilder.js';
 
 export class UserData {
   userId: string;
@@ -16,19 +17,6 @@ export class UserData {
   ): string {
     const newMetric = new Metric(metricName, lookupType, scopeType, queryOptions);
     this.dashboards[dashboardNumber].metrics.push(newMetric.metricId);
-    this.metrics[newMetric.metricId] = newMetric;
-    return newMetric.metricId;
-  }
-  addPlaceholderMetric(
-    metricName: string,
-    lookupType: LookupType,
-    scopeType: ScopeType.Range,
-    placeholderId: string,
-    queryOptions?: any
-  ): string {
-    const newMetric = new Metric(metricName, lookupType, scopeType, queryOptions);
-    newMetric.metricId = placeholderId;
-    this.dashboards[0].metrics.push(newMetric.metricId);
     this.metrics[newMetric.metricId] = newMetric;
     return newMetric.metricId;
   }
@@ -76,7 +64,7 @@ export class Metric {
   scopeType: ScopeType;
   graphType: GraphType;
   queryOptions: any;
-  searchQuery: string;
+  searchQuery: string | undefined;
   constructor(
     metricName: string,
     lookupType: LookupType,
@@ -87,10 +75,7 @@ export class Metric {
     this.metricName = metricName;
     this.lookupType = lookupType; // LookupType.MemoryUsed
     this.scopeType = scopeType;
-    this.queryOptions = Object.assign(
-      { duration: 24 * 60 * 60, stepSize: 20 * 60 },
-      queryOptions
-    );
+    this.queryOptions = queryOptions;
     this.graphType = graphForQuery(
       this.lookupType,
       this.scopeType,
@@ -131,48 +116,50 @@ function graphForQuery(
   }
 }
 
-function queryBuilder(lookupType: LookupType, queryOptions: any): string {
-  // Creates a promQL search string for a given LookupType and set of options
-  console.log(lookupType, queryOptions);
-  switch (lookupType) {
-    case LookupType.CustomEntry: {
-      return queryOptions.customQuery;
-    }
 
-    case LookupType.CPUIdle: {
-      return 'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
-    }
+// OLD queryBuilder -- replaced by queryBuilder.ts
+// function queryBuilder(lookupType: LookupType, queryOptions: any): string {
+//   // Creates a promQL search string for a given LookupType and set of options
+//   console.log(lookupType, queryOptions);
+//   switch (lookupType) {
+//     case LookupType.CustomEntry: {
+//       return queryOptions.customQuery;
+//     }
 
-    case LookupType.MemoryIdle: {
-      return 'sum((container_memory_usage_bytes{container!="POD",container!=""} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
-    }
+//     case LookupType.CPUIdle: {
+//       return 'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
+//     }
 
-    case LookupType.MemoryUsed: {
-      return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';
-    }
+//     case LookupType.MemoryIdle: {
+//       return 'sum((container_memory_usage_bytes{container!="POD",container!=""} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
+//     }
 
-    case LookupType.CPUUsage: {
-      return 'container_cpu_usage_seconds_total';
-    }
+//     case LookupType.MemoryUsed: {
+//       return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';
+//     }
 
-    case LookupType.FreeDiskinNode: {
-      return 'node_filesystem_avail_bytes/node_filesystem_size_bytes*100';
-    }
+//     case LookupType.CPUUsage: {
+//       return 'container_cpu_usage_seconds_total';
+//     }
 
-    case LookupType.ReadyNodesByCluster: {
-      return 'sum(kube_node_status_condition{condition="Ready", status="true"}==1)';
-    }
+//     case LookupType.FreeDiskinNode: {
+//       return 'node_filesystem_avail_bytes/node_filesystem_size_bytes*100';
+//     }
 
-    case LookupType.NodesReadinessFlapping: {
-      return 'sum(changes(kube_node_status_condition{status="true",condition="Ready"}[15m])) by (node) > 2';
-    }
+//     case LookupType.ReadyNodesByCluster: {
+//       return 'sum(kube_node_status_condition{condition="Ready", status="true"}==1)';
+//     }
 
-    case LookupType.PodCount: {
-      return 'sum by (namespace) (kube_pod_info)';
-    }
+//     case LookupType.NodesReadinessFlapping: {
+//       return 'sum(changes(kube_node_status_condition{status="true",condition="Ready"}[15m])) by (node) > 2';
+//     }
 
-    default: {
-      return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';
-    }
-  }
-}
+//     case LookupType.PodCount: {
+//       return 'sum by (namespace) (kube_pod_info)';
+//     }
+
+//     default: {
+//       return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';
+//     }
+//   }
+// }
