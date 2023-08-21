@@ -69,7 +69,11 @@ export function queryBuilder(
   lookupType: LookupType,
   queryOptions: any
 ): string | undefined {
-  console.log(lookupType, queryOptions);
+  console.log(
+    'Query builder for Lookup Type: ',
+    lookupType,
+    'and options ' + queryOptions
+  );
 
   switch (lookupType) {
     case LookupType.CustomEntry: {
@@ -236,7 +240,7 @@ export function queryBuilder(
     }
 
     default: {
-      console.log('Error in queryBuilder: Invalid LookType passed in.');
+      console.log('Error in queryBuilder: Invalid LookupType passed in.');
       return undefined;
     }
   }

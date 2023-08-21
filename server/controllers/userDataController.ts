@@ -96,18 +96,13 @@ userDataController.addMetric = (
 ) => {
   console.log('Received a new Metric to configure:', req.body);
   const newMetricInfo = req.body;
-  const updatedUserData = readUserData();
-  console.log('Read Data:', updatedUserData);
-  console.log('Dashboard Size: ', updatedUserData.dashboards[0].metrics.length);
+  const updatedUserData = res.locals.userData;
 
   const newMetric = new Metric(
     newMetricInfo.name,
-    newMetricInfo.type,
-    newMetricInfo.scope,
-    {
-      duration: newMetricInfo.duration,
-      stepSize: newMetricInfo.stepSize,
-    }
+    newMetricInfo.lookupType,
+    newMetricInfo.scopeType,
+    res.locals.queryOptions
   );
   updatedUserData.dashboards[0].metrics.push(newMetric);
   updatedUserData.metrics[newMetric.metricId] = newMetric;

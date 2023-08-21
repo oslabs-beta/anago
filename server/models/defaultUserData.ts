@@ -8,7 +8,45 @@ newUserData.clusters.push(new Cluster('Testing Cluster', DEPLOYMENT_URL));
 if (ACTIVE_DEPLOYMENT) {
   // Build live demo clusters
   newUserData.addMetric(
-    'CPU Idle by Cluster',
+    'CPU Usage by Namespace',
+    LookupType.CPUUsage,
+    ScopeType.Range,
+    {
+      duration: 2 * 60 * 60,
+      stepSize: 5 * 60,
+      target: 'namespace',
+    }
+  );
+  newUserData.addMetric(
+    'Memory Usage by Container',
+    LookupType.MemoryUsed,
+    ScopeType.Range,
+    {
+      duration: 2 * 60 * 60,
+      stepSize: 5 * 60,
+      target: 'container',
+    }
+  );
+  newUserData.addMetric(
+    '% Memory Available by Node',
+    LookupType.MemoryFreeInNode,
+    ScopeType.Range,
+    {
+      duration: 5 * 60 * 60,
+      stepSize: 5 * 60,
+    }
+  );
+  newUserData.addMetric(
+    '% Disk Space Available by Node',
+    LookupType.FreeDiskinNode,
+    ScopeType.Range,
+    {
+      duration: 5 * 60 * 60,
+      stepSize: 5 * 60,
+    }
+  );
+  newUserData.addMetric(
+    'CPU Underutilization',
     LookupType.CPUIdle,
     ScopeType.Range,
     {
@@ -17,7 +55,7 @@ if (ACTIVE_DEPLOYMENT) {
     }
   );
   newUserData.addMetric(
-    'Memory Idle by Cluster',
+    'Memory Underutilization',
     LookupType.MemoryIdle,
     ScopeType.Range,
     {
@@ -30,35 +68,8 @@ if (ACTIVE_DEPLOYMENT) {
     LookupType.PodCount,
     ScopeType.Range,
     {
-      duration: 3 * 60 * 60,
-      stepSize: 5 * 60,
-    }
-  );
-  newUserData.addMetric(
-    '% Memory Used by Node',
-    LookupType.MemoryUsed,
-    ScopeType.Range,
-    {
-      duration: 5 * 60 * 60,
-      stepSize: 5 * 60,
-    }
-  );
-  newUserData.addMetric(
-    'CPU Usage by Container',
-    LookupType.CPUUsage,
-    ScopeType.Range,
-    {
-      duration: 5 * 60 * 60,
-      stepSize: 5 * 60,
-    }
-  );
-  newUserData.addMetric(
-    'Disk Space by Container',
-    LookupType.FreeDiskinNode,
-    ScopeType.Range,
-    {
-      duration: 5 * 60 * 60,
-      stepSize: 5 * 60,
+      duration: 2 * 24 * 60 * 60,
+      stepSize: 60 * 60,
     }
   );
   newUserData.addMetric(
@@ -67,7 +78,7 @@ if (ACTIVE_DEPLOYMENT) {
     ScopeType.Range,
     {
       duration: 21 * 24 * 60 * 60,
-      stepSize: 8 * 60 * 60,
+      stepSize: 4 * 60 * 60,
     }
   );
   // Verify before using Flapping Metric

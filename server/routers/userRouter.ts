@@ -1,5 +1,6 @@
 import express, { Response } from 'express';
 import userDataController from '../controllers/userDataController.js';
+import promApiController from '../controllers/promApiController.js';
 
 const userRouter = express.Router();
 
@@ -18,6 +19,7 @@ userRouter.delete('/hiddenAlert', userDataController.deleteHiddenAlert, (_, res:
 
 userRouter.post(
   '/add-metric',
+  promApiController.queryBaseBuilder,
   userDataController.addMetric,
   (_, res: Response) => {
     //send updated user data

@@ -24,6 +24,8 @@ const promURLAlerts = promURL + 'alerts';
 
 const promApiController: any = {
   metricQueryLookup: (req: Request, res: Response, next: NextFunction) => {
+    // When FE fetches a particular metricId, this middleware adds the metric basics (lookupType, searchQuery, queryOptions) onto res.locals for access in other middleware.
+
     // Fetch userData
     const userData = readUserData();
     if (!userData) {
@@ -43,6 +45,8 @@ const promApiController: any = {
   },
 
   queryBaseBuilder: (req: Request, res: Response, next: NextFunction) => {
+    // When a New Metric is being previewed or added, this middleware builds out new queryOptions and searchQuery objects and adds them to res.locals.
+
     // Fetch userData
     const userData = readUserData();
     if (!userData) {

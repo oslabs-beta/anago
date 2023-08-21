@@ -72,11 +72,6 @@ const AddMetric = (props): any => {
       })
         .then((res) => res.json())
         .then((res) => {
-          if (res.ok) console.log('Received reply', res);
-          else {
-            console.log('some error fetching data');
-          }
-
           // Should verify query validity as part of this process
           setMessageText('Metric Preview Successful');
 
@@ -95,6 +90,7 @@ const AddMetric = (props): any => {
   const saveMetric = () => {
     setMessageText('Saving New Metric...');
     const newMetric = formData();
+    console.log('Trying to save a new metric:\n', newMetric);
 
     fetch('/api/user/add-metric', {
       method: 'POST',
@@ -110,8 +106,8 @@ const AddMetric = (props): any => {
         // Should verify query validity as part of this process
         setMessageText('New Metric Saved!');
 
-        // Restore defaults
-        setTypes([types[0], types[1], LookupType.CustomEntry]);
+        // Restore defaults? Maybe not..
+        /*setTypes([types[0], types[1], LookupType.CustomEntry]);
         setFields({
           name: '',
           duration: '',
@@ -119,7 +115,8 @@ const AddMetric = (props): any => {
           customQuery: '',
           refresh: '',
         });
-        setMetricData({});
+        setMetricData({});*/
+
         // Refetch user data for updated Dashboard[0] ?
 
         // Dismiss message
@@ -393,20 +390,21 @@ const AddMetric = (props): any => {
                   );
                 })}
               </select>{' '}
-              {chosenDomains[0]!=='Cluster' &&
-              <select
-                id="new-metric-context-picker"
-                onChange={typeChanged}
-                value={chosenDomains[1]}
-              >
-                {domains[1].map((el, index) => {
-                  return (
-                    <option value={el} key={'metric-pick' + el}>
-                      {domains[1][index]}
-                    </option>
-                  );
-                })}
-              </select>}
+              {chosenDomains[0] !== 'Cluster' && (
+                <select
+                  id="new-metric-context-picker"
+                  onChange={typeChanged}
+                  value={chosenDomains[1]}
+                >
+                  {domains[1].map((el, index) => {
+                    return (
+                      <option value={el} key={'metric-pick' + el}>
+                        {domains[1][index]}
+                      </option>
+                    );
+                  })}
+                </select>
+              )}
             </div>
           )}
 

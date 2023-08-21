@@ -15,7 +15,12 @@ export class UserData {
     queryOptions?: any,
     dashboardNumber = 0
   ): string {
-    const newMetric = new Metric(metricName, lookupType, scopeType, queryOptions);
+    const newMetric = new Metric(
+      metricName,
+      lookupType,
+      scopeType,
+      queryOptions
+    );
     this.dashboards[dashboardNumber].metrics.push(newMetric.metricId);
     this.metrics[newMetric.metricId] = newMetric;
     return newMetric.metricId;
@@ -73,19 +78,17 @@ export class Metric {
   ) {
     this.metricId = randomUUID();
     this.metricName = metricName;
-    this.lookupType = lookupType; // LookupType.MemoryUsed
+    this.lookupType = lookupType;
     this.scopeType = scopeType;
     this.queryOptions = queryOptions;
     this.graphType = graphForQuery(
       this.lookupType,
       this.scopeType,
       this.queryOptions
-    ); // GraphyType.LineGraph
+    ); 
     this.searchQuery = queryBuilder(this.lookupType, this.queryOptions);
   }
 }
-
-
 
 function graphForQuery(
   lookupType: LookupType,
@@ -115,7 +118,6 @@ function graphForQuery(
       return GraphType.LineGraph;
   }
 }
-
 
 // OLD queryBuilder -- replaced by queryBuilder.ts
 // function queryBuilder(lookupType: LookupType, queryOptions: any): string {
