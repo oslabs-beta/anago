@@ -7,11 +7,13 @@ export type ServerError = {
 };
 
 export type MetricProps = {
-  graphType: number;
-  lookupType: number;
-  metricId: string;
-  metricName: string;
-  searchQuery: string;
+  graphType: GraphType;
+  lookupType: LookupType;
+  scopeType: ScopeType;
+  metricId?: string;
+  metricName?: string;
+  searchQuery?: string;
+  queryOptions?: any;
 };
 
 export interface UserData {
@@ -106,36 +108,56 @@ export interface CleanAlert {
 
 export enum LookupType {
   CustomEntry, //0
-  CPUIdleByCluster, //1
-  MemoryIdleByCluster,
-  MemoryUsed,
-  CPUUsedByContainer,
-  FreeDiskUsage,
-  ReadyNodesByCluster,
-  NodesReadinessFlapping,
-  PodCount,
+  CPUUsage, // 1 - Current CPU Usage
+  CPUIdle, // 2 - Rylie help fill this out
+  MemoryUsed, // 3
+  MemoryFreeInNode, // 4 - Needs work
+  MemoryIdle, // 5 - Rylie help!
+  DiskUsage, // 6
+  FreeDiskinNode, // 7
+  ReadyNodesByCluster, // 8
+  NodesReadinessFlapping, // 9
+  PodRestarts, //10
+  PodCount, // 111
+}
+
+export enum ScopeType {
+  Range,
+  Instant,
+}
+
+export enum GraphType {
+  PrintValue, //0 Print Value or Bar Chart
+  LineGraph, //1
+  PieChart, //2
 }
 
 export const lookupName = (type: LookupType): string => {
   switch (type) {
     case LookupType.CustomEntry:
       return 'Custom PromQL Entry';
-    case LookupType.CPUIdleByCluster:
-      return 'CPU Idle by Cluster';
-    case LookupType.MemoryIdleByCluster:
-      return 'Memory Idle by Cluster';
+    case LookupType.CPUUsage:
+      return 'CPU Usage';
+    case LookupType.CPUIdle:
+      return 'CPU Underutilization';
     case LookupType.MemoryUsed:
-      return '% Memory Used by Node';
-    case LookupType.CPUUsedByContainer:
-      return 'CPU Usage by Container';
-    case LookupType.FreeDiskUsage:
-      return 'Disk Space by Container';
+      return 'Memory Usage by Container';
+    case LookupType.MemoryFreeInNode:
+      return 'Memory Available in Nodes (%)';
+    case LookupType.MemoryIdle:
+      return 'Memory Underutilization';
+    case LookupType.DiskUsage:
+      return 'Disk Usage';
+    case LookupType.FreeDiskinNode:
+      return 'Disk Space Available on Nodes (%)';
     case LookupType.ReadyNodesByCluster:
       return 'Ready Nodes by Cluster';
     case LookupType.NodesReadinessFlapping:
       return 'Node Readiness Flapping';
+    case LookupType.PodRestarts:
+      return 'Pod Restart Rates';
     case LookupType.PodCount:
-      return 'Pod Count by Namespace';
+      return 'Pod Counts';
     default:
       return 'Lookup Type Not Found';
   }
@@ -146,6 +168,7 @@ export const lookupName = (type: LookupType): string => {
 export type yAxis = {
   label: string;
   data: number[];
+  pointStyle?: boolean;
 };
 // object to send to front end to plot on a graph
 export type plotData = {
