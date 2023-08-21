@@ -8,7 +8,7 @@ import { UserData } from '../../types';
 import { useContext, useEffect } from 'react';
 import { StoreContext } from '../context/stateStore';
 import logo from '../assets/images/anago.png';
-import AlertBar from '../Components/AlertBar';
+import AlertBar from '../Components/Dashboard/AlertBar';
 
 export default function Home() {
   const userData = useRouteLoaderData('home') as UserData;

@@ -57,7 +57,6 @@ k8sController.getPods = async (
     const data: any = await k8sApi.listPodForAllNamespaces();
     const pods: Pod[] = data.body.items.map(data => {
       const { name, namespace, creationTimestamp, uid, labels } = data.metadata;
-      console.log(data.spec.containers)
       const { nodeName, containers, serviceAccount } = data.spec;
       const { conditions, containerStatuses, phase, podIP } = data.status;
       const pod: Pod = {

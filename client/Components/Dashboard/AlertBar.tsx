@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { UserData } from '../../types';
+import { UserData } from '../../../types';
 import { useRouteLoaderData } from 'react-router-dom';
-import { StoreContext } from '../context/stateStore';
+import { StoreContext } from '../../context/stateStore';
 
 //TODO: add displayed to the state store
 

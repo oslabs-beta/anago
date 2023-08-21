@@ -23,14 +23,14 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   //clean up alert data for relevant information and assign relevant alerts to namespace state
   useEffect(() => {
     const alerts: CleanAlert[] = handleAlerts(displayedAlerts);
-    alerts.forEach((alert: CleanAlert) => {
+    alerts.forEach((alert: any) => {
       console.log(alert);
       if (alert['affectedNamespace'] && !namespaceAlerts[alert]) {
         setNamespaceAlerts([alert, ...namespaceAlerts]);
       }
     });
   }, []);
-  console.log('namespaceAlerts', namespaceAlerts);
+
 
   //determine the number of namespaces selected in the dropdown menu by filtering the selectedStates stateful array
   const numNamespaces = Object.keys(selectedStates).filter(
@@ -69,7 +69,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
                 namespaceAlerts.map(alert => {
                   if (alert['affectedNamespace'] === name) {
                     return (
-                      <div className='alert-info'>
+                      <div className='alert-info' style={{color: 'red'}}>
                         <h3>Alert Information:</h3>
                         <div className='info-item'>
                           <h3>Alert Name:</h3>

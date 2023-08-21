@@ -8,7 +8,7 @@ import {
 //import routes
 import Home from './Routes/Home';
 // import Login from './Routes/Login';
-import Dashboard from './Components/Dashboard';
+import Dashboard from './Components/Dashboard/Dashboard';
 import ClusterView from './Routes/ClusterView';
 import SetUp from './Routes/SetUp';
 
