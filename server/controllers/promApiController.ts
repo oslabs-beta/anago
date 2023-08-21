@@ -4,7 +4,7 @@ import {
   plotData,
   promResponse,
   promResResultElements,
-} from '../../types';
+} from '../../types.ts';
 import {
   placeholderData,
   cleanTime,
@@ -51,7 +51,6 @@ const promApiController: any = {
     const query = userData.metrics[metricId].searchQuery;
     const options = userData.metrics[metricId].queryOptions;
 
-
     // TODO: IF INSTANT QUERY:
     // res.locals.promQuery = promURLInstant + query;
 
@@ -85,7 +84,11 @@ const promApiController: any = {
     // Placeholder Data for Offline Development
     if (!ACTIVE_DEPLOYMENT) {
       console.log('Supplying Placeholder data for metricId ', metricId);
-      const placeholderFetch = placeholderData(metricId, res.locals.userData, res.locals.queryOptions);
+      const placeholderFetch = placeholderData(
+        metricId,
+        res.locals.userData,
+        res.locals.queryOptions
+      );
       // console.log('Local data for metric ', metricId, ':\n', placeholderFetch);
       res.locals.promMetrics = placeholderFetch;
       return next();
@@ -151,7 +154,10 @@ const promApiController: any = {
           }
           // populate the y-axis object with the scraped metrics
           // yAxis.label = obj.metric.toString();
-          yAxis.label = namePlot(obj, res.locals.userData.metrics[metricId].lookupType);
+          yAxis.label = namePlot(
+            obj,
+            res.locals.userData.metrics[metricId].lookupType
+          );
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));
           });

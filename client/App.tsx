@@ -6,26 +6,32 @@ import {
 } from 'react-router-dom';
 
 //import routes
-import Home from './Home';
-import Login from './Login';
-import Settings from './Settings';
-import Dashboard from '../Components/Dashboard';
-import ClusterView from './ClusterView';
+import Home from './Routes/Home.tsx';
+// import Login from './Routes/Login';
+import Dashboard from './Components/Dashboard/Dashboard.tsx';
+import ClusterView from './Routes/ClusterView.tsx';
+import SetUp from './Routes/SetUp.tsx';
 
 //import loaders
-import * as loaders from '../Loaders';
+import * as loaders from './context/loaders.tsx';
 import React from 'react';
+// import React from 'react';
 
 //create router to pass into router provider component returned from app. createBrowserRouter recommended for all latest React Router web projects.
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Home />} loader={loaders.userLoader} id='home'>
       <Route path=':id' element={<Dashboard />} />
-      <Route path='login' element={<Login />} />
-      {/* <Route path='settings' element={<Settings />} /> */}
-      <Route path='clusterview' element={<ClusterView />} loader={loaders.clusterLoader} id='cluster'/>
-    </Route>,
-  ),
+      {/* <Route path='login' element={<Login />} /> */}
+      <Route
+        path='clusterview'
+        element={<ClusterView />}
+        loader={loaders.clusterLoader}
+        id='cluster'
+      />
+      <Route path='setup' element={<SetUp />}/>
+    </Route>
+  )
 );
 
 //provide router to application

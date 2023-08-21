@@ -1,7 +1,6 @@
 import { Modal } from 'react-responsive-modal';
-import { useState } from 'react';
-import { cleanName } from '../../functions';
-import React from 'react';
+import React, { useState } from 'react';
+import { cleanName } from '../../context/functions.ts';
 
 const Deployments = ({
   name,
@@ -11,26 +10,19 @@ const Deployments = ({
   namespace,
   id,
 }) => {
-  const [open, setOpen]: any = useState(false);
+  const [open, setOpen] = useState(false);
 
+  //modal handler functions
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
-  const fixLabels = labels => {
-    let labelArr: any = [];
-    for (let label in labels) {
-      const newObj = {};
-      newObj[label] = labels[label];
-      labelArr.push(newObj);
-    }
-    return labelArr;
-  };
 
+  //create an array of 'labels' keys to be mapped over in the return statement
   const deploymentLabels = Object.keys(labels);
 
   return (
     <div className='deployment' id={id} key={id}>
-      <div>
+      <div className='deployment-info'>
         <img
           className='k8logo'
           id='deployment-logo'
@@ -61,11 +53,19 @@ const Deployments = ({
               <p>{namespace}</p>
             </div>
             {deploymentLabels.map(label => {
-              if (label === 'app' || label === 'k8s-app' || label === 'app.kubernetes.io/name') {
+              if (
+                label === 'app' ||
+                label === 'k8s-app' ||
+                label === 'app.kubernetes.io/name'
+              ) {
                 return (
                   <div key={id} className='info-item'>
                     <h3>App:</h3>
-                    <p>{labels['app'] || labels['k8s-app'] || labels['app.kubernetes.io/name']}</p>
+                    <p>
+                      {labels['app'] ||
+                        labels['k8s-app'] ||
+                        labels['app.kubernetes.io/name']}
+                    </p>
                   </div>
                 );
               }

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { UserData } from '../../types';
+import React, { useEffect, useState } from 'react';
+import { UserData } from '../../../types.ts';
 import { Modal } from 'react-responsive-modal';
 import {
   Chart as ChartJS,
@@ -14,7 +14,7 @@ import {
 } from 'chart.js';
 import { Line, Chart } from 'react-chartjs-2';
 import { useRouteLoaderData } from 'react-router-dom';
-import React from 'react';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -26,13 +26,12 @@ ChartJS.register(
   Legend
 );
 
-const MetricDisplay = ({ metricId, editMode }) => {
+const MetricDisplay = ({ metricId }) => {
   const userData = useRouteLoaderData('home') as UserData;
 
   //state to handle modal and handling fetched data router
   const [open, setOpen]: any = useState(false);
   const [metricData, setMetricData]: any = useState({});
-  const [trashCanClicked, setTrashCanClicked] = useState<Boolean>(false);
 
   // display options for metrics
   const options = {
@@ -54,25 +53,6 @@ const MetricDisplay = ({ metricId, editMode }) => {
         setMetricData(data);
       })
       .catch((err) => console.log(err));
-  }
-
-  async function deleteMetric() {
-    try {
-      // send request to backend
-      const response = await fetch(`/api/user/metrics/${metricId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        throw new Error('failed to delete metric from user data');
-      } else {
-        setTrashCanClicked(true);
-      }
-    } catch (err) {
-      console.log(err);
-    }
   }
 
   useEffect(
@@ -111,36 +91,19 @@ const MetricDisplay = ({ metricId, editMode }) => {
   const closeModal = () => setOpen(false);
 
   return (
-    <div>
-      <div
-        className={`metric-container${
-          trashCanClicked ? '-trash-can-clicked' : ''
-        }`}
-      >
-        <h4 className="metric-title">
-          {userData.metrics[metricId].metricName}{' '}
-          {editMode && !trashCanClicked && (
-            <img
-              id="trash-can"
-              src="client/assets/images/trash-can.png"
-              onClick={deleteMetric}
-              height="22px"
-              width="20px"
-            />
-          )}
-        </h4>
-        {metricData.hasOwnProperty('labels') && (
-          <Line data={metricData} options={options} onClick={openModal} />
-        )}
-        <div className="modal">
-          {/* {metricId && <button onClick={openModal}>See more</button>} */}
-          <Modal open={open} onClose={closeModal}>
-            <h4 className="metric-title">
-              {userData.metrics[metricId].metricName}
-            </h4>
-            {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
-          </Modal>
-        </div>
+    <div className='metric-container'>
+      <h4 className='metric-title'>{userData.metrics[metricId].metricName}</h4>
+      {metricData.hasOwnProperty('labels') && (
+        <Line data={metricData} options={options} onClick={openModal} />
+      )}
+      <div className='modal'>
+        {/* {metricId && <button onClick={openModal}>See more</button>} */}
+        <Modal open={open} onClose={closeModal}>
+          <h4 className='metric-title'>
+            {userData.metrics[metricId].metricName}
+          </h4>
+          {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
+        </Modal>
       </div>
     </div>
   );

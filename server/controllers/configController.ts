@@ -3,12 +3,11 @@ import { execa, $ } from 'execa';
 
 const configController: any = {};
 
-
 //unable to test due to prom chart already being applied
 configController.applyPromChart = async (
   _req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const addHelm =

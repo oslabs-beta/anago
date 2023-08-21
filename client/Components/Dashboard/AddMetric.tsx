@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouteLoaderData } from 'react-router-dom';
-import { LookupType, lookupName, UserData } from '../../types';
-import MetricDisplay from './MetricDisplay';
+import { LookupType, lookupName, UserData } from '../../../types.ts';
+import MetricDisplay from './MetricDisplay.tsx';
 import React from 'react';
 
 const AddMetric = (props): any => {
@@ -71,23 +71,23 @@ const AddMetric = (props): any => {
   };
 
   return (
-    <div className="new-metric-modal">
+    <div className='new-metric-modal'>
       <h2>New Metric</h2>
-      <div className="new-metric-container">
-        <div className="new-metric-form">
+      <div className='new-metric-container'>
+        <div className='new-metric-form'>
           <h3>Select Metric Options</h3>
           <div>
             <label>Metric Name: </label>{' '}
             <input
-              id="new-metric-name"
+              id='new-metric-name'
               value={fields.name}
               placeholder={lookupName(Number(type))}
               onChange={(e) => textChanged(e, 'name')}
             ></input>
           </div>
           <div>
-            <label htmlFor="new-metric-type">Metric Type: </label>
-            <select id="new-metric-type" onChange={typeChanged} value={type}>
+            <label htmlFor='new-metric-type'>Metric Type: </label>
+            <select id='new-metric-type' onChange={typeChanged} value={type}>
               {lookupOptions.map((el) => {
                 return (
                   <option value={el} key={'option' + el}>
@@ -101,9 +101,9 @@ const AddMetric = (props): any => {
             <div>
               <label>Total Time: </label>{' '}
               <input
-                id="new-metric-duration"
+                id='new-metric-duration'
                 value={fields.duration}
-                placeholder="24 hours"
+                placeholder='24 hours'
                 onChange={(e) => textChanged(e, 'duration')}
               ></input>
             </div>
@@ -112,9 +112,9 @@ const AddMetric = (props): any => {
             <div>
               <label>Time Interval: </label>{' '}
               <input
-                id="new-metric-step"
+                id='new-metric-step'
                 value={fields.step}
-                placeholder="20 mins"
+                placeholder='20 mins'
                 onChange={(e) => textChanged(e, 'step')}
               ></input>
             </div>
@@ -123,43 +123,43 @@ const AddMetric = (props): any => {
             <div>
               <label>Pod Color: </label>{' '}
               <input
-                id="new-metric-color"
+                id='new-metric-color'
                 value={fields.color}
-                placeholder="Blue"
+                placeholder='Blue'
                 onChange={(e) => textChanged(e, 'color')}
               ></input>
             </div>
           )}
           {Number(type) == 0 && (
-            <div className="metric-text-area">
+            <div className='metric-text-area'>
               <label>Custom Query: </label>{' '}
               <textarea
-                id="new-metric-custom-query"
+                id='new-metric-custom-query'
                 value={fields.customQuery}
-                placeholder="Enter PromQL here..."
+                placeholder='Enter PromQL here...'
                 onChange={(e) => textChanged(e, 'customQuery')}
               ></textarea>
             </div>
           )}
         </div>
-        <div className="new-metric-preview">
-          <div className="new-metric-status">
-            <h4 className="new-metric-status-message">{messageText}</h4>
+        <div className='new-metric-preview'>
+          <div className='new-metric-status'>
+            <h4 className='new-metric-status-message'>{messageText}</h4>
           </div>
-          <div className="new-metric-preview-image">
+          <div className='new-metric-preview-image'>
             <h3>Preview Query</h3>
             {/* {metricData.hasOwnProperty('labels') && <Line data={metricData} />} */}
           </div>
         </div>
       </div>
-      <div className="new-metric-buttons">
-        <button className="btn" onClick={saveMetric}>
+      <div className='new-metric-buttons'>
+        <button className='btn' onClick={saveMetric}>
           Save
         </button>
-        <button className="btn" onClick={previewMetric}>
+        <button className='btn' onClick={previewMetric}>
           Preview
         </button>
-        <button className="btn" onClick={() => props.setAddMetricModal(false)}>
+        <button className='btn' onClick={() => props.setAddMetricModal(false)}>
           Cancel
         </button>
       </div>

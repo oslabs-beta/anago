@@ -537,6 +537,18 @@ h5 {
   white-space: normal;
   width: 85px;
 }
+// .icon-container{
+//   position: relative;
+// }
+
+.alert-icon{
+  height: 30px;
+  width: 35px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+}
 
 .cluster-view {
   display: flex;

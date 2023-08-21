@@ -15,10 +15,9 @@ dataRouter.get(
     // console.log(_req.body);
 
     return res.status(200).json(res.locals.promMetrics);
-  },
+  }
 );
 
 //does this metric exist? look at the searchQuery, make that request to promQL, parse the data, pass it to the front end
 
 export default dataRouter;
-

@@ -26,6 +26,12 @@
   "ts-node": {
     "esm": true
   },
-  "include": ["src", "server/**/*.ts", "client", "types.ts"],
+  "include": [
+    "client",
+    "server/**/*.ts",
+    "client",
+    "types.ts",
+    "dev/grafanaDashboard.tsx"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

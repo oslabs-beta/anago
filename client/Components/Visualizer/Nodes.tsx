@@ -1,9 +1,8 @@
-import Namespaces from './Namespaces';
+import Namespaces from './Namespaces.tsx';
 import { useRouteLoaderData } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
-import { useContext, useState } from 'react';
-import React from 'react';
-import { StoreContext } from '../../stateStore';
+import React, { useContext, useState } from 'react';
+import { StoreContext } from '../../context/stateStore.tsx';
 
 const Nodes = ({
   name,
@@ -19,14 +18,16 @@ const Nodes = ({
   const [open, setOpen]: any = useState(false);
   const { selectedStates, displayedAlerts }: any = useContext(StoreContext);
 
+  //modal handler functions
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
-
+  //determines how many nodes have been selected in dropdown by mapping over selected states stateful array
   const numNodes = Object.keys(selectedStates).filter(
     item => item.charAt(0) === 'i' && selectedStates[item] === true,
   ).length;
 
+  //if no nodes are selected (default, all nodes will display) or the node's name is selected, display the node and its child components. else, display null.
   return numNodes === 0 || selectedStates[name] ? (
     <div className='node' id={id} key={id}>
       <div className='node-info'>
