@@ -31,17 +31,21 @@ export default function Home() {
     <div className="home-layout">
       <header>
         <span className="logo-container">
-          <img src={'client/assets/images/anago.png'} alt="logo" className="logo-image" />
+          <img
+            src={'client/assets/images/anago.png'}
+            alt="logo"
+            className="logo-image"
+          />
           <h3 className="app-title">Anago</h3>
         </span>
         <nav>
-          <NavLink to={'/'} className='nav-btn'>
+          <NavLink to={'/'} className="nav-btn">
             Dashboards
           </NavLink>
           {/* <NavLink to={'/settings'} className='nav-btn'>
-            Settings
-          </NavLink> */} 
-          <NavLink to={'/clusterview'} className='nav-btn'>
+            Settings showAlerts='false'
+          </NavLink> */}
+          <NavLink to={'/clusterview'} className="nav-btn" showAlerts="true">
             Cluster View
           </NavLink>
           {/* <NavLink to={'/login'} className='nav-btn'>
@@ -51,7 +55,7 @@ export default function Home() {
       </header>
 
       <div className="main-body">
-      <AlertBar />
+        <AlertBar />
         <Outlet />
       </div>
     </div>

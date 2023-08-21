@@ -6,6 +6,7 @@ import { StoreContext } from '../stateStore';
 //TODO: add displayed to the state store
 
 const AlertBar = () => {
+  const [showAlertBar, setShowAlertBar] = useState<Boolean>(true);
   //keep track of displayed alerts
   const { displayedAlerts, setDisplayedAlerts }: any = useContext(StoreContext);
   // keep track of all alerts
@@ -120,7 +121,7 @@ const AlertBar = () => {
 
   // onclick to hide alerts
   async function handleHide(id: string) {
-    setHidden(prev => [...prev, id]);
+    setHidden((prev) => [...prev, id]);
     try {
       // send request to backend
       const response = await fetch(`/api/user/hiddenAlert`, {
@@ -161,91 +162,95 @@ const AlertBar = () => {
   }
 
   return (
-    <div
-      className="status-bar"
-      onMouseOver={() => setMouseOver(true)}
-      onMouseOut={() => setMouseOver(false)}
-    >
-      {/* if data was fetched and there are errors and mouse is over*/}
-      {fetched && !noErrors && mouseOver && (
-        <div>
-          <h3 id='alertTitle'>
-            <strong>ALERTS:</strong>
-          </h3>
-          {['critical', 'warning'].map(severity => (
-            <div id={severity} key={severity}>
-              {[...displayedAlerts].map(
-                (alertObj) =>
-                  alertObj.labels.severity === severity &&
-                  !hidden.includes(alertObj.startsAt) && (
-                    <p
-                      className={alertObj.labels.severity}
-                      key={alertObj.startsAt}
-                      id={alertObj.startsAt}
-                    >
-                      <strong className="message">
-                        {severity.toUpperCase()}:
-                      </strong>{' '}
-                      {alertObj.annotations.description}
-                      <br></br>
-                      <button
-                        onClick={() => handleHide(alertObj.startsAt)}
-                        className="btn-small"
-                      >
-                        hide
-                      </button>
-                    </p>
-                  ),
-              )}
-            </div>
-          ))}
-          {hidden.length > 0 && (
+    <>
+      {showAlertBar && (
+        <div
+          className="status-bar"
+          onMouseOver={() => setMouseOver(true)}
+          onMouseOut={() => setMouseOver(false)}
+        >
+          {/* if data was fetched and there are errors and mouse is over*/}
+          {fetched && !noErrors && mouseOver && (
             <div>
+              <h3 id="alertTitle">
+                <strong>ALERTS:</strong>
+              </h3>
               {['critical', 'warning'].map((severity) => (
-                <div id="hidden" key={`${severity}+H`}>
-                  {[...hidden].map((hiddenId) => {
-                    const alertObj = alerts.find(
-                      alertObj =>
-                        alertObj.startsAt === hiddenId &&
-                        alertObj.labels.severity === severity,
-                    );
-                    return (
-                      alertObj && (
-                        <p key={hiddenId} id={hiddenId}>
-                          <em>
-                            {severity.toUpperCase()}:{' '}
-                            {alertObj.annotations.description}{' '}
-                          </em>
+                <div id={severity} key={severity}>
+                  {[...displayedAlerts].map(
+                    (alertObj) =>
+                      alertObj.labels.severity === severity &&
+                      !hidden.includes(alertObj.startsAt) && (
+                        <p
+                          className={alertObj.labels.severity}
+                          key={alertObj.startsAt}
+                          id={alertObj.startsAt}
+                        >
+                          <strong className="message">
+                            {severity.toUpperCase()}:
+                          </strong>{' '}
+                          {alertObj.annotations.description}
                           <br></br>
                           <button
+                            onClick={() => handleHide(alertObj.startsAt)}
                             className="btn-small"
-                            onClick={() => handleRestore(alertObj.startsAt)}
                           >
-                            Restore
+                            hide
                           </button>
                         </p>
                       )
-                    );
-                  })}
+                  )}
                 </div>
               ))}
+              {hidden.length > 0 && (
+                <div>
+                  {['critical', 'warning'].map((severity) => (
+                    <div id="hidden" key={`${severity}+H`}>
+                      {[...hidden].map((hiddenId) => {
+                        const alertObj = alerts.find(
+                          (alertObj) =>
+                            alertObj.startsAt === hiddenId &&
+                            alertObj.labels.severity === severity
+                        );
+                        return (
+                          alertObj && (
+                            <p key={hiddenId} id={hiddenId}>
+                              <em>
+                                {severity.toUpperCase()}:{' '}
+                                {alertObj.annotations.description}{' '}
+                              </em>
+                              <br></br>
+                              <button
+                                className="btn-small"
+                                onClick={() => handleRestore(alertObj.startsAt)}
+                              >
+                                Restore
+                              </button>
+                            </p>
+                          )
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
+          )}
+          {/* if there are errors, the data is fetched, but the mouse is not over */}
+          {!noErrors && fetched && !mouseOver && (
+            <h3 id="mouseNotOver">
+              <strong>
+                ALERTS PREVIEW: {criticalCount} Critical, {warningCount} Warning
+              </strong>
+            </h3>
+          )}
+          {/* if data was fetched AND there are no errors */}
+          {noErrors && fetched && (
+            <h3 id="noAlertTitle">Currently, you have no active alerts!</h3>
           )}
         </div>
       )}
-      {/* if there are errors, the data is fetched, but the mouse is not over */}
-      {!noErrors && fetched && !mouseOver && (
-        <h3 id="mouseNotOver">
-          <strong>
-            ALERTS PREVIEW: {criticalCount} Critical, {warningCount} Warning
-          </strong>
-        </h3>
-      )}
-      {/* if data was fetched AND there are no errors */}
-      {noErrors && fetched && (
-        <h3 id='noAlertTitle'>Currently, you have no active alerts!</h3>
-      )}
-    </div>
+    </>
   );
 };
 
