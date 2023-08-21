@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { readUserData } from './helperFuncs.ts';
-import { Metric, UserData } from '../models/userDataClass.ts';
+import { readUserData } from './helperFuncs.js';
+import { Metric, UserData } from '../models/userDataClass.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
