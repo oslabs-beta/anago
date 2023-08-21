@@ -14,6 +14,7 @@ import SetUp from './Routes/SetUp';
 
 //import loaders
 import * as loaders from './context/loaders';
+import React from 'react';
 // import React from 'react';
 
 //create router to pass into router provider component returned from app. createBrowserRouter recommended for all latest React Router web projects.

@@ -3,11 +3,12 @@ import Pods from './Pods';
 import Services from './Services';
 import Modal from 'react-responsive-modal';
 import { useRouteLoaderData } from 'react-router-dom';
-import React, { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { StoreContext } from '../../context/stateStore';
 import { cleanTime, handleAlerts } from '../../context/functions';
 import { Pod, Service, Deployment, CleanAlert } from '../../../types';
 import AlertFlag from './AlertFlag';
+import React from 'react';
 
 const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   const clusterData: any = useRouteLoaderData('cluster');
@@ -23,14 +24,14 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
   //clean up alert data for relevant information and assign relevant alerts to namespace state
   useEffect(() => {
     const alerts: CleanAlert[] = handleAlerts(displayedAlerts);
-    alerts.forEach((alert: any) => {
+    alerts.forEach((alert: CleanAlert) => {
       console.log(alert);
       if (alert['affectedNamespace'] && !namespaceAlerts[alert]) {
         setNamespaceAlerts([alert, ...namespaceAlerts]);
       }
     });
   }, []);
-
+  console.log('namespaceAlerts', namespaceAlerts);
 
   //determine the number of namespaces selected in the dropdown menu by filtering the selectedStates stateful array
   const numNamespaces = Object.keys(selectedStates).filter(
@@ -69,7 +70,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
                 namespaceAlerts.map(alert => {
                   if (alert['affectedNamespace'] === name) {
                     return (
-                      <div className='alert-info' style={{color: 'red'}}>
+                      <div className='alert-info'>
                         <h3>Alert Information:</h3>
                         <div className='info-item'>
                           <h3>Alert Name:</h3>

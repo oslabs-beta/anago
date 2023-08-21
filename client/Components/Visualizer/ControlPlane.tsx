@@ -1,6 +1,5 @@
 import { Modal } from 'react-responsive-modal';
-import { useState } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 
 const ControlPlane = () => {
   const [open, setOpen] = useState(false);

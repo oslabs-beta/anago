@@ -1,5 +1,5 @@
 import { Modal } from 'react-responsive-modal';
-import { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { cleanName, handleAlerts } from '../../context/functions';
 import { StoreContext } from '../../context/stateStore';
 import { CleanAlert } from '../../../types';

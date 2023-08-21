@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { UserData } from '../../../types';
 import { Modal } from 'react-responsive-modal';
 import {
@@ -14,7 +14,7 @@ import {
 } from 'chart.js';
 import { Line, Chart } from 'react-chartjs-2';
 import { useRouteLoaderData } from 'react-router-dom';
-import React from 'react';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
