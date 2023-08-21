@@ -34,11 +34,15 @@ const MetricDisplay = ({ metricId }) => {
   const [metricData, setMetricData]: any = useState({});
 
   // display options for metrics
-  const options = {
+  const options: any = {
     plugins: {
       legend: {
         display: false,
       },
+    },
+    interaction: {
+      intersect: false,
+      mode: 'nearest',
     },
   };
 
@@ -97,12 +101,19 @@ const MetricDisplay = ({ metricId }) => {
         <Line data={metricData} options={options} onClick={openModal} />
       )}
       <div className='modal'>
-        {/* {metricId && <button onClick={openModal}>See more</button>} */}
         <Modal open={open} onClose={closeModal}>
           <h4 className='metric-title'>
             {userData.metrics[metricId].metricName}
           </h4>
-          {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
+          {metricData.hasOwnProperty('labels') && (
+            <Line
+              data={metricData}
+              options={{
+                ...options,
+                plugins: { legend: { display: true } },
+              }}
+            />
+          )}
         </Modal>
       </div>
     </div>
