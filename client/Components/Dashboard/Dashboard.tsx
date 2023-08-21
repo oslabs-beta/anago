@@ -92,7 +92,6 @@ const Dashboard = () => {
                 <MetricDisplay
                   metricId={metricId}
                   key={metricId + lastUpdate}
-                  editMode={editMode}
                 />
               ))}
               <Outlet />
