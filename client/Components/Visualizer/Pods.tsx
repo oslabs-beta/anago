@@ -3,6 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { cleanName, handleAlerts } from '../../context/functions';
 import { StoreContext } from '../../context/stateStore';
 import { CleanAlert } from '../../../types';
+import AlertFlag from './AlertFlag';
 
 const Pods = ({
   conditions,
@@ -19,8 +20,8 @@ const Pods = ({
   id,
 }) => {
   const [open, setOpen]: any = useState(false);
-  const { selectedStates, displayedAlerts }: any = useContext(StoreContext);
-  const [podAlerts, setPodAlerts]:any = useState([]);
+  const { displayedAlerts }: any = useContext(StoreContext);
+  const [podAlerts, setPodAlerts]: any = useState([]);
 
   //modal handler functions
   const openModal = () => setOpen(true);
@@ -30,16 +31,20 @@ const Pods = ({
   useEffect(() => {
     const alerts: CleanAlert[] = handleAlerts(displayedAlerts);
     alerts.forEach((alert: any) => {
-      console.log(alert);
       if (alert['affectedPod'] && !podAlerts[alert]) {
         setPodAlerts([alert, ...podAlerts]);
       }
     });
   }, []);
-  console.log('podAlerts', podAlerts)
 
   return (
     <div className='pod' id={id} key={id}>
+      {podAlerts.length > 0 &&
+        podAlerts.map(alert => {
+          if (alert['affectedPod'] === name) {
+            return <AlertFlag key={alert.startTime} />;
+          }
+        })}
       <img
         src='client/assets/images/pod.png'
         className='k8logo'
@@ -52,40 +57,43 @@ const Pods = ({
         <Modal open={open} onClose={closeModal}>
           <h2>Pod Information:</h2>
           <div className='modal-content'>
-          {podAlerts.length > 0 &&
-                podAlerts.map(alert => {
-                  if (alert['affectedPod'].includes(name)) {
-                    return (
-                      <div className='alert-info' style={{color: 'red'}}>
-                        <h3>Alert Information:</h3>
-                        <div className='info-item'>
-                          <h3>Alert Name:</h3>
-                          <p>{alert.name}</p>
-                        </div>
-                        <div className='info-item'>
-                          <h3>Description:</h3>
-                          <p>{alert.description}</p>
-                        </div>
-                        <div className='info-item'>
-                          <h3>Summary:</h3>
-                          <p>{alert.summary}</p>
-                        </div>
-                        <div className='info-item'>
-                          <h3>Severity:</h3>
-                          <p>{alert.severity}</p>
-                        </div>
-                        <div className='info-item'>
-                          <h3>Start Time:</h3>
-                          <p>{alert.startTime}</p>
-                        </div>
-                        <div className='info-item'>
-                          <h3>Last Updated:</h3>
-                          <p>{alert.lastUpdated}</p>
-                        </div>
+            {podAlerts.length > 0 &&
+              podAlerts.map(alert => {
+                if (alert['affectedPod'].includes(name)) {
+                  return (
+                    <div
+                      className='alert-info'
+                      style={{ color: 'red' }}
+                      key={id}>
+                      <h3>Alert Information:</h3>
+                      <div className='info-item'>
+                        <h3>Alert Name:</h3>
+                        <p>{alert.name}</p>
                       </div>
-                    );
-                  }
-                })}
+                      <div className='info-item'>
+                        <h3>Description:</h3>
+                        <p>{alert.description}</p>
+                      </div>
+                      <div className='info-item'>
+                        <h3>Summary:</h3>
+                        <p>{alert.summary}</p>
+                      </div>
+                      <div className='info-item'>
+                        <h3>Severity:</h3>
+                        <p>{alert.severity}</p>
+                      </div>
+                      <div className='info-item'>
+                        <h3>Start Time:</h3>
+                        <p>{alert.startTime}</p>
+                      </div>
+                      <div className='info-item'>
+                        <h3>Last Updated:</h3>
+                        <p>{alert.lastUpdated}</p>
+                      </div>
+                    </div>
+                  );
+                }
+              })}
             <div className='info-item'>
               <h3>Pod Name:</h3>
               <p>{name}</p>
