@@ -93,6 +93,7 @@ export interface Cluster {
   deployments: Deployment[];
 }
 
+//filtering through alert data and cleaning it up for improved iteration
 export interface CleanAlert{
   name: string,
   description: string,
