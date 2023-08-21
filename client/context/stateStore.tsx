@@ -9,15 +9,14 @@ export type Props = {
 
 //declaring the parameter type Props to assign children to a ReactNode type
 export default ({ children }: Props) => {
-
   const [currentMetrics, setCurrentMetrics] = useState([]);
   const [currentDashboard, setCurrentDashboard] = useState<String[]>([]);
   const [hasFetchedUserData, setHasFetchedUserData] = useState(false);
   //manages selected items in the dropdown
-  const [selectedStates, setSelectedStates] = useState({})
+  const [selectedStates, setSelectedStates] = useState({});
   //manages currently displayed alerts
   const [displayedAlerts, setDisplayedAlerts] = useState<Object>([]);
-  
+  const [clusterData, setClusterData] = useState({});
 
   const States = {
     currentDashboard: currentDashboard,
@@ -30,6 +29,8 @@ export default ({ children }: Props) => {
     setSelectedStates: setSelectedStates,
     displayedAlerts: displayedAlerts,
     setDisplayedAlerts: setDisplayedAlerts,
+    clusterData: clusterData,
+    setClusterData: setClusterData,
   };
 
   return (

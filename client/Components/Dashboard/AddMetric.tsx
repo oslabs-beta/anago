@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { StoreContext } from '../../context/stateStore';
 import { useRouteLoaderData } from 'react-router-dom';
 import { LookupType, ScopeType, lookupName, UserData } from '../../../types';
 import MetricDisplayPreview from './MetricDisplayPreview';
 
 const AddMetric = (props): any => {
   const userData = useRouteLoaderData('home') as UserData;
+  const { clusterData }: any = useContext(StoreContext);
+  console.log('Cluster Data', clusterData);
   // The preconfiged queries to show in the selector
   const lookupOptions = [
     LookupType.CPUUsage,
@@ -37,7 +40,7 @@ const AddMetric = (props): any => {
 
   // User configurable options that vary by lookup preconfigs
   const [domains, setDomains] = useState([
-    ['Cluster', 'Namespace', 'Node', 'Deployment'],
+    ['Cluster', 'Namespace', 'Node'],
     [''],
     ['View All', 'Namespaces', 'Nodes', 'Containers'],
   ]);
@@ -137,8 +140,11 @@ const AddMetric = (props): any => {
       // Preconfigured Query - get target/context, if applicable
       // Context: If there is a context, save it
       if (contextMatrix[types[2]].length) {
-        newMetric.context = chosenDomains[0];
-        newMetric.contextChoice = chosenDomains[1];
+        // If contextChoice is blank, stick with cluster
+        if (chosenDomains[1].length > 0) {
+          newMetric.context = chosenDomains[0];
+          newMetric.contextChoice = chosenDomains[1];
+        } else newMetric.context = 'cluster';
       }
       // Target: If there is a target, save it
       if (targetMatrix[types[2]].length) newMetric.target = chosenDomains[2];
@@ -194,7 +200,7 @@ const AddMetric = (props): any => {
 
     // Filter Targets based on current Context
     let filteredTargets = [...targetMatrix[searchType]];
-    console.log(filteredTargets);
+    // console.log(filteredTargets);
     if (filteredTargets.length) {
       if (newChosenDomains[0] == 'Node') filteredTargets.splice(1, 1);
       // Can't query Namespaces in Node
@@ -203,13 +209,27 @@ const AddMetric = (props): any => {
       }
     }
 
+    let contextChoices = [''];
+    console.log(clusterData);
+    if (
+      newChosenDomains[0] !== 'Cluster' &&
+      clusterData.hasOwnProperty('namespaces')
+    ) {
+      switch (newChosenDomains[0]) {
+        case 'Namespace':
+          contextChoices = clusterData.namespaces.map((el) => el.name);
+          break;
+        case 'Node':
+          contextChoices = clusterData.nodes.map((el) => el.name);
+          break;
+        default:
+          break;
+      }
+    }
+
     // Update state values
     setTypes([scope, entryType, searchType]);
-    setDomains([
-      contextMatrix[searchType],
-      ['Pithy-Depl', 'Kube-QL', '192.168.9.99', 'Prom-Prom-Prom-Prom'],
-      filteredTargets,
-    ]);
+    setDomains([contextMatrix[searchType], contextChoices, filteredTargets]);
     setChosenDomains(newChosenDomains);
   };
 
