@@ -58,7 +58,7 @@ const MetricDisplay = ({ metricId, editMode }) => {
   async function deleteMetric() {
     try {
       // send request to backend
-      const response = await fetch(`/api/user/metric/${metricId}`, {
+      const response = await fetch(`/api/user/metrics/${metricId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ const MetricDisplay = ({ metricId, editMode }) => {
             <img
               id="trash-can"
               src="client/assets/images/trash-can.png"
-              onClick= {() => deleteMetric}
+              onClick={() => deleteMetric}
               height="22px"
               width="20px"
             />

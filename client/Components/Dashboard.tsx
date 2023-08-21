@@ -32,12 +32,18 @@ const Dashboard = () => {
       fetch('/api/pithy')
         .then((res) => res.json())
         .then((res) => {
-          setTimeout(() => pithy(), 1000);
+          setTimeout(() => pithy(), 100000);
         });
     } catch {
       console.log('failed to fetch pithy');
     }
   };
+
+  function saveMetricsAndReload(){
+    setEditMode(false)
+    window.location.reload()
+    return;
+  }
 
   const metricIds = Object.keys(userData.metrics);
 
@@ -67,13 +73,13 @@ const Dashboard = () => {
             {!editMode && (
               <span>
                 <button className="btn" onClick={() => setEditMode(true)}>
-                  Edit Metrics
+                  Edit Mode
                 </button>
               </span>
             )}
             {editMode && (
               <span>
-                <button className="btn" onClick={() => setEditMode(false)}>
+                <button className="btn" onClick={() => saveMetricsAndReload}>
                   Save Metrics
                 </button>
               </span>

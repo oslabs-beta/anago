@@ -326,6 +326,41 @@ header nav {
   overflow-y: auto;
 }
 
+.modal-content {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  word-wrap: break-word;
+}
+
+.modal-content h2 {
+  display: inline-block;
+  padding-right: 500px;
+}
+
+.info-item {
+  display: flex;
+  justify-content:first baseline;
+  align-items: first baseline;
+  line-height: 100%;
+  padding-right: 30px;
+}
+.info-item h3 {
+  padding-right: 10px;
+}
+.info-item p {
+  font-size: 20px;
+}
+.info-item table {
+  width: 100%;
+}
+
+.info-item th,
+td {
+  border: 1px solid black;
+  padding: 5px;
+}
+
 .react-responsive-modal-closeButton {
   position: absolute;
   top: 14px;
@@ -478,11 +513,12 @@ header nav {
 }
 
 h5 {
+  font-family: sans-serif;
   margin-bottom: 5px;
   margin-top: 2px;
   word-wrap: break-word;
   white-space: normal;
-  width: 80px;
+  width: 85px;
 }
 
 .cluster-view {
@@ -502,19 +538,18 @@ h5 {
   flex-direction: column;
   flex-wrap: wrap;
   flex-grow: 1;
-  width: 46%;
-  padding: 20px;
+  width: 45%;
+  padding: 25px;
 }
 .node-info {
   position: absolute;
   top: 0;
   right: 0;
-  margin-bottom: 2px;
 }
 .node-inner-border {
   border: 3px dashed rgb(0, 42, 255, 0.6);
   border-radius: 10px;
-  padding: 20px 5px 5px 5px;
+  padding: 25px 5px 5px 5px;
   margin-bottom: 10px;
 }
 

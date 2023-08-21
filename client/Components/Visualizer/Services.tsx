@@ -30,30 +30,45 @@ const Services = ({
       <div className='modal'>
         <Modal open={open} onClose={closeModal}>
           <h2>Service Information:</h2>
-          <h3>Service Name:</h3>
-          <p>{name}</p>
-          <h3>Creation Timestamp:</h3>
-          <p>{creationTimestamp}</p>
-          <h3>Ports:</h3>
-          <div>
-            {ports.map(port => {
-              return (
-                <div key={port.name+id}>
-                  <h4>Name: </h4>
-                  <p>{port.name}</p>
-                  <h4>Port: </h4>
-                  <p>{port.port}</p>
-                  <h4>Target Port: </h4>
-                  <p>{port.targetPort}</p>
-                  <h4>Protocol: </h4>
-                  <p>{port.protocol}</p>
-                </div>
-              );
-            })}
-          </div>
+          <div className='modal-content'>
+            <div className='info-item'>
+              <h3>Service Name:</h3>
+              <p>{name}</p>
+            </div>
+            <div className='info-item'>
+              <h3>Creation Timestamp:</h3>
+              <p>{creationTimestamp}</p>
+            </div>
+            <div className='info-item'>
+              <table>
+                <h3>Ports:</h3>
+                <tr className='column-name'>
+                  <th>Name:</th>
+                  <th>Port:</th>
+                  <th>Target Port:</th>
+                  <th>Protocol:</th>
+                </tr>
 
-          <h3>Namespace: </h3>
-          <p>{namespace}</p>
+                {ports.map(port => {
+                  return (
+                    <tr className='table-row' key={port.name + id}>
+                      <td>{port.name}</td>
+
+                      <td>{port.port}</td>
+
+                      <td>{port.targetPort}</td>
+
+                      <td>{port.protocol}</td>
+                    </tr>
+                  );
+                })}
+              </table>
+            </div>
+            <div className='info-item'>
+              <h3>Namespace: </h3>
+              <p>{namespace}</p>
+            </div>
+          </div>
         </Modal>
       </div>
     </div>
