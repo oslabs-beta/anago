@@ -1,3 +1,5 @@
+import { RequestHandler } from "express";
+//global error handler type
 export type ServerError = {
   log: string;
   status: number;
@@ -20,8 +22,11 @@ export interface UserData {
   clusterName: string;
   dashboards: {}[];
   metrics: {};
+  hiddenAlerts: [];
 }
 
+
+//represents properties on Node object passed from API request in K8s API controller to components on FE
 export interface Node {
   name: string;
   namespace: any;
@@ -32,6 +37,7 @@ export interface Node {
   status: {};
 }
 
+//represents properties on Pod object passed from API request in K8s API controller to components on FE
 export interface Pod {
   name: string;
   namespace: string;
@@ -47,14 +53,17 @@ export interface Pod {
   uid: string;
 }
 
+//represents properties on Namespace object passed from API request in K8s API controller to components on FE
 export interface Namespace {
   name: string;
   creationTimestamp: string;
   labels: [];
   uid: string;
   phase: string;
+  nodeName: string;
 }
 
+//represents properties on Service object passed from API request in K8s API controller to components on FE
 export interface Service {
   name: string;
   namespace: string;
@@ -63,8 +72,10 @@ export interface Service {
   uid: string;
   ports: [];
   loadBalancer: [];
+  clusterIP;
 }
 
+//represents properties on Deployment object passed from API request in K8s API controller to components on FE
 export interface Deployment {
   name: string;
   creationTimestamp: string;
@@ -75,12 +86,25 @@ export interface Deployment {
   status: {};
 }
 
+//represents properties on Cluster object passed from API request in K8s API controller to components on FE
 export interface Cluster {
   nodes: Node[];
   pods: Pod[];
   namespaces: Namespace[];
   services: Service[];
   deployments: Deployment[];
+}
+
+//filtering through alert data and cleaning it up for improved iteration
+export interface CleanAlert{
+  name: string,
+  description: string,
+  summary: string,
+  severity: string,
+  affectedPod?: string | undefined,
+  affectedNamespace?: string | undefined,
+  startTime: string,
+  lastUpdated: string,
 }
 
 export enum LookupType {

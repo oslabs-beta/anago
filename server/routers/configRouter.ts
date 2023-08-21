@@ -1,5 +1,5 @@
 import express, { Response } from 'express';
-import configController from '../controllers/configController.js';
+import configController from '../controllers/configController.ts';
 
 const configRouter = express.Router();
 

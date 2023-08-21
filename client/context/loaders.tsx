@@ -6,8 +6,8 @@ export const userLoader = async () => {
   return res.json();
 };
 
+//fetch cluster information from kubernetes API and pass to visualizer components
 export const clusterLoader =async () => {
   const res = await fetch('api/k8s/cluster');
   return res.json();
 }
-

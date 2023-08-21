@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import { readUserData } from './helperFuncs.js';
-import { Metric } from '../models/userDataClass.js';
+import { readUserData } from './helperFuncs.ts';
+import { Metric, UserData } from '../models/userDataClass.ts';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 const userDataController: any = {};
 
 userDataController.sendUserData = (
@@ -13,6 +12,7 @@ userDataController.sendUserData = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log('in sendUserData');
   try {
     const userData = readUserData();
     if (!userData) {
@@ -23,7 +23,7 @@ userDataController.sendUserData = (
       });
     }
     res.locals.userData = userData;
-    next();
+    return next();
   } catch (err) {
     next({
       log: `error in userDataController.sendUserData: ${err}`,
@@ -33,13 +33,49 @@ userDataController.sendUserData = (
   }
 };
 
-userDataController.saveHiddenAlert = (
+userDataController.getHiddenAlerts = (
   _req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    // add hidden alert!
+    const userData = readUserData();
+    if (!userData) {
+      next({
+        log: `Reading User Data failed in userDataController.getHiddenAlerts.`,
+        status: 500,
+        message: { err: 'Error retreiving user data.' },
+      });
+    }
+    res.locals.hiddenAlerts = userData.hiddenAlerts;
+    next();
+  } catch (err) {
+    next({
+      log: `error in userDataController.getHiddenAlerts: ${err}`,
+      status: 500,
+      message: { err: 'Error retreiving hidden alerts' },
+    });
+  }
+};
+
+userDataController.saveHiddenAlert = (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+) => {
+  try {
+    // grab just the string from the {hidden: string} param
+    const newHiddenAlert = req.body.hidden;
+    //grab the current userData
+    const updatedUserData = readUserData();
+    // if the current user does not have this saved error, add it
+    if (!updatedUserData.hiddenAlerts.includes(newHiddenAlert)) {
+      updatedUserData.hiddenAlerts.push(newHiddenAlert);
+    }
+    fs.writeFileSync(
+      path.resolve(__dirname, '../models/userData.json'),
+      JSON.stringify(updatedUserData)
+    );
     next();
   } catch (err) {
     next({
@@ -51,12 +87,22 @@ userDataController.saveHiddenAlert = (
 };
 
 userDataController.deleteHiddenAlert = (
-  _req: Request,
-  res: Response,
+  req: Request,
+  _res: Response,
   next: NextFunction
 ) => {
   try {
-    // delete hidden alert!
+    const unhideAlert = req.body.hidden;
+    const updatedUserData = readUserData();
+    //filter the current hiddenAlerts array
+    updatedUserData.hiddenAlerts = updatedUserData.hiddenAlerts.filter(
+      (value) => value !== unhideAlert
+    );
+
+    fs.writeFileSync(
+      path.resolve(__dirname, '../models/userData.json'),
+      JSON.stringify(updatedUserData)
+    );
     next();
   } catch (err) {
     next({
@@ -72,7 +118,6 @@ userDataController.saveUserData = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('Saving updated user data.');
   const updatedUserData = req.body;
   try {
     fs.writeFileSync(

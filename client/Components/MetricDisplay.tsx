@@ -101,3 +101,4 @@ const MetricDisplay = ({ metricId }) => {
 };
 
 export default MetricDisplay;
+
