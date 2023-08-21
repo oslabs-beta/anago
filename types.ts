@@ -120,13 +120,13 @@ export const lookupName = (type: LookupType): string => {
     case LookupType.MemoryUsed:
       return 'Memory Usage by Container';
     case LookupType.MemoryFreeInNode:
-      return 'Memory Available in Node';
+      return 'Memory Available in Nodes (%)';
     case LookupType.MemoryIdle:
       return 'Memory Idle Tracking';
     case LookupType.DiskUsage:
       return 'Disk Usage';
     case LookupType.FreeDiskinNode:
-      return 'Disk Space on Node';
+      return 'Disk Space Available on Nodes (%)';
     case LookupType.ReadyNodesByCluster:
       return 'Ready Nodes by Cluster';
     case LookupType.NodesReadinessFlapping:
@@ -145,6 +145,7 @@ export const lookupName = (type: LookupType): string => {
 export type yAxis = {
   label: string;
   data: number[];
+  pointStyle?: boolean;
 };
 // object to send to front end to plot on a graph
 export type plotData = {

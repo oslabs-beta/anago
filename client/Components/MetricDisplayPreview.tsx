@@ -24,18 +24,31 @@ ChartJS.register(
   Legend
 );
 
-const MetricDisplay = ({ metricData }) => {
+const MetricDisplay = ({ lookupType, metricData }) => {
   //state to handle modal and handling fetched data router
   const [open, setOpen]: any = useState(false);
 
   // display options for metrics
-  const options = {
+  const options: any = {
     plugins: {
       legend: {
         display: false,
       },
     },
+    interaction: {
+      intersect: false,
+      mode: 'nearest',
+    },
   };
+
+  // Most axes should always start at 0, but some may not -- uncomment next line and add items that may not need 0-basis for plotting
+  // if (![].includes(lookupType))
+  Object.assign(options, { scales: { y: { beginAtZero: true } } });
+  // Some axes should go up to ~100
+  if ([4, 7].includes(lookupType))
+    Object.assign(options, {
+      scales: { y: { suggestedMax: 100, suggestedMin: 0 } },
+    });
 
   //modal handler functions
   const openModal = () => setOpen(true);
@@ -48,7 +61,13 @@ const MetricDisplay = ({ metricData }) => {
         {/* {metricId && <button onClick={openModal}>See more</button>} */}
         <Modal open={open} onClose={closeModal}>
           <h4 className="metric-title">Query Preview</h4>
-          <Line data={metricData} />
+          <Line
+            data={metricData}
+            options={{
+              ...options,
+              plugins: { legend: { display: true } },
+            }}
+          />
         </Modal>
       </div>
     </div>

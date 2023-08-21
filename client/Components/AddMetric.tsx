@@ -12,7 +12,6 @@ const AddMetric = (props): any => {
     LookupType.MemoryUsed,
     LookupType.MemoryFreeInNode,
     LookupType.MemoryIdle,
-    LookupType.DiskUsage,
     LookupType.FreeDiskinNode,
     LookupType.ReadyNodesByCluster,
     LookupType.NodesReadinessFlapping,
@@ -197,13 +196,13 @@ const AddMetric = (props): any => {
       newChosenDomains[2] = e.target.value;
 
     // Filter Targets based on current Context
-    let filteredTargets = targetMatrix[searchType];
+    let filteredTargets = [...targetMatrix[searchType]];
+    console.log(filteredTargets);
     if (filteredTargets.length) {
-      if (newChosenDomains[0] == 'Node')
-        filteredTargets = filteredTargets.slice(1);
+      if (newChosenDomains[0] == 'Node') filteredTargets.splice(1, 1);
       // Can't query Namespaces in Node
       else if (newChosenDomains[0] == 'Deployment') {
-        filteredTargets = filteredTargets.slice(2); //Can't q NS/Node in Depl
+        filteredTargets.splice(1, 2); //Can't q NS/Node in Depl
       }
     }
 
@@ -239,7 +238,11 @@ const AddMetric = (props): any => {
       str += `for ${lookupName(Number(types[2]))}`;
       if (targetMatrix[types[2]].length) {
         // there is a target + context
-        str += `, showing all ${chosenDomains[2]} in the ${chosenDomains[1]} ${chosenDomains[0]}`;
+        if (chosenDomains[2] == 'View All') {
+          str += `, showing everything in the ${chosenDomains[1]} ${chosenDomains[0]}`;
+        } else {
+          str += `, grouping together all ${chosenDomains[2]} in the ${chosenDomains[1]} ${chosenDomains[0]}`;
+        }
       } else if (contextMatrix[types[2]].length) {
         // there is context/no-target
         str += `, throughout the ${chosenDomains[1]} ${chosenDomains[0]},`;
@@ -410,7 +413,7 @@ const AddMetric = (props): any => {
           {/* METRIC TARGET */}
           {types[1] == 'entry-precon' && domains[2].length > 0 && (
             <div>
-              <label htmlFor="new-metric-target">View by: </label>
+              <label htmlFor="new-metric-target">Group by: </label>
               <select
                 id="new-metric-target"
                 onChange={typeChanged}
@@ -484,7 +487,10 @@ const AddMetric = (props): any => {
           <div className="new-metric-preview-image">
             <h3>Query Preview</h3>
             {metricData.hasOwnProperty('labels') && (
-              <MetricDisplayPreview metricData={metricData} />
+              <MetricDisplayPreview
+                metricData={metricData}
+                lookupType={types[2]}
+              />
             )}
           </div>
           <div className="new-metric-status">
@@ -556,38 +562,32 @@ function timeConverter(input: string): number {
   }
 }
 
-function generateSummary() {
-  let str = '';
-
-  return str;
-}
-
 const contextMatrix = [
   [],
-  ['Cluster', 'Namespace', 'Node', 'Deployment'],
-  ['Cluster', 'Namespace', 'Node', 'Deployment'],
+  ['Cluster', 'Namespace', 'Node'],
+  ['Cluster', 'Namespace', 'Node'],
   ['Cluster', 'Namespace', 'Node'],
   [],
-  ['Cluster', 'Namespace', 'Node', 'Deployment'],
-  ['Cluster', 'Namespace', 'Node', 'Deployment'],
+  ['Cluster', 'Namespace', 'Node'],
+  ['Cluster', 'Namespace', 'Node'],
   [],
   [],
-  ['Cluster', 'Namespace', 'Node', 'Deployment'],
-  ['Cluster', 'Namespace', 'Node', 'Deployment'],
-  ['Cluster', 'Namespace', 'Node', 'Deployment'],
+  [],
+  ['Cluster', 'Namespace', 'Node'],
+  ['Cluster', 'Namespace', 'Node'],
 ];
 
 const targetMatrix = [
   [],
-  ['View All', 'Namespaces', 'Nodes', 'Deployments', 'Containers'],
+  ['View All', 'Namespaces', 'Nodes', 'Containers'],
+  [],
+  ['View All', 'Namespaces', 'Nodes', 'Containers'],
+  [],
+  [],
+  ['View All', 'Namespaces', 'Nodes', 'Containers'],
   [],
   [],
   [],
-  [],
-  ['View All', 'Namespaces', 'Nodes', 'Deployments', 'Containers'],
-  [],
-  [],
-  [],
-  [],
-  ['View All', 'Namespaces', 'Nodes', 'Deployments'],
+  ['View All', 'Namespaces', 'Nodes', 'Containers'],
+  ['View All', 'Namespaces', 'Nodes', 'Containers'],
 ];

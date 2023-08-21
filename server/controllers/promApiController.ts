@@ -167,6 +167,7 @@ const promApiController: any = {
           const yAxis: yAxis = {
             label: '',
             data: [],
+            pointStyle: false,
           };
           // populate the data for the promMeterics x-axis one time
           if (promMetrics.labels.length === 0) {

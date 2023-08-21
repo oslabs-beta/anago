@@ -33,13 +33,27 @@ const MetricDisplay = ({ metricId }) => {
   const [metricData, setMetricData]: any = useState({});
 
   // display options for metrics
-  const options = {
+  const options: any = {
     plugins: {
       legend: {
         display: false,
       },
     },
+    interaction: {
+      intersect: false,
+      mode: 'nearest',
+    },
   };
+
+  const thisType = userData.metrics[metricId].lookupType;
+  // Most axes should always start at 0, but some may not -- uncomment next line and add items that may not need 0-basis for plotting
+  // if (![].includes(thisType))
+  Object.assign(options, { scales: { y: { beginAtZero: true } } });
+  // Some axes should go up to ~100
+  if ([4, 7].includes(thisType))
+    Object.assign(options, {
+      scales: { y: { suggestedMax: 100, suggestedMin: 0 } },
+    });
 
   //fetching data from Prometheus
   useEffect(() => {
@@ -71,7 +85,15 @@ const MetricDisplay = ({ metricId }) => {
           <h4 className="metric-title">
             {userData.metrics[metricId].metricName}
           </h4>
-          {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
+          {metricData.hasOwnProperty('labels') && (
+            <Line
+              data={metricData}
+              options={{
+                ...options,
+                plugins: { legend: { display: true } },
+              }}
+            />
+          )}
         </Modal>
       </div>
     </div>
