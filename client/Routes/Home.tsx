@@ -6,13 +6,11 @@ import {
 } from 'react-router-dom';
 import { UserData } from '../../types';
 import { useContext, useEffect } from 'react';
-import { StoreContext } from '../stateStore';
-import React from 'react';
+import { StoreContext } from '../context/stateStore';
 import logo from '../assets/images/anago.png';
-import AlertBar from '../Components/AlertBar';
+import AlertBar from '../Components/Dashboard/AlertBar';
 
 export default function Home() {
-  //import data from loader
   const userData = useRouteLoaderData('home') as UserData;
   const navigate = useNavigate();
   const { setHasFetchedUserData, setCurrentDashboard }: any =
@@ -24,25 +22,29 @@ export default function Home() {
   useEffect(() => {
     setHasFetchedUserData(true);
     setCurrentDashboard(dashboards[0]);
-    navigate('0');
+    if (window.location.pathname === '/') navigate('0');
   }, []);
 
   return (
     <div className="home-layout">
       <header>
         <span className="logo-container">
-          <img src={'client/assets/images/anago.png'} alt="logo" className="logo-image" />
+          <img
+            src={'client/assets/images/anago.png'}
+            alt="logo"
+            className="logo-image"
+          />
           <h3 className="app-title">Anago</h3>
         </span>
         <nav>
-          <NavLink to={'/'} className='nav-btn'>
+          <NavLink to={'/0'} className="nav-btn">
             Dashboards
           </NavLink>
-          {/* <NavLink to={'/settings'} className='nav-btn'>
-            Settings
-          </NavLink> */} 
-          <NavLink to={'/clusterview'} className='nav-btn'>
+          <NavLink to={'/clusterview'} className="nav-btn">
             Cluster View
+          </NavLink>
+          <NavLink to={'/setup'} className="nav-btn">
+            Getting Started
           </NavLink>
           {/* <NavLink to={'/login'} className='nav-btn'>
             Log Out
@@ -51,7 +53,7 @@ export default function Home() {
       </header>
 
       <div className="main-body">
-      <AlertBar />
+        <AlertBar />
         <Outlet />
       </div>
     </div>

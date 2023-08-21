@@ -1,6 +1,6 @@
 export const DEPLOYMENT_URL = 'http://localhost:9090/';
 export const PITHY_URL =
-  'http://af4229dcba421469f98c7369c72e123c-566514288.us-east-2.elb.amazonaws.com/slow';
+  'http://a02d62995141f4ecb856d5dd4467ca42-607603214.us-east-2.elb.amazonaws.com/slow';
 
 export const ACTIVE_DEPLOYMENT = true; // T: Cluster is live. F: Cached queries
 export const NEW_USER = false; // T: Use default Metrics. F: Load saved user

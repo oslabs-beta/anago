@@ -1,7 +1,6 @@
 import { Modal } from 'react-responsive-modal';
-import { useState } from 'react';
-import { cleanName } from '../../functions.ts';
-import React from 'react';
+import React, { useState } from 'react';
+import { cleanName } from '../../context/functions.js';
 
 const Services = ({
   name,
@@ -14,6 +13,7 @@ const Services = ({
 }) => {
   const [open, setOpen]: any = useState(false);
 
+  //modal handler functions
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 

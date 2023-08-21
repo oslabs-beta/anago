@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { UserData } from '../../types';
+import { UserData } from '../../../types';
 import { Modal } from 'react-responsive-modal';
 import {
   Chart as ChartJS,
@@ -43,19 +43,6 @@ const MetricDisplay = ({ metricId, editMode }) => {
     },
   };
 
-  //fetching data from Prometheus
-  function fetchFromProm() {
-    //console.log('Current user in metric:', userData);
-    fetch(`/api/data/metrics/${metricId}`, {
-      method: 'GET',
-    })
-      .then((data) => data.json())
-      .then((data) => {
-        setMetricData(data);
-      })
-      .catch((err) => console.log(err));
-  }
-
   async function deleteMetric() {
     try {
       // send request to backend
@@ -73,6 +60,19 @@ const MetricDisplay = ({ metricId, editMode }) => {
     } catch (err) {
       console.log(err);
     }
+  }
+
+  //fetching data from Prometheus
+  function fetchFromProm() {
+    //console.log('Current user in metric:', userData);
+    fetch(`/api/data/metrics/${metricId}`, {
+      method: 'GET',
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        setMetricData(data);
+      })
+      .catch((err) => console.log(err));
   }
 
   useEffect(
@@ -138,7 +138,15 @@ const MetricDisplay = ({ metricId, editMode }) => {
             <h4 className="metric-title">
               {userData.metrics[metricId].metricName}
             </h4>
-            {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
+            {metricData.hasOwnProperty('labels') && (
+              <Line
+                data={metricData}
+                options={{
+                  ...options,
+                  plugins: { legend: { display: true } },
+                }}
+              />
+            )}
           </Modal>
         </div>
       </div>
