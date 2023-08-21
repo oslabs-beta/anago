@@ -518,7 +518,7 @@ const AddMetric = (props): any => {
       </div>
       <div className="summary-container">
         <p>{querySummary}</p>
-        <p>{queryPromQL}</p>
+        <p className='summary-query'>{queryPromQL}</p>
       </div>
       <div className="new-metric-buttons">
         <button className="btn" onClick={saveMetric}>

@@ -311,7 +311,10 @@ header nav {
     font-size: 16px;
     font-family: 'Ubuntu', sans-serif;
     text-align: justify;
-    line-break: anywhere;
+  }
+
+  .summary-query {
+    word-break: anywhere;
   }
 }
 

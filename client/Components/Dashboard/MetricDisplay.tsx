@@ -35,13 +35,25 @@ const MetricDisplay = ({ metricId, editMode }) => {
   const [trashCanClicked, setTrashCanClicked] = useState<Boolean>(false);
 
   // display options for metrics
-  const options = {
+  const options: any = {
     plugins: {
       legend: {
         display: false,
       },
     },
+    interaction: {
+      intersect: false,
+      mode: 'nearest',
+    },
   };
+  // Most axes should always start at 0, but some may not -- uncomment next line and add items that may not need 0-basis for plotting
+  // if (![].includes(userData.metrics[metricId].lookupType))
+  Object.assign(options, { scales: { y: { beginAtZero: true } } });
+  // Some axes should go up to ~100
+  if ([4, 7].includes(userData.metrics[metricId].lookupType))
+    Object.assign(options, {
+      scales: { y: { suggestedMax: 100, suggestedMin: 0 } },
+    });
 
   async function deleteMetric() {
     try {
