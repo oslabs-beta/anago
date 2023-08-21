@@ -32,6 +32,7 @@ const MetricDisplay = ({ metricId, editMode }) => {
   //state to handle modal and handling fetched data router
   const [open, setOpen]: any = useState(false);
   const [metricData, setMetricData]: any = useState({});
+  const [trashCanClicked, setTrashCanClicked] = useState<Boolean>(false);
 
   // display options for metrics
   const options = {
@@ -66,6 +67,8 @@ const MetricDisplay = ({ metricId, editMode }) => {
       });
       if (!response.ok) {
         throw new Error('failed to delete metric from user data');
+      } else {
+        setTrashCanClicked(true);
       }
     } catch (err) {
       console.log(err);
@@ -109,14 +112,18 @@ const MetricDisplay = ({ metricId, editMode }) => {
 
   return (
     <div>
-      <div className="metric-container">
+      <div
+        className={`metric-container${
+          trashCanClicked ? '-trash-can-clicked' : ''
+        }`}
+      >
         <h4 className="metric-title">
           {userData.metrics[metricId].metricName}{' '}
-          {editMode && (
+          {editMode && !trashCanClicked && (
             <img
               id="trash-can"
               src="client/assets/images/trash-can.png"
-              onClick={() => deleteMetric}
+              onClick={deleteMetric}
               height="22px"
               width="20px"
             />

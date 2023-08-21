@@ -56,6 +56,23 @@ $highlight-bright: rgba(143, 166, 200, 0.9);
   margin-bottom: 15px;
   cursor: pointer;
 }
+.metric-container-trash-can-clicked {
+  min-width: 400px;
+  max-width: 500px;
+  min-height: 300px;
+  background-color: rgb(140, 138, 138);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+  .metric-title {
+    font-family: 'Ubuntu', sans-serif;
+    margin: 5px;
+  }
+  margin-bottom: 15px;
+  cursor: pointer;
+}
 
 .metric-title {
   display: flex;
@@ -340,7 +357,7 @@ header nav {
 
 .info-item {
   display: flex;
-  justify-content:first baseline;
+  justify-content: first baseline;
   align-items: first baseline;
   line-height: 100%;
   padding-right: 30px;

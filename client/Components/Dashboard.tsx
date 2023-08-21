@@ -39,9 +39,9 @@ const Dashboard = () => {
     }
   };
 
-  function saveMetricsAndReload(){
-    setEditMode(false)
-    window.location.reload()
+  function saveMetricsAndReload() {
+    setEditMode(false);
+    window.location.reload();
     return;
   }
 
@@ -79,7 +79,7 @@ const Dashboard = () => {
             )}
             {editMode && (
               <span>
-                <button className="btn" onClick={() => saveMetricsAndReload}>
+                <button className="btn" onClick={saveMetricsAndReload}>
                   Save Metrics
                 </button>
               </span>
