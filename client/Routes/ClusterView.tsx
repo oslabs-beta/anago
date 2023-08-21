@@ -7,7 +7,6 @@ import React from 'react';
 
 const ClusterView = () => {
   const clusterData: any = useRouteLoaderData('cluster');
-  console.log('retrieved clusterData', clusterData);
   const nodes: Node[] = clusterData.nodes;
 
   return (

@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useRouteLoaderData } from 'react-router-dom';
-import { StoreContext } from '../../stateStore';
-
+import { StoreContext } from '../../context/stateStore';
 
 export function Dropdown() {
-  const [isDropdownDisplayed, setIsDropdownDisplayed] = useState(false);
   const clusterData: any = useRouteLoaderData('cluster');
   const { selectedStates, setSelectedStates }: any = useContext(StoreContext);
+  const [isDropdownDisplayed, setIsDropdownDisplayed] = useState(false);
 
+  //set the default 'selected states' to include all nodes and namespaces returned from K8s API so the page initially loads with content
   const defaultStates = () => {
     let obj = {};
     clusterData.nodes.map(node => {
@@ -19,6 +19,7 @@ export function Dropdown() {
     return obj;
   };
 
+  //determine the number of nodes and namespaces that are selected from the dropdown and the total number of nodes and namespaces available. this creates a label for the dropdown bar that shows the proportion of available items are currently viewed
   const numSelected = Object.values(selectedStates).filter(Boolean).length;
   const numNodes = Object.keys(selectedStates).filter(
     item => item.charAt(0) === 'i' && selectedStates[item] === true,
@@ -29,23 +30,8 @@ export function Dropdown() {
   const totalNodes = clusterData.nodes.length;
   const totalNamespaces = clusterData.namespaces.length;
 
-  // const nodeNames = clusterData.nodes.map(node => {
-  //   return node.name;
-  // });
-  // const namespaceNames = clusterData.namespaces.map(namespace => {
-  //   return namespace.name;
-  // });
 
-  // const selectedNodes: String[] | any  = Object.keys(selectedStates).filter(
-  //   element => element.charAt(0) === 'i',
-  // );
-  // const selectedNamespaces: String[] | any = Object.keys(selectedStates).filter(
-  //   element => element.charAt(0) !== 'i',
-  // );
-
-  // const unselected = Object.values(nodeNames).filter(el => !selectedNodes.includes(el))
-  // const hiddenNamespaces = Object.values(namespaceNames).filter(el => !selectedNamespaces.includes(el))
-
+  //handler function to close the dropdown if clicked outside of the dropdown window
   const dropdownRef = useRef(null);
   const onClick = e => {
     if (e.target !== dropdownRef.current) {
@@ -53,6 +39,7 @@ export function Dropdown() {
     }
   };
 
+  //upon component mounting, set the default selected states to the recieved API data, add an event listener to handle closing the dropdown with clicks outside of reference. remove event listener when component unmounts
   useEffect(() => {
     const base = defaultStates();
     setSelectedStates(base);
@@ -63,8 +50,6 @@ export function Dropdown() {
     };
   }, []);
 
-
-  console.log('selectedStates', selectedStates);
   return (
     <fieldset className='dropdown'>
       <button

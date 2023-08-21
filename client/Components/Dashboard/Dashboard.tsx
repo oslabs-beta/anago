@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-responsive-modal';
 import MetricDisplay from './MetricDisplay';
-import { UserData } from '../../types';
+import { UserData } from '../../../types';
 import {
   useRouteLoaderData,
   useParams,
@@ -9,7 +9,6 @@ import {
   useLocation,
 } from 'react-router-dom';
 import AddMetric from './AddMetric';
-import React from 'react';
 
 const Dashboard = () => {
   const userData = useRouteLoaderData('home') as UserData;

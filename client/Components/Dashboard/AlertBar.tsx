@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { UserData } from '../../types';
+import { UserData } from '../../../types';
 import { useRouteLoaderData } from 'react-router-dom';
-import { StoreContext } from '../stateStore';
+import { StoreContext } from '../../context/stateStore';
 
 //TODO: add displayed to the state store
 
@@ -46,11 +46,11 @@ const AlertBar = () => {
   //filter out any alerts that are supposed to be hidden and also any repeats
   function calculateDisplayed() {
     const displayed = sorted
-      .filter((alert) => !hidden.includes(alert.startsAt))
+      .filter(alert => !hidden.includes(alert.startsAt))
       .reduce((unique, alert) => {
         // filtering out repeats based on a property on the object in the array
         if (
-          !unique.find((uniqueAlert) => uniqueAlert.startsAt === alert.startsAt)
+          !unique.find(uniqueAlert => uniqueAlert.startsAt === alert.startsAt)
         ) {
           unique.push(alert);
         }
@@ -142,7 +142,7 @@ const AlertBar = () => {
   //onclick to restore alerts
   async function handleRestore(id: string) {
     //remove the id from the hidden array to update state
-    setHidden((prev) => prev.filter((alertId) => alertId !== id));
+    setHidden(prev => prev.filter(alertId => alertId !== id));
     // request to the backend
     try {
       const response = await fetch(`/api/user/hiddenAlert`, {
@@ -162,10 +162,9 @@ const AlertBar = () => {
 
   return (
     <div
-      className="status-bar"
+      className='status-bar'
       onMouseOver={() => setMouseOver(true)}
-      onMouseOut={() => setMouseOver(false)}
-    >
+      onMouseOut={() => setMouseOver(false)}>
       {/* if data was fetched and there are errors and mouse is over*/}
       {fetched && !noErrors && mouseOver && (
         <div>
@@ -175,23 +174,21 @@ const AlertBar = () => {
           {['critical', 'warning'].map(severity => (
             <div id={severity} key={severity}>
               {[...displayedAlerts].map(
-                (alertObj) =>
+                alertObj =>
                   alertObj.labels.severity === severity &&
                   !hidden.includes(alertObj.startsAt) && (
                     <p
                       className={alertObj.labels.severity}
                       key={alertObj.startsAt}
-                      id={alertObj.startsAt}
-                    >
-                      <strong className="message">
+                      id={alertObj.startsAt}>
+                      <strong className='message'>
                         {severity.toUpperCase()}:
                       </strong>{' '}
                       {alertObj.annotations.description}
                       <br></br>
                       <button
                         onClick={() => handleHide(alertObj.startsAt)}
-                        className="btn-small"
-                      >
+                        className='btn-small'>
                         hide
                       </button>
                     </p>
@@ -201,9 +198,9 @@ const AlertBar = () => {
           ))}
           {hidden.length > 0 && (
             <div>
-              {['critical', 'warning'].map((severity) => (
-                <div id="hidden" key={`${severity}+H`}>
-                  {[...hidden].map((hiddenId) => {
+              {['critical', 'warning'].map(severity => (
+                <div id='hidden' key={`${severity}+H`}>
+                  {[...hidden].map(hiddenId => {
                     const alertObj = alerts.find(
                       alertObj =>
                         alertObj.startsAt === hiddenId &&
@@ -218,9 +215,8 @@ const AlertBar = () => {
                           </em>
                           <br></br>
                           <button
-                            className="btn-small"
-                            onClick={() => handleRestore(alertObj.startsAt)}
-                          >
+                            className='btn-small'
+                            onClick={() => handleRestore(alertObj.startsAt)}>
                             Restore
                           </button>
                         </p>
@@ -235,7 +231,7 @@ const AlertBar = () => {
       )}
       {/* if there are errors, the data is fetched, but the mouse is not over */}
       {!noErrors && fetched && !mouseOver && (
-        <h3 id="mouseNotOver">
+        <h3 id='mouseNotOver'>
           <strong>
             ALERTS PREVIEW: {criticalCount} Critical, {warningCount} Warning
           </strong>

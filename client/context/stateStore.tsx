@@ -13,9 +13,11 @@ export default ({ children }: Props) => {
   const [currentMetrics, setCurrentMetrics] = useState([]);
   const [currentDashboard, setCurrentDashboard] = useState<String[]>([]);
   const [hasFetchedUserData, setHasFetchedUserData] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState<Number>();
+  //manages selected items in the dropdown
   const [selectedStates, setSelectedStates] = useState({})
+  //manages currently displayed alerts
   const [displayedAlerts, setDisplayedAlerts] = useState<Object>([]);
+  
 
   const States = {
     currentDashboard: currentDashboard,
@@ -24,8 +26,6 @@ export default ({ children }: Props) => {
     setHasFetchedUserData: setHasFetchedUserData,
     currentMetrics: currentMetrics,
     setCurrentMetrics: setCurrentMetrics,
-    lastUpdate: lastUpdate,
-    setLastUpdate: setLastUpdate,
     selectedStates: selectedStates,
     setSelectedStates: setSelectedStates,
     displayedAlerts: displayedAlerts,

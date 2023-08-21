@@ -18,16 +18,6 @@ const k8sApi2 = kc.makeApiClient(k8s.AppsV1Api);
 
 const k8sController: any = {};
 
-// k8sController.getControlPlane = async ( _req: Request,
-//   res: Response,
-//   next: NextFunction,) => {
-// try {
-//   const data: any = await k8sApi.
-// } catch (error) {
-//   console.log(error)
-// }
-// }
-
 k8sController.getNodes = async (
   _req: Request,
   res: Response,
@@ -67,7 +57,6 @@ k8sController.getPods = async (
     const data: any = await k8sApi.listPodForAllNamespaces();
     const pods: Pod[] = data.body.items.map(data => {
       const { name, namespace, creationTimestamp, uid, labels } = data.metadata;
-      console.log(data.spec.containers)
       const { nodeName, containers, serviceAccount } = data.spec;
       const { conditions, containerStatuses, phase, podIP } = data.status;
       const pod: Pod = {
@@ -130,7 +119,6 @@ k8sController.getServices = async (
 ) => {
   try {
     const data: any = await k8sApi.listServiceForAllNamespaces();
-
     const services: Service[] = data.body.items.map(data => {
       const { name, namespace, uid, creationTimestamp, labels } = data.metadata;
       const { ports, clusterIP } = data.spec;

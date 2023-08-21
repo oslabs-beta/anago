@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { UserData } from '../../types';
+import React, { useEffect, useState } from 'react';
+import { UserData } from '../../../types';
 import { Modal } from 'react-responsive-modal';
 import {
   Chart as ChartJS,
@@ -14,7 +14,7 @@ import {
 } from 'chart.js';
 import { Line, Chart } from 'react-chartjs-2';
 import { useRouteLoaderData } from 'react-router-dom';
-import React from 'react';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -23,7 +23,7 @@ ChartJS.register(
   Colors,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 const MetricDisplay = ({ metricId }) => {
@@ -52,7 +52,7 @@ const MetricDisplay = ({ metricId }) => {
       .then(data => {
         setMetricData(data);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }
 
   useEffect(
@@ -83,7 +83,7 @@ const MetricDisplay = ({ metricId }) => {
       // userData.metrics[metricId].scopeType,
       // userData.metrics[metricId].queryOptions.stepSize,
       // userData.metrics[metricId].queryOptions.refresh,
-    ]
+    ],
   );
 
   //modal handler functions
@@ -91,15 +91,15 @@ const MetricDisplay = ({ metricId }) => {
   const closeModal = () => setOpen(false);
 
   return (
-    <div className="metric-container">
-      <h4 className="metric-title">{userData.metrics[metricId].metricName}</h4>
+    <div className='metric-container'>
+      <h4 className='metric-title'>{userData.metrics[metricId].metricName}</h4>
       {metricData.hasOwnProperty('labels') && (
         <Line data={metricData} options={options} onClick={openModal} />
       )}
-      <div className="modal">
+      <div className='modal'>
         {/* {metricId && <button onClick={openModal}>See more</button>} */}
         <Modal open={open} onClose={closeModal}>
-          <h4 className="metric-title">
+          <h4 className='metric-title'>
             {userData.metrics[metricId].metricName}
           </h4>
           {metricData.hasOwnProperty('labels') && <Line data={metricData} />}

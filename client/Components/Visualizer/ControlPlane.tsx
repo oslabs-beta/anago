@@ -1,9 +1,8 @@
 import { Modal } from 'react-responsive-modal';
-import { useState } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 
 const ControlPlane = () => {
-  const [open, setOpen]: any = useState(false);
+  const [open, setOpen] = useState(false);
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
   return (
@@ -18,7 +17,7 @@ const ControlPlane = () => {
       <div className='modal'>
         <Modal open={open} onClose={closeModal}>
           <div className='modal-content'>
-            <p>Your Cluster is hosted on Amazon Web Services' Elastic Kubernetes Service (EKS)</p>
+            <p>Your Current Cluster is hosted on Amazon Web Services' Elastic Kubernetes Service (EKS)</p>
           </div>
         </Modal>
       </div>

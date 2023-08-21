@@ -1,7 +1,8 @@
 import { Modal } from 'react-responsive-modal';
-import { useState } from 'react';
-import { cleanName } from '../../functions';
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { cleanName, handleAlerts } from '../../context/functions';
+import { StoreContext } from '../../context/stateStore';
+import { CleanAlert } from '../../../types';
 
 const Pods = ({
   conditions,
@@ -18,11 +19,24 @@ const Pods = ({
   id,
 }) => {
   const [open, setOpen]: any = useState(false);
+  const { selectedStates, displayedAlerts }: any = useContext(StoreContext);
+  const [podAlerts, setPodAlerts]:any = useState([]);
 
+  //modal handler functions
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
-  console.log('container statuses', containerStatuses);
+  //clean up alert data for relevant information and assign relevant alerts to pod state
+  useEffect(() => {
+    const alerts: CleanAlert[] = handleAlerts(displayedAlerts);
+    alerts.forEach((alert: any) => {
+      console.log(alert);
+      if (alert['affectedPod'] && !podAlerts[alert]) {
+        setPodAlerts([alert, ...podAlerts]);
+      }
+    });
+  }, []);
+  console.log('podAlerts', podAlerts)
 
   return (
     <div className='pod' id={id} key={id}>
@@ -36,9 +50,42 @@ const Pods = ({
 
       <div className='modal'>
         <Modal open={open} onClose={closeModal}>
-          {}
           <h2>Pod Information:</h2>
           <div className='modal-content'>
+          {podAlerts.length > 0 &&
+                podAlerts.map(alert => {
+                  if (alert['affectedPod'].includes(name)) {
+                    return (
+                      <div className='alert-info' style={{color: 'red'}}>
+                        <h3>Alert Information:</h3>
+                        <div className='info-item'>
+                          <h3>Alert Name:</h3>
+                          <p>{alert.name}</p>
+                        </div>
+                        <div className='info-item'>
+                          <h3>Description:</h3>
+                          <p>{alert.description}</p>
+                        </div>
+                        <div className='info-item'>
+                          <h3>Summary:</h3>
+                          <p>{alert.summary}</p>
+                        </div>
+                        <div className='info-item'>
+                          <h3>Severity:</h3>
+                          <p>{alert.severity}</p>
+                        </div>
+                        <div className='info-item'>
+                          <h3>Start Time:</h3>
+                          <p>{alert.startTime}</p>
+                        </div>
+                        <div className='info-item'>
+                          <h3>Last Updated:</h3>
+                          <p>{alert.lastUpdated}</p>
+                        </div>
+                      </div>
+                    );
+                  }
+                })}
             <div className='info-item'>
               <h3>Pod Name:</h3>
               <p>{name}</p>
@@ -79,7 +126,6 @@ const Pods = ({
                   {conditions.map(condition => {
                     return (
                       <th key={condition.type}>
-                        {' '}
                         {`${condition.type} Status: ${condition.status}`}
                       </th>
                     );
@@ -110,31 +156,31 @@ const Pods = ({
             {containers.map(container => {
               return (
                 <div key={container.name + id}>
-                    <div className='info-item'>
-                      <h3>Container Name:</h3>
-                      <p>{container.name}</p>
-                    </div>
+                  <div className='info-item'>
+                    <h3>Container Name:</h3>
+                    <p>{container.name}</p>
+                  </div>
 
-                    {containerStatuses.map(status => {
-                      if (status.name === container.name) {
-                        return (
-                          <div key={status.id}>
-                            <div className='info-item'>
-                              <h3>Image:</h3>
-                              <p>{status.image}</p>
-                            </div>
-                            <div className='info-item'>
-                              <h3>Status:</h3>
-                              <p>{Object.keys(status.state)}</p>
-                            </div>
-                            <div className='info-item'>
-                              <h3>Restart Count:</h3>
-                              <p>{status.restartCount}</p>
-                            </div>
+                  {containerStatuses.map(status => {
+                    if (status.name === container.name) {
+                      return (
+                        <div key={status.id}>
+                          <div className='info-item'>
+                            <h3>Image:</h3>
+                            <p>{status.image}</p>
                           </div>
-                        );
-                      }
-                    })}
+                          <div className='info-item'>
+                            <h3>Status:</h3>
+                            <p>{Object.keys(status.state)}</p>
+                          </div>
+                          <div className='info-item'>
+                            <h3>Restart Count:</h3>
+                            <p>{status.restartCount}</p>
+                          </div>
+                        </div>
+                      );
+                    }
+                  })}
 
                   <div className='info-item'>
                     <table>
@@ -166,22 +212,22 @@ const Pods = ({
                     </table>
                   </div>
                   <div className='info-item'>
-                  <table>
-                    <h3>Volume Mounts:</h3>
-                    <tr className='column-name'>
-                      <th>Name:</th>
-                      <th>Path:</th>
-                    </tr>
-                    {container.volumeMounts.map(element => {
-                      return (
-                        <tr className='table-row' key={element.name + id}>
-                          <td>{element.name}</td>
-                          <td>{element.mountPath}</td>
-                        </tr>
-                      );
-                    })}
-                  </table>
-                      </div>
+                    <table>
+                      <h3>Volume Mounts:</h3>
+                      <tr className='column-name'>
+                        <th>Name:</th>
+                        <th>Path:</th>
+                      </tr>
+                      {container.volumeMounts.map(element => {
+                        return (
+                          <tr className='table-row' key={element.name + id}>
+                            <td>{element.name}</td>
+                            <td>{element.mountPath}</td>
+                          </tr>
+                        );
+                      })}
+                    </table>
+                  </div>
                 </div>
               );
             })}
