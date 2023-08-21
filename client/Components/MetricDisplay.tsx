@@ -1,3 +1,4 @@
+/*
 import { useEffect, useState } from 'react';
 import { UserData } from '../../types';
 import { Modal } from 'react-responsive-modal';
@@ -101,4 +102,4 @@ const MetricDisplay = ({ metricId }) => {
 };
 
 export default MetricDisplay;
-
+*/

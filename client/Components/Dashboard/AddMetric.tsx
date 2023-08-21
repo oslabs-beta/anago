@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouteLoaderData } from 'react-router-dom';
-import { LookupType, ScopeType, lookupName, UserData } from '../../types';
+import { LookupType, ScopeType, lookupName, UserData } from '../../../types';
 import MetricDisplayPreview from './MetricDisplayPreview';
 
 const AddMetric = (props): any => {
