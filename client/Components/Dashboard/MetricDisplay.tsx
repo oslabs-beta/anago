@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { UserData } from '../../../types';
+import { UserData } from '../../../types.tsx';
 import { Modal } from 'react-responsive-modal';
 import {
   Chart as ChartJS,
@@ -26,12 +26,13 @@ ChartJS.register(
   Legend
 );
 
-const MetricDisplay = ({ metricId }) => {
+const MetricDisplay = ({ metricId, editMode }) => {
   const userData = useRouteLoaderData('home') as UserData;
 
   //state to handle modal and handling fetched data router
   const [open, setOpen]: any = useState(false);
   const [metricData, setMetricData]: any = useState({});
+  const [trashCanClicked, setTrashCanClicked] = useState<Boolean>(false);
 
   // display options for metrics
   const options = {
@@ -41,6 +42,19 @@ const MetricDisplay = ({ metricId }) => {
       },
     },
   };
+
+  //fetching data from Prometheus
+  function fetchFromProm() {
+    //console.log('Current user in metric:', userData);
+    fetch(`/api/data/metrics/${metricId}`, {
+      method: 'GET',
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        setMetricData(data);
+      })
+      .catch((err) => console.log(err));
+  }
 
   async function deleteMetric() {
     try {
@@ -59,19 +73,6 @@ const MetricDisplay = ({ metricId }) => {
     } catch (err) {
       console.log(err);
     }
-  }
-
-  //fetching data from Prometheus
-  function fetchFromProm() {
-    //console.log('Current user in metric:', userData);
-    fetch(`/api/data/metrics/${metricId}`, {
-      method: 'GET',
-    })
-      .then((data) => data.json())
-      .then((data) => {
-        setMetricData(data);
-      })
-      .catch((err) => console.log(err));
   }
 
   useEffect(
@@ -137,15 +138,7 @@ const MetricDisplay = ({ metricId }) => {
             <h4 className="metric-title">
               {userData.metrics[metricId].metricName}
             </h4>
-            {metricData.hasOwnProperty('labels') && (
-              <Line
-                data={metricData}
-                options={{
-                  ...options,
-                  plugins: { legend: { display: true } },
-                }}
-              />
-            )}
+            {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
           </Modal>
         </div>
       </div>
