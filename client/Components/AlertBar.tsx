@@ -15,7 +15,7 @@ const AlertBar = () => {
   const [alerts, setAlerts] = useState<any[]>([]);
   const [fetched, setFetched] = useState<Boolean>(false);
   const [noErrors, setNoErrors] = useState<Boolean>(false);
-  const [mouseOver, setMouseOver] = useState<Boolean>(false);
+  const [clicked, setClicked] = useState<Boolean>(false);
   const [open, setOpen]: any = useState(false);
   const [modalAlert, setModalAlert] = useState<any>({});
   //save this hidden with userData
@@ -118,7 +118,7 @@ const AlertBar = () => {
           statusBar.style.height = '3.5rem';
           statusBar.style.overflowY = 'hidden';
           statusBar.style.cursor = 'auto';
-          statusBar.style.backgroundColor = '#008a8a33';
+          statusBar.style.backgroundColor = '#3a98f650';
         }
       });
     }
@@ -179,14 +179,18 @@ const AlertBar = () => {
       setOpen(true);
     }
   }
-  console.log('displayed alerts: ', displayedAlerts);
 
   return (
     <>
       {showAlertBar && (
         <>
           <div className='modal'>
-            <Modal open={open} onClose={() => setOpen(false)}>
+            <Modal
+              open={open}
+              onClose={() => {
+                setOpen(false);
+              }}
+            >
               <p>
                 <strong>Name:</strong> {modalAlert.name}{' '}
               </p>
@@ -207,15 +211,11 @@ const AlertBar = () => {
               </p>
             </Modal>
           </div>
-          <div
-            className='status-bar'
-            onMouseOver={() => setMouseOver(true)}
-            onMouseOut={() => setMouseOver(false)}
-          >
+          <div className='status-bar'>
             {/* if data was fetched and there are errors and mouse is over*/}
-            {fetched && !noErrors && mouseOver && (
+            {fetched && !noErrors && clicked && (
               <div>
-                <h3 id='alertTitle'>
+                <h3 id='alertTitle' onClick={() => setClicked(false)}>
                   <strong>ALERTS:</strong>
                 </h3>
                 {['critical', 'warning'].map((severity) => (
@@ -290,8 +290,8 @@ const AlertBar = () => {
               </div>
             )}
             {/* if there are errors, the data is fetched, but the mouse is not over */}
-            {!noErrors && fetched && !mouseOver && (
-              <h3 id='mouseNotOver'>
+            {!noErrors && fetched && !clicked && (
+              <h3 id='mouseNotOver' onClick={() => setClicked(true)}>
                 <strong>
                   ALERTS PREVIEW: {criticalCount} Critical, {warningCount}{' '}
                   Warning
