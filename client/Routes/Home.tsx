@@ -25,15 +25,15 @@ export default function Home() {
     if (window.location.pathname === '/') navigate('0');
   }, []);
 
-  // Fetch Cluster Data
-  useEffect(() => {
-    fetch('api/k8s/cluster')
-      .then((data) => data.json())
-      .then((data) => {
-        setClusterData(data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  // // Fetch Cluster Data
+  // useEffect(() => {
+  //   fetch('api/k8s/cluster')
+  //     .then((data) => data.json())
+  //     .then((data) => {
+  //       setClusterData(data);
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, []);
 
   return (
     <div className="home-layout">
