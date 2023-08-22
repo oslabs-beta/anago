@@ -10,7 +10,7 @@ import dataRouter from './routers/dataRouter.ts';
 import userRouter from './routers/userRouter.ts';
 import k8sRouter from './routers/k8sRouter.ts';
 import configRouter from './routers/configRouter.ts';
-import { ServerError } from '../types.ts';
+import { ServerError } from '../types';
 import { config } from 'dotenv';
 
 // json + form processing

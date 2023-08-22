@@ -4,8 +4,8 @@ import {
   plotData,
   promResResultElements,
 } from '../../types.ts';
-import newUserData from '../models/defaultUserData';
-import { NEW_USER, ACTIVE_DEPLOYMENT } from '../../user-config';
+import newUserData from '../models/defaultUserData.ts';
+import { NEW_USER, ACTIVE_DEPLOYMENT } from '../../user-config.ts';
 // File Read/Write
 import fs from 'fs';
 import path from 'path';
@@ -87,7 +87,7 @@ export function namePlot(obj: any, type: LookupType) {
       return obj.metric.node;
     }
     case LookupType.DiskUsage: {
-      return obj.metric.pod; 
+      return obj.metric.pod;
     }
     case LookupType.ReadyNodesByCluster: {
       return 'MVP-Cluster';

@@ -4,7 +4,7 @@ import {
   plotData,
   promResponse,
   promResResultElements,
-} from '../../types.ts';
+} from '../../types';
 import {
   placeholderData,
   cleanTime,
