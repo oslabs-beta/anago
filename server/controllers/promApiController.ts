@@ -185,7 +185,11 @@ const promApiController: any = {
           }
           // populate the y-axis object with the scraped metrics
           // yAxis.label = obj.metric.toString();
-          yAxis.label = namePlot(obj, res.locals.lookupType);
+          yAxis.label = namePlot(
+            obj,
+            res.locals.lookupType,
+            res.locals.queryOptions
+          );
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));
           });

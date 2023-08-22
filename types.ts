@@ -119,7 +119,7 @@ export enum LookupType {
   ReadyNodesByCluster, // 8
   NodesReadinessFlapping, // 9
   PodRestarts, //10
-  PodCount, // 111
+  PodCount, // 11
 }
 
 export enum ScopeType {

@@ -40,7 +40,6 @@ const MetricDisplay = ({ lookupType, metricData }) => {
       mode: 'nearest',
     },
   };
-  
 
   // Most axes should always start at 0, but some may not -- uncomment next line and add items that may not need 0-basis for plotting
   // if (![].includes(lookupType))
@@ -66,7 +65,11 @@ const MetricDisplay = ({ lookupType, metricData }) => {
             data={metricData}
             options={{
               ...options,
-              plugins: { legend: { display: true } },
+              plugins: {
+                legend: {
+                  display: true,
+                },
+              },
             }}
           />
         </Modal>
