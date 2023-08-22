@@ -29,9 +29,9 @@ const router = createBrowserRouter(
         loader={loaders.clusterLoader}
         id='cluster'
       />
-      <Route path='setup' element={<SetUp />} />
-    </Route>,
-  ),
+      <Route path='setup' element={<SetUp />}/>
+    </Route>
+  )
 );
 
 //provide router to application

@@ -9,6 +9,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import AddMetric from './AddMetric';
+import AlertBar from '../AlertBar';
 
 const Dashboard = () => {
   const userData = useRouteLoaderData('home') as UserData;
@@ -47,65 +48,68 @@ const Dashboard = () => {
   const metricIds = Object.keys(userData.metrics);
 
   return (
-    <div className="dashboard-outer">
-      {id && (
-        <>
-          <h2 className="dashboard-title">
-            {userData.dashboards[id].dashboardName}
-          </h2>
-          <div className="dashboard-buttons">
-            <span>
-              <button className="btn" onClick={refresh}>
-                Refresh
-              </button>
-            </span>
-            <span>
-              <button className="btn" onClick={pithy}>
-                Pithy Loop
-              </button>
-            </span>
-            <span>
-              <button className="btn" onClick={() => setAddMetricModal(true)}>
-                Add Metric
-              </button>
-            </span>
-            {!editMode && (
+    <div>
+      <AlertBar />
+      <div className='dashboard-outer'>
+        {id && (
+          <>
+            <h2 className='dashboard-title'>
+              {userData.dashboards[id].dashboardName}
+            </h2>
+            <div className='dashboard-buttons'>
               <span>
-                <button className="btn" onClick={() => setEditMode(true)}>
-                  Edit Mode
+                <button className='btn' onClick={refresh}>
+                  Refresh
                 </button>
               </span>
-            )}
-            {editMode && (
               <span>
-                <button className="btn" onClick={saveMetricsAndReload}>
-                  Save Metrics
+                <button className='btn' onClick={pithy}>
+                  Pithy Loop
                 </button>
               </span>
-            )}
-          </div>
-          <div className="dashboard-container">
-            {metricIds.map((metricId) => (
-              <MetricDisplay
-                metricId={metricId}
-                key={metricId + lastUpdate}
-                editMode={editMode}
-              />
-            ))}
-            <Outlet />
-          </div>
-          <div>
-            <p>Last updated: {`${lastUpdate}`}</p>
-          </div>
-        </>
-      )}
-      <div className="modal">
-        <Modal open={addMetricModal} onClose={() => setAddMetricModal(false)}>
-          <AddMetric
-            dashboard={location}
-            setAddMetricModal={setAddMetricModal}
-          />
-        </Modal>
+              <span>
+                <button className='btn' onClick={() => setAddMetricModal(true)}>
+                  Add Metric
+                </button>
+              </span>
+              {!editMode && (
+                <span>
+                  <button className='btn' onClick={() => setEditMode(true)}>
+                    Edit Mode
+                  </button>
+                </span>
+              )}
+              {editMode && (
+                <span>
+                  <button className='btn' onClick={saveMetricsAndReload}>
+                    Save Metrics
+                  </button>
+                </span>
+              )}
+            </div>
+            <div className='dashboard-container'>
+              {metricIds.map((metricId) => (
+                <MetricDisplay
+                  metricId={metricId}
+                  key={metricId + lastUpdate}
+                  editMode={editMode}
+                />
+              ))}
+              <Outlet />
+            </div>
+            <div>
+              <p>Last updated: {`${lastUpdate}`}</p>
+            </div>
+          </>
+        )}
+        <div className='modal'>
+          <Modal open={addMetricModal} onClose={() => setAddMetricModal(false)}>
+            <AddMetric
+              dashboard={location}
+              setAddMetricModal={setAddMetricModal}
+            />
+          </Modal>
+        </div>
       </div>
     </div>
   );
