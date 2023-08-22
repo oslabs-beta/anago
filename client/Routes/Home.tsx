@@ -13,7 +13,7 @@ import AlertBar from '../Components/Dashboard/AlertBar';
 export default function Home() {
   const userData = useRouteLoaderData('home') as UserData;
   const navigate = useNavigate();
-  const { setHasFetchedUserData, setCurrentDashboard }: any =
+  const { setHasFetchedUserData, setCurrentDashboard, setClusterData }: any =
     useContext(StoreContext);
 
   const dashboards = userData.dashboards;
@@ -23,6 +23,16 @@ export default function Home() {
     setHasFetchedUserData(true);
     setCurrentDashboard(dashboards[0]);
     if (window.location.pathname === '/') navigate('0');
+  }, []);
+
+  // Fetch Cluster Data
+  useEffect(() => {
+    fetch('api/k8s/cluster')
+      .then((data) => data.json())
+      .then((data) => {
+        setClusterData(data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
