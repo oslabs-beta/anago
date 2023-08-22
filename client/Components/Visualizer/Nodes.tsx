@@ -1,9 +1,8 @@
-import Namespaces from './Namespaces.tsx';
+import Namespaces from './Namespaces';
 import { useRouteLoaderData } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import React, { useContext, useState } from 'react';
-import { StoreContext } from '../../context/stateStore.tsx';
-
+import { StoreContext } from '../../context/stateStore';
 const Nodes = ({
   name,
   creationTimestamp,

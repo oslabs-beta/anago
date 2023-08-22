@@ -1,8 +1,8 @@
 import { Modal } from 'react-responsive-modal';
 import React, { useState, useContext, useEffect } from 'react';
-import { cleanName, handleAlerts } from '../../context/functions.ts';
-import { StoreContext } from '../../context/stateStore.tsx';
-import { CleanAlert } from '../../../types.ts';
+import { cleanName, handleAlerts } from '../../context/functions';
+import { StoreContext } from '../../context/stateStore';
+import { CleanAlert } from '../../../types';
 
 const Pods = ({
   conditions,

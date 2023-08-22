@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { UserData } from '../../../types.tsx';
+import { UserData } from '../../../types';
 import { Modal } from 'react-responsive-modal';
 import {
   Chart as ChartJS,
@@ -117,28 +117,36 @@ const MetricDisplay = ({ metricId, editMode }) => {
           trashCanClicked ? '-trash-can-clicked' : ''
         }`}
       >
-        <h4 className="metric-title">
+        <h4 className='metric-title'>
           {userData.metrics[metricId].metricName}{' '}
           {editMode && !trashCanClicked && (
             <img
-              id="trash-can"
-              src="client/assets/images/trash-can.png"
+              id='trash-can'
+              src='client/assets/images/trash-can.png'
               onClick={deleteMetric}
-              height="22px"
-              width="20px"
+              height='22px'
+              width='20px'
             />
           )}
         </h4>
         {metricData.hasOwnProperty('labels') && (
           <Line data={metricData} options={options} onClick={openModal} />
         )}
-        <div className="modal">
+        <div className='modal'>
           {/* {metricId && <button onClick={openModal}>See more</button>} */}
           <Modal open={open} onClose={closeModal}>
-            <h4 className="metric-title">
+            <h4 className='metric-title'>
               {userData.metrics[metricId].metricName}
             </h4>
-            {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
+            {metricData.hasOwnProperty('labels') && (
+              <Line
+                data={metricData}
+                options={{
+                  ...options,
+                  plugins: { legend: { display: true } },
+                }}
+              />
+            )}
           </Modal>
         </div>
       </div>

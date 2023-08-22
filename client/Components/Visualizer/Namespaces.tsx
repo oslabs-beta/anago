@@ -1,12 +1,12 @@
-import Deployments from './Deployments.tsx';
-import Pods from './Pods.tsx';
-import Services from './Services.tsx';
+import Deployments from './Deployments';
+import Pods from './Pods';
+import Services from './Services';
 import Modal from 'react-responsive-modal';
 import { useRouteLoaderData } from 'react-router-dom';
 import React, { useContext, useState, useEffect } from 'react';
-import { StoreContext } from '../../context/stateStore.tsx';
-import { cleanTime, handleAlerts } from '../../context/functions.ts';
-import { Pod, Service, Deployment, CleanAlert } from '../../../types.ts';
+import { StoreContext } from '../../context/stateStore';
+import { cleanTime, handleAlerts } from '../../context/functions';
+import { Pod, Service, Deployment, CleanAlert } from '../../../types';
 import AlertFlag from './AlertFlag';
 
 const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {

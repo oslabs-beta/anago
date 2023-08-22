@@ -1,6 +1,6 @@
 import { Modal } from 'react-responsive-modal';
 import React, { useState } from 'react';
-import { cleanName } from '../../context/functions.ts';
+import { cleanName } from '../../context/functions';
 
 const Deployments = ({
   name,

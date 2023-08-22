@@ -1,7 +1,6 @@
 import { Modal } from 'react-responsive-modal';
 import React, { useState } from 'react';
-import { cleanName } from '../../context/functions.ts';
-
+import { cleanName } from '../../context/functions.js';
 const Services = ({
   name,
   loadBalancer,
@@ -49,7 +48,7 @@ const Services = ({
                   <th>Protocol:</th>
                 </tr>
 
-                {ports.map(port => {
+                {ports.map((port) => {
                   return (
                     <tr className='table-row' key={port.name + id}>
                       <td>{port.name}</td>

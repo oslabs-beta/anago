@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useRouteLoaderData } from 'react-router-dom';
-import { StoreContext } from '../../context/stateStore.tsx';
+import { StoreContext } from '../../context/stateStore';
 
 export function Dropdown() {
   const clusterData: any = useRouteLoaderData('cluster');

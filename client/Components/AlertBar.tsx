@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UserData } from '../../types';
 import { useRouteLoaderData } from 'react-router-dom';
-import { StoreContext } from '../context/stateStore.tsx';
-import { handleAlerts } from '../context/functions.ts';
+import { StoreContext } from '../context/stateStore';
+import { handleAlerts } from '../context/functions';
 import Modal from 'react-responsive-modal';
 
 //TODO: add displayed to the state store
