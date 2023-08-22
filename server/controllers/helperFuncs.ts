@@ -73,7 +73,7 @@ export function cleanTime(date: Date, options: any) {
 }
 
 export function namePlot(obj: any, type: LookupType, queryOptions: any) {
-  console.log('INSIDE NAMING: ', obj.metric, type, queryOptions);
+  //console.log('INSIDE NAMING: ', obj.metric, type, queryOptions);
 
   switch (type) {
     case LookupType.CustomEntry: {

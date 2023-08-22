@@ -36,24 +36,24 @@ export default function Home() {
   }, []);
 
   return (
-    <div className='home-layout'>
+    <div className="home-layout">
       <header>
-        <span className='logo-container'>
+        <div className="logo-container">
           <img
             src={'client/assets/images/anago.png'}
-            alt='logo'
-            className='logo-image'
+            alt="logo"
+            className="logo-image"
           />
-          <h3 className='app-title'>Anago</h3>
-        </span>
+          <h3 className="app-title">Anago</h3>
+        </div>
         <nav>
-          <NavLink to={'/0'} className='nav-btn'>
+          <NavLink to={'/0'} className="nav-btn">
             Dashboards
           </NavLink>
-          <NavLink to={'/clusterview'} className='nav-btn'>
+          <NavLink to={'/clusterview'} className="nav-btn">
             Cluster View
           </NavLink>
-          <NavLink to={'/setup'} className='nav-btn'>
+          <NavLink to={'/setup'} className="nav-btn">
             Getting Started
           </NavLink>
           {/* <NavLink to={'/login'} className='nav-btn'>
@@ -62,7 +62,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <div className='main-body'>
+      <div className="main-body">
         <Outlet />
       </div>
     </div>

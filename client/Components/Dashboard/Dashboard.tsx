@@ -27,7 +27,6 @@ const Dashboard = () => {
   //pithy rendering example
   const refresh = () => setLastUpdate(new Date());
   const pithy = () => {
-    console.log('fetch pithy');
     try {
       fetch('/api/pithy')
         .then((res) => res.json())

@@ -58,7 +58,6 @@ const MetricDisplay = ({ metricId, editMode }) => {
 
   //fetching data from Prometheus
   function fetchFromProm() {
-    //console.log('Current user in metric:', userData);
     fetch(`/api/data/metrics/${metricId}`, {
       method: 'GET',
     })
@@ -112,8 +111,7 @@ const MetricDisplay = ({ metricId, editMode }) => {
       } else {
         intervalTime = 300;
       }
-      console.log(userData);
-      console.log('Interval Time:', intervalTime);
+
       // set interval to update data based on intervalTime in ms
       const interval: NodeJS.Timer = setInterval(
         fetchFromProm,
