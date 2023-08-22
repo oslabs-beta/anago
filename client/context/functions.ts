@@ -1,4 +1,4 @@
-import { CleanAlert } from "../../types";
+import { CleanAlert } from '../../types';
 
 //clean times for improved readability
 export function cleanTime(date: string) {
@@ -19,7 +19,7 @@ export function cleanName(name: string) {
 
 //handle alert data processing for FE
 export function handleAlerts(statefulAlerts: []) {
-  const current = [...statefulAlerts].map(alert => {
+  const current = [...statefulAlerts].map((alert) => {
     const obj = <CleanAlert>{};
     obj['name'] = alert['labels']['alertname'];
     obj['description'] = alert['annotations']['description'];
@@ -28,6 +28,7 @@ export function handleAlerts(statefulAlerts: []) {
     if (alert['labels']['pod']) obj['affectedPod'] = alert['labels']['pod'];
     if (alert['labels']['namespace'])
       obj['affectedNamespace'] = alert['labels']['namespace'];
+    obj['startsAt'] = alert['startsAt'];
     obj['startTime'] = cleanTime(alert['startsAt']);
     obj['lastUpdated'] = cleanTime(alert['updatedAt']);
     return obj;

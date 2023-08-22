@@ -43,6 +43,19 @@ const MetricDisplay = ({ metricId, editMode }) => {
     },
   };
 
+  //fetching data from Prometheus
+  function fetchFromProm() {
+    //console.log('Current user in metric:', userData);
+    fetch(`/api/data/metrics/${metricId}`, {
+      method: 'GET',
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        setMetricData(data);
+      })
+      .catch((err) => console.log(err));
+  }
+
   async function deleteMetric() {
     try {
       // send request to backend
@@ -60,19 +73,6 @@ const MetricDisplay = ({ metricId, editMode }) => {
     } catch (err) {
       console.log(err);
     }
-  }
-
-  //fetching data from Prometheus
-  function fetchFromProm() {
-    //console.log('Current user in metric:', userData);
-    fetch(`/api/data/metrics/${metricId}`, {
-      method: 'GET',
-    })
-      .then((data) => data.json())
-      .then((data) => {
-        setMetricData(data);
-      })
-      .catch((err) => console.log(err));
   }
 
   useEffect(
@@ -117,25 +117,25 @@ const MetricDisplay = ({ metricId, editMode }) => {
           trashCanClicked ? '-trash-can-clicked' : ''
         }`}
       >
-        <h4 className="metric-title">
+        <h4 className='metric-title'>
           {userData.metrics[metricId].metricName}{' '}
           {editMode && !trashCanClicked && (
             <img
-              id="trash-can"
-              src="client/assets/images/trash-can.png"
+              id='trash-can'
+              src='client/assets/images/trash-can.png'
               onClick={deleteMetric}
-              height="22px"
-              width="20px"
+              height='22px'
+              width='20px'
             />
           )}
         </h4>
         {metricData.hasOwnProperty('labels') && (
           <Line data={metricData} options={options} onClick={openModal} />
         )}
-        <div className="modal">
+        <div className='modal'>
           {/* {metricId && <button onClick={openModal}>See more</button>} */}
           <Modal open={open} onClose={closeModal}>
-            <h4 className="metric-title">
+            <h4 className='metric-title'>
               {userData.metrics[metricId].metricName}
             </h4>
             {metricData.hasOwnProperty('labels') && (

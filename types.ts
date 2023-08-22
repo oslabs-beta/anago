@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import { RequestHandler } from 'express';
 //global error handler type
 export type ServerError = {
   log: string;
@@ -24,7 +24,6 @@ export interface UserData {
   metrics: {};
   hiddenAlerts: [];
 }
-
 
 //represents properties on Node object passed from API request in K8s API controller to components on FE
 export interface Node {
@@ -96,15 +95,15 @@ export interface Cluster {
 }
 
 //filtering through alert data and cleaning it up for improved iteration
-export interface CleanAlert{
-  name: string,
-  description: string,
-  summary: string,
-  severity: string,
-  affectedPod?: string | undefined,
-  affectedNamespace?: string | undefined,
-  startTime: string,
-  lastUpdated: string,
+export interface CleanAlert {
+  name: string;
+  description: string;
+  summary: string;
+  severity: string;
+  affectedPod?: string | undefined;
+  affectedNamespace?: string | undefined;
+  startTime: string;
+  lastUpdated: string;
 }
 
 export enum LookupType {
