@@ -20,35 +20,114 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { promResResultElements } from '../../types';
 import Row from './TableRow';
+// import { cleanTime } from '../../server/controllers/helperFuncs';
 
 interface RowsObj {
   [key: string]: any[];
 }
+
+// ! should be able to import this func from helperFuncs but getting an error with reading 'fs'
+/*
+function cleanTime(date: Date, options: any) {
+  const metricDuration = options.hasOwnProperty('duration')
+    ? options.duration
+    : 24 * 60 * 60;
+
+  if (metricDuration >= 2 * 7 * 24 * 60 * 60) {
+    // >= 2 week
+    return date.toLocaleDateString(); //date only
+  } else if (metricDuration <= 12 * 60 * 60) {
+    // < 12 h
+    const dateArr = date.toLocaleTimeString().split(':');
+    const pref = dateArr.slice(0, 2).join(':');
+    const suff = dateArr[2].split(' ')[1];
+    return pref + ' ' + suff; // time + AM/PM
+  } else {
+    // 12-2w
+    const arr = date.toLocaleString().split(',');
+    const dateStr = arr[0].split('/').slice(0, 2).join('/');
+    const timeArr = arr[1].split(':');
+    const pref = timeArr.slice(0, 2).join(':');
+    const suff = timeArr[2].split(' ')[1];
+    const timeStr = pref + ' ' + suff;
+    return dateStr + ': ' + timeStr; // MM/DD, TOD
+  }
+}
+*/
+
 const TableDisplay = ({ tableData, logId }) => {
   // const [tableData, setTableData]: any = useState(new Map());
   const [fetchCount, setFetchCount] = useState(0);
   const [filteredTableData, setfilteredTableData]: any[] = useState([]);
   const [logHPA, setLogHPA] = useState<string | promResResultElements[][]>([]);
 
-  console.log('logId', logId);
-  console.log('tableData', tableData);
   const newData: promResResultElements[][] = [];
-  /*
+
   const getHPAUtilization = async () => {
     fetch(`/api/data/metrics/${logId}`, {
-      method: 'GET',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        displayType: 'log',
+      }),
     })
       .then(data => data.json())
       .then(data => {
-        console.log('hpa data', data);
-        setLogHPA(data);
+        filterHPAUtilization(data);
+        // setLogHPA(data);
       })
       .catch(err => console.log(err));
   };
-  */
-  let arrOfRows: any = undefined;
+
+  const filterHPAUtilization = data => {
+    // initialize cache to store an array of metric values by their associated hpa
+    const cache = {};
+
+    // if not metrics met the scope of the query
+    if (typeof data === 'string') {
+      return filterTableData(cache);
+    } else {
+      data.forEach(metricObj => {
+        cache[metricObj.metric.horizontalpodautoscaler] = [];
+        if (!Array.isArray(metricObj.values[0][0])) {
+          metricObj.values.forEach(arr => {
+            // ! may need to update duration when fixing the HPA Utilization query
+            /*
+          cache[metricObj.metric.horizontalpodautoscaler].push(
+            [cleanTime(arr[0], { duration: 60 * 60 }),
+            arr[1]]
+          );
+          */
+            cache[metricObj.metric.horizontalpodautoscaler].push([
+              arr[0],
+              arr[1],
+            ]);
+          });
+        }
+        // if the values array from prometheus is >99, then it will return nested arrays of the values array (each holds the metrics for every 99 set of values)
+        // in this case, only display the most recent 99 metrics
+        else {
+          metricObj.values[0].forEach(arr => {
+            // ! may need to update duration when fixing the HPA Utilization query
+            /*
+          cache[metricObj.metric.horizontalpodautoscaler].push(
+            [cleanTime(arr[0], { duration: 60 * 60 }),
+            arr[1]]
+          );
+          */
+            cache[metricObj.metric.horizontalpodautoscaler].push([
+              arr[0],
+              arr[1],
+            ]);
+          });
+        }
+      });
+      return filterTableData(cache);
+    }
+  };
+
   const rows: RowsObj = {};
-  const filterTableData = () => {
+  const filterTableData = cache => {
     // initialize object to store hpa's as keys and all associated metrics as values to eliminate potential errors due to lack of order preservation (individual scraped metrics may not be in order by hpa) and obtain constant lookup time
     const tableIterator = tableData.values();
 
@@ -64,22 +143,31 @@ const TableDisplay = ({ tableData, logId }) => {
       });
       column += 1;
     }
+    // !may need to be a separate func
     setfilteredTableData(
       Object.keys(rows).map(hpa => {
-        return <Row key={hpa} hpa={hpa} row={rows[hpa]} />;
+        return (
+          <Row
+            key={hpa}
+            hpa={hpa}
+            row={rows[hpa]}
+            log={
+              cache[hpa] ||
+              'This HPA has not reached 90% or more utilization within the last day'
+            }
+          />
+        );
       }),
     );
-    // arrOfRows = Object.keys(rows).map(hpa => {
-    //   return <Row key={hpa} hpa={hpa} row={rows[hpa]} />;
-    // });
-    console.log('rows', rows);
-    console.log('Object.keys(rows)', Object.keys(rows));
   };
 
   useEffect(() => {
-    // getHPAUtilization();
-    filterTableData();
+    getHPAUtilization();
   }, []);
+
+  // useEffect(() => {
+  //   filterTableData();
+  // }, [logHPA]);
 
   // TODO GET METRICS FOR HPA UTILIZATION (final element in array) and display when click the down arrow on table
 
@@ -99,20 +187,7 @@ const TableDisplay = ({ tableData, logId }) => {
               <TableCell align='right'>Desired Replicas</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {filteredTableData}
-            <Row
-              key='pithy-deploymentTest'
-              hpa='pithy-deploymentTest'
-              row={['0', '50', '1', '10', '1', '1']}
-            />
-            {/* <Row
-              key={'hpa'}
-              hpa={'hpa'}
-              row={[1, 2, 3, 4, 5, 6]}
-              logHPA={logHPA}
-            /> */}
-          </TableBody>
+          <TableBody>{filteredTableData}</TableBody>
         </Table>
       </TableContainer>
     </div>

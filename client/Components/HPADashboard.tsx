@@ -67,7 +67,6 @@ const HPADisplay = () => {
           .then(data => {
             tableOrder.set(id, data);
             setTableData(tableOrder);
-            console.log('data', data);
             count += 1;
             setFetchCount(count);
           })
@@ -85,7 +84,6 @@ const HPADisplay = () => {
   return (
     <div>
       {fetchCount === 7 && <TableDisplay tableData={tableData} logId={log} />}
-      {/* log component */}
       {/* double line graph component */}
       {/* reccomendations */}
     </div>

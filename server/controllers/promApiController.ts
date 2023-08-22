@@ -113,6 +113,7 @@ const promApiController: any = {
       // query Prometheus
       const response = await fetch(res.locals.promQuery);
       const data = await response.json();
+      console.log('prom response data: ', data.data.result);
       // if the prometheus query response indicates a failure, then send an error message
       if (data.status === 'error') {
         return next({
@@ -127,12 +128,13 @@ const promApiController: any = {
         return next();
       }
       // if instant query type
-      else if (req.body) {
-        if (req.body.duration === 'instant') {
-          console.log('instant promql response', data.data.result);
-          res.locals.promMetrics = data.data.result;
-          return next();
-        }
+      else if (
+        req.body.duration === 'instant' ||
+        req.body.displayType === 'log'
+      ) {
+        console.log('instant or log promql response', data.data.result);
+        res.locals.promMetrics = data.data.result;
+        return next();
       }
       // if prometheus query response contains metric data, then filter data into an object of plotData type
       else {
@@ -153,6 +155,7 @@ const promApiController: any = {
           }
         );
         */
+        console.log('range query ');
 
         data.data.result.forEach((obj: promResResultElements) => {
           // initialize object to store in promMetrics datasets

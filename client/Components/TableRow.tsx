@@ -15,15 +15,52 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { promResResultElements } from '../../types';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
+import metricsController from '../../server/controllers/metricsController';
 
-// table:
-// [hpa name, status target, desired target, min pods, max pods, replicas ]
-
-const Row = (props: { hpa: string; row: (string | number)[] }) => {
-  const { hpa, row } = props;
+const Row = (props: { hpa: string; row: (string | number)[]; log: any }) => {
+  const { hpa, row, log } = props;
   const [open, setOpen] = React.useState(false);
+  const [filteredLog, setFilteredLog] = useState<any>(undefined);
 
-  const filterLogHPA = () => {};
+  const filterLogHPA = () => {
+    if (typeof log === 'string') {
+      return setFilteredLog(
+        <TableRow key={JSON.stringify(log)}>
+          <TableCell component='th' scope='row'>
+            {log}
+          </TableCell>
+        </TableRow>,
+      );
+    } else {
+      /* {row.history.map(historyRow => (
+                      <TableRow key={historyRow.date}>
+                        <TableCell component='th' scope='row'>
+                          {historyRow.date}
+                        </TableCell>
+                        <TableCell>{historyRow.customerId}</TableCell>
+                        <TableCell align='right'>{historyRow.amount}</TableCell>
+                        <TableCell align='right'>
+                          {Math.round(historyRow.amount * row.price * 100) /
+                            100}
+                        </TableCell>
+                      </TableRow>
+                    ))} */
+      return setFilteredLog(
+        log.map(arr => (
+          <TableRow key={JSON.stringify(log)}>
+            <TableCell component='th' scope='row'>
+              {arr[0]}
+            </TableCell>
+            <TableCell>{arr[1]}</TableCell>
+            {/* <TableCell align='right'>{historyRow.amount}</TableCell>
+            <TableCell align='right'>
+              {Math.round(historyRow.amount * row.price * 100) / 100}
+            </TableCell> */}
+          </TableRow>
+        )),
+      );
+    }
+  };
 
   useEffect(() => {
     filterLogHPA();
@@ -56,32 +93,16 @@ const Row = (props: { hpa: string; row: (string | number)[] }) => {
           <Collapse in={open} timeout='auto' unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant='h6' gutterBottom component='div'>
-                {`HPA Utlization >= 80%`}
+                {`HPA Utlization >= 90%`}
               </Typography>
               <Table size='small' aria-label='purchases'>
                 <TableHead>
                   <TableRow>
                     <TableCell>Timestamp</TableCell>
                     <TableCell>Utilization %</TableCell>
-                    {/* <TableCell align='right'>Amount</TableCell>
-                      <TableCell align='right'>Total price ($)</TableCell> */}
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {/* {row.history.map(historyRow => (
-                      <TableRow key={historyRow.date}>
-                        <TableCell component='th' scope='row'>
-                          {historyRow.date}
-                        </TableCell>
-                        <TableCell>{historyRow.customerId}</TableCell>
-                        <TableCell align='right'>{historyRow.amount}</TableCell>
-                        <TableCell align='right'>
-                          {Math.round(historyRow.amount * row.price * 100) /
-                            100}
-                        </TableCell>
-                      </TableRow>
-                    ))} */}
-                </TableBody>
+                <TableBody>{filteredLog}</TableBody>
               </Table>
             </Box>
           </Collapse>

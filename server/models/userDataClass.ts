@@ -208,7 +208,9 @@ function queryBuilder(lookupType: LookupType, queryOptions: any): string {
     }
 
     case LookupType.HPAUtilization: {
-      return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 >= 80';
+      // TODO: return metric back to 90%
+      return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 >= 90';
+      // return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 <= 30';
     }
 
     case LookupType.HTTPRequests: {
