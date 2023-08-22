@@ -51,9 +51,9 @@ export function optionsBuilder(obj: any): any {
       case 'Nodes':
         options.target = 'node';
         break;
-      case 'Deployments':
-        options.target = 'deployment';
-        break;
+      // case 'Deployments':
+      //   options.target = 'deployment';
+      //   break;
       case 'Containers':
         options.target = 'container';
         break;
@@ -235,7 +235,11 @@ export function queryBuilder(
         queryOptions.hasOwnProperty('target') &&
         queryOptions.target !== 'all'
       )
-        str += 'by (' + queryOptions.target + ')';
+        if (queryOptions.target == 'container') {
+          str += 'by (created_by_name)';
+        } else {
+          str += 'by (' + queryOptions.target + ')';
+        }
       return str;
     }
 

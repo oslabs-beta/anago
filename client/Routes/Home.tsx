@@ -13,7 +13,7 @@ import AlertBar from '../Components/AlertBar';
 export default function Home() {
   const userData = useRouteLoaderData('home') as UserData;
   const navigate = useNavigate();
-  const { setHasFetchedUserData, setCurrentDashboard }: any =
+  const { setHasFetchedUserData, setCurrentDashboard, setClusterData }: any =
     useContext(StoreContext);
 
   const dashboards = userData.dashboards;
@@ -25,25 +25,35 @@ export default function Home() {
     if (window.location.pathname === '/') navigate('0');
   }, []);
 
+  // Fetch Cluster Data
+  useEffect(() => {
+    fetch('api/k8s/cluster')
+      .then((data) => data.json())
+      .then((data) => {
+        setClusterData(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
-    <div className='home-layout'>
+    <div className="home-layout">
       <header>
-        <span className='logo-container'>
+        <div className="logo-container">
           <img
             src={'client/assets/images/anago.png'}
-            alt='logo'
-            className='logo-image'
+            alt="logo"
+            className="logo-image"
           />
-          <h3 className='app-title'>Anago</h3>
-        </span>
+          <h3 className="app-title">Anago</h3>
+        </div>
         <nav>
-          <NavLink to={'/0'} className='nav-btn'>
+          <NavLink to={'/0'} className="nav-btn">
             Dashboards
           </NavLink>
-          <NavLink to={'/clusterview'} className='nav-btn'>
+          <NavLink to={'/clusterview'} className="nav-btn">
             Cluster View
           </NavLink>
-          <NavLink to={'/setup'} className='nav-btn'>
+          <NavLink to={'/setup'} className="nav-btn">
             Getting Started
           </NavLink>
           {/* <NavLink to={'/login'} className='nav-btn'>
@@ -52,7 +62,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <div className='main-body'>
+      <div className="main-body">
         <Outlet />
       </div>
     </div>

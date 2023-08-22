@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { UserData } from '../../../types';
 import { Modal } from 'react-responsive-modal';
+import { ScopeType } from '../../../types';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -35,17 +36,28 @@ const MetricDisplay = ({ metricId, editMode }) => {
   const [trashCanClicked, setTrashCanClicked] = useState<Boolean>(false);
 
   // display options for metrics
-  const options = {
+  const options: any = {
     plugins: {
       legend: {
         display: false,
       },
     },
+    interaction: {
+      intersect: false,
+      mode: 'nearest',
+    },
   };
+  // Most axes should always start at 0, but some may not -- uncomment next line and add items that may not need 0-basis for plotting
+  // if (![].includes(userData.metrics[metricId].lookupType))
+  Object.assign(options, { scales: { y: { beginAtZero: true } } });
+  // Some axes should go up to ~100
+  if ([4, 7].includes(userData.metrics[metricId].lookupType))
+    Object.assign(options, {
+      scales: { y: { suggestedMax: 100, suggestedMin: 0 } },
+    });
 
   //fetching data from Prometheus
   function fetchFromProm() {
-    //console.log('Current user in metric:', userData);
     fetch(`/api/data/metrics/${metricId}`, {
       method: 'GET',
     })
@@ -82,22 +94,31 @@ const MetricDisplay = ({ metricId, editMode }) => {
       //{userData: metrics: metricId: queryOptions: stepSize/Refresh}
       fetchFromProm();
       // auto refresh section:
-      // let intervalTime: number;
-      // // check to see if it is a range metric
-      // if (userData.metrics[metricId].scopeType === 'ScopeType.Range') {
-      //   // find the interval time for that metric based on the stepSize
-      //   intervalTime = userData.metrics[metricId].queryOptions.stepSize;
-      // } else {
-      //   // if it is not a range metric (i.e. no stepSize), use the refresh property
-      //   intervalTime = userData.metrics[metricId].queryOptions.refresh;
-      // }
-      // // set interval to update data based on intervalTime in ms
-      // const interval: NodeJS.Timer = setInterval(
-      //   fetchFromProm,
-      //   intervalTime * 1000
-      // );
-      // // clear interval so it only runs the setInterval when component is mounted
-      // return () => clearInterval(interval);
+      let intervalTime: number;
+      // check to see if it is a range metric
+      if (
+        userData.metrics[metricId].scopeType === ScopeType.Range &&
+        userData.metrics[metricId].queryOptions.hasOwnProperty('stepSize')
+      ) {
+        // find the interval time for that metric based on the stepSize
+        intervalTime = userData.metrics[metricId].queryOptions.stepSize;
+      } else if (
+        userData.metrics[metricId].scopeType === ScopeType.Instant &&
+        userData.metrics[metricId].queryOptions.hasOwnProperty('refresh')
+      ) {
+        // if it is not a range metric (i.e. no stepSize), use the refresh property
+        intervalTime = userData.metrics[metricId].queryOptions.refresh;
+      } else {
+        intervalTime = 300;
+      }
+
+      // set interval to update data based on intervalTime in ms
+      const interval: NodeJS.Timer = setInterval(
+        fetchFromProm,
+        intervalTime * 1000
+      );
+      // clear interval so it only runs the setInterval when component is mounted
+      return () => clearInterval(interval);
     },
     [
       // userData.metrics[metricId].scopeType,

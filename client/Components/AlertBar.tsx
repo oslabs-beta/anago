@@ -184,7 +184,7 @@ const AlertBar = () => {
     <>
       {showAlertBar && (
         <>
-          <div className='modal'>
+          <div className="modal">
             <Modal
               open={open}
               onClose={() => {
@@ -211,11 +211,28 @@ const AlertBar = () => {
               </p>
             </Modal>
           </div>
-          <div className='status-bar'>
+          <div
+            className="status-bar"
+            onClick={(e) => {
+              const buttons = document.getElementsByClassName('btn-small');
+              let buttonClicked = false;
+              // Iterate to see if the click was in a button
+              Array.prototype.forEach.call(buttons, (element) => {
+                if (element.contains(e.target)) {
+                  buttonClicked = true;
+                }
+              });
+              // If not, toggle alert view
+              if (!buttonClicked) {
+                if (!clicked) setClicked(true);
+                else setClicked(false);
+              }
+            }}
+          >
             {/* if data was fetched and there are errors and mouse is over*/}
             {fetched && !noErrors && clicked && (
               <div>
-                <h3 id='alertTitle' onClick={() => setClicked(false)}>
+                <h3 id="alertTitle" onClick={() => setClicked(false)}>
                   <strong>ALERTS:</strong>
                 </h3>
                 {['critical', 'warning'].map((severity) => (
@@ -229,22 +246,22 @@ const AlertBar = () => {
                             key={alertObj.description}
                             id={alertObj.description}
                           >
-                            <strong className='message'>
+                            <strong className="message">
                               {severity.toUpperCase()}:
                             </strong>{' '}
                             {alertObj.description}
                             <br></br>
                             <button
                               onClick={() => handleHide(alertObj.description)}
-                              className='btn-small'
+                              className="btn-small"
                             >
-                              hide
+                              Hide
                             </button>
                             <button
                               onClick={() =>
                                 handleDetails(alertObj.description)
                               }
-                              className='btn-small'
+                              className="btn-small"
                             >
                               Details
                             </button>
@@ -256,7 +273,7 @@ const AlertBar = () => {
                 {hidden.length > 0 && (
                   <div>
                     {['critical', 'warning'].map((severity) => (
-                      <div id='hidden' key={`${severity}+H`}>
+                      <div id="hidden" key={`${severity}+H`}>
                         {[...hidden].map((hiddenId) => {
                           const alertObj = alerts.find(
                             (alertObj) =>
@@ -272,7 +289,7 @@ const AlertBar = () => {
                                 </em>
                                 <br></br>
                                 <button
-                                  className='btn-small'
+                                  className="btn-small"
                                   onClick={() =>
                                     handleRestore(alertObj.description)
                                   }
@@ -291,7 +308,7 @@ const AlertBar = () => {
             )}
             {/* if there are errors, the data is fetched, but the mouse is not over */}
             {!noErrors && fetched && !clicked && (
-              <h3 id='mouseNotOver' onClick={() => setClicked(true)}>
+              <h3 id="mouseNotOver" onClick={() => setClicked(true)}>
                 <strong>
                   ALERTS PREVIEW: {criticalCount} Critical, {warningCount}{' '}
                   Warning
@@ -300,7 +317,7 @@ const AlertBar = () => {
             )}
             {/* if data was fetched AND there are no errors */}
             {noErrors && fetched && (
-              <h3 id='noAlertTitle'>Currently, you have no active alerts!</h3>
+              <h3 id="noAlertTitle">Currently, you have no active alerts!</h3>
             )}
           </div>
         </>

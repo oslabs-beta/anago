@@ -65,7 +65,11 @@ const MetricDisplay = ({ lookupType, metricData }) => {
             data={metricData}
             options={{
               ...options,
-              plugins: { legend: { display: true } },
+              plugins: {
+                legend: {
+                  display: true,
+                },
+              },
             }}
           />
         </Modal>

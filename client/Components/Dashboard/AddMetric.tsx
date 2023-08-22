@@ -7,7 +7,6 @@ import MetricDisplayPreview from './MetricDisplayPreview';
 const AddMetric = (props): any => {
   const userData = useRouteLoaderData('home') as UserData;
   const { clusterData }: any = useContext(StoreContext);
-  console.log('Cluster Data', clusterData);
   // The preconfiged queries to show in the selector
   const lookupOptions = [
     LookupType.CPUUsage,
@@ -58,6 +57,8 @@ const AddMetric = (props): any => {
   // Query Summary Text
   const [querySummary, setQuerySummary] = useState('');
   const [queryPromQL, setQueryPromQL] = useState('');
+
+
 
   // Preview the user's current query, if possible
   const previewMetric = () => {
@@ -518,7 +519,7 @@ const AddMetric = (props): any => {
       </div>
       <div className="summary-container">
         <p>{querySummary}</p>
-        <p>{queryPromQL}</p>
+        <p className="summary-query">{queryPromQL}</p>
       </div>
       <div className="new-metric-buttons">
         <button className="btn" onClick={saveMetric}>
