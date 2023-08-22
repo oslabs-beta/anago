@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-responsive-modal';
-import MetricDisplay from './MetricDisplay.tsx';
-import { UserData } from '../../../types.tsx';
+import MetricDisplay from './MetricDisplay';
+import { UserData } from '../../../types';
 import {
   useRouteLoaderData,
   useParams,
