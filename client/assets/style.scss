@@ -155,12 +155,15 @@ header nav {
   width: auto;
   border: 2px solid rgba(0, 44, 139, 0.4);
   border-radius: 8px;
-  height: 3.5rem;
   margin: auto;
+  overflow-y: scroll;
   background-color: #2f72cf33;
   margin-bottom: 1rem;
   overflow-y: hidden;
   transition: height 0.3s;
+}
+.status-bar:hover {
+  background-color: #2f72cf4f;
 }
 #critical,
 #warning,
@@ -169,36 +172,26 @@ header nav {
   flex-direction: column;
   text-align: left;
 }
-.status-bar #mouseNotOver {
+#mouseNotOver {
   display: flex;
   flex-direction: column;
   align-self: center;
+  justify-content: center;
+  height: 1rem;
 }
 
 #alertTitle,
 #mouseNotOver {
   color: rgb(219, 28, 28);
-  cursor: pointer;
   display: flex;
   flex-direction: column;
-}
-
-#mouseNotOver {
-  display: flex;
-  flex-direction: row;
-  text-align: center;
+  cursor: pointer;
 }
 
 #noAlertTitle {
   color: rgb(145, 143, 143);
 }
 
-.status-bar:hover {
-  background-color: #2f72cf4f;
-  overflow-y: auto;
-  height: 10rem;
-  cursor: pointer;
-}
 .critical {
   color: rgb(131, 17, 17);
 }
@@ -213,13 +206,6 @@ header nav {
 
 .status-bar:active {
   overflow-y: scroll;
-}
-// .status-bar:hover {
-//   height: 10rem;
-// }
-.status-bar:click {
-  height: 10rem;
-  overflow-y: auto;
 }
 
 // Add Metric styling
@@ -756,12 +742,6 @@ h5 {
   margin-left: 5px;
   margin-right: 5px;
   border-radius: 25px;
-}
-.status-bar:hover {
-  height: 10rem;
-  overflow-y: auto;
-}
-.status-bar:active {
 }
 
 #namespace-logo {
