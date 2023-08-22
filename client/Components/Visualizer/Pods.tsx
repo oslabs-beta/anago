@@ -20,7 +20,7 @@ const Pods = ({
 }) => {
   const [open, setOpen]: any = useState(false);
   const { selectedStates, displayedAlerts }: any = useContext(StoreContext);
-  const [podAlerts, setPodAlerts]:any = useState([]);
+  const [podAlerts, setPodAlerts]: any = useState([]);
 
   //modal handler functions
   const openModal = () => setOpen(true);
@@ -28,7 +28,8 @@ const Pods = ({
 
   //clean up alert data for relevant information and assign relevant alerts to pod state
   useEffect(() => {
-    const alerts: CleanAlert[] = handleAlerts(displayedAlerts);
+    const alerts = displayedAlerts;
+    // const alerts: CleanAlert[] = handleAlerts(displayedAlerts);
     alerts.forEach((alert: any) => {
       console.log(alert);
       if (alert['affectedPod'] && !podAlerts[alert]) {
@@ -36,94 +37,98 @@ const Pods = ({
       }
     });
   }, []);
-  console.log('podAlerts', podAlerts)
+  console.log('podAlerts', podAlerts);
 
   return (
-    <div className='pod' id={id} key={id}>
+    <div className="pod" id={id} key={id}>
       <img
-        src='client/assets/images/pod.png'
-        className='k8logo'
-        id='pod-logo'
+        src="client/assets/images/pod.png"
+        className="k8logo"
+        id="pod-logo"
         onClick={openModal}
       />
       <h5>{cleanName(name)}</h5>
 
-      <div className='modal'>
+      <div className="modal">
         <Modal open={open} onClose={closeModal}>
           <h2>Pod Information:</h2>
-          <div className='modal-content'>
-          {podAlerts.length > 0 &&
-                podAlerts.map(alert => {
-                  if (alert['affectedPod'].includes(name)) {
-                    return (
-                      <div className='alert-info' style={{color: 'red'}}>
-                        <h3>Alert Information:</h3>
-                        <div className='info-item'>
-                          <h3>Alert Name:</h3>
-                          <p>{alert.name}</p>
-                        </div>
-                        <div className='info-item'>
-                          <h3>Description:</h3>
-                          <p>{alert.description}</p>
-                        </div>
-                        <div className='info-item'>
-                          <h3>Summary:</h3>
-                          <p>{alert.summary}</p>
-                        </div>
-                        <div className='info-item'>
-                          <h3>Severity:</h3>
-                          <p>{alert.severity}</p>
-                        </div>
-                        <div className='info-item'>
-                          <h3>Start Time:</h3>
-                          <p>{alert.startTime}</p>
-                        </div>
-                        <div className='info-item'>
-                          <h3>Last Updated:</h3>
-                          <p>{alert.lastUpdated}</p>
-                        </div>
+          <div className="modal-content">
+            {podAlerts.length > 0 &&
+              podAlerts.map((alert) => {
+                if (alert['affectedPod'].includes(name)) {
+                  return (
+                    <div
+                      className="alert-info"
+                      style={{ color: 'red' }}
+                      key={'podalert' + name}
+                    >
+                      <h3>Alert Information:</h3>
+                      <div className="info-item">
+                        <h3>Alert Name:</h3>
+                        <p>{alert.name}</p>
                       </div>
-                    );
-                  }
-                })}
-            <div className='info-item'>
+                      <div className="info-item">
+                        <h3>Description:</h3>
+                        <p>{alert.description}</p>
+                      </div>
+                      <div className="info-item">
+                        <h3>Summary:</h3>
+                        <p>{alert.summary}</p>
+                      </div>
+                      <div className="info-item">
+                        <h3>Severity:</h3>
+                        <p>{alert.severity}</p>
+                      </div>
+                      <div className="info-item">
+                        <h3>Start Time:</h3>
+                        <p>{alert.startTime}</p>
+                      </div>
+                      <div className="info-item">
+                        <h3>Last Updated:</h3>
+                        <p>{alert.lastUpdated}</p>
+                      </div>
+                    </div>
+                  );
+                }
+              })}
+            <div className="info-item">
               <h3>Pod Name:</h3>
               <p>{name}</p>
             </div>
-            <div className='info-item'>
+            <div className="info-item">
               <h3>Pod Status:</h3>
               <p>{phase}</p>
             </div>
-            <div className='info-item'>
+            <div className="info-item">
               <h3>Running Application:</h3>
               <p>{labels.app}</p>
             </div>
-            <div className='info-item'>
+            <div className="info-item">
               <h3>Namespace:</h3>
               <p>{namespace}</p>
             </div>
-            <div className='info-item'>
+            <div className="info-item">
               <h3>Creation Timestamp:</h3>
               <p>{creationTimestamp}</p>
             </div>
-            <div className='info-item'>
+            <div className="info-item">
               <h3>Pod IP:</h3>
               <p>{podIP}</p>
             </div>
-            <div className='info-item'>
+            <div className="info-item">
               <h3>Service Account:</h3>
               <p>{serviceAccount}</p>
             </div>
-            <div className='info-item'>
+            <div className="info-item">
               <h3>Node:</h3>
               <p>{nodeName}</p>
             </div>
-            <div className='info-item'>
-              <table className='conditions'>
+            <div className="info-item">
+              <table className="conditions">
                 <h3>Conditions: </h3>
 
-                <tr className='column-names'>
-                  {conditions.map(condition => {
+                <tr className="column-names">
+                  {conditions.map((condition) => {
                     return (
                       <th key={condition.type}>
                         {`${condition.type} Status: ${condition.status}`}
@@ -131,8 +136,8 @@ const Pods = ({
                     );
                   })}
                 </tr>
-                <tr className='table-row'>
-                  {conditions.map(condition => {
+                <tr className="table-row">
+                  {conditions.map((condition) => {
                     return (
                       <td key={condition.type + id}>
                         {'Last Transition Time: ' +
@@ -141,8 +146,8 @@ const Pods = ({
                     );
                   })}
                 </tr>
-                <tr className='table-row'>
-                  {conditions.map(condition => {
+                <tr className="table-row">
+                  {conditions.map((condition) => {
                     return (
                       <td key={condition.type + podIP}>
                         {'Last Probe Time: ' + condition.lastProbeTime}
@@ -153,27 +158,27 @@ const Pods = ({
               </table>
             </div>
             <h2>Container Information: </h2>
-            {containers.map(container => {
+            {containers.map((container) => {
               return (
                 <div key={container.name + id}>
-                  <div className='info-item'>
+                  <div className="info-item">
                     <h3>Container Name:</h3>
                     <p>{container.name}</p>
                   </div>
 
-                  {containerStatuses.map(status => {
+                  {containerStatuses.map((status) => {
                     if (status.name === container.name) {
                       return (
                         <div key={status.id}>
-                          <div className='info-item'>
+                          <div className="info-item">
                             <h3>Image:</h3>
                             <p>{status.image}</p>
                           </div>
-                          <div className='info-item'>
+                          <div className="info-item">
                             <h3>Status:</h3>
                             <p>{Object.keys(status.state)}</p>
                           </div>
-                          <div className='info-item'>
+                          <div className="info-item">
                             <h3>Restart Count:</h3>
                             <p>{status.restartCount}</p>
                           </div>
@@ -182,10 +187,10 @@ const Pods = ({
                     }
                   })}
 
-                  <div className='info-item'>
+                  <div className="info-item">
                     <table>
                       <h3>Ports:</h3>
-                      <tr className='column-name'>
+                      <tr className="column-name">
                         <th>Name:</th>
                         <th>Container Port:</th>
                         <th>Host Port:</th>
@@ -193,9 +198,9 @@ const Pods = ({
                       </tr>
 
                       {container.ports ? (
-                        container.ports.map(port => {
+                        container.ports.map((port) => {
                           return (
-                            <tr className='table-row' key={port.name + id}>
+                            <tr className="table-row" key={port.name + id}>
                               <td>{port.name}</td>
 
                               <td>{port.containerPort}</td>
@@ -211,16 +216,16 @@ const Pods = ({
                       )}
                     </table>
                   </div>
-                  <div className='info-item'>
+                  <div className="info-item">
                     <table>
                       <h3>Volume Mounts:</h3>
-                      <tr className='column-name'>
+                      <tr className="column-name">
                         <th>Name:</th>
                         <th>Path:</th>
                       </tr>
-                      {container.volumeMounts.map(element => {
+                      {container.volumeMounts.map((element) => {
                         return (
-                          <tr className='table-row' key={element.name + id}>
+                          <tr className="table-row" key={element.name + id}>
                             <td>{element.name}</td>
                             <td>{element.mountPath}</td>
                           </tr>

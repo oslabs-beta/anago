@@ -67,6 +67,7 @@ const AlertBar = () => {
       }, []);
     // update displayed state
     setDisplayedAlerts(displayed);
+    console.log('displayed', displayed);
     // make a call to calculate alert counts
     calculateAlertCounts(displayed);
     return displayed;
