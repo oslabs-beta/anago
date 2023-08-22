@@ -6,7 +6,7 @@ import { Node } from '../../types';
 import Nodes from '../Components/Visualizer/Nodes';
 import ControlPlane from '../Components/Visualizer/ControlPlane';
 import React from 'react';
-import AlertBar from '../Components/AlertBar.tsx';
+import AlertBar from '../Components/AlertBar';
 
 const ClusterView = () => {
   const clusterData: any = useRouteLoaderData('cluster');

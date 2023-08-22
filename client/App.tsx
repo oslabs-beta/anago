@@ -6,14 +6,14 @@ import {
 } from 'react-router-dom';
 
 //import routes
-import Home from './Routes/Home.tsx';
+import Home from './Routes/Home';
 // import Login from './Routes/Login';
-import Dashboard from './Components/Dashboard/Dashboard.tsx';
-import ClusterView from './Routes/ClusterView.tsx';
-import SetUp from './Routes/SetUp.tsx';
+import Dashboard from './Components/Dashboard/Dashboard';
+import ClusterView from './Routes/ClusterView';
+import SetUp from './Routes/SetUp';
 
 //import loaders
-import * as loaders from './context/loaders.tsx';
+import * as loaders from './context/loaders';
 import React from 'react';
 // import React from 'react';
 

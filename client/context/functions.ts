@@ -1,4 +1,4 @@
-import { CleanAlert } from '../../types.ts';
+import { CleanAlert } from '../../types';
 
 //clean times for improved readability
 export function cleanTime(date: string) {

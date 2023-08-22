@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StoreContext } from '../context/stateStore.tsx';
+import { StoreContext } from '../context/stateStore';
 
 const SetUp = () => {
   return (

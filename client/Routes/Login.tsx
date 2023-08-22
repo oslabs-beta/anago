@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StoreContext } from '../context/stateStore.tsx';
+import { StoreContext } from '../context/stateStore';
 import { Form } from 'react-router-dom';
 
 const Login = () => {
