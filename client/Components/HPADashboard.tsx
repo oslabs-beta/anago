@@ -15,6 +15,7 @@ import {
 import { Line, Chart } from 'react-chartjs-2';
 import { useRouteLoaderData } from 'react-router-dom';
 import TableDisplay from './TableDisplay';
+import DoubleLineGraph from './DoubleLineGraph';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -46,7 +47,6 @@ const HPADisplay = () => {
 
   // fetch hpa table specific metrics to display
   const getTableData = async () => {
-    console.log('getTableData');
     // perserve the order of the metric results after fetching
     const tableOrder = tableData;
     let count = 0;
@@ -84,7 +84,7 @@ const HPADisplay = () => {
   return (
     <div>
       {fetchCount === 7 && <TableDisplay tableData={tableData} logId={log} />}
-      {/* double line graph component */}
+      <DoubleLineGraph metricIds={doubleLineGraph} />
       {/* reccomendations */}
     </div>
   );

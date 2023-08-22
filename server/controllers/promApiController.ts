@@ -186,6 +186,7 @@ const promApiController: any = {
         });
 
         res.locals.promMetrics = promMetrics;
+        console.log('promMetrics', promMetrics);
         return next();
       }
     } catch (err) {

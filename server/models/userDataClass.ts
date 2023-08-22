@@ -209,16 +209,23 @@ function queryBuilder(lookupType: LookupType, queryOptions: any): string {
 
     case LookupType.HPAUtilization: {
       // TODO: return metric back to 90%
-      return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 >= 90';
-      // return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 <= 30';
+      // return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 >= 90';
+      return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 <= 30';
     }
 
     case LookupType.HTTPRequests: {
-      return 'increase(http_requests_total[1m])';
+      // TODO: return metric back to deployment http requests (would need to set up ingress to access it on pithy)
+      // return 'increase(http_requests_total[1m])';
+      // return 'increase(prometheus_http_requests_total[1m])';
+      return 'increase(prometheus_http_requests_total[1m])';
     }
 
     case LookupType.PodCountByHPA: {
-      return 'sum by (created_by_name) (kube_pod_info)';
+      // TODO: make it not just for pithy
+      // return 'sum by (created_by_name) (kube_pod_info)';
+      // return 'sum by (created_by_name) (kube_pod_info{created_by_name=~"pithy-deployment.+"})';
+      // return 'count(kube_pod_info{created_by_name=~"pithy-deployment.+"})';
+      return 'sum by (created_by_name) (kube_pod_info{created_by_name="prometheus-prometheus-node-exporter"})';
     }
 
     default: {
