@@ -24,47 +24,24 @@ const Row = (props: { hpa: string; row: (string | number)[]; log: any }) => {
 
   const filterLogHPA = () => {
     if (typeof log === 'string') {
-      return setFilteredLog(
+      return (
         <TableRow key={JSON.stringify(log)}>
           <TableCell component='th' scope='row'>
             {log}
           </TableCell>
-        </TableRow>,
+        </TableRow>
       );
     } else {
-      /* {row.history.map(historyRow => (
-                      <TableRow key={historyRow.date}>
-                        <TableCell component='th' scope='row'>
-                          {historyRow.date}
-                        </TableCell>
-                        <TableCell>{historyRow.customerId}</TableCell>
-                        <TableCell align='right'>{historyRow.amount}</TableCell>
-                        <TableCell align='right'>
-                          {Math.round(historyRow.amount * row.price * 100) /
-                            100}
-                        </TableCell>
-                      </TableRow>
-                    ))} */
-      return setFilteredLog(
-        log.map(arr => (
-          <TableRow key={JSON.stringify(log)}>
-            <TableCell component='th' scope='row'>
-              {arr[0]}
-            </TableCell>
-            <TableCell>{arr[1]}</TableCell>
-            {/* <TableCell align='right'>{historyRow.amount}</TableCell>
-            <TableCell align='right'>
-              {Math.round(historyRow.amount * row.price * 100) / 100}
-            </TableCell> */}
-          </TableRow>
-        )),
-      );
+      return log.map(arr => (
+        <TableRow key={JSON.stringify(log)}>
+          <TableCell component='th' scope='row'>
+            {arr[0]}
+          </TableCell>
+          <TableCell>{arr[1]}</TableCell>
+        </TableRow>
+      ));
     }
   };
-
-  useEffect(() => {
-    filterLogHPA();
-  });
 
   return (
     <>
@@ -102,7 +79,7 @@ const Row = (props: { hpa: string; row: (string | number)[]; log: any }) => {
                     <TableCell>Utilization %</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>{filteredLog}</TableBody>
+                <TableBody>{filterLogHPA()}</TableBody>
               </Table>
             </Box>
           </Collapse>
