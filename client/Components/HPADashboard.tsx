@@ -61,14 +61,13 @@ const HPADisplay = () => {
             duration: 'instant',
           }),
         })
-          .then(data => {
-            data.json();
-            console.log(data);
+          .then((data: Response): any => {
+            return data.json();
           })
           .then(data => {
-            console.log('data', data);
             tableOrder.set(id, data);
             setTableData(tableOrder);
+            console.log('data', data);
             count += 1;
             setFetchCount(count);
           })
@@ -85,7 +84,7 @@ const HPADisplay = () => {
 
   return (
     <div>
-      {fetchCount === 7 && <TableDisplay tableData={tableData} />}
+      {fetchCount === 7 && <TableDisplay tableData={tableData} logId={log} />}
       {/* log component */}
       {/* double line graph component */}
       {/* reccomendations */}

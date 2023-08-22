@@ -14,32 +14,20 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { promResResultElements } from '../../types';
+import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 
 // table:
 // [hpa name, status target, desired target, min pods, max pods, replicas ]
 
-const Row = (props: { hpa: string; row: string | number[] }) => {
+const Row = (props: { hpa: string; row: (string | number)[] }) => {
   const { hpa, row } = props;
   const [open, setOpen] = React.useState(false);
 
-  const getHPAUtilization = async () => {
-    fetch(`/api/data/metrics/74a9ac72-1bd8-4eb6-9b77-570cc0876147`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        duration: 'instant',
-      }),
-    })
-      .then(data => {
-        data.json();
-      })
-      .then(data => console.log(data))
-      .catch(err => console.log(err));
-  };
+  const filterLogHPA = () => {};
 
   useEffect(() => {
-    getHPAUtilization();
-  }, []);
+    filterLogHPA();
+  });
 
   return (
     <>

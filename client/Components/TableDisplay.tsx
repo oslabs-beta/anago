@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  ReactComponentElement,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react';
 import { UserData } from '../../types';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
@@ -16,46 +21,37 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { promResResultElements } from '../../types';
 import Row from './TableRow';
 
-const TableDisplay = ({ tableData }) => {
+interface RowsObj {
+  [key: string]: any[];
+}
+const TableDisplay = ({ tableData, logId }) => {
   // const [tableData, setTableData]: any = useState(new Map());
   const [fetchCount, setFetchCount] = useState(0);
   const [filteredTableData, setfilteredTableData]: any[] = useState([]);
+  const [logHPA, setLogHPA] = useState<string | promResResultElements[][]>([]);
 
+  console.log('logId', logId);
   console.log('tableData', tableData);
   const newData: promResResultElements[][] = [];
   /*
-  const getTableData = async () => {
-    // perserve the order of the metric results after fetching
-    const tableOrder = tableData;
-    let count = 0;
-    try {
-      metricIds.forEach(async id => {
-        tableOrder.set(id, null);
-        fetch(`/api/data/metrics/${id}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            duration: 'instant',
-          }),
-        })
-          .then(data => data.json())
-          .then(data => {
-            tableOrder.set(id, data);
-            setTableData(tableOrder);
-            setFetchCount(++count);
-          });
-      });
-    } catch (err) {
-      console.log(err);
-    }
+  const getHPAUtilization = async () => {
+    fetch(`/api/data/metrics/${logId}`, {
+      method: 'GET',
+    })
+      .then(data => data.json())
+      .then(data => {
+        console.log('hpa data', data);
+        setLogHPA(data);
+      })
+      .catch(err => console.log(err));
   };
   */
-
-  const rows: {} = {};
+  let arrOfRows: any = undefined;
+  const rows: RowsObj = {};
   const filterTableData = () => {
-    // initialize object to store hpa's as keys and all associated metrics as values to eliminate potential errors due to lack of order preservation
+    // initialize object to store hpa's as keys and all associated metrics as values to eliminate potential errors due to lack of order preservation (individual scraped metrics may not be in order by hpa) and obtain constant lookup time
     const tableIterator = tableData.values();
-    console.log('iterator', tableIterator);
+
     // initialize a key for each active hpa, representing a row in the table
     tableIterator.next().value.forEach(metricObj => {
       rows[metricObj.metric.horizontalpodautoscaler] = [];
@@ -68,11 +64,22 @@ const TableDisplay = ({ tableData }) => {
       });
       column += 1;
     }
+    setfilteredTableData(
+      Object.keys(rows).map(hpa => {
+        return <Row key={hpa} hpa={hpa} row={rows[hpa]} />;
+      }),
+    );
+    // arrOfRows = Object.keys(rows).map(hpa => {
+    //   return <Row key={hpa} hpa={hpa} row={rows[hpa]} />;
+    // });
+    console.log('rows', rows);
+    console.log('Object.keys(rows)', Object.keys(rows));
   };
-  // ! WHAT IS HAPPENING - data stream is being sent back from the server with a status of 200. json parse it, then it says undefined?
-  // useEffect(() => {
-  //   filterTableData();
-  // }, []);
+
+  useEffect(() => {
+    // getHPAUtilization();
+    filterTableData();
+  }, []);
 
   // TODO GET METRICS FOR HPA UTILIZATION (final element in array) and display when click the down arrow on table
 
@@ -93,10 +100,18 @@ const TableDisplay = ({ tableData }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {Object.keys(rows).forEach(hpa => {
-              <Row key={hpa} hpa={hpa} row={rows[hpa]} />;
-            })} */}
-            <Row key={'hpa'} hpa={'hpa'} row={[1, 2, 3, 4, 5, 6]} />
+            {filteredTableData}
+            <Row
+              key='pithy-deploymentTest'
+              hpa='pithy-deploymentTest'
+              row={['0', '50', '1', '10', '1', '1']}
+            />
+            {/* <Row
+              key={'hpa'}
+              hpa={'hpa'}
+              row={[1, 2, 3, 4, 5, 6]}
+              logHPA={logHPA}
+            /> */}
           </TableBody>
         </Table>
       </TableContainer>

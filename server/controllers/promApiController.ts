@@ -39,11 +39,7 @@ const promApiController: any = {
 
     // retrieve metricId from request query parameter
     const metricId = req.params.id;
-    let metricDuration = '';
-    if (req.body) {
-      metricDuration = req.body.duration;
-      console.log('metricDuration:', metricDuration);
-    }
+    console.log('id', metricId);
 
     // prometheus http api url's to query
     const promURL = 'http://localhost:9090/api/v1/';
@@ -58,10 +54,15 @@ const promApiController: any = {
     const options = userData.metrics[metricId].queryOptions;
 
     // TODO: IF INSTANT QUERY:
-    if (metricDuration === 'instant') {
-      console.log('instant query');
-      res.locals.promQuery = promURLInstant + query;
-      return next();
+    // let metricDuration = '';
+    if (req.body) {
+      const metricDuration = req.body.duration;
+      // console.log('metricDuration:', metricDuration);
+      if (metricDuration === 'instant') {
+        console.log('instant query');
+        res.locals.promQuery = promURLInstant + query;
+        return next();
+      }
     }
 
     // TODO: IF RANGE QUERY:
