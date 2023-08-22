@@ -213,9 +213,20 @@ const AlertBar = () => {
           </div>
           <div
             className="status-bar"
-            onClick={() => {
-              if (!clicked) setClicked(true);
-              else setClicked(false);
+            onClick={(e) => {
+              const buttons = document.getElementsByClassName('btn-small');
+              let buttonClicked = false;
+              // Iterate to see if the click was in a button
+              Array.prototype.forEach.call(buttons, (element) => {
+                if (element.contains(e.target)) {
+                  buttonClicked = true;
+                }
+              });
+              // If not, toggle alert view
+              if (!buttonClicked) {
+                if (!clicked) setClicked(true);
+                else setClicked(false);
+              }
             }}
           >
             {/* if data was fetched and there are errors and mouse is over*/}
@@ -244,7 +255,7 @@ const AlertBar = () => {
                               onClick={() => handleHide(alertObj.description)}
                               className="btn-small"
                             >
-                              hide
+                              Hide
                             </button>
                             <button
                               onClick={() =>
