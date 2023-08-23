@@ -38,13 +38,16 @@ const promApiController: any = {
     res.locals.userData = userData;
 
     const metricId = req.params.id;
-    if (userData.metrics === undefined) {
-      console.log(
-        'About to crash when trying to set Res.Locals with metricId',
-        metricId,
-        'from metrics',
-        userData.metrics[metricId]
-      );
+    if (
+      userData.metrics === undefined ||
+      userData.metrics[metricId] === undefined ||
+      !userData.metrics[metricId].hasOwnProperty('looupType')
+    ) {
+      next({
+        log: `Invalid metricId lookup in promApiController.getRangeMetrics.`,
+        status: 400,
+        message: { err: 'Bad lookup request.' },
+      });
     }
     res.locals.lookupType = userData.metrics[metricId].lookupType;
     res.locals.scopeType = userData.metrics[metricId].scopeType;
