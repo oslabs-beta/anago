@@ -309,7 +309,11 @@ header {
     word-break: anywhere;
   }
 }
-
+.interval-note {
+  margin-left: 20px;
+  color: red;
+  font-size: 14px;
+}
 //universal modal styling
 .react-responsive-modal-root {
   position: fixed;
