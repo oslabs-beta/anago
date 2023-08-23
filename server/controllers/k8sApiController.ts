@@ -43,7 +43,12 @@ k8sController.getNodes = async (
     res.locals.cluster = { nodes: nodes };
     return next();
   } catch (error) {
-    console.log(error);
+    return next({
+      log: 'Error caught in k8sController getNodes', error,
+      status: 400,
+      message: { err: 'An error occured when fetching Node information from the Kubernetes API' },
+    })
+    
   }
 };
 
@@ -78,7 +83,11 @@ k8sController.getPods = async (
     res.locals.cluster = { pods: pods };
     next();
   } catch (error) {
-    console.log(error);
+    return next({
+      log: 'Error caught in k8sController getPods', error,
+      status: 400,
+      message: { err: 'An error occured when fetching Pod information from the Kubernetes API' },
+    })
   }
 };
 
@@ -107,7 +116,11 @@ k8sController.getNamespaces = async (
     res.locals.cluster = { namespaces: namespaces };
     next();
   } catch (error) {
-    console.log(error);
+    return next({
+      log: 'Error caught in k8sController getNamespaces', error,
+      status: 400,
+      message: { err: 'An error occured when fetching Namespace information from the Kubernetes API' },
+    })
   }
 };
 
@@ -138,7 +151,11 @@ k8sController.getServices = async (
     res.locals.cluster = { services: services };
     next();
   } catch (error) {
-    console.log(error);
+    return next({
+      log: 'Error caught in k8sController getServices', error,
+      status: 400,
+      message: { err: 'An error occured when fetching Service information from the Kubernetes API' },
+    })
   }
 };
 
@@ -169,7 +186,11 @@ k8sController.getDeployments = async (
     res.locals.cluster = { deployments: deployments };
     next();
   } catch (error) {
-    console.log(error);
+    return next({
+      log: 'Error caught in k8sController getDeployments', error,
+      status: 400,
+      message: { err: 'An error occured when fetching Deployment information from the Kubernetes API' },
+    })
   }
 };
 
@@ -195,7 +216,11 @@ k8sController.getCluster = async (
     res.locals.cluster = cluster;
     next();
   } catch (error) {
-    console.log(error);
+    return next({
+      log: 'Error caught in k8sController getCluster', error,
+      status: 400,
+      message: { err: 'An error occured when fetching Cluster information from the Kubernetes API' },
+    })
   }
 };
 

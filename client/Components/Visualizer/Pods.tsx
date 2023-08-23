@@ -3,6 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { cleanName, handleAlerts } from '../../context/functions';
 import { StoreContext } from '../../context/stateStore';
 import { CleanAlert } from '../../../types';
+import AlertFlag from './AlertFlag';
 
 const Pods = ({
   conditions,
@@ -31,7 +32,6 @@ const Pods = ({
     const alerts = displayedAlerts;
     // const alerts: CleanAlert[] = handleAlerts(displayedAlerts);
     alerts.forEach((alert: any) => {
-      console.log(alert);
       if (alert['affectedPod'] && !podAlerts[alert]) {
         setPodAlerts([alert, ...podAlerts]);
       }
@@ -40,7 +40,13 @@ const Pods = ({
   console.log('podAlerts', podAlerts);
 
   return (
-    <div className="pod" id={id} key={id}>
+    <div className='pod' id={id} key={id}>
+      {/* {podAlerts.length > 0 &&
+        podAlerts.map(alert => {
+          if (alert['affectedPod'] === name) {
+            return <AlertFlag key={alert.startTime} />;
+          }
+        })} */}
       <img
         src="client/assets/images/pod.png"
         className="k8logo"

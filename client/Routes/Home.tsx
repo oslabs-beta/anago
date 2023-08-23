@@ -5,7 +5,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import { UserData } from '../../types';
-import { useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { StoreContext } from '../context/stateStore';
 import logo from '../assets/images/anago.png';
 import AlertBar from '../Components/AlertBar';

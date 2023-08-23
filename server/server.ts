@@ -61,7 +61,7 @@ app.use(
     console.log(err);
     console.log(errorObj.message);
     return res.status(errorObj.status).json(errorObj.message);
-  }
+  },
 );
 
 app.listen(PORT, () => {
