@@ -20,7 +20,7 @@ export interface UserData {
   userId: string;
   clusters: {}[];
   clusterName: string;
-  dashboards: {}[];
+  dashboards: any;
   metrics: {};
   hiddenAlerts: [];
 }
