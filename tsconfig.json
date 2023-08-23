@@ -33,6 +33,6 @@
     "client",
     "types.ts",
     "dev/grafanaDashboard.tsx"
-  ],
+, "ErrorElement.tsx"  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

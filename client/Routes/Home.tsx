@@ -22,7 +22,7 @@ export default function Home() {
   useEffect(() => {
     setHasFetchedUserData(true);
     setCurrentDashboard(dashboards[0]);
-    navigate('0');
+   // navigate('0');
   }, []);
 
   return (

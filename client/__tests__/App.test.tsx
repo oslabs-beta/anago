@@ -1,49 +1,49 @@
-// import App from '../App.tsx';
-// import Dashboard from '../Components/Dashboard/Dashboard.tsx';
-// import ClusterView from '../Routes/ClusterView.tsx';
-// import Home from '../Routes/Home.tsx';
-// import SetUp from '../Routes/SetUp.tsx';
-// import { render, screen } from './test-utils';
-// import * as loaders from '../context/loaders';
-// import {
-//   RouterProvider,
-//   createMemoryRouter,
-//   MemoryRouter,
-//   Route,
-//   createRoutesFromElements,
-// } from 'react-router-dom';
+import App from '../App.tsx';
+import Dashboard from '../Components/Dashboard/Dashboard.tsx';
+import ClusterView from '../Routes/ClusterView.tsx';
+import Home from '../Routes/Home.tsx';
+import SetUp from '../Routes/SetUp.tsx';
+import { render, screen } from './test-utils';
+import * as loaders from '../context/loaders';
+import {
+  RouterProvider,
+  createMemoryRouter,
+  MemoryRouter,
+  Route,
+  createRoutesFromElements,
+} from 'react-router-dom';
 
-// const mockRoutes = [
-//   {
-//     path: '/',
-//     element: <Home />,
-//     loader: vi.fn(),
-//     id: 'home',
-//     children: [
-//       {
-//         path: ':id',
-//         element: <Dashboard />,
-//       },
-//       {
-//         path: 'clusterview',
-//         element: <ClusterView />,
-//         loader: vi.fn(),
-//         id: 'cluster',
-//       },
-//       {
-//         path: 'setup',
-//         element: <SetUp />,
-//       },
-//     ],
-//   },
-// ];
+const mockRoutes = [
+  {
+    path: '/',
+    element: <Home />,
+    loader: vi.fn(),
+    id: 'home',
+    children: [
+      {
+        path: ':id',
+        element: <Dashboard />,
+      },
+      {
+        path: 'clusterview',
+        element: <ClusterView />,
+        loader: vi.fn(),
+        id: 'cluster',
+      },
+      {
+        path: 'setup',
+        element: <SetUp />,
+      },
+    ],
+  },
+];
 
-// describe('App Component Test', () => {
-//   test('renders without crashing', () => {
-//     const { container } = render(<App />);
-//     expect(container).toBeInTheDocument();
-//   });
-// });
+describe('App Component Test', () => {
+  test('renders without crashing', () => {
+    const { container } = render(<App />);
+    expect(container).toBeInTheDocument();
+  });
+});
 
 // describe('App is providing routing capability to child components', async () => {
 //   const router = createMemoryRouter(mockRoutes, {
@@ -142,18 +142,18 @@
 //   });
 
 
-//   // it('throws when the index route has children', () => {
-//   //   expect(() => {
-//   //     createRoutesFromChildren(
-//   //       <Route path='/'>
-//   //         {/* @ts-expect-error */}
-//   //         <Route index>
-//   //           <Route path='users' />
-//   //         </Route>
-//   //       </Route>,
-//   //     );
-//   //   }).toThrow('An index route cannot have child routes.');
-//   // });
+  // it('throws when the index route has children', () => {
+  //   expect(() => {
+  //     createRoutesFromChildren(
+  //       <Route path='/'>
+  //         {/* @ts-expect-error */}
+  //         <Route index>
+  //           <Route path='users' />
+  //         </Route>
+  //       </Route>,
+  //     );
+  //   }).toThrow('An index route cannot have child routes.');
+  // });
 
 //   it('supports react fragments for automatic ID generation', () => {
 //     expect(
@@ -198,88 +198,88 @@
 //   });
 // });
 
-// // vi.mock('react-router-dom', () => ({
-// //   createBrowserRouter: vi.fn(),
-// //   createRoutesFromElements: vi.fn(),
-// //   useLoaderData: vi.fn(),
-// //   useRouteLoaderData: vi.fn(),
-// //   useNavigate: vi.fn(),
-// // }));
+// vi.mock('react-router-dom', () => ({
+//   createBrowserRouter: vi.fn(),
+//   createRoutesFromElements: vi.fn(),
+//   useLoaderData: vi.fn(),
+//   useRouteLoaderData: vi.fn(),
+//   useNavigate: vi.fn(),
+// }));
 
-// // const mockRouter = {
-// //   navigate: vi.fn(),
-// //   getCurrentRoute: vi.fn(),
-// //   useLoaderData: vi.fn(),
-// //   useRouteLoaderData: vi.fn(),
-// // };
+// const mockRouter = {
+//   navigate: vi.fn(),
+//   getCurrentRoute: vi.fn(),
+//   useLoaderData: vi.fn(),
+//   useRouteLoaderData: vi.fn(),
+// };
 
-// // mockRouter.setup(() => {
-// //   createRoutesFromElements.$mock(() => mockRoutes);
-// // });
+// mockRouter.setup(() => {
+//   createRoutesFromElements.$mock(() => mockRoutes);
+// });
 
-// // const TestingComponent = () => {
-// //   const { hasFetchedUserData, currentDashboard }: any =
-// //     useContext(StoreContext);
-// //   return (
-// //     <div>
-// //       <p data-testID='dashboard'>{currentDashboard.toString()}</p>
-// //       <p data-testID='hasFetched'>{hasFetchedUserData.toString()}</p>
-// //     </div>
-// //   );
-// // };
-// // const hasFetched = {
-// //   currentDashboard: 'default',
-// // };
-// // const hasNotFetched = {
-// //   currentDashboard: undefined,
-// // };
+// const TestingComponent = () => {
+//   const { hasFetchedUserData, currentDashboard }: any =
+//     useContext(StoreContext);
+//   return (
+//     <div>
+//       <p data-testID='dashboard'>{currentDashboard.toString()}</p>
+//       <p data-testID='hasFetched'>{hasFetchedUserData.toString()}</p>
+//     </div>
+//   );
+// };
+// const hasFetched = {
+//   currentDashboard: 'default',
+// };
+// const hasNotFetched = {
+//   currentDashboard: undefined,
+// };
 
-// // describe('Testing Store Provider Context', () => {
-// //     let providerProps;
-// //     beforeEach(()=>{
-// //         (providerProps={
-// //             dashboard: 'default',
-// //             hasFetchedUserData: true,
-// //         })
-// //     })
+// describe('Testing Store Provider Context', () => {
+//     let providerProps;
+//     beforeEach(()=>{
+//         (providerProps={
+//             dashboard: 'default',
+//             hasFetchedUserData: true,
+//         })
+//     })
 
-// //     test('provides expected State object to child elements', ()=>{
-// //         render( <TestingComponent/>, {providerProps});
-// //         expect(screen.queryByTestId('dashboard')).toEqual('default');
-// //         expect(screen.queryByTestId('hasFetched')).toEqual('true');
+//     test('provides expected State object to child elements', ()=>{
+//         render( <TestingComponent/>, {providerProps});
+//         expect(screen.queryByTestId('dashboard')).toEqual('default');
+//         expect(screen.queryByTestId('hasFetched')).toEqual('true');
 
-// //     })
-// // })
+//     })
+// })
 
-// // describe('<StoreProvider/>', () => {
-// //   test('provides expected States object to child elements', () => {
-// //     [
-// //       {
-// //         scenario: 'has fetched',
-// //         currentDashboard: hasFetched,
-// //         expectedDashboard: 'default',
-// //         expectedFetch: 'true',
-// //       },
-// //       {
-// //         scenario: 'has not fetched',
-// //         currentDashboard: hasNotFetched,
-// //         expectedDashboard: undefined,
-// //         expectedFetch: 'false',
-// //       },
-// //     ].forEach(({ scenario, currentDashboard, expectedDashboard, expectedFetch }) => {
-// //       test(scenario, () => {
-// //         const { getByTestId } = render(
-// //           <StoreContext.Provider>
-// //             <TestingComponent />
-// //           </StoreContext.Provider>,
-// //         );
-// //       });
-// //       expect(screen.getByTestId('dashboard')).toEqual(expectedDashboard);
+// describe('<StoreProvider/>', () => {
+//   test('provides expected States object to child elements', () => {
+//     [
+//       {
+//         scenario: 'has fetched',
+//         currentDashboard: hasFetched,
+//         expectedDashboard: 'default',
+//         expectedFetch: 'true',
+//       },
+//       {
+//         scenario: 'has not fetched',
+//         currentDashboard: hasNotFetched,
+//         expectedDashboard: undefined,
+//         expectedFetch: 'false',
+//       },
+//     ].forEach(({ scenario, currentDashboard, expectedDashboard, expectedFetch }) => {
+//       test(scenario, () => {
+//         const { getByTestId } = render(
+//           <StoreContext.Provider>
+//             <TestingComponent />
+//           </StoreContext.Provider>,
+//         );
+//       });
+//       expect(screen.getByTestId('dashboard')).toEqual(expectedDashboard);
 
-// //       expect(screen.queryByTestId('hasFetched')).toEqual(expectedFetch);
+//       expect(screen.queryByTestId('hasFetched')).toEqual(expectedFetch);
 
-// //     });
-// //   });
-// // });
+//     });
+//   });
+// });
 
-// // // describe('')
+// // describe('')
