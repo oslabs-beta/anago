@@ -7,7 +7,6 @@ import {
 import { UserData } from '../../types';
 import React, { useContext, useEffect } from 'react';
 import { StoreContext } from '../context/stateStore';
-import logo from '../assets/images/anago.png';
 import AlertBar from '../Components/AlertBar';
 
 export default function Home() {

@@ -67,7 +67,7 @@ export function optionsBuilder(obj: any): any {
 
 export function queryBuilder(
   lookupType: LookupType,
-  queryOptions: any,
+  queryOptions: any
 ): string | undefined {
   // console.log(
   //   'Query builder for Lookup Type: ',
@@ -81,7 +81,7 @@ export function queryBuilder(
         return queryOptions.customQuery;
       else {
         console.log(
-          'Error in queryBuilder: Tried to create a custom query with no custom query string provided.',
+          'Error in queryBuilder: Tried to create a custom query with no custom query string provided.'
         );
         return undefined;
       }
@@ -123,9 +123,9 @@ export function queryBuilder(
         str +=
           ', ' +
           queryOptions.context +
-          '=' +
+          '="' +
           queryOptions.contextChoice +
-          '}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
+          '"}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
       } else {
         str +=
           '}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
@@ -145,9 +145,9 @@ export function queryBuilder(
           str +
           '{' +
           queryOptions.context +
-          '=' +
+          '="' +
           queryOptions.contextChoice +
-          '}';
+          '"}';
       if (
         queryOptions.hasOwnProperty('target') &&
         queryOptions.target !== 'all'
@@ -174,9 +174,9 @@ export function queryBuilder(
         str +=
           ', ' +
           queryOptions.context +
-          '=' +
+          '="' +
           queryOptions.contextChoice +
-          '} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
+          '"} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
       } else {
         str +=
           '} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
@@ -210,7 +210,12 @@ export function queryBuilder(
         queryOptions.context !== 'cluster'
       )
         str =
-          str + ',' + queryOptions.context + '=' + queryOptions.contextChoice;
+          str +
+          ',' +
+          queryOptions.context +
+          '="' +
+          queryOptions.contextChoice +
+          '"';
       str += '}[5m]))';
       if (
         queryOptions.hasOwnProperty('target') &&
@@ -229,7 +234,12 @@ export function queryBuilder(
         queryOptions.context !== 'cluster'
       )
         str =
-          str + ',' + queryOptions.context + '=' + queryOptions.contextChoice;
+          str +
+          ',' +
+          queryOptions.context +
+          '="' +
+          queryOptions.contextChoice +
+          '"';
       str += '})';
       if (
         queryOptions.hasOwnProperty('target') &&

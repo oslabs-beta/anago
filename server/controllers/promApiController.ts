@@ -60,19 +60,20 @@ const promApiController: any = {
     res.locals.userData = userData;
 
     res.locals.lookupType = req.body.lookupType;
+    res.locals.scopeType = req.body.scopeType;
     res.locals.queryOptions = optionsBuilder(req.body);
     res.locals.searchQuery = queryBuilder(
       req.body.lookupType,
-      res.locals.queryOptions,
+      res.locals.queryOptions
     );
-    // console.log(
-    //   'In query base builder with req.body',
-    //   req.body,
-    //   '\nBuilt query Options',
-    //   res.locals.queryOptions,
-    //   '\nBuilt searchQuery',
-    //   res.locals.searchQuery
-    // );
+    console.log(
+      'In query base builder with req.body',
+      req.body,
+      '\nBuilt query Options',
+      res.locals.queryOptions,
+      '\nBuilt searchQuery',
+      res.locals.searchQuery
+    );
     next();
   },
 
@@ -121,7 +122,7 @@ const promApiController: any = {
       const placeholderFetch = placeholderData(
         metricId,
         res.locals.userData,
-        res.locals.queryOptions,
+        res.locals.queryOptions
       );
       // console.log('Local data for metric ', metricId, ':\n', placeholderFetch);
       res.locals.promMetrics = placeholderFetch;
@@ -205,7 +206,7 @@ const promApiController: any = {
           yAxis.label = namePlot(
             obj,
             res.locals.lookupType,
-            res.locals.queryOptions,
+            res.locals.queryOptions
           );
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));
