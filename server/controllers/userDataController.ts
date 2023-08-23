@@ -94,7 +94,7 @@ userDataController.deleteHiddenAlert = (
   try {
     const unhideAlert = req.body.hidden;
     const updatedUserData = readUserData();
-    //filter the current hiddenAlerts array
+    //filter the current hiddenAlerts array to delete alert
     updatedUserData.hiddenAlerts = updatedUserData.hiddenAlerts.filter(
       (value) => value !== unhideAlert
     );
@@ -186,7 +186,6 @@ userDataController.addMetric = (
   updatedUserData.metrics[newMetric.metricId] = newMetric;
 
   console.log('Added new metric. Updated User Data:', updatedUserData);
-
 
   fs.writeFileSync(
     path.resolve(__dirname, '../models/userData.json'),
