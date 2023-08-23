@@ -90,9 +90,16 @@ if (ACTIVE_DEPLOYMENT) {
   // );
   //
   // ! HPA Monitoring pre-built Dashboard
+  // addMetric(
+  // metricName: string,
+  // lookupType: LookupType,
+  // scopeType = ScopeType.Range,
+  // queryOptions?: any,
+  // dashboardNumber = 0,
   newUserData.addMetric(
     'HPA by Deployment',
     LookupType.HPAByDeployment,
+    ScopeType.Instant,
     null,
     1,
   );
@@ -100,37 +107,49 @@ if (ACTIVE_DEPLOYMENT) {
   newUserData.addMetric(
     'HPA Target Status',
     LookupType.HPATargetStatus,
+    ScopeType.Instant,
     null,
     1,
   );
-  newUserData.addMetric('HPA Target', LookupType.HPATargetSpec, null, 1);
+  newUserData.addMetric(
+    'HPA Target',
+    LookupType.HPATargetSpec,
+    ScopeType.Instant,
+    null,
+    1,
+  );
   newUserData.addMetric(
     'HPA Minimum Replicas',
     LookupType.HPAMinReplicas,
+    ScopeType.Instant,
     null,
     1,
   );
   newUserData.addMetric(
     'HPA Maximum Replicas',
     LookupType.HPAMaxReplicas,
+    ScopeType.Instant,
     null,
     1,
   );
   newUserData.addMetric(
     'HPA Current Replicas',
     LookupType.HPACurrentReplicas,
+    ScopeType.Instant,
     null,
     1,
   );
   newUserData.addMetric(
     'HPA Desired Replicas',
     LookupType.HPADesiredReplicas,
+    ScopeType.Instant,
     null,
     1,
   );
   newUserData.addMetric(
     'HPA Utilization >= 90%',
     LookupType.HPAUtilization,
+    ScopeType.Range,
     {
       // duration: 24 * 60 * 60, // 1 day
       duration: 60 * 60,
@@ -141,6 +160,7 @@ if (ACTIVE_DEPLOYMENT) {
   newUserData.addMetric(
     'Total HTTP Requests',
     LookupType.HTTPRequests,
+    ScopeType.Range,
     {
       duration: 5 * 60 * 60,
       stepSize: 5 * 60,
@@ -148,7 +168,7 @@ if (ACTIVE_DEPLOYMENT) {
     1,
   );
 
-  // TODO filter by endpt, method type, job, app, namespace
+  // TODO filter by endpt, method type, job, app, namespace OR filter on FE
   /*
   userData.addMetric(
     'HTTP Requests by Endpoint',
@@ -165,6 +185,7 @@ if (ACTIVE_DEPLOYMENT) {
   newUserData.addMetric(
     'Pod Count by HPA Deployment',
     LookupType.PodCountByHPA,
+    ScopeType.Range,
     {
       duration: 5 * 60 * 60,
       stepSize: 5 * 60,

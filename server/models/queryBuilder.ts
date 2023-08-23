@@ -67,7 +67,7 @@ export function optionsBuilder(obj: any): any {
 
 export function queryBuilder(
   lookupType: LookupType,
-  queryOptions: any
+  queryOptions: any,
 ): string | undefined {
   // console.log(
   //   'Query builder for Lookup Type: ',
@@ -81,7 +81,7 @@ export function queryBuilder(
         return queryOptions.customQuery;
       else {
         console.log(
-          'Error in queryBuilder: Tried to create a custom query with no custom query string provided.'
+          'Error in queryBuilder: Tried to create a custom query with no custom query string provided.',
         );
         return undefined;
       }
@@ -240,6 +240,102 @@ export function queryBuilder(
         } else {
           str += 'by (' + queryOptions.target + ')';
         }
+      return str;
+    }
+
+    case LookupType.HPAByDeployment: {
+      return 'kube_horizontalpodautoscaler_metadata_generation';
+    }
+
+    case LookupType.HPATargetStatus: {
+      return 'kube_horizontalpodautoscaler_status_target_metric{metric_target_type="utilization"}';
+    }
+
+    case LookupType.HPATargetSpec: {
+      return 'kube_horizontalpodautoscaler_spec_target_metric';
+    }
+
+    case LookupType.HPAMinReplicas: {
+      return 'kube_horizontalpodautoscaler_spec_min_replicas';
+    }
+
+    case LookupType.HPAMaxReplicas: {
+      return 'kube_horizontalpodautoscaler_spec_max_replicas';
+    }
+
+    case LookupType.HPACurrentReplicas: {
+      return 'kube_horizontalpodautoscaler_status_current_replicas';
+    }
+
+    case LookupType.HPADesiredReplicas: {
+      return 'kube_horizontalpodautoscaler_status_desired_replicas';
+    }
+
+    case LookupType.HPAUtilization: {
+      // TODO: return metric back to 90%
+      // return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 >= 90';
+      return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 <= 30';
+    }
+    // !SMKLC;MDLMCL;S
+    case LookupType.HTTPRequests: {
+      // TODO: return metric back to deployment http requests (would need to set up ingress to access it on pithy)
+      // return 'increase(http_requests_total[1m])';
+      // return 'increase(prometheus_http_requests_total[1m])';
+      let str = 'increase(prometheus_http_requests_total[1m])';
+      // ! examples
+      // increase(prometheus_http_requests_total{endpoint="http-web"}[1m])
+      // handler="/"
+      // ! increase(prometheus_http_requests_total{service="prometheus-kube-prometheus-prometheus"}[1m])
+      // service=pithy-service
+      // hpa=pithy-deployment
+      // increase(prometheus_http_requests_total{service="prometheus-kube-prometheus-prometheus", endpoint="http-web"}[1m])
+      // {service=~"prometheus.+"}
+      if (
+        queryOptions.hasOwnProperty('hpa') &&
+        queryOptions.hasOwnProperty('endpoint')
+      ) {
+        // const service = () => {
+        //   return queryOptions.hpa.slice(0, queryOptions.hpa.indexOf('-'));
+        // };
+        str =
+          str.slice(0, 39) +
+          `{service=~"` +
+          queryOptions.hpa.slice(0, queryOptions.hpa.indexOf('-')) +
+          `.+", endpoint="` +
+          queryOptions.endpoint +
+          `"}` +
+          str.slice(39);
+      }
+      if (queryOptions.hasOwnProperty('hpa')) {
+        str =
+          str.slice(0, 39) +
+          `{service=~"` +
+          queryOptions.hpa.slice(0, queryOptions.hpa.indexOf('-')) +
+          `.+"}` +
+          str.slice(39);
+      }
+      if (queryOptions.hasOwnProperty('endpoint')) {
+        str =
+          str.slice(0, 39) +
+          `{endpoint="` +
+          queryOptions.endpoint +
+          `"}` +
+          str.slice(39);
+      }
+      return str;
+    }
+
+    case LookupType.PodCountByHPA: {
+      // TODO: make it not just for pithy
+      let str = `count by (created_by_name)(kube_pod_info{created_by_name="pithy-deployment-f77bd655c"})`;
+      // let str = 'count by (created_by_name)(kube_pod_info)';
+      if (queryOptions.hasOwnProperty('hpa')) {
+        str =
+          str.slice(0, str.length - 1) +
+          `{created_by_name=~"` +
+          queryOptions.hpa +
+          `.+"})`;
+      }
       return str;
     }
 
