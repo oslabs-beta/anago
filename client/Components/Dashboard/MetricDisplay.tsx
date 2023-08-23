@@ -28,11 +28,12 @@ ChartJS.register(
 );
 
 const MetricDisplay = ({ metricId, editMode }) => {
+  // current userData
   const userData = useRouteLoaderData('home') as UserData;
-
   //state to handle modal and handling fetched data router
   const [open, setOpen]: any = useState(false);
   const [metricData, setMetricData]: any = useState({});
+  //button to delete metrics from userData
   const [trashCanClicked, setTrashCanClicked] = useState<Boolean>(false);
 
   // display options for metrics
@@ -68,9 +69,9 @@ const MetricDisplay = ({ metricId, editMode }) => {
       .catch((err) => console.log(err));
   }
 
+  // send delete request to backend
   async function deleteMetric() {
     try {
-      // send request to backend
       const response = await fetch(`/api/user/metrics/${metricId}`, {
         method: 'DELETE',
         headers: {
@@ -90,23 +91,20 @@ const MetricDisplay = ({ metricId, editMode }) => {
   useEffect(
     () => {
       //initial fetch request
-      //this is made on the assumption of this structure:
-      //{userData: metrics: metricId: queryOptions: stepSize/Refresh}
       fetchFromProm();
       // auto refresh section:
       let intervalTime: number;
-      // check to see if it is a range metric
+      // if the metric is a range metric and has a stepSize property, refresh by the stepSize property
       if (
         userData.metrics[metricId].scopeType === ScopeType.Range &&
         userData.metrics[metricId].queryOptions.hasOwnProperty('stepSize')
       ) {
-        // find the interval time for that metric based on the stepSize
         intervalTime = userData.metrics[metricId].queryOptions.stepSize;
       } else if (
         userData.metrics[metricId].scopeType === ScopeType.Instant &&
         userData.metrics[metricId].queryOptions.hasOwnProperty('refresh')
       ) {
-        // if it is not a range metric (i.e. no stepSize), use the refresh property
+        // if it is not a range metric and has a refresh property, refresh by the refresh property
         intervalTime = userData.metrics[metricId].queryOptions.refresh;
       } else {
         intervalTime = 300;
@@ -154,7 +152,6 @@ const MetricDisplay = ({ metricId, editMode }) => {
           <Line data={metricData} options={options} onClick={openModal} />
         )}
         <div className='modal'>
-          {/* {metricId && <button onClick={openModal}>See more</button>} */}
           <Modal open={open} onClose={closeModal}>
             <h4 className='metric-title'>
               {userData.metrics[metricId].metricName}

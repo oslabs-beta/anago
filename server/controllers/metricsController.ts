@@ -1,14 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import userData from '../models/defaultUserData';
 
-//    userData = {
-//      userId = randomUUID();
-//      clusters = [];
-//      dashboards = [];
-//      metrics = {key/userId: info};
-//      const firstDash = new Dashboard('Kubernetes Dashboard');
-//      this.dashboards.push(firstDash);
-//}
+// this controller is not currently in use but can be altered to check if metrics exist in the userData
 
 const metricsController: any = {};
 
