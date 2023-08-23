@@ -11,7 +11,7 @@ import {
   namePlot,
   readUserData,
 } from './helperFuncs.ts';
-import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.ts';
+import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 import type { Request, Response, NextFunction } from 'express';
 import { optionsBuilder, queryBuilder } from '../models/queryBuilder.js';
 
@@ -41,7 +41,7 @@ const promApiController: any = {
     if (
       userData.metrics === undefined ||
       userData.metrics[metricId] === undefined ||
-      !userData.metrics[metricId].hasOwnProperty('looupType')
+      !userData.metrics[metricId].hasOwnProperty('lookupType')
     ) {
       next({
         log: `Invalid metricId lookup in promApiController.getRangeMetrics.`,
@@ -91,7 +91,7 @@ const promApiController: any = {
   // build the query to send to the prometheus http api
   queryBuilder: (req: Request, res: Response, next: NextFunction) => {
     // prometheus http api url's to query
-    const promURL = 'http://localhost:9090/api/v1/';
+    const promURL = DEPLOYMENT_URL+'api/v1/';
     const promURLInstant = promURL + 'query?query=';
     const promURLRange = promURL + 'query_range?query=';
     const promURLAlerts = promURL + 'alerts';

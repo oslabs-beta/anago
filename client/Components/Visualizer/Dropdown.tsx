@@ -10,10 +10,10 @@ export function Dropdown() {
   //set the default 'selected states' to include all nodes and namespaces returned from K8s API so the page initially loads with content
   const defaultStates = () => {
     let obj = {};
-    clusterData.nodes.map(node => {
+    clusterData.nodes.map((node) => {
       obj[node.name] = false;
     });
-    clusterData.namespaces.map(namespace => {
+    clusterData.namespaces.map((namespace) => {
       obj[namespace.name] = false;
     });
     return obj;
@@ -22,18 +22,17 @@ export function Dropdown() {
   //determine the number of nodes and namespaces that are selected from the dropdown and the total number of nodes and namespaces available. this creates a label for the dropdown bar that shows the proportion of available items are currently viewed
   const numSelected = Object.values(selectedStates).filter(Boolean).length;
   const numNodes = Object.keys(selectedStates).filter(
-    item => item.charAt(0) === 'i' && selectedStates[item] === true,
+    (item) => item.charAt(0) === 'i' && selectedStates[item] === true
   ).length;
   const numNamespaces = Object.keys(selectedStates).filter(
-    item => item.charAt(0) !== 'i' && selectedStates[item] === true,
+    (item) => item.charAt(0) !== 'i' && selectedStates[item] === true
   ).length;
   const totalNodes = clusterData.nodes.length;
   const totalNamespaces = clusterData.namespaces.length;
 
-
   //handler function to close the dropdown if clicked outside of the dropdown window
   const dropdownRef = useRef(null);
-  const onClick = e => {
+  const onClick = (e) => {
     if (e.target !== dropdownRef.current) {
       setIsDropdownDisplayed(false);
     }
@@ -54,27 +53,30 @@ export function Dropdown() {
     <fieldset className='dropdown'>
       <button
         className='state-dropdown'
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation();
-          setIsDropdownDisplayed(prevState => !prevState);
-        }}>
+          setIsDropdownDisplayed((prevState) => !prevState);
+        }}
+      >
         {numSelected > 0
           ? `Nodes selected: ${numNodes}/${totalNodes}, Namespaces selected: ${numNamespaces}/${totalNamespaces}`
-          : '--Filter Your Cluster View--'}
+          : '--Filter Your ClusterView--'}
       </button>
       {isDropdownDisplayed && (
         <div
           className='panel'
           ref={dropdownRef}
-          onClick={e => e.stopPropagation()}>
+          onClick={(e) => e.stopPropagation()}
+        >
           <h4 className='dropdown-sublabel'>Nodes: </h4>
-          {clusterData.nodes.map(node => {
+          {clusterData.nodes.map((node) => {
             return (
               <div className='dropdown-items' key={node.uid}>
                 <fieldset
-                  className={selectedStates[node.name] ? `selected` : ''}>
+                  className={selectedStates[node.name] ? `selected` : ''}
+                >
                   <input
-                    onChange={e =>
+                    onChange={(e) =>
                       setSelectedStates({
                         ...selectedStates,
                         [node.name]: e.target.checked,
@@ -89,13 +91,14 @@ export function Dropdown() {
             );
           })}
           <h4 className='dropdown-sublabel'>Namespaces: </h4>
-          {clusterData.namespaces.map(namespace => {
+          {clusterData.namespaces.map((namespace) => {
             return (
               <div className='dropdown-items' key={namespace.uid}>
                 <fieldset
-                  className={selectedStates[namespace.name] ? `selected` : ''}>
+                  className={selectedStates[namespace.name] ? `selected` : ''}
+                >
                   <input
-                    onChange={e =>
+                    onChange={(e) =>
                       setSelectedStates({
                         ...selectedStates,
                         [namespace.name]: e.target.checked,

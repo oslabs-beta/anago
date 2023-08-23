@@ -284,23 +284,33 @@ const AddMetric = (props): any => {
     // Branch over time-range
     if (types[0] == ScopeType.Range) {
       str += ' over the last ';
+      // Parse the entered time string
       const timeSec = fields.duration
         ? timeConverter(fields.duration)
         : 24 * 60 * 60;
-      if (timeSec > 1 * 60 * 60 * 24 * 365) {
-        str += `${Math.round((timeSec / 60 / 60 / 24 / 365) * 10) / 10} years.`;
-      } else if (timeSec > 60 * 60 * 24 * 90) {
-        str += `${Math.round((timeSec / 60 / 60 / 24 / 30) * 10) / 10} months.`;
-      } else if (timeSec > 60 * 60 * 24 * 20) {
-        str += `${Math.round((timeSec / 60 / 60 / 24 / 7) * 10) / 10} weeks.`;
-      } else if (timeSec > 60 * 60 * 24 * 3.5) {
-        str += `${Math.round((timeSec / 60 / 60 / 24) * 10) / 10} days.`;
-      } else if (timeSec > 60 * 60 * 3.5) {
-        str += `${Math.round((timeSec / 60 / 60) * 10) / 10} hours.`;
-      } else if (timeSec > 60 * 3.5) {
-        str += `${Math.round((timeSec / 60) * 10) / 10} minutes.`;
+      if (timeSec) {
+        if (timeSec > 1 * 60 * 60 * 24 * 365) {
+          str += `${
+            Math.round((timeSec / 60 / 60 / 24 / 365) * 10) / 10
+          } years.`;
+        } else if (timeSec > 60 * 60 * 24 * 90) {
+          str += `${
+            Math.round((timeSec / 60 / 60 / 24 / 30) * 10) / 10
+          } months.`;
+        } else if (timeSec > 60 * 60 * 24 * 20) {
+          str += `${Math.round((timeSec / 60 / 60 / 24 / 7) * 10) / 10} weeks.`;
+        } else if (timeSec > 60 * 60 * 24 * 3.5) {
+          str += `${Math.round((timeSec / 60 / 60 / 24) * 10) / 10} days.`;
+        } else if (timeSec > 60 * 60 * 3.5) {
+          str += `${Math.round((timeSec / 60 / 60) * 10) / 10} hours.`;
+        } else if (timeSec > 60 * 3.5) {
+          str += `${Math.round((timeSec / 60) * 10) / 10} minutes.`;
+        } else {
+          str += `${timeSec} seconds.`;
+        }
       } else {
-        str += `${timeSec} seconds.`;
+        // Couldn't convert time, so use default
+        str += "24 hours (couldn't parse time).";
       }
     } else {
       str += '.';
@@ -547,9 +557,32 @@ const AddMetric = (props): any => {
 
 export default AddMetric;
 
-function timeConverter(input: string): number {
-  let numPart = Number(input.split(' ')[0]);
-  const stringPart = input.split(' ')[1];
+function timeConverter(input: string): number | undefined {
+  let numPart, stringPart;
+  // if (input.includes(' ')) {
+  numPart = Number(input.split(' ')[0]);
+  stringPart = input.split(' ')[1];
+  // } else {
+  //   // Find num/letter break
+  //   let firstLetter = 0;
+  //   for (let i = 0; i < input.length; i++) {
+  //     if (input[i].toLowerCase() !== input[i].toUpperCase()) {
+  //       firstLetter = i;
+  //       break;
+  //     }
+  //   }
+  //   // let cleanBreak = true;
+  //   // for (let i = 0; i < firstLetter; i++) {
+  //   //   if (input[i].toLowerCase() !== input[i].toUpperCase()) cleanBreak = false;
+  //   // }
+  //   // for (let i = firstLetter; i < input.length; i++) {
+  //   //   if (input[i].toLowerCase() === input[i].toUpperCase()) cleanBreak = false;
+  //   // }
+  //   // if (cleanBreak) {
+  //   numPart = input.slice(0, firstLetter);
+  //   stringPart = input.slice(firstLetter);
+  //   // } else return undefined;
+  // }
   switch (stringPart) {
     case 's':
     case 'seconds':
@@ -586,7 +619,7 @@ function timeConverter(input: string): number {
     case 'years':
       return numPart * 60 * 60 * 24 * 365;
     default:
-      return numPart;
+      return undefined;
   }
 }
 

@@ -31,7 +31,7 @@ const Dashboard = () => {
       fetch('/api/pithy')
         .then((res) => res.json())
         .then((res) => {
-          setTimeout(() => pithy(), 1000);
+          setTimeout(() => pithy(), 700);
         });
     } catch {
       console.log('failed to fetch pithy');

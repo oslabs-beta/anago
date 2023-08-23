@@ -4,6 +4,7 @@ import { useRouteLoaderData } from 'react-router-dom';
 import { StoreContext } from '../context/stateStore';
 import { handleAlerts } from '../context/functions';
 import Modal from 'react-responsive-modal';
+import { ALERT_URL } from '../../user-config.js';
 
 //TODO: add displayed to the state store
 
@@ -25,7 +26,8 @@ const AlertBar = () => {
   const [warningCount, setWarningCount] = useState<number>();
   const userData = useRouteLoaderData('home') as UserData;
   //make sure this local host address gives the alert JSON object
-  const alertsAPI = 'http://localhost:9093/api/v2/alerts';
+
+  const alertsAPI = ALERT_URL + 'api/v2/alerts';
 
   //fetching function to API
   const fetching = async () => {
@@ -185,7 +187,7 @@ const AlertBar = () => {
     <>
       {showAlertBar && (
         <>
-          <div className="modal">
+          <div className='modal'>
             <Modal
               open={open}
               onClose={() => {
@@ -213,7 +215,7 @@ const AlertBar = () => {
             </Modal>
           </div>
           <div
-            className="status-bar"
+            className='status-bar'
             onClick={(e) => {
               const buttons = document.getElementsByClassName('btn-small');
               let buttonClicked = false;
@@ -233,7 +235,7 @@ const AlertBar = () => {
             {/* if data was fetched and there are errors and mouse is over*/}
             {fetched && !noErrors && clicked && (
               <div>
-                <h3 id="alertTitle" onClick={() => setClicked(false)}>
+                <h3 id='alertTitle' onClick={() => setClicked(false)}>
                   <strong>ALERTS:</strong>
                 </h3>
                 {['critical', 'warning'].map((severity) => (
@@ -247,14 +249,14 @@ const AlertBar = () => {
                             key={alertObj.description}
                             id={alertObj.description}
                           >
-                            <strong className="message">
+                            <strong className='message'>
                               {severity.toUpperCase()}:
                             </strong>{' '}
                             {alertObj.description}
                             <br></br>
                             <button
                               onClick={() => handleHide(alertObj.description)}
-                              className="btn-small"
+                              className='btn-small'
                             >
                               Hide
                             </button>
@@ -262,7 +264,7 @@ const AlertBar = () => {
                               onClick={() =>
                                 handleDetails(alertObj.description)
                               }
-                              className="btn-small"
+                              className='btn-small'
                             >
                               Details
                             </button>
@@ -274,7 +276,7 @@ const AlertBar = () => {
                 {hidden.length > 0 && (
                   <div>
                     {['critical', 'warning'].map((severity) => (
-                      <div id="hidden" key={`${severity}+H`}>
+                      <div id='hidden' key={`${severity}+H`}>
                         {[...hidden].map((hiddenId) => {
                           const alertObj = alerts.find(
                             (alertObj) =>
@@ -290,7 +292,7 @@ const AlertBar = () => {
                                 </em>
                                 <br></br>
                                 <button
-                                  className="btn-small"
+                                  className='btn-small'
                                   onClick={() =>
                                     handleRestore(alertObj.description)
                                   }
@@ -309,7 +311,7 @@ const AlertBar = () => {
             )}
             {/* if there are errors, the data is fetched, but the mouse is not over */}
             {!noErrors && fetched && !clicked && (
-              <h3 id="mouseNotOver" onClick={() => setClicked(true)}>
+              <h3 id='mouseNotOver' onClick={() => setClicked(true)}>
                 <strong>
                   ALERTS PREVIEW: {criticalCount} Critical, {warningCount}{' '}
                   Warning
@@ -318,7 +320,7 @@ const AlertBar = () => {
             )}
             {/* if data was fetched AND there are no errors */}
             {noErrors && fetched && (
-              <h3 id="noAlertTitle">Currently, you have no active alerts!</h3>
+              <h3 id='noAlertTitle'>Currently, you have no active alerts!</h3>
             )}
           </div>
         </>
