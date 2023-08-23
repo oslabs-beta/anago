@@ -1,14 +1,16 @@
 # Anago
 
-![Anago-Banner] ({add link for badge URL})
+
+<img src="client/assets/images/abg3.png">
+
 
 Anago, in Ancient Greek, means to lead to a higher place, to uplift, and to take to sea. In this spirit, Team Anago hopes to serve as a perfect compass to help you manage your containerized application deployments on the Kubernetes platform.
 
-Anago is a tool to help developers monitoring and visualize their Kubernetes clusters. Team Anago is equipped for monitoring Kubernetes clusters hosted both on local servers and on cloud-based platforms. Anago provides out-of-the-box support for Prometheus and Prometheus’ Alertmanager for scraping metrics and alerts, and integrates with Chart.JS for the dashboard graphs. Let’s dive into how the features of Anago’s platform can simplify and streamline managing your Kubernetes clusters.
 
-//banners for each technology (we can add or subtract as needed)
+Anago is a tool to help developers monitor and visualize their Kubernetes clusters. Team Anago is equipped for monitoring Kubernetes clusters hosted both on local servers and on cloud-based platforms. Anago provides out-of-the-box support for Prometheus and Prometheus’ Alertmanager for scraping metrics and alerts, and integrates with Chart.JS for the dashboard graphs. Let’s dive into how the features of Anago’s platform can simplify and streamline managing your Kubernetes clusters.
 
-<div align="center" style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+
+<div style="display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap">
 <a href="https://kubernetes.io/"><img src="https://img.shields.io/badge/kubernetes-326ce5.svg?&style=for-the-badge&logo=kubernetes&logoColor=white" alt="Kubernetes" style="max-width: 100%"></a>
 <a href="https://www.docker.com/"><img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" style="max-width: 100%"></a>
 <a href="https://aws.amazon.com/"><img src="https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white" alt="AWS" style="max-width: 100%"></a>
@@ -16,7 +18,6 @@ Anago is a tool to help developers monitoring and visualize their Kubernetes clu
 <a href="https://www.chartjs.org/"><img src="https://img.shields.io/badge/Chart%20js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white" alt="Chart.js" style="max-width: 100%"></a>
 <a href="https://helm.sh/"><img src="https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=Helm&labelColor=0F1689" alt="Helm" style="max-width: 100%"></a>
 <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E" alt="Vite" style="max-width: 100%"></a>
-<a href=""><img src="" alt="V" style="max-width: 100%"></a>
 <a href="https://www.npmjs.com/package/ts-node"><img src="https://img.shields.io/badge/ts--node-3178C6?style=for-the-badge&logo=ts-node&logoColor=white" alt="ts-node" style="max-width: 100%"></a>
 <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" style="max-width: 100%"></a>
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" alt="JavaScript" style="max-width: 100%"></a>
@@ -29,20 +30,25 @@ Anago is a tool to help developers monitoring and visualize their Kubernetes clu
 <a href="https://eslint.org/"> <img src="https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white" alt="Eslint" style="max-width:100%"></a>
 </div>
 
+
 ## Table of Contents
+
 
 1. [Anago](#Anago)
 2. [Features](#features)
 3. [Installations & Getting Started](#installations-&-getting-started)
 4. [File Structure](#file-structure)
-5. [Issue Submission](#issue-submission)
-6. [Our Team](#our-team)
-7. [License](#license)
-8. [Other](#other)
+5. [Our Team](#our-team)
+6. [License](#license)
+7. [Other](#other)
+8. [Issue Submission](#issue-submission)
 
-# Features
+
+## Features
+
 
 Anago is a Kubernetes cluster monitoring and visualization tool providing relevant, richly detailed insights into the health of your application deployments with the following useful features:
+
 
 1. **Real-time Data Monitoring**: Anago seamlessly integrates with your cloud-based and/or locally hosted Kubernetes clusters to allow for a real-time analysis of cluster performance.
 2. **Customizable Metrics**: Anago harnesses the power of Prometheus to scrape time-series data from your Kubernetes clusters. We offer customized query-building to configure your dashboard to display cluster metrics and data insights relevant to you. We provide the tools for your cluster management, and you decide which direction you want to take them.
@@ -51,15 +57,55 @@ Anago is a Kubernetes cluster monitoring and visualization tool providing releva
 5. **Cluster Visualization**:
 6. **Platform-agnostic**:
 
-# Installations & Getting Started
-Let’s walk through how to get your cluster connected to Anago.(add link)
 
-# File Structure
+## Installations & Getting Started
 
-# Issue Submission
 
-# Our Team
+Let’s walk through how to get your cluster <a>setup</a> with Anago
 
-# License
 
-# Other
+## File Structure
+
+
+## Our Team
+
+
+<table style="width:75%;">
+<tr>
+</tr>
+<tr>
+<td><img src="client/assets/Anago-Members/alexandra.png" height="100%" width="100%"></td>
+<td>Alexandra Ashcraft</td>
+<td><a href="https://www.linkedin.com/in/alexandra-ashcraft1"><img src="client/assets/images/linkedInLogo.webp" height="45%" width='45%'></a><a href="https://github.com/AlexandraAshcraft"><img src="client/assets/images/github2.png" height="30%" width='30%' ></a> </td>
+</tr>
+<tr>
+<td><img src="client/assets/Anago-Members/halia.jpg" height="100%" width='100%'></td>
+<td>Halia Haynes</td>
+<td><a href="https://www.linkedin.com/in/haliahaynes/"><img src="client/assets/images/linkedInLogo.webp" height="45%" width='45%'></a><a href="https://github.com/hhaynes4"><img src="client/assets/images/github2.png" height="30%" width='30%' ></a>
+</td>
+</tr>
+<tr>
+<td><img src="client/assets/images/anago.png" height="100%" width="100%"></td>
+<td>Rylie Pereira</td>
+<td><a href="https://www.linkedin.com/in/rylie-pereira-524711225/"><img src="client/assets/images/linkedInLogo.webp" height="45%" width='45%'></a><a href="https://github.com/ryliep"><img src="client/assets/images/github2.png" height="30%" width='30%' ></a> </td>
+</tr>
+<tr>
+<td><img src="client/assets/images/anago.png" height="100%" width="100%"></td>
+<td>Steve Schlepphorst</td>
+<td><a href="https://www.linkedin.com/in/schlepphorst/"><img src="client/assets/images/linkedInLogo.webp" height="45%" width='45%'></a><a href="https://github.com/schlepphorst"><img src="client/assets/images/github2.png" height="30%" width='30%' ></a> </td>
+</tr>
+</table>
+
+
+## License
+
+
+## Other
+
+
+## Issue Submission
+
+
+
+
+
