@@ -329,7 +329,7 @@ header nav {
 
 .info-item {
   display: flex;
-  justify-content:first baseline;
+  justify-content: first baseline;
   align-items: first baseline;
   line-height: 100%;
   padding-right: 30px;
@@ -513,7 +513,7 @@ h5 {
 //   position: relative;
 // }
 
-.alert-icon{
+.alert-icon {
   height: 30px;
   width: 35px;
   position: absolute;
@@ -710,4 +710,39 @@ h5 {
 .panel fieldset.selected {
   background: rgb(173, 216, 230, 0.7);
   width: 100%;
+}
+
+.error-handler {
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+#shipwreck {
+  background: url('client/assets/images/shipwreck.png');
+  width: 150%;
+  height: 150%;
+  background-size: cover;
+  z-index: 1;
+  background-position: center;
+  background-repeat:repeat;
+  margin-top: -300px;
+  margin-left: -100px;
+}
+
+#error-logo {
+  height: 200px;
+  width: 200px;
+ 
+}
+
+.error-message{
+  position: absolute;
+  z-index: 10;
+  top: -130px;
+  left: 40px;
 }
