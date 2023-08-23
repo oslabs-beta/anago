@@ -64,14 +64,14 @@ const promApiController: any = {
       req.body.lookupType,
       res.locals.queryOptions
     );
-    console.log(
-      'In query base builder with req.body',
-      req.body,
-      '\nBuilt query Options',
-      res.locals.queryOptions,
-      '\nBuilt searchQuery',
-      res.locals.searchQuery
-    );
+    // console.log(
+    //   'In query base builder with req.body',
+    //   req.body,
+    //   '\nBuilt query Options',
+    //   res.locals.queryOptions,
+    //   '\nBuilt searchQuery',
+    //   res.locals.searchQuery
+    // );
     next();
   },
 
@@ -100,7 +100,7 @@ const promApiController: any = {
     res.locals.promQuery =
       promURLRange + res.locals.searchQuery + startQuery + endQuery + stepQuery;
 
-    console.log('Query: ', res.locals.promQuery);
+    //console.log('Query: ', res.locals.promQuery);
     return next();
     // TODO: add error handler
   },
