@@ -20,11 +20,11 @@ const k8sController: any = {};
 k8sController.getNodes = async (
   _req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const data: any = await k8sApi.listNode();
-    const nodes: Node[] = data.body.items.map((data) => {
+    const nodes: Node[] = data.body.items.map(data => {
       const { name, namespace, creationTimestamp, labels, uid } = data.metadata;
       const { providerID } = data.spec;
       const { status } = data;
@@ -43,18 +43,23 @@ k8sController.getNodes = async (
     res.locals.cluster = { nodes: nodes };
     return next();
   } catch (error) {
-    console.log(error);
+    return next({
+      log: 'Error caught in k8sController getNodes', error,
+      status: 400,
+      message: { err: 'An error occured when fetching Node information from the Kubernetes API' },
+    })
+    
   }
 };
 
 k8sController.getPods = async (
   _req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const data: any = await k8sApi.listPodForAllNamespaces();
-    const pods: Pod[] = data.body.items.map((data) => {
+    const pods: Pod[] = data.body.items.map(data => {
       const { name, namespace, creationTimestamp, uid, labels } = data.metadata;
       const { nodeName, containers, serviceAccount } = data.spec;
       const { conditions, containerStatuses, phase, podIP } = data.status;
@@ -78,18 +83,22 @@ k8sController.getPods = async (
     res.locals.cluster = { pods: pods };
     next();
   } catch (error) {
-    console.log(error);
+    return next({
+      log: 'Error caught in k8sController getPods', error,
+      status: 400,
+      message: { err: 'An error occured when fetching Pod information from the Kubernetes API' },
+    })
   }
 };
 
 k8sController.getNamespaces = async (
   _req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const data: any = await k8sApi.listNamespace();
-    const namespaces = data.body.items.map((data) => {
+    const namespaces = data.body.items.map(data => {
       const { name, creationTimestamp, labels, uid } = data.metadata;
       const { phase } = data.status;
       const nodeName = '';
@@ -107,18 +116,22 @@ k8sController.getNamespaces = async (
     res.locals.cluster = { namespaces: namespaces };
     next();
   } catch (error) {
-    console.log(error);
+    return next({
+      log: 'Error caught in k8sController getNamespaces', error,
+      status: 400,
+      message: { err: 'An error occured when fetching Namespace information from the Kubernetes API' },
+    })
   }
 };
 
 k8sController.getServices = async (
   _req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const data: any = await k8sApi.listServiceForAllNamespaces();
-    const services: Service[] = data.body.items.map((data) => {
+    const services: Service[] = data.body.items.map(data => {
       const { name, namespace, uid, creationTimestamp, labels } = data.metadata;
       const { ports, clusterIP } = data.spec;
       const { loadBalancer } = data.status;
@@ -138,19 +151,23 @@ k8sController.getServices = async (
     res.locals.cluster = { services: services };
     next();
   } catch (error) {
-    console.log(error);
+    return next({
+      log: 'Error caught in k8sController getServices', error,
+      status: 400,
+      message: { err: 'An error occured when fetching Service information from the Kubernetes API' },
+    })
   }
 };
 
 k8sController.getDeployments = async (
   _req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const data: any = await k8sApi2.listDeploymentForAllNamespaces();
 
-    const deployments: Deployment[] = data.body.items.map((data) => {
+    const deployments: Deployment[] = data.body.items.map(data => {
       const { name, creationTimestamp, labels, namespace, uid } = data.metadata;
       const { replicas } = data.spec;
       const { status } = data.status;
@@ -169,14 +186,18 @@ k8sController.getDeployments = async (
     res.locals.cluster = { deployments: deployments };
     next();
   } catch (error) {
-    console.log(error);
+    return next({
+      log: 'Error caught in k8sController getDeployments', error,
+      status: 400,
+      message: { err: 'An error occured when fetching Deployment information from the Kubernetes API' },
+    })
   }
 };
 
 k8sController.getCluster = async (
   _req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const nodes = res.locals.nodes;
@@ -193,6 +214,45 @@ k8sController.getCluster = async (
     };
     //currently does not accounting for multiple clusters, just one cluster for now
     res.locals.cluster = cluster;
+    next();
+  } catch (error) {
+    return next({
+      log: 'Error caught in k8sController getCluster', error,
+      status: 400,
+      message: { err: 'An error occured when fetching Cluster information from the Kubernetes API' },
+    })
+  }
+};
+
+k8sController.getHpa = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const data: any = await k8sApi.listPodForAllNamespaces();
+    const pods: Pod[] = data.body.items.map(data => {
+      const { name, namespace, creationTimestamp, uid, labels } = data.metadata;
+      const { nodeName, containers, serviceAccount } = data.spec;
+      const { conditions, containerStatuses, phase, podIP } = data.status;
+      const pod: Pod = {
+        name,
+        namespace,
+        uid,
+        creationTimestamp,
+        labels,
+        nodeName,
+        containers,
+        serviceAccount,
+        conditions,
+        containerStatuses,
+        phase,
+        podIP,
+      };
+      return pod;
+    });
+    res.locals.pods = pods;
+    res.locals.cluster = { pods: pods };
     next();
   } catch (error) {
     console.log(error);

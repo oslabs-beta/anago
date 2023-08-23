@@ -8,7 +8,8 @@ export type Props = {
 };
 
 //declaring the parameter type Props to assign children to a ReactNode type
-export default ({ children }: Props) => {
+function StoreProvider({ children }: Props) {
+
   const [currentMetrics, setCurrentMetrics] = useState([]);
   const [currentDashboard, setCurrentDashboard] = useState<String[]>([]);
   const [hasFetchedUserData, setHasFetchedUserData] = useState(false);
@@ -37,3 +38,4 @@ export default ({ children }: Props) => {
     <StoreContext.Provider value={States}>{children}</StoreContext.Provider>
   );
 };
+export default StoreProvider;

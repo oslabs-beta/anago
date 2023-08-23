@@ -182,11 +182,11 @@ userDataController.addMetric = (
     newMetricInfo.scopeType,
     res.locals.queryOptions
   );
-  updatedUserData.dashboards[0].metrics.push(newMetric);
+  updatedUserData.dashboards[0].metrics.push(newMetric.metricId);
   updatedUserData.metrics[newMetric.metricId] = newMetric;
 
-  console.log('Updated Data:', updatedUserData);
-  console.log('Dashboard Size: ', updatedUserData.dashboards[0].metrics.length);
+  console.log('Added new metric. Updated User Data:', updatedUserData);
+
 
   fs.writeFileSync(
     path.resolve(__dirname, '../models/userData.json'),

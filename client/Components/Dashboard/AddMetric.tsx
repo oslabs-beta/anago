@@ -6,7 +6,18 @@ import MetricDisplayPreview from './MetricDisplayPreview';
 
 const AddMetric = (props): any => {
   const userData = useRouteLoaderData('home') as UserData;
-  const { clusterData }: any = useContext(StoreContext);
+  const { clusterData, setClusterData }: any = useContext(StoreContext);
+
+  // Fetch Cluster Data
+  useEffect(() => {
+    fetch('api/k8s/cluster')
+      .then((data) => data.json())
+      .then((data) => {
+        setClusterData(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   // The preconfiged queries to show in the selector
   const lookupOptions = [
     LookupType.CPUUsage,
@@ -57,8 +68,6 @@ const AddMetric = (props): any => {
   // Query Summary Text
   const [querySummary, setQuerySummary] = useState('');
   const [queryPromQL, setQueryPromQL] = useState('');
-
-
 
   // Preview the user's current query, if possible
   const previewMetric = () => {
@@ -275,23 +284,33 @@ const AddMetric = (props): any => {
     // Branch over time-range
     if (types[0] == ScopeType.Range) {
       str += ' over the last ';
+      // Parse the entered time string
       const timeSec = fields.duration
         ? timeConverter(fields.duration)
         : 24 * 60 * 60;
-      if (timeSec > 1 * 60 * 60 * 24 * 365) {
-        str += `${Math.round((timeSec / 60 / 60 / 24 / 365) * 10) / 10} years.`;
-      } else if (timeSec > 60 * 60 * 24 * 90) {
-        str += `${Math.round((timeSec / 60 / 60 / 24 / 30) * 10) / 10} months.`;
-      } else if (timeSec > 60 * 60 * 24 * 20) {
-        str += `${Math.round((timeSec / 60 / 60 / 24 / 7) * 10) / 10} weeks.`;
-      } else if (timeSec > 60 * 60 * 24 * 3.5) {
-        str += `${Math.round((timeSec / 60 / 60 / 24) * 10) / 10} days.`;
-      } else if (timeSec > 60 * 60 * 3.5) {
-        str += `${Math.round((timeSec / 60 / 60) * 10) / 10} hours.`;
-      } else if (timeSec > 60 * 3.5) {
-        str += `${Math.round((timeSec / 60) * 10) / 10} minutes.`;
+      if (timeSec) {
+        if (timeSec > 1 * 60 * 60 * 24 * 365) {
+          str += `${
+            Math.round((timeSec / 60 / 60 / 24 / 365) * 10) / 10
+          } years.`;
+        } else if (timeSec > 60 * 60 * 24 * 90) {
+          str += `${
+            Math.round((timeSec / 60 / 60 / 24 / 30) * 10) / 10
+          } months.`;
+        } else if (timeSec > 60 * 60 * 24 * 20) {
+          str += `${Math.round((timeSec / 60 / 60 / 24 / 7) * 10) / 10} weeks.`;
+        } else if (timeSec > 60 * 60 * 24 * 3.5) {
+          str += `${Math.round((timeSec / 60 / 60 / 24) * 10) / 10} days.`;
+        } else if (timeSec > 60 * 60 * 3.5) {
+          str += `${Math.round((timeSec / 60 / 60) * 10) / 10} hours.`;
+        } else if (timeSec > 60 * 3.5) {
+          str += `${Math.round((timeSec / 60) * 10) / 10} minutes.`;
+        } else {
+          str += `${timeSec} seconds.`;
+        }
       } else {
-        str += `${timeSec} seconds.`;
+        // Couldn't convert time, so use default
+        str += "24 hours (couldn't parse time).";
       }
     } else {
       str += '.';
@@ -301,17 +320,17 @@ const AddMetric = (props): any => {
   }, [types, fields, chosenDomains]);
 
   return (
-    <div className="new-metric-modal">
+    <div className='new-metric-modal'>
       <h2>New Metric</h2>
 
       {/* METRIC NAME */}
-      <div className="new-metric-container">
-        <div className="new-metric-form">
+      <div className='new-metric-container'>
+        <div className='new-metric-form'>
           <h3>Select Metric Options</h3>
           <div>
             <label>Metric Name: </label>{' '}
             <input
-              id="new-metric-name"
+              id='new-metric-name'
               value={fields.name}
               placeholder={
                 types[1] == 'entry-precon'
@@ -323,63 +342,63 @@ const AddMetric = (props): any => {
           </div>
 
           {/* PRECON / CUSTOM RADIO BUTTON */}
-          <div className="radio-container">
-            <label htmlFor="new-metric-scope">Query:</label>
-            <label className="radio-button-container">
+          <div className='radio-container'>
+            <label htmlFor='new-metric-scope'>Query:</label>
+            <label className='radio-button-container'>
               Preconfigured
               <input
-                type="radio"
-                id="entry-precon"
+                type='radio'
+                id='entry-precon'
                 defaultChecked
                 onChange={typeChanged}
-                name="entryType"
+                name='entryType'
               ></input>
-              <span className="checkmark"></span>
+              <span className='checkmark'></span>
             </label>
-            <label className="radio-button-container">
+            <label className='radio-button-container'>
               Custom
               <input
-                type="radio"
-                id="entry-custom"
+                type='radio'
+                id='entry-custom'
                 onChange={typeChanged}
-                name="entryType"
+                name='entryType'
               ></input>
-              <span className="checkmark"></span>
+              <span className='checkmark'></span>
             </label>
           </div>
 
           {/* SCOPE RADIO BUTTON */}
-          <div className="radio-container">
-            <label htmlFor="new-metric-scope">Scope:</label>
-            <label className="radio-button-container">
+          <div className='radio-container'>
+            <label htmlFor='new-metric-scope'>Scope:</label>
+            <label className='radio-button-container'>
               Time-Range Query
               <input
-                type="radio"
-                id="scope-range"
+                type='radio'
+                id='scope-range'
                 defaultChecked
                 onChange={typeChanged}
-                name="scope"
+                name='scope'
               ></input>
-              <span className="checkmark"></span>
+              <span className='checkmark'></span>
             </label>
-            <label className="radio-button-container">
+            <label className='radio-button-container'>
               Instant Query
               <input
-                type="radio"
-                id="scope-instant"
+                type='radio'
+                id='scope-instant'
                 onChange={typeChanged}
-                name="scope"
+                name='scope'
               ></input>
-              <span className="checkmark"></span>
+              <span className='checkmark'></span>
             </label>
           </div>
 
           {/* PRECON METRIC TYPE */}
           {types[1] == 'entry-precon' && (
             <div>
-              <label htmlFor="new-metric-type">Metric Type: </label>
+              <label htmlFor='new-metric-type'>Metric Type: </label>
               <select
-                id="new-metric-type"
+                id='new-metric-type'
                 onChange={typeChanged}
                 value={types[2]}
               >
@@ -397,9 +416,9 @@ const AddMetric = (props): any => {
           {/* METRIC CONTEXT */}
           {types[1] == 'entry-precon' && domains[0].length > 0 && (
             <div>
-              <label htmlFor="new-metric-context">Context: </label>
+              <label htmlFor='new-metric-context'>Context: </label>
               <select
-                id="new-metric-context"
+                id='new-metric-context'
                 onChange={typeChanged}
                 value={chosenDomains[0]}
               >
@@ -413,7 +432,7 @@ const AddMetric = (props): any => {
               </select>{' '}
               {chosenDomains[0] !== 'Cluster' && (
                 <select
-                  id="new-metric-context-picker"
+                  id='new-metric-context-picker'
                   onChange={typeChanged}
                   value={chosenDomains[1]}
                 >
@@ -432,9 +451,9 @@ const AddMetric = (props): any => {
           {/* METRIC TARGET */}
           {types[1] == 'entry-precon' && domains[2].length > 0 && (
             <div>
-              <label htmlFor="new-metric-target">Group by: </label>
+              <label htmlFor='new-metric-target'>Group by: </label>
               <select
-                id="new-metric-target"
+                id='new-metric-target'
                 onChange={typeChanged}
                 value={chosenDomains[2]}
               >
@@ -454,9 +473,9 @@ const AddMetric = (props): any => {
             <div>
               <label>Total Time: </label>{' '}
               <input
-                id="new-metric-duration"
+                id='new-metric-duration'
                 value={fields.duration}
-                placeholder="24 hours"
+                placeholder='24 hours'
                 onChange={(e) => textChanged(e, 'duration')}
               ></input>
             </div>
@@ -467,9 +486,9 @@ const AddMetric = (props): any => {
             <div>
               <label>Time Interval: </label>{' '}
               <input
-                id="new-metric-step"
+                id='new-metric-step'
                 value={fields.step}
-                placeholder="20 mins"
+                placeholder='20 mins'
                 onChange={(e) => textChanged(e, 'step')}
               ></input>
             </div>
@@ -480,9 +499,9 @@ const AddMetric = (props): any => {
             <div>
               <label>Refresh Interval: </label>{' '}
               <input
-                id="new-metric-refresh"
+                id='new-metric-refresh'
                 value={fields.refresh}
-                placeholder="60 secs"
+                placeholder='60 secs'
                 onChange={(e) => textChanged(e, 'refresh')}
               ></input>
             </div>
@@ -490,20 +509,20 @@ const AddMetric = (props): any => {
 
           {/* CUSTOM QUERY STRING */}
           {types[1] == 'entry-custom' && (
-            <div className="metric-text-area">
+            <div className='metric-text-area'>
               <label>Custom Query: </label>{' '}
               <textarea
-                id="new-metric-custom-query"
+                id='new-metric-custom-query'
                 value={fields.customQuery}
-                placeholder="Enter PromQL here..."
+                placeholder='Enter PromQL here...'
                 onChange={(e) => textChanged(e, 'customQuery')}
               ></textarea>
             </div>
           )}
         </div>
 
-        <div className="new-metric-preview">
-          <div className="new-metric-preview-image">
+        <div className='new-metric-preview'>
+          <div className='new-metric-preview-image'>
             <h3>Query Preview</h3>
             {metricData.hasOwnProperty('labels') && (
               <MetricDisplayPreview
@@ -512,24 +531,24 @@ const AddMetric = (props): any => {
               />
             )}
           </div>
-          <div className="new-metric-status">
-            <h4 className="new-metric-status-message">{messageText}</h4>
+          <div className='new-metric-status'>
+            <h4 className='new-metric-status-message'>{messageText}</h4>
           </div>
         </div>
       </div>
-      <div className="summary-container">
+      <div className='summary-container'>
         <p>{querySummary}</p>
-        <p className="summary-query">{queryPromQL}</p>
+        <p className='summary-query'>{queryPromQL}</p>
       </div>
-      <div className="new-metric-buttons">
-        <button className="btn" onClick={saveMetric}>
+      <div className='new-metric-buttons'>
+        <button className='btn' onClick={saveMetric}>
           Save
         </button>
-        <button className="btn" onClick={previewMetric}>
+        <button className='btn' onClick={previewMetric}>
           Preview
         </button>
-        <button className="btn" onClick={() => props.setAddMetricModal(false)}>
-          Cancel
+        <button className='btn' onClick={() => props.saveAndReload()}>
+          Close
         </button>
       </div>
     </div>
@@ -538,9 +557,32 @@ const AddMetric = (props): any => {
 
 export default AddMetric;
 
-function timeConverter(input: string): number {
-  let numPart = Number(input.split(' ')[0]);
-  const stringPart = input.split(' ')[1];
+function timeConverter(input: string): number | undefined {
+  let numPart, stringPart;
+  // if (input.includes(' ')) {
+  numPart = Number(input.split(' ')[0]);
+  stringPart = input.split(' ')[1];
+  // } else {
+  //   // Find num/letter break
+  //   let firstLetter = 0;
+  //   for (let i = 0; i < input.length; i++) {
+  //     if (input[i].toLowerCase() !== input[i].toUpperCase()) {
+  //       firstLetter = i;
+  //       break;
+  //     }
+  //   }
+  //   // let cleanBreak = true;
+  //   // for (let i = 0; i < firstLetter; i++) {
+  //   //   if (input[i].toLowerCase() !== input[i].toUpperCase()) cleanBreak = false;
+  //   // }
+  //   // for (let i = firstLetter; i < input.length; i++) {
+  //   //   if (input[i].toLowerCase() === input[i].toUpperCase()) cleanBreak = false;
+  //   // }
+  //   // if (cleanBreak) {
+  //   numPart = input.slice(0, firstLetter);
+  //   stringPart = input.slice(firstLetter);
+  //   // } else return undefined;
+  // }
   switch (stringPart) {
     case 's':
     case 'seconds':
@@ -577,7 +619,7 @@ function timeConverter(input: string): number {
     case 'years':
       return numPart * 60 * 60 * 24 * 365;
     default:
-      return numPart;
+      return undefined;
   }
 }
 

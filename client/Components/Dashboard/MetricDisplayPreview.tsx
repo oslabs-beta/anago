@@ -21,7 +21,7 @@ ChartJS.register(
   Colors,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 const MetricDisplay = ({ lookupType, metricData }) => {
@@ -55,12 +55,12 @@ const MetricDisplay = ({ lookupType, metricData }) => {
   const closeModal = () => setOpen(false);
 
   return (
-    <div className="metric-container">
+    <div className='metric-container'>
       <Line data={metricData} options={options} onClick={openModal} />
-      <div className="modal">
+      <div className='modal'>
         {/* {metricId && <button onClick={openModal}>See more</button>} */}
         <Modal open={open} onClose={closeModal}>
-          <h4 className="metric-title">Query Preview</h4>
+          <h4 className='metric-title'>Query Preview</h4>
           <Line
             data={metricData}
             options={{

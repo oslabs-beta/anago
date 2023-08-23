@@ -13,15 +13,27 @@ export class UserData {
     lookupType: LookupType,
     scopeType = ScopeType.Range,
     queryOptions?: any,
-    dashboardNumber = 0
+    dashboardNumber = 0,
   ): string {
     const newMetric = new Metric(
       metricName,
       lookupType,
       scopeType,
-      queryOptions
+      queryOptions,
     );
     this.dashboards[dashboardNumber].metrics.push(newMetric.metricId);
+    this.metrics[newMetric.metricId] = newMetric;
+    return newMetric.metricId;
+  }
+  addPlaceholderMetric(
+    metricName: string,
+    lookupType: LookupType,
+    placeholderId: string,
+    queryOptions?: any,
+  ): string {
+    const newMetric = new Metric(metricName, lookupType, queryOptions);
+    newMetric.metricId = placeholderId;
+    this.dashboards[0].metrics.push(newMetric.metricId);
     this.metrics[newMetric.metricId] = newMetric;
     return newMetric.metricId;
   }
@@ -74,7 +86,7 @@ export class Metric {
     metricName: string,
     lookupType: LookupType,
     scopeType = ScopeType.Range,
-    queryOptions: any = {}
+    queryOptions: any = {},
   ) {
     this.metricId = randomUUID();
     this.metricName = metricName;
@@ -84,8 +96,8 @@ export class Metric {
     this.graphType = graphForQuery(
       this.lookupType,
       this.scopeType,
-      this.queryOptions
-    ); 
+      this.queryOptions,
+    );
     this.searchQuery = queryBuilder(this.lookupType, this.queryOptions);
   }
 }
@@ -93,7 +105,7 @@ export class Metric {
 function graphForQuery(
   lookupType: LookupType,
   scopeType: ScopeType,
-  options: any
+  options: any,
 ): GraphType {
   // Assigns a graph type to a query type
   // Ranged lookups yield line graphs
@@ -113,6 +125,26 @@ function graphForQuery(
     case LookupType.ReadyNodesByCluster:
       return GraphType.LineGraph;
     case LookupType.NodesReadinessFlapping:
+      return GraphType.LineGraph;
+    case LookupType.HPAByDeployment:
+      return GraphType.PrintValue;
+    case LookupType.HPATargetStatus:
+      return GraphType.PrintValue;
+    case LookupType.HPATargetSpec:
+      return GraphType.PrintValue;
+    case LookupType.HPAMinReplicas:
+      return GraphType.PrintValue;
+    case LookupType.HPAMaxReplicas:
+      return GraphType.PrintValue;
+    case LookupType.HPACurrentReplicas:
+      return GraphType.PrintValue;
+    case LookupType.HPADesiredReplicas:
+      return GraphType.PrintValue;
+    case LookupType.HPAUtilization:
+      return GraphType.PrintValue;
+    case LookupType.HTTPRequests:
+      return GraphType.LineGraph;
+    case LookupType.PodCountByHPA:
       return GraphType.LineGraph;
     default:
       return GraphType.LineGraph;
@@ -158,6 +190,55 @@ function graphForQuery(
 
 //     case LookupType.PodCount: {
 //       return 'sum by (namespace) (kube_pod_info)';
+//     }
+
+//     case LookupType.HPAByDeployment: {
+//       return 'kube_horizontalpodautoscaler_metadata_generation';
+//     }
+
+//     case LookupType.HPATargetStatus: {
+//       return 'kube_horizontalpodautoscaler_status_target_metric{metric_target_type="utilization"}';
+//     }
+
+//     case LookupType.HPATargetSpec: {
+//       return 'kube_horizontalpodautoscaler_spec_target_metric';
+//     }
+
+//     case LookupType.HPAMinReplicas: {
+//       return 'kube_horizontalpodautoscaler_spec_min_replicas';
+//     }
+
+//     case LookupType.HPAMaxReplicas: {
+//       return 'kube_horizontalpodautoscaler_spec_max_replicas';
+//     }
+
+//     case LookupType.HPACurrentReplicas: {
+//       return 'kube_horizontalpodautoscaler_status_current_replicas';
+//     }
+
+//     case LookupType.HPADesiredReplicas: {
+//       return 'kube_horizontalpodautoscaler_status_desired_replicas';
+//     }
+
+//     case LookupType.HPAUtilization: {
+//       // TODO: return metric back to 90%
+//       // return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 >= 90';
+//       return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 <= 30';
+//     }
+
+//     case LookupType.HTTPRequests: {
+//       // TODO: return metric back to deployment http requests (would need to set up ingress to access it on pithy)
+//       // return 'increase(http_requests_total[1m])';
+//       // return 'increase(prometheus_http_requests_total[1m])';
+//       return 'increase(prometheus_http_requests_total[1m])';
+//     }
+
+//     case LookupType.PodCountByHPA: {
+//       // TODO: make it not just for pithy
+//       // return 'sum by (created_by_name) (kube_pod_info)';
+//       // return 'sum by (created_by_name) (kube_pod_info{created_by_name=~"pithy-deployment.+"})';
+//       // return 'count(kube_pod_info{created_by_name=~"pithy-deployment.+"})';
+//       return 'sum by (created_by_name) (kube_pod_info{created_by_name="prometheus-prometheus-node-exporter"})';
 //     }
 
 //     default: {

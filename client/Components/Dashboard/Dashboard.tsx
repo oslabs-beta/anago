@@ -31,7 +31,7 @@ const Dashboard = () => {
       fetch('/api/pithy')
         .then((res) => res.json())
         .then((res) => {
-          setTimeout(() => pithy(), 100000);
+          setTimeout(() => pithy(), 700);
         });
     } catch {
       console.log('failed to fetch pithy');
@@ -41,12 +41,12 @@ const Dashboard = () => {
 
   function saveMetricsAndReload() {
     setEditMode(false);
+    setAddMetricModal(false);
     window.location.reload();
     return;
   }
 
-  const metricIds = Object.keys(userData.metrics);
-
+  const metricIds: string[] = userData.dashboards[0].metrics;
   return (
     <div>
       <AlertBar />
@@ -103,10 +103,15 @@ const Dashboard = () => {
           </>
         )}
         <div className='modal'>
-          <Modal open={addMetricModal} onClose={() => setAddMetricModal(false)}>
+          <Modal
+            open={addMetricModal}
+            onClose={() => {
+              saveMetricsAndReload();
+            }}
+          >
             <AddMetric
               dashboard={location}
-              setAddMetricModal={setAddMetricModal}
+              saveAndReload={saveMetricsAndReload}
             />
           </Modal>
         </div>

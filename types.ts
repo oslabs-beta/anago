@@ -20,7 +20,7 @@ export interface UserData {
   userId: string;
   clusters: {}[];
   clusterName: string;
-  dashboards: {}[];
+  dashboards: any;
   metrics: {};
   hiddenAlerts: [];
 }
@@ -107,6 +107,7 @@ export interface CleanAlert {
 }
 
 export enum LookupType {
+  // Default Dashboard
   CustomEntry, //0
   CPUUsage, // 1 - Current CPU Usage
   CPUIdle, // 2 - Rylie help fill this out
@@ -119,11 +120,22 @@ export enum LookupType {
   NodesReadinessFlapping, // 9
   PodRestarts, //10
   PodCount, // 11
+  // HPA Dashboard
+  HPAByDeployment, //12
+  HPATargetStatus, //13
+  HPATargetSpec, //14
+  HPAMinReplicas, //15
+  HPAMaxReplicas, //16
+  HPACurrentReplicas, //17
+  HPADesiredReplicas, //18
+  HPAUtilization, //19
+  HTTPRequests, //20
+  PodCountByHPA, //21
 }
 
 export enum ScopeType {
-  Range,
-  Instant,
+  Range, //0
+  Instant, //1
 }
 
 export enum GraphType {
@@ -158,6 +170,26 @@ export const lookupName = (type: LookupType): string => {
       return 'Pod Restart Rates';
     case LookupType.PodCount:
       return 'Pod Counts';
+    case LookupType.HPAByDeployment:
+      return 'HPA by Deployment';
+    case LookupType.HPATargetStatus:
+      return 'HPATargetStatus';
+    case LookupType.HPATargetSpec:
+      return 'HPA Target Spec';
+    case LookupType.HPAMinReplicas:
+      return 'HPA Min Replicas';
+    case LookupType.HPAMaxReplicas:
+      return 'HPA Max Replicas';
+    case LookupType.HPACurrentReplicas:
+      return 'HPA Current Replicas';
+    case LookupType.HPADesiredReplicas:
+      return 'HPA Desired Replicas';
+    case LookupType.HPAUtilization:
+      return 'HPA Utilization';
+    case LookupType.HTTPRequests:
+      return 'HTTP Requests';
+    case LookupType.PodCountByHPA:
+      return 'Pod Count by HPA';
     default:
       return 'Lookup Type Not Found';
   }

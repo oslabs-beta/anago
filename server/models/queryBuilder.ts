@@ -69,11 +69,11 @@ export function queryBuilder(
   lookupType: LookupType,
   queryOptions: any
 ): string | undefined {
-  console.log(
-    'Query builder for Lookup Type: ',
-    lookupType,
-    'and options ' + queryOptions
-  );
+  // console.log(
+  //   'Query builder for Lookup Type: ',
+  //   lookupType,
+  //   'and options ' + queryOptions
+  // );
 
   switch (lookupType) {
     case LookupType.CustomEntry: {
@@ -123,9 +123,9 @@ export function queryBuilder(
         str +=
           ', ' +
           queryOptions.context +
-          '=' +
+          '="' +
           queryOptions.contextChoice +
-          '}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
+          '"}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
       } else {
         str +=
           '}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
@@ -145,9 +145,9 @@ export function queryBuilder(
           str +
           '{' +
           queryOptions.context +
-          '=' +
+          '="' +
           queryOptions.contextChoice +
-          '}';
+          '"}';
       if (
         queryOptions.hasOwnProperty('target') &&
         queryOptions.target !== 'all'
@@ -174,9 +174,9 @@ export function queryBuilder(
         str +=
           ', ' +
           queryOptions.context +
-          '=' +
+          '="' +
           queryOptions.contextChoice +
-          '} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
+          '"} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
       } else {
         str +=
           '} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
@@ -210,7 +210,12 @@ export function queryBuilder(
         queryOptions.context !== 'cluster'
       )
         str =
-          str + ',' + queryOptions.context + '=' + queryOptions.contextChoice;
+          str +
+          ',' +
+          queryOptions.context +
+          '="' +
+          queryOptions.contextChoice +
+          '"';
       str += '}[5m]))';
       if (
         queryOptions.hasOwnProperty('target') &&
@@ -229,7 +234,12 @@ export function queryBuilder(
         queryOptions.context !== 'cluster'
       )
         str =
-          str + ',' + queryOptions.context + '=' + queryOptions.contextChoice;
+          str +
+          ',' +
+          queryOptions.context +
+          '="' +
+          queryOptions.contextChoice +
+          '"';
       str += '})';
       if (
         queryOptions.hasOwnProperty('target') &&
@@ -240,6 +250,103 @@ export function queryBuilder(
         } else {
           str += 'by (' + queryOptions.target + ')';
         }
+      return str;
+    }
+
+    case LookupType.HPAByDeployment: {
+      return 'kube_horizontalpodautoscaler_metadata_generation';
+    }
+
+    case LookupType.HPATargetStatus: {
+      return 'kube_horizontalpodautoscaler_status_target_metric{metric_target_type="utilization"}';
+    }
+
+    case LookupType.HPATargetSpec: {
+      return 'kube_horizontalpodautoscaler_spec_target_metric';
+    }
+
+    case LookupType.HPAMinReplicas: {
+      return 'kube_horizontalpodautoscaler_spec_min_replicas';
+    }
+
+    case LookupType.HPAMaxReplicas: {
+      return 'kube_horizontalpodautoscaler_spec_max_replicas';
+    }
+
+    case LookupType.HPACurrentReplicas: {
+      return 'kube_horizontalpodautoscaler_status_current_replicas';
+    }
+
+    case LookupType.HPADesiredReplicas: {
+      return 'kube_horizontalpodautoscaler_status_desired_replicas';
+    }
+
+    case LookupType.HPAUtilization: {
+      // TODO: return metric back to 90%
+      // return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 >= 90';
+      return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 <= 30';
+    }
+    // !SMKLC;MDLMCL;S
+    case LookupType.HTTPRequests: {
+      // TODO: return metric back to deployment http requests (would need to set up ingress to access it on pithy)
+      // return 'increase(http_requests_total[1m])';
+      // return 'increase(prometheus_http_requests_total[1m])';
+      let str = 'increase(prometheus_http_requests_total[1m])';
+      // ! examples
+      // increase(prometheus_http_requests_total{endpoint="http-web"}[1m])
+      // handler="/"
+      // ! increase(prometheus_http_requests_total{service="prometheus-kube-prometheus-prometheus"}[1m])
+      // service=pithy-service
+      // hpa=pithy-deployment
+      // increase(prometheus_http_requests_total{service="prometheus-kube-prometheus-prometheus", endpoint="http-web"}[1m])
+      // {service=~"prometheus.+"}
+      if (
+        queryOptions.hasOwnProperty('hpa') &&
+        queryOptions.hasOwnProperty('endpoint')
+      ) {
+        // const service = () => {
+        //   return queryOptions.hpa.slice(0, queryOptions.hpa.indexOf('-'));
+        // };
+        str =
+          str.slice(0, 39) +
+          `{service=~"` +
+          queryOptions.hpa.slice(0, queryOptions.hpa.indexOf('-')) +
+          `.+", endpoint="` +
+          queryOptions.endpoint +
+          `"}` +
+          str.slice(39);
+      }
+      if (queryOptions.hasOwnProperty('hpa')) {
+        str =
+          str.slice(0, 39) +
+          `{service=~"` +
+          queryOptions.hpa.slice(0, queryOptions.hpa.indexOf('-')) +
+          `.+"}` +
+          str.slice(39);
+      }
+      if (queryOptions.hasOwnProperty('endpoint')) {
+        str =
+          str.slice(0, 39) +
+          `{endpoint="` +
+          queryOptions.endpoint +
+          `"}` +
+          str.slice(39);
+      }
+      return str;
+    }
+
+    case LookupType.PodCountByHPA: {
+      // TODO: make it not just for pithy
+      // let str = `count by (created_by_name)(kube_pod_info{created_by_name="pithy-deployment-f77bd655c"})`;
+      // let str = 'count by (created_by_name)(kube_pod_info)';
+      let str = '{created_by_name="prometheus-kube-state-metrics-7d8b486d89"}';
+      if (queryOptions.hasOwnProperty('hpa')) {
+        str =
+          str.slice(0, str.length - 1) +
+          `{created_by_name=~"` +
+          queryOptions.hpa +
+          `.+"})`;
+      }
       return str;
     }
 

@@ -20,7 +20,7 @@ export function readUserData(): any {
   try {
     const readData = fs.readFileSync(
       path.resolve(__dirname, '../models/userData.json'),
-      'utf-8'
+      'utf-8',
     );
     const userData = JSON.parse(readData);
     if (
@@ -28,11 +28,11 @@ export function readUserData(): any {
       !userData.hasOwnProperty('metrics')
     ) {
       console.log(
-        'Read UserData is missing metrics. Using and saving default data.'
+        'Read UserData is missing metrics. Using and saving default data.',
       );
       fs.writeFileSync(
         path.resolve(__dirname, '../models/userData.json'),
-        JSON.stringify(newUserData)
+        JSON.stringify(newUserData),
       );
       return newUserData;
     }
@@ -40,7 +40,7 @@ export function readUserData(): any {
     return userData;
   } catch (err) {
     console.log(
-      'Error reading User Data from disk in helper function readUserData.'
+      'Error reading User Data from disk in helper function readUserData.',
     );
     return;
   }
@@ -129,6 +129,19 @@ export function namePlot(obj: any, type: LookupType, queryOptions: any) {
       return 'Nodes Ready for Pods';
     }
 
+    case LookupType.HTTPRequests:
+      if (
+        !obj.metric.hasOwnProperty('endpoint') ||
+        !obj.metric.hasOwnProperty('service')
+      ) {
+        return 'http request';
+      }
+      return `service="${obj.metric.service}" endpoint="${obj.metric.endpoint}"`;
+
+    case LookupType.PodCountByHPA:
+      if (!obj.metric.hasOwnProperty('created_by_name')) return 'pod count';
+      return `created_by_name="${obj.metric.created_by_name}"`;
+
     case LookupType.DiskUsage:
     default: {
       return 'data';
@@ -139,7 +152,7 @@ export function namePlot(obj: any, type: LookupType, queryOptions: any) {
 export function placeholderData(
   metricId: string,
   userData: any,
-  options: any
+  options: any,
 ): any {
   const promMetrics: plotData = {
     labels: [],
@@ -148,7 +161,7 @@ export function placeholderData(
 
   const readData = fs.readFileSync(
     path.resolve(__dirname, '../models/demoData.json'),
-    'utf-8'
+    'utf-8',
   );
   const parsedData = JSON.parse(readData);
   const myMetrics = parsedData[metricId];
