@@ -6,7 +6,18 @@ import MetricDisplayPreview from './MetricDisplayPreview';
 
 const AddMetric = (props): any => {
   const userData = useRouteLoaderData('home') as UserData;
-  const { clusterData }: any = useContext(StoreContext);
+  const { clusterData, setClusterData }: any = useContext(StoreContext);
+
+  // Fetch Cluster Data
+  useEffect(() => {
+    fetch('api/k8s/cluster')
+      .then((data) => data.json())
+      .then((data) => {
+        setClusterData(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   // The preconfiged queries to show in the selector
   const lookupOptions = [
     LookupType.CPUUsage,
@@ -57,8 +68,6 @@ const AddMetric = (props): any => {
   // Query Summary Text
   const [querySummary, setQuerySummary] = useState('');
   const [queryPromQL, setQueryPromQL] = useState('');
-
-
 
   // Preview the user's current query, if possible
   const previewMetric = () => {

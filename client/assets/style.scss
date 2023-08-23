@@ -37,7 +37,8 @@ $highlight-gray: rgba(143, 166, 200, 0.5);
   align-items: center;
   justify-content: space-between;
   margin: 10px;
-  width: 90%;
+  width: 96%;
+  margin-left: 2%;
 }
 
 .metric-container {
@@ -124,11 +125,11 @@ header nav {
   }
 }
 header {
-  z-index: 500;
+  z-index: 30;
 }
 
 .logo-container {
-  z-index: 1000;
+  z-index: 20;
   width: 100%;
   display: flex;
   justify-content: flex-start;
@@ -150,6 +151,7 @@ header {
 
 //status bar styling
 .status-bar {
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -315,9 +317,11 @@ header {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 1;
+  z-index: 40;
 }
-
+nav {
+  z-index: 20;
+}
 .react-responsive-modal-overlay {
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
