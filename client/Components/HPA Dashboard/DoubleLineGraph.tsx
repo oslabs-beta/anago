@@ -24,6 +24,7 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
+import IndivDLG from './IndivDLG';
 
 const DoubleLineGraph = ({ metricIds }) => {
   const userData = useRouteLoaderData('home') as UserData;
@@ -36,53 +37,22 @@ const DoubleLineGraph = ({ metricIds }) => {
   const [open, setOpen]: any = useState(false);
   const [metricData, setMetricData] = useState<any>({});
   const [fetchCount, setFetchCount] = useState<number>(0);
-  const [graphData, setGraphData] = useState<any>({});
+  const [graphData, setGraphData] = useState<any>(undefined);
 
-  const options = {
-    responsive: true,
-    interaction: {
-      mode: 'index' as const,
-      intersect: false,
-    },
-    stacked: false,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      title: {
-        display: true,
-        text: 'Chart.js Line Chart - Multi Axis',
-      },
-    },
-    scales: {
-      y: {
-        type: 'linear' as const,
-        display: true,
-        position: 'left' as const,
-      },
-      y1: {
-        type: 'linear' as const,
-        display: true,
-        position: 'right' as const,
-        grid: {
-          drawOnChartArea: false,
-        },
-      },
-    },
-  };
-  const optionsWithLegend = JSON.parse(JSON.stringify(options));
-  optionsWithLegend.plugins.legend.display = true;
-
-  // warm color generator for lines on graph
-  //  For Warm color : R from 128 to 255
-  //   101 -> 199
-  //   0.5
-  // 50
-  // 150
   interface graphShape {
     labels: any[];
     datasets: any[];
   }
+
+  // let indivGraphs: any;
+  // const createIndivGraphs = cacheByHPA => {
+  //   indivGraphs = Object.values(cacheByHPA).map(graphObj => {
+  //     return <IndivDLG graphData={graphObj} />;
+  //   });
+  //   setGraphData(Object.values(cacheByHPA));
+  //   console.log('complete');
+  //   // setGraphData(true);
+  // };
 
   const shapeData = () => {
     const cacheByHPA = {};
@@ -151,7 +121,9 @@ const DoubleLineGraph = ({ metricIds }) => {
       }
     });
 
-    setGraphData(finalShape);
+    // setGraphData(finalShape);
+    setGraphData(cacheByHPA);
+    // createIndivGraphs(cacheByHPA);
   };
 
   const getPodsAndRequests = async () => {
@@ -185,28 +157,12 @@ const DoubleLineGraph = ({ metricIds }) => {
     }
   }, [fetchCount]);
 
-  //modal handler functions
-  const openModal = () => setOpen(true);
-  const closeModal = () => setOpen(false);
-
   return (
-    <div className='metric-container'>
-      {/* <h4 className='metric-title'>{userData.metrics[metricId].metricName}</h4> */}
-      {graphData.hasOwnProperty('labels') && (
-        <Line data={graphData} options={options} onClick={openModal} />
-      )}
-      <div className='modal'>
-        {/* {metricId && <button onClick={openModal}>See more</button>} */}
-        <button onClick={openModal}>See more</button>
-        <Modal open={open} onClose={closeModal}>
-          {/* <h4 className='metric-title'>
-            {userData.metrics[metricId].metricName}
-          </h4> */}
-          {graphData.hasOwnProperty('labels') && (
-            <Line data={graphData} options={optionsWithLegend} />
-          )}
-        </Modal>
-      </div>
+    <div>
+      {graphData &&
+        Object.values(JSON.parse(JSON.stringify(graphData))).map(graphObj => {
+          return <IndivDLG graphData={graphObj} />;
+        })}
     </div>
   );
 };
