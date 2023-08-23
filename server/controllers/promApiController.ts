@@ -39,6 +39,7 @@ const promApiController: any = {
 
     const metricId = req.params.id;
     res.locals.lookupType = userData.metrics[metricId].lookupType;
+    res.locals.scopeType = userData.metrics[metricId].scopeType;
     res.locals.searchQuery = userData.metrics[metricId].searchQuery;
     res.locals.queryOptions = userData.metrics[metricId].queryOptions;
     next();
@@ -77,39 +78,42 @@ const promApiController: any = {
 
   // build the query to send to the prometheus http api
   queryBuilder: (req: Request, res: Response, next: NextFunction) => {
-    // TODO: REQS SHOULD BE COMING IN ON BODY NOW
-    // const query = res.locals.searchQuery;
-    // const options = res.locals.queryOptions;
-
     // prometheus http api url's to query
     const promURL = 'http://localhost:9090/api/v1/';
     const promURLInstant = promURL + 'query?query=';
     const promURLRange = promURL + 'query_range?query=';
-    // TODO: update alerts url if needed
     const promURLAlerts = promURL + 'alerts';
 
-    // TODO: IF RANGE QUERY:
-    const end = Math.floor(Date.now() / 1000); // current date and time
-    const endQuery = `&end=${end}`;
-    const duration = res.locals.queryOptions.duration;
-    const start = end - duration;
-    const startQuery = `&start=${start}`;
-    const stepSize = res.locals.queryOptions.stepSize;
-    const stepQuery = `&step=${stepSize}s`; // data interval
+    // build a range promql
+    if (res.locals.scopeType === 0) {
+      const end = Math.floor(Date.now() / 1000); // current date and time
+      const endQuery = `&end=${end}`;
+      const duration = res.locals.queryOptions.duration;
+      const start = end - duration;
+      const startQuery = `&start=${start}`;
+      const stepSize = res.locals.queryOptions.stepSize;
+      const stepQuery = `&step=${stepSize}s`; // data interval
 
-    res.locals.promQuery =
-      promURLRange + res.locals.searchQuery + startQuery + endQuery + stepQuery;
+      res.locals.promQuery =
+        promURLRange +
+        res.locals.searchQuery +
+        startQuery +
+        endQuery +
+        stepQuery;
+    }
+    // build an instant promql
+    if (res.locals.scopeType === 1) {
+      res.locals.promQuery = promURLInstant + res.locals.searchQuery;
+    }
 
-    //console.log('Query: ', res.locals.promQuery);
     return next();
     // TODO: add error handler
   },
 
   // get request querying prometheus http api that exists as an instance in kubernetes
   getMetrics: async (req: Request, res: Response, next: NextFunction) => {
-    // console.log('Get Metrics with res.locals', res.locals);
-    // Read placeholder data instead of fetching- if the cluster is not currently running on AWS
     // Placeholder Data for Offline Development
+    // Read placeholder data instead of fetching- if the cluster is not currently running on AWS
     if (!ACTIVE_DEPLOYMENT) {
       // retrieve metricId from request query parameter
       const metricId = req.params.id;
@@ -123,16 +127,12 @@ const promApiController: any = {
       res.locals.promMetrics = placeholderFetch;
       return next();
     }
-    // initialize object to store scraped metrics. This object shape is required by ChartJS to graph
-    const promMetrics: plotData = {
-      labels: [],
-      datasets: [],
-    };
+
     try {
       // query Prometheus
       const response = await fetch(res.locals.promQuery);
       const data = await response.json();
-      console.log('prom response data: ', data.data.result);
+      // console.log('prom response data: ', data.data.result);
       // if the prometheus query response indicates a failure, then send an error message
       if (data.status === 'error') {
         return next({
@@ -143,15 +143,16 @@ const promApiController: any = {
       }
       // if no metrics meet the query requirements, then no metrics data will be returned from prometheus
       else if (data.data.result.length === 0) {
-        res.locals.promMetrics = 'No metrics meet the scope of the query';
+        // res.locals.promMetrics = 'No metrics meet the scope of the query';
+        res.locals.promMetrics = ['No metrics meet the scope of the query'];
         return next();
       }
       // if instant query type
       else if (
-        req.body.duration === 'instant' ||
+        res.locals.scopeType === 1 ||
+        // TODO: MAKE ADDITIONAL MIDDLEWARE TO SHAPE DATA TO APPROPRIATE GRAPH TYPE
         req.body.displayType === 'log'
       ) {
-        console.log('instant or log promql response', data.data.result);
         res.locals.promMetrics = data.data.result;
         return next();
       }
@@ -174,7 +175,13 @@ const promApiController: any = {
           }
         );
         */
-        console.log('range query ');
+        // console.log('range query ');
+
+        // initialize object to store scraped metrics. This object shape is required by ChartJS to graph
+        const promMetrics: plotData = {
+          labels: [],
+          datasets: [],
+        };
 
         data.data.result.forEach((obj: promResResultElements) => {
           // initialize object to store in promMetrics datasets
@@ -207,7 +214,7 @@ const promApiController: any = {
         });
 
         res.locals.promMetrics = promMetrics;
-        console.log('promMetrics', promMetrics);
+        // console.log('promMetrics', promMetrics);
         return next();
       }
     } catch (err) {

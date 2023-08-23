@@ -327,8 +327,9 @@ export function queryBuilder(
 
     case LookupType.PodCountByHPA: {
       // TODO: make it not just for pithy
-      let str = `count by (created_by_name)(kube_pod_info{created_by_name="pithy-deployment-f77bd655c"})`;
+      // let str = `count by (created_by_name)(kube_pod_info{created_by_name="pithy-deployment-f77bd655c"})`;
       // let str = 'count by (created_by_name)(kube_pod_info)';
+      let str = '{created_by_name="prometheus-kube-state-metrics-7d8b486d89"}';
       if (queryOptions.hasOwnProperty('hpa')) {
         str =
           str.slice(0, str.length - 1) +

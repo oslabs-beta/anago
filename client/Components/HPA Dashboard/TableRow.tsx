@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { UserData } from '../../types';
+import { UserData } from '../../../types';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -13,9 +13,9 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { promResResultElements } from '../../types';
+import { promResResultElements } from '../../../types';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
-import metricsController from '../../server/controllers/metricsController';
+import metricsController from '../../../server/controllers/metricsController';
 
 const Row = (props: { hpa: string; row: (string | number)[]; log: any }) => {
   const { hpa, row, log } = props;

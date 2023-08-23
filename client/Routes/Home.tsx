@@ -45,9 +45,13 @@ export default function Home() {
           />
           <h3 className='app-title'>Anago</h3>
         </div>
+
         <nav>
           <NavLink to={'/0'} className='nav-btn'>
             Dashboards
+          </NavLink>
+          <NavLink to={'/1'} className='nav-btn'>
+            HPA Monitor/Test
           </NavLink>
           <NavLink to={'/clusterview'} className='nav-btn'>
             Cluster View

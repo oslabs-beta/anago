@@ -90,12 +90,6 @@ if (ACTIVE_DEPLOYMENT) {
   // );
   //
   // ! HPA Monitoring pre-built Dashboard
-  // addMetric(
-  // metricName: string,
-  // lookupType: LookupType,
-  // scopeType = ScopeType.Range,
-  // queryOptions?: any,
-  // dashboardNumber = 0,
   newUserData.addMetric(
     'HPA by Deployment',
     LookupType.HPAByDeployment,
@@ -147,17 +141,6 @@ if (ACTIVE_DEPLOYMENT) {
     1,
   );
   newUserData.addMetric(
-    'HPA Utilization >= 90%',
-    LookupType.HPAUtilization,
-    ScopeType.Range,
-    {
-      // duration: 24 * 60 * 60, // 1 day
-      duration: 60 * 60,
-      stepSize: 60, // 1 min
-    },
-    1,
-  );
-  newUserData.addMetric(
     'Total HTTP Requests',
     LookupType.HTTPRequests,
     ScopeType.Range,
@@ -167,21 +150,6 @@ if (ACTIVE_DEPLOYMENT) {
     },
     1,
   );
-
-  // TODO filter by endpt, method type, job, app, namespace OR filter on FE
-  /*
-  userData.addMetric(
-    'HTTP Requests by Endpoint',
-    LookupType.HTTPRequestsEndpoints,
-    {
-      duration: 5 * 60 * 60,
-      stepSize: 5 * 60,
-    },
-    1,
-  );
-  can filter results for endpoints and method types
-  increase(http_requests_total{endpoint="https-metrics", method="GET"}[24h])
-  */
   newUserData.addMetric(
     'Pod Count by HPA Deployment',
     LookupType.PodCountByHPA,
@@ -192,8 +160,17 @@ if (ACTIVE_DEPLOYMENT) {
     },
     1,
   );
-
-  // TODO -will give: {created_by_name="pithy-deployment-f77bd655c"} SO NEED TO GET HPA FROM HPA METADATA TO FILTER FIRST PART OF CREATED_BY STRING
+  newUserData.addMetric(
+    'HPA Utilization >= 90%',
+    LookupType.HPAUtilization,
+    ScopeType.Range,
+    {
+      // duration: 24 * 60 * 60, // 1 day
+      duration: 60 * 60,
+      stepSize: 60, // 1 min
+    },
+    1,
+  );
 } else {
   // Use placeholder data instead
 

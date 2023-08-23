@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { UserData } from '../../types';
+import { UserData } from '../../../types';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -18,42 +18,13 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { promResResultElements } from '../../types';
+import { promResResultElements } from '../../../types';
 import Row from './TableRow';
-// import { cleanTime } from '../../server/controllers/helperFuncs';
+import { cleanTime } from '../../context/functions';
 
 interface RowsObj {
   [key: string]: any[];
 }
-
-// ! should be able to import this func from helperFuncs but getting an error with reading 'fs'
-/*
-function cleanTime(date: Date, options: any) {
-  const metricDuration = options.hasOwnProperty('duration')
-    ? options.duration
-    : 24 * 60 * 60;
-
-  if (metricDuration >= 2 * 7 * 24 * 60 * 60) {
-    // >= 2 week
-    return date.toLocaleDateString(); //date only
-  } else if (metricDuration <= 12 * 60 * 60) {
-    // < 12 h
-    const dateArr = date.toLocaleTimeString().split(':');
-    const pref = dateArr.slice(0, 2).join(':');
-    const suff = dateArr[2].split(' ')[1];
-    return pref + ' ' + suff; // time + AM/PM
-  } else {
-    // 12-2w
-    const arr = date.toLocaleString().split(',');
-    const dateStr = arr[0].split('/').slice(0, 2).join('/');
-    const timeArr = arr[1].split(':');
-    const pref = timeArr.slice(0, 2).join(':');
-    const suff = timeArr[2].split(' ')[1];
-    const timeStr = pref + ' ' + suff;
-    return dateStr + ': ' + timeStr; // MM/DD, TOD
-  }
-}
-*/
 
 const TableDisplay = ({ tableData, logId, graphIds }) => {
   // const [tableData, setTableData]: any = useState(new Map());
@@ -64,6 +35,7 @@ const TableDisplay = ({ tableData, logId, graphIds }) => {
   const newData: promResResultElements[][] = [];
 
   const getHPAUtilization = async () => {
+    console.log('getHPAUtilization logId', logId);
     fetch(`/api/data/metrics/${logId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -73,18 +45,19 @@ const TableDisplay = ({ tableData, logId, graphIds }) => {
     })
       .then(data => data.json())
       .then(data => {
+        console.log('data in  getHPAUtilization', data);
         filterHPAUtilization(data);
         // setLogHPA(data);
       })
       .catch(err => console.log(err));
   };
 
-  const filterHPAUtilization = data => {
+  const filterHPAUtilization = (data: any[]) => {
     // initialize cache to store an array of metric values by their associated hpa
     const cache = {};
-
+    console.log('data in filterHPAUtilization', data);
     // if not metrics met the scope of the query
-    if (typeof data === 'string') {
+    if (data[0] === 'No metrics meet the scope of the query') {
       return filterTableData(cache);
     } else {
       data.forEach(metricObj => {
@@ -93,15 +66,21 @@ const TableDisplay = ({ tableData, logId, graphIds }) => {
           metricObj.values.forEach(arr => {
             // ! may need to update duration when fixing the HPA Utilization query
             /*
-          cache[metricObj.metric.horizontalpodautoscaler].push(
-            [cleanTime(arr[0], { duration: 60 * 60 }),
-            arr[1]]
-          );
-          */
+            cache[metricObj.metric.horizontalpodautoscaler].push([
+              cleanTime(arr[0], { duration: 60 * 60 }),
+              arr[1],
+            ]);
+            */
+            cache[metricObj.metric.horizontalpodautoscaler].push([
+              cleanTime(arr[0]),
+              arr[1],
+            ]);
+            /*
             cache[metricObj.metric.horizontalpodautoscaler].push([
               arr[0],
               arr[1],
             ]);
+            */
           });
         }
         // if the values array from prometheus is >99, then it will return nested arrays of the values array (each holds the metrics for every 99 set of values)

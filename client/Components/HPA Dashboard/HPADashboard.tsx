@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { UserData } from '../../types';
+import { UserData } from '../../../types';
 import { Modal } from 'react-responsive-modal';
 import {
   Chart as ChartJS,
@@ -16,6 +16,7 @@ import { Line, Chart } from 'react-chartjs-2';
 import { useRouteLoaderData } from 'react-router-dom';
 import TableDisplay from './TableDisplay';
 import DoubleLineGraph from './DoubleLineGraph';
+import AlertBar from '../AlertBar';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -30,24 +31,28 @@ ChartJS.register(
 const HPADisplay = () => {
   const [tableData, setTableData]: any = useState(new Map());
   const [fetchCount, setFetchCount] = useState(0);
+  const [displayTable, setDisplayTable] = useState<any>(undefined);
 
   const userData = useRouteLoaderData('home') as UserData;
-  const metricIds: string[] = Object.keys(userData.metrics).slice(7);
+  const metricIds: string[] = userData.dashboards[1].metrics;
 
   // split metrics into their appropriate grouping components
   const table: string[] = [];
-  let log: string | undefined = '';
+  const log = metricIds[metricIds.length - 1];
   const doubleLineGraph: string[] = [];
-  metricIds.forEach(id => {
+  metricIds.slice(0, metricIds.length - 1).forEach(id => {
     userData.metrics[id].graphType === 0
       ? table.push(id)
       : doubleLineGraph.push(id);
   });
-  log = table.pop();
+  console.log('table', table.length);
+  console.log('doubleLineGraph', doubleLineGraph);
+  console.log('log', log);
 
   // fetch hpa table specific metrics to display
   const getTableData = async () => {
     // perserve the order of the metric results after fetching
+    console.log('entered getTableData in HPADashboard');
     const tableOrder = tableData;
     let count = 0;
     try {
@@ -55,11 +60,8 @@ const HPADisplay = () => {
         tableOrder.set(id, null);
 
         fetch(`/api/data/metrics/${id}`, {
-          method: 'POST',
+          method: 'GET',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            duration: 'instant',
-          }),
         })
           .then((data: Response): any => {
             return data.json();
@@ -76,13 +78,32 @@ const HPADisplay = () => {
       console.log(err);
     }
   };
-  //  retrieve hpa table data on mount
+
+  // fetch hpa table data on mount
   useEffect(() => {
     getTableData();
   }, []);
 
+  // const renderTable = () => {
+  //   setDisplayTable(
+  //     <TableDisplay
+  //       tableData={tableData}
+  //       logId={log}
+  //       graphIds={doubleLineGraph}
+  //     />,
+  //   );
+  // };
+  // useEffect(() => {
+  //   if (fetchCount === 7) {
+  //     renderTable();
+  //   }
+  // }, [fetchCount]);
+
   return (
     <div>
+      // TODO: UNCOMMENT ALERT BAR
+      {/* <AlertBar /> */}
+      <h2 className='dashboard-title'>HPA Monitoring & Testing Suite</h2>
       {fetchCount === 7 && (
         <TableDisplay
           tableData={tableData}
