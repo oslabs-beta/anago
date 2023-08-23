@@ -26,7 +26,6 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
     // const alerts: CleanAlert[] = handleAlerts(displayedAlerts);
     const alerts: any = displayedAlerts;
     alerts.forEach((alert: any) => {
-      console.log(alert);
       if (alert['affectedNamespace'] && !namespaceAlerts[alert]) {
         setNamespaceAlerts([alert, ...namespaceAlerts]);
       }
@@ -44,7 +43,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
       {namespaceAlerts.length > 0 &&
         namespaceAlerts.map((alert) => {
           if (alert['affectedNamespace'] === name) {
-            return <AlertFlag />;
+            return <AlertFlag key={alert.startTime}/>;
           }
         })}
       <img
@@ -71,7 +70,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
                 namespaceAlerts.map((alert) => {
                   if (alert['affectedNamespace'] === name) {
                     return (
-                      <div className="alert-info" style={{ color: 'red' }}>
+                      <div className='alert-info' style={{color: 'red'}} key={name + 'alert'}>
                         <h3>Alert Information:</h3>
                         <div className="info-item">
                           <h3>Alert Name:</h3>

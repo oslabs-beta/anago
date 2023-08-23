@@ -823,3 +823,38 @@ h5 {
   background: rgb(173, 216, 230, 0.7);
   width: 100%;
 }
+
+.error-handler {
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-size: cover;
+}
+
+#shipwreck {
+  background: url('client/assets/images/shipwreck.png');
+  width: 110vw;
+  height: 110vh;
+  background-size: cover;
+  z-index: 1;
+  background-position: center;
+  background-repeat: repeat;
+  margin-top: -10px;
+  margin-left: -75px;
+}
+
+#error-logo {
+  height: 200px;
+  width: 200px;
+}
+
+.error-message {
+  position: absolute;
+  z-index: 10;
+  top: 0px;
+  left: 40px;
+}
