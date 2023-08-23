@@ -101,8 +101,7 @@ const HPADisplay = () => {
 
   return (
     <div>
-      // TODO: UNCOMMENT ALERT BAR
-      {/* <AlertBar /> */}
+      <AlertBar />
       <h2 className='dashboard-title'>HPA Monitoring & Testing Suite</h2>
       {fetchCount === 7 && (
         <TableDisplay
