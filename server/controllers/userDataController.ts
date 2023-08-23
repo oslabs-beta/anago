@@ -94,7 +94,7 @@ userDataController.deleteHiddenAlert = (
   try {
     const unhideAlert = req.body.hidden;
     const updatedUserData = readUserData();
-    //filter the current hiddenAlerts array
+    //filter the current hiddenAlerts array to delete alert
     updatedUserData.hiddenAlerts = updatedUserData.hiddenAlerts.filter(
       (value) => value !== unhideAlert
     );
@@ -139,18 +139,18 @@ userDataController.deleteMetric = (
   res: Response,
   next: NextFunction
 ) => {
-  const metricId = req.params.id;
+  const metridId = req.params.id;
   try {
     const updatedUserData = readUserData();
 
     //filter the metric from the dashboard section
     updatedUserData.dashboards[0].metrics =
       updatedUserData.dashboards[0].metrics.filter(
-        (value) => value !== metricId
+        (value) => value !== metridId
       );
     // filter the metric from the metrics object
-    if (updatedUserData.metrics.hasOwnProperty(metricId)) {
-      delete updatedUserData.metrics[metricId];
+    if (updatedUserData.metrics.hasOwnProperty(metridId)) {
+      delete updatedUserData.metrics[metridId];
     }
 
     fs.writeFileSync(
@@ -186,7 +186,6 @@ userDataController.addMetric = (
   updatedUserData.metrics[newMetric.metricId] = newMetric;
 
   console.log('Added new metric. Updated User Data:', updatedUserData);
-
 
   fs.writeFileSync(
     path.resolve(__dirname, '../models/userData.json'),
