@@ -26,34 +26,34 @@ export default function Home() {
   }, []);
 
   // // Fetch Cluster Data
-  // useEffect(() => {
-  //   fetch('api/k8s/cluster')
-  //     .then((data) => data.json())
-  //     .then((data) => {
-  //       setClusterData(data);
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, []);
+  useEffect(() => {
+    fetch('api/k8s/cluster')
+      .then((data) => data.json())
+      .then((data) => {
+        setClusterData(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
-    <div className="home-layout">
+    <div className='home-layout'>
       <header>
-        <div className="logo-container">
+        <div className='logo-container'>
           <img
             src={'client/assets/images/anago.png'}
-            alt="logo"
-            className="logo-image"
+            alt='logo'
+            className='logo-image'
           />
-          <h3 className="app-title">Anago</h3>
+          <h3 className='app-title'>Anago</h3>
         </div>
         <nav>
-          <NavLink to={'/0'} className="nav-btn">
+          <NavLink to={'/0'} className='nav-btn'>
             Dashboards
           </NavLink>
-          <NavLink to={'/clusterview'} className="nav-btn">
+          <NavLink to={'/clusterview'} className='nav-btn'>
             Cluster View
           </NavLink>
-          <NavLink to={'/setup'} className="nav-btn">
+          <NavLink to={'/setup'} className='nav-btn'>
             Getting Started
           </NavLink>
           {/* <NavLink to={'/login'} className='nav-btn'>
@@ -62,7 +62,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <div className="main-body">
+      <div className='main-body'>
         <Outlet />
       </div>
     </div>
