@@ -8,6 +8,7 @@ import {
 //import routes
 import Home from './Routes/Home';
 // import Login from './Routes/Login';
+import HPADashboard from './Components/HPA Dashboard/HPADashboard';
 import Dashboard from './Components/Dashboard/Dashboard';
 import ClusterView from './Routes/ClusterView';
 import SetUp from './Routes/SetUp';
@@ -27,6 +28,11 @@ const router = createBrowserRouter(
       loader={loaders.userLoader}
       id='home'
       errorElement={<ErrorElement />}>
+      <Route
+        path='/1'
+        element={<HPADashboard />}
+        errorElement={<ErrorElement />}
+      />
       <Route
         path=':id'
         element={<Dashboard />}

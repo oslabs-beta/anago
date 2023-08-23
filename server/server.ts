@@ -1,15 +1,15 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import path from 'path';
-import { PITHY_URL } from '../user-config';
+import { PITHY_URL } from '../user-config.js';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app: Express = express();
 const PORT: number = 3000;
 
-import dataRouter from './routers/dataRouter';
-import userRouter from './routers/userRouter';
-import k8sRouter from './routers/k8sRouter';
-import configRouter from './routers/configRouter';
+import dataRouter from './routers/dataRouter.js';
+import userRouter from './routers/userRouter.js';
+import k8sRouter from './routers/k8sRouter.js';
+import configRouter from './routers/configRouter.js';
 import { ServerError } from '../types';
 import { config } from 'dotenv';
 
@@ -61,7 +61,7 @@ app.use(
     console.log(err);
     console.log(errorObj.message);
     return res.status(errorObj.status).json(errorObj.message);
-  }
+  },
 );
 
 app.listen(PORT, () => {

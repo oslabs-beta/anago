@@ -7,7 +7,6 @@ import {
 import { UserData } from '../../types';
 import React, { useContext, useEffect } from 'react';
 import { StoreContext } from '../context/stateStore';
-import logo from '../assets/images/anago.png';
 import AlertBar from '../Components/AlertBar';
 
 export default function Home() {
@@ -21,8 +20,7 @@ export default function Home() {
   //set default dashboard and route to that dashboard
   useEffect(() => {
     setHasFetchedUserData(true);
-    setCurrentDashboard(dashboards[0]);
-    if (window.location.pathname === '/') navigate('0');
+    if (window.location.pathname === '/') return navigate('0');
   }, []);
 
   // // Fetch Cluster Data
@@ -36,24 +34,28 @@ export default function Home() {
   // }, []);
 
   return (
-    <div className="home-layout">
+    <div className='home-layout'>
       <header>
-        <div className="logo-container">
+        <div className='logo-container'>
           <img
             src={'client/assets/images/anago.png'}
-            alt="logo"
-            className="logo-image"
+            alt='logo'
+            className='logo-image'
           />
-          <h3 className="app-title">Anago</h3>
+          <h3 className='app-title'>Anago</h3>
         </div>
+
         <nav>
-          <NavLink to={'/0'} className="nav-btn">
-            Dashboards
+          <NavLink to={'/0'} className='nav-btn'>
+            Dashboard
           </NavLink>
-          <NavLink to={'/clusterview'} className="nav-btn">
-            Cluster View
+          <NavLink to={'/1'} className='nav-btn'>
+            HPA Monitor/Test
           </NavLink>
-          <NavLink to={'/setup'} className="nav-btn">
+          <NavLink to={'/clusterview'} className='nav-btn'>
+            ClusterView
+          </NavLink>
+          <NavLink to={'/setup'} className='nav-btn'>
             Getting Started
           </NavLink>
           {/* <NavLink to={'/login'} className='nav-btn'>
@@ -62,7 +64,7 @@ export default function Home() {
         </nav>
       </header>
 
-      <div className="main-body">
+      <div className='main-body'>
         <Outlet />
       </div>
     </div>
