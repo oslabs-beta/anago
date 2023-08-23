@@ -13,11 +13,18 @@ dataRouter.get(
   promApiController.queryBuilder,
   promApiController.getMetrics,
   (_req: Request, res: Response) => {
-    // make some data fetch
-    // console.log(_req.body);
-
     return res.status(200).json(res.locals.promMetrics);
-  }
+  },
+);
+
+dataRouter.post(
+  '/metrics/:id',
+  promApiController.metricQueryLookup,
+  promApiController.queryBuilder,
+  promApiController.getMetrics,
+  async (_req: Request, res: Response) => {
+    return res.status(200).json(res.locals.promMetrics);
+  },
 );
 
 dataRouter.post(
@@ -26,14 +33,11 @@ dataRouter.post(
   promApiController.queryBuilder,
   promApiController.getMetrics,
   (_req: Request, res: Response) => {
-    // make some data fetch
-    // console.log(_req.body);
-
     return res.status(200).json({
       metricData: res.locals.promMetrics,
       searchQuery: res.locals.searchQuery,
     });
-  }
+  },
 );
 
 //does this metric exist? look at the searchQuery, make that request to promQL, parse the data, pass it to the front end

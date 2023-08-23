@@ -139,18 +139,18 @@ userDataController.deleteMetric = (
   res: Response,
   next: NextFunction
 ) => {
-  const metricDes = req.body;
+  const metricId = req.params.id;
   try {
     const updatedUserData = readUserData();
 
     //filter the metric from the dashboard section
     updatedUserData.dashboards[0].metrics =
       updatedUserData.dashboards[0].metrics.filter(
-        (value) => value !== updatedUserData
+        (value) => value !== metricId
       );
     // filter the metric from the metrics object
-    if (updatedUserData.metrics.hasOwnProperty(updatedUserData)) {
-      delete updatedUserData.metrics[updatedUserData];
+    if (updatedUserData.metrics.hasOwnProperty(metricId)) {
+      delete updatedUserData.metrics[metricId];
     }
 
     fs.writeFileSync(
@@ -185,8 +185,8 @@ userDataController.addMetric = (
   updatedUserData.dashboards[0].metrics.push(newMetric.metricId);
   updatedUserData.metrics[newMetric.metricId] = newMetric;
 
-  console.log('Updated Data:', updatedUserData);
-  console.log('Dashboard Size: ', updatedUserData.dashboards[0].metrics.length);
+  console.log('Added new metric. Updated User Data:', updatedUserData);
+
 
   fs.writeFileSync(
     path.resolve(__dirname, '../models/userData.json'),

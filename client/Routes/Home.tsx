@@ -7,7 +7,6 @@ import {
 import { UserData } from '../../types';
 import React, { useContext, useEffect } from 'react';
 import { StoreContext } from '../context/stateStore';
-import logo from '../assets/images/anago.png';
 import AlertBar from '../Components/AlertBar';
 
 export default function Home() {
@@ -21,8 +20,7 @@ export default function Home() {
   //set default dashboard and route to that dashboard
   useEffect(() => {
     setHasFetchedUserData(true);
-    setCurrentDashboard(dashboards[0]);
-    if (window.location.pathname === '/') navigate('0');
+    if (window.location.pathname === '/') return navigate('0');
   }, []);
 
   // // Fetch Cluster Data
@@ -46,12 +44,16 @@ export default function Home() {
           />
           <h3 className='app-title'>Anago</h3>
         </div>
+
         <nav>
           <NavLink to={'/0'} className='nav-btn'>
-            Dashboards
+            Dashboard
+          </NavLink>
+          <NavLink to={'/1'} className='nav-btn'>
+            HPA Monitor/Test
           </NavLink>
           <NavLink to={'/clusterview'} className='nav-btn'>
-            Cluster View
+            ClusterView
           </NavLink>
           <NavLink to={'/setup'} className='nav-btn'>
             Getting Started

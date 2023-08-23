@@ -1,9 +1,11 @@
-import { UserData, Cluster, Metric } from './userDataClass.js';
+import { UserData, Cluster, Metric, Dashboard } from './userDataClass.js';
 import { LookupType, ScopeType } from '../../types.js';
 import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 
 const newUserData = new UserData();
 newUserData.clusters.push(new Cluster('Testing Cluster', DEPLOYMENT_URL));
+const hpaDash = new Dashboard('HPA Monitoring');
+newUserData.dashboards.push(hpaDash);
 
 if (ACTIVE_DEPLOYMENT) {
   // Build live demo clusters
@@ -15,7 +17,7 @@ if (ACTIVE_DEPLOYMENT) {
       duration: 2 * 60 * 60,
       stepSize: 5 * 60,
       target: 'namespace',
-    }
+    },
   );
   newUserData.addMetric(
     'Memory Usage by Container',
@@ -25,7 +27,7 @@ if (ACTIVE_DEPLOYMENT) {
       duration: 2 * 60 * 60,
       stepSize: 5 * 60,
       target: 'container',
-    }
+    },
   );
   newUserData.addMetric(
     '% Memory Available by Node',
@@ -34,7 +36,7 @@ if (ACTIVE_DEPLOYMENT) {
     {
       duration: 5 * 60 * 60,
       stepSize: 5 * 60,
-    }
+    },
   );
   newUserData.addMetric(
     '% Disk Space Available by Node',
@@ -43,7 +45,7 @@ if (ACTIVE_DEPLOYMENT) {
     {
       duration: 5 * 60 * 60,
       stepSize: 5 * 60,
-    }
+    },
   );
   newUserData.addMetric(
     'CPU Underutilization',
@@ -52,7 +54,7 @@ if (ACTIVE_DEPLOYMENT) {
     {
       duration: 5 * 60 * 60,
       stepSize: 5 * 60,
-    }
+    },
   );
   newUserData.addMetric(
     'Memory Underutilization',
@@ -61,7 +63,7 @@ if (ACTIVE_DEPLOYMENT) {
     {
       duration: 5 * 60 * 60,
       stepSize: 5 * 60,
-    }
+    },
   );
   newUserData.addMetric(
     'Pod Count by Namespace',
@@ -70,7 +72,7 @@ if (ACTIVE_DEPLOYMENT) {
     {
       duration: 2 * 24 * 60 * 60,
       stepSize: 60 * 60,
-    }
+    },
   );
   newUserData.addMetric(
     'Ready Nodes by Cluster',
@@ -79,13 +81,96 @@ if (ACTIVE_DEPLOYMENT) {
     {
       duration: 21 * 24 * 60 * 60,
       stepSize: 4 * 60 * 60,
-    }
+    },
   );
   // Verify before using Flapping Metric
   // userData.addMetric(
   //   'Nodes Readiness Flapping',
   //   LookupType.NodesReadinessFlapping,
   // );
+  //
+  // ! HPA Monitoring pre-built Dashboard
+  newUserData.addMetric(
+    'HPA by Deployment',
+    LookupType.HPAByDeployment,
+    ScopeType.Instant,
+    null,
+    1,
+  );
+  // TODO: filter by deployment: kube_horizontalpodautoscaler_metadata_generation{horizontalpodautoscaler="pithy-deployment"}
+  newUserData.addMetric(
+    'HPA Target Status',
+    LookupType.HPATargetStatus,
+    ScopeType.Instant,
+    null,
+    1,
+  );
+  newUserData.addMetric(
+    'HPA Target',
+    LookupType.HPATargetSpec,
+    ScopeType.Instant,
+    null,
+    1,
+  );
+  newUserData.addMetric(
+    'HPA Minimum Replicas',
+    LookupType.HPAMinReplicas,
+    ScopeType.Instant,
+    null,
+    1,
+  );
+  newUserData.addMetric(
+    'HPA Maximum Replicas',
+    LookupType.HPAMaxReplicas,
+    ScopeType.Instant,
+    null,
+    1,
+  );
+  newUserData.addMetric(
+    'HPA Current Replicas',
+    LookupType.HPACurrentReplicas,
+    ScopeType.Instant,
+    null,
+    1,
+  );
+  newUserData.addMetric(
+    'HPA Desired Replicas',
+    LookupType.HPADesiredReplicas,
+    ScopeType.Instant,
+    null,
+    1,
+  );
+  newUserData.addMetric(
+    'Total HTTP Requests',
+    LookupType.HTTPRequests,
+    ScopeType.Range,
+    {
+      duration: 5 * 60 * 60,
+      stepSize: 5 * 60,
+    },
+    1,
+  );
+  newUserData.addMetric(
+    'Pod Count by HPA Deployment',
+    LookupType.PodCountByHPA,
+    ScopeType.Range,
+    {
+      duration: 5 * 60 * 60,
+      stepSize: 5 * 60,
+    },
+    1,
+  );
+  newUserData.addMetric(
+    'HPA Utilization >= 90%',
+    LookupType.HPAUtilization,
+    ScopeType.Range,
+    {
+      // duration: 24 * 60 * 60, // 1 day
+      duration: 60 * 60,
+      stepSize: 60, // 1 min
+    },
+    1,
+  );
 } else {
   // Use placeholder data instead
 
@@ -94,7 +179,7 @@ if (ACTIVE_DEPLOYMENT) {
     new Metric('CPU Idle by Cluster', LookupType.CPUIdle, ScopeType.Range, {
       duration: 5 * 60 * 60,
       stepSize: 5 * 60,
-    })
+    }),
   );
   placeHolderMetrics.push(
     new Metric(
@@ -104,14 +189,14 @@ if (ACTIVE_DEPLOYMENT) {
       {
         duration: 24 * 60 * 60,
         stepSize: 20 * 60,
-      }
-    )
+      },
+    ),
   );
   placeHolderMetrics.push(
     new Metric('Pod Count by Namespace', LookupType.PodCount, ScopeType.Range, {
       duration: 3 * 60 * 60,
       stepSize: 5 * 60,
-    })
+    }),
   );
   placeHolderMetrics.push(
     new Metric(
@@ -121,14 +206,14 @@ if (ACTIVE_DEPLOYMENT) {
       {
         duration: 24 * 60 * 60,
         stepSize: 20 * 60,
-      }
-    )
+      },
+    ),
   );
   placeHolderMetrics.push(
     new Metric('CPU Usage by Container', LookupType.CPUUsage, ScopeType.Range, {
       duration: 24 * 60 * 60,
       stepSize: 20 * 60,
-    })
+    }),
   );
   placeHolderMetrics.push(
     new Metric(
@@ -138,8 +223,8 @@ if (ACTIVE_DEPLOYMENT) {
       {
         duration: 24 * 60 * 60,
         stepSize: 20 * 60,
-      }
-    )
+      },
+    ),
   );
   placeHolderMetrics.push(
     new Metric(
@@ -149,8 +234,8 @@ if (ACTIVE_DEPLOYMENT) {
       {
         duration: 21 * 24 * 60 * 60,
         stepSize: 8 * 60 * 60,
-      }
-    )
+      },
+    ),
   );
 
   placeHolderMetrics.forEach((el, index) => {

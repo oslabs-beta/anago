@@ -7,7 +7,7 @@ const configController: any = {};
 configController.applyPromChart = async (
   _req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const addHelm =
