@@ -182,7 +182,7 @@ userDataController.addMetric = (
     newMetricInfo.scopeType,
     res.locals.queryOptions
   );
-  updatedUserData.dashboards[0].metrics.push(newMetric);
+  updatedUserData.dashboards[0].metrics.push(newMetric.metricId);
   updatedUserData.metrics[newMetric.metricId] = newMetric;
 
   console.log('Updated Data:', updatedUserData);

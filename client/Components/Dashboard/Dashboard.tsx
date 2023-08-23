@@ -44,7 +44,7 @@ const Dashboard = () => {
     return;
   }
 
-  const metricIds = Object.keys(userData.metrics);
+  const metricIds: string[] = userData.dashboards[0].metrics;
 
   return (
     <div>
