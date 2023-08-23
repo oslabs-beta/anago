@@ -720,29 +720,29 @@ h5 {
   justify-content: center;
   align-items: center;
   position: relative;
+  background-size: cover;
 }
 
 #shipwreck {
   background: url('client/assets/images/shipwreck.png');
-  width: 150%;
-  height: 150%;
+  width: 110vw;
+  height: 110vh;
   background-size: cover;
   z-index: 1;
   background-position: center;
-  background-repeat:repeat;
-  margin-top: -300px;
-  margin-left: -100px;
+  background-repeat: repeat;
+  margin-top: -10px;
+  margin-left: -75px;
 }
 
 #error-logo {
   height: 200px;
   width: 200px;
- 
 }
 
-.error-message{
+.error-message {
   position: absolute;
   z-index: 10;
-  top: -130px;
+  top: 0px;
   left: 40px;
 }

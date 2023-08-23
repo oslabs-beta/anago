@@ -1,15 +1,15 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import path from 'path';
-import { PITHY_URL } from '../user-config.ts';
+import { PITHY_URL } from '../user-config';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app: Express = express();
 const PORT: number = 3000;
 
-import dataRouter from './routers/dataRouter.ts';
-import userRouter from './routers/userRouter.ts';
-import k8sRouter from './routers/k8sRouter.ts';
-import configRouter from './routers/configRouter.ts';
+import dataRouter from './routers/dataRouter';
+import userRouter from './routers/userRouter';
+import k8sRouter from './routers/k8sRouter';
+import configRouter from './routers/configRouter';
 import { ServerError } from '../types';
 import { config } from 'dotenv';
 
