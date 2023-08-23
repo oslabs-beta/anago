@@ -15,7 +15,7 @@ const metricsController: any = {};
 metricsController.verifyMetric = (
   req: Request,
   _res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   const { metricId } = req.params;
   try {

@@ -1,4 +1,4 @@
-import { CleanAlert } from "../../types";
+import { CleanAlert } from '../../types';
 
 //clean times for improved readability
 export function cleanTime(date: string) {
@@ -19,8 +19,17 @@ export function cleanName(name: string) {
 
 //handle alert data processing for FE
 export function handleAlerts(statefulAlerts: []) {
-  const current = [...statefulAlerts].map(alert => {
+  console.log('Handling alerts: ', statefulAlerts);
+  const current = [...statefulAlerts].map((alert) => {
     const obj = <CleanAlert>{};
+    // obj['name'] = alert['name'];
+    // obj['description'] = alert['description'];
+    // obj['summary'] = alert['summary'];
+    // obj['severity'] = alert['severity'];
+    // if (alert['pod']) obj['affectedPod'] = alert['pod'];
+    // if (alert['namespace']) obj['affectedNamespace'] = alert['namespace'];
+    // obj['startTime'] = cleanTime(alert['startTime']);
+    // obj['lastUpdated'] = cleanTime(alert['lastUpdated']);
     obj['name'] = alert['labels']['alertname'];
     obj['description'] = alert['annotations']['description'];
     obj['summary'] = alert['annotations']['summary'];
@@ -28,6 +37,7 @@ export function handleAlerts(statefulAlerts: []) {
     if (alert['labels']['pod']) obj['affectedPod'] = alert['labels']['pod'];
     if (alert['labels']['namespace'])
       obj['affectedNamespace'] = alert['labels']['namespace'];
+    obj['startsAt'] = alert['startsAt'];
     obj['startTime'] = cleanTime(alert['startsAt']);
     obj['lastUpdated'] = cleanTime(alert['updatedAt']);
     return obj;

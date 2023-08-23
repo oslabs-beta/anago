@@ -11,6 +11,7 @@ $highlight: rgba(97, 145, 215, 1);
 $highlight-dark: rgb(33, 81, 155);
 $highlight-light: rgba(97, 145, 215, 0.7);
 $highlight-bright: rgba(143, 166, 200, 0.9);
+$highlight-gray: rgba(143, 166, 200, 0.5);
 
 * {
   font-family: 'Ubuntu', sans-serif;
@@ -36,7 +37,8 @@ $highlight-bright: rgba(143, 166, 200, 0.9);
   align-items: center;
   justify-content: space-between;
   margin: 10px;
-  width: 90%;
+  width: 96%;
+  margin-left: 2%;
 }
 
 .metric-container {
@@ -54,6 +56,33 @@ $highlight-bright: rgba(143, 166, 200, 0.9);
     margin: 5px;
   }
   margin-bottom: 15px;
+  cursor: pointer;
+}
+.metric-container-trash-can-clicked {
+  min-width: 400px;
+  max-width: 500px;
+  min-height: 300px;
+  background-color: rgb(140, 138, 138);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+  .metric-title {
+    font-family: 'Ubuntu', sans-serif;
+    margin: 5px;
+  }
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.metric-title {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+}
+#trash-can {
+  padding-left: 5px;
 }
 
 header {
@@ -64,7 +93,6 @@ header {
   background-color: $highlight;
   display: flex;
   position: fixed;
-
   justify-content: space-evenly;
 }
 
@@ -96,8 +124,12 @@ header nav {
     margin-right: 40px;
   }
 }
+header {
+  z-index: 30;
+}
 
 .logo-container {
+  z-index: 20;
   width: 100%;
   display: flex;
   justify-content: flex-start;
@@ -119,6 +151,7 @@ header nav {
 
 //status bar styling
 .status-bar {
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -128,12 +161,15 @@ header nav {
   width: auto;
   border: 2px solid rgba(0, 44, 139, 0.4);
   border-radius: 8px;
-  height: 3.5rem;
   margin: auto;
+  overflow-y: scroll;
   background-color: #2f72cf33;
   margin-bottom: 1rem;
   overflow-y: hidden;
   transition: height 0.3s;
+}
+.status-bar:hover {
+  background-color: #2f72cf4f;
 }
 #critical,
 #warning,
@@ -142,36 +178,26 @@ header nav {
   flex-direction: column;
   text-align: left;
 }
-.status-bar #mouseNotOver {
+#mouseNotOver {
   display: flex;
   flex-direction: column;
   align-self: center;
+  justify-content: center;
+  height: 1rem;
 }
 
 #alertTitle,
 #mouseNotOver {
   color: rgb(219, 28, 28);
-  cursor: pointer;
   display: flex;
   flex-direction: column;
-}
-
-#mouseNotOver {
-  display: flex;
-  flex-direction: row;
-  text-align: center;
+  cursor: pointer;
 }
 
 #noAlertTitle {
   color: rgb(145, 143, 143);
 }
 
-.status-bar:hover {
-  background-color: #2f72cf4f;
-  overflow-y: auto;
-  height: 10rem;
-  cursor: pointer;
-}
 .critical {
   color: rgb(131, 17, 17);
 }
@@ -187,13 +213,6 @@ header nav {
 .status-bar:active {
   overflow-y: scroll;
 }
-// .status-bar:hover {
-//   height: 10rem;
-// }
-.status-bar:click {
-  height: 10rem;
-  overflow-y: auto;
-}
 
 // Add Metric styling
 .new-metric-modal {
@@ -207,6 +226,7 @@ header nav {
   h3 {
     font-family: 'Ubuntu', sans-serif;
   }
+
   .new-metric-container {
     display: flex;
     flex-wrap: wrap;
@@ -226,7 +246,7 @@ header nav {
       select,
       option {
         font-family: 'Ubuntu', sans-serif;
-        font-size: 16px;
+        font-size: 18px;
         margin: 5px;
       }
     }
@@ -265,6 +285,31 @@ header nav {
   }
 }
 
+.summary-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 70%;
+  margin: 20px;
+  margin-left: 15%;
+  background-color: $highlight-gray;
+
+  p {
+    padding: 0px;
+    margin: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 16px;
+    font-family: 'Ubuntu', sans-serif;
+    text-align: justify;
+  }
+
+  .summary-query {
+    word-break: anywhere;
+  }
+}
+
 //universal modal styling
 .react-responsive-modal-root {
   position: fixed;
@@ -272,9 +317,11 @@ header nav {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 1;
+  z-index: 40;
 }
-
+nav {
+  z-index: 20;
+}
 .react-responsive-modal-overlay {
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
@@ -501,6 +548,77 @@ td {
   color: rgba(0, 0, 0, 0.3);
 }
 
+.radio-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  width: 100%;
+}
+
+.radio-button-container {
+  display: block;
+  position: relative;
+  padding-left: 36px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.radio-button-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 22px;
+  width: 22px;
+  margin-left: 6px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio-button-container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio-button-container input:checked ~ .checkmark {
+  background-color: $highlight;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio-button-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio-button-container .checkmark:after {
+  top: 7px;
+  left: 7px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+
 h5 {
   font-family: sans-serif;
   margin-bottom: 5px;
@@ -636,12 +754,6 @@ h5 {
   margin-right: 5px;
   border-radius: 25px;
 }
-.status-bar:hover {
-  height: 10rem;
-  overflow-y: auto;
-}
-.status-bar:active {
-}
 
 #namespace-logo {
   position: absolute;
@@ -683,7 +795,7 @@ h5 {
   width: max-content;
   overflow-y: auto;
   margin-top: 5px;
-  z-index: 100;
+  z-index: 10;
   font-family: 'Ubuntu', sans-serif;
 }
 .panel fieldset {

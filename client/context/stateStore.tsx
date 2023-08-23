@@ -14,10 +14,10 @@ function StoreProvider({ children }: Props) {
   const [currentDashboard, setCurrentDashboard] = useState<String[]>([]);
   const [hasFetchedUserData, setHasFetchedUserData] = useState(false);
   //manages selected items in the dropdown
-  const [selectedStates, setSelectedStates] = useState({})
+  const [selectedStates, setSelectedStates] = useState({});
   //manages currently displayed alerts
   const [displayedAlerts, setDisplayedAlerts] = useState<Object>([]);
-  
+  const [clusterData, setClusterData] = useState({});
 
   const States = {
     currentDashboard: currentDashboard,
@@ -30,6 +30,8 @@ function StoreProvider({ children }: Props) {
     setSelectedStates: setSelectedStates,
     displayedAlerts: displayedAlerts,
     setDisplayedAlerts: setDisplayedAlerts,
+    clusterData: clusterData,
+    setClusterData: setClusterData,
   };
 
   return (
