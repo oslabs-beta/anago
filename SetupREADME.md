@@ -1,6 +1,41 @@
+# Welcome
+
+to the Anago setup page. Follow these two simple instructions to start monitoring your Kubernetes cluster!
+
+# Setup for Anago:
+
+1. Turn on portforwarding to access your Prometheus instance. Anago is expecting to access your prometheus instance at port 9090 as dictated in the [user-config.ts](/user-config.ts) file. To accomplished this, use the kubectl port-forward command:
+
+```bash
+kubectl port-forward svc/[service-name] -n [namespace] 9090
+```
+
+2. Similarly, allow portforwarding to access the alertManager UI. Anago is expected access at Port 9093, as described in the [user-config.ts](/user-config.ts) file. Port-forward with the following command:
+
+```bash
+kubectl port-forward svc/[service-name]  -n [namespace] 9093
+```
+
+All set? click [here](/README.md) to return to the main README.md
+
+# New To AWS?
+
+AWS can be very ticky to navigate so Anago is here to help guide you. Follow along with our comprehensive step-by-step guide to deploying and monitoring your own kubernetes cluster!
+
+## Table of Contents
+
+1. [Prerequisites](#Prerequisites)
+2. [AWS Login and Authentication](#AWS-Login-and-Authentication)
+3. [eksctl Setup](#eksctl-Setup)
+4. [Loading the image to ECR](#Loading-the-image-to-ECR)
+5. [Deployment + Services](#Deployment-+-Services)
+6. [Making the Metrics Available](#Making-the-Metrics-Available)
+7. [Prometheus Setup](#Prometheus-Setup-using-Helm)
+8. [AlertManager Setup](#AlertManager-Setup)
+
 ## Prerequisites
 
-1. Before working with Anago, the following installations and setups are required:
+1. For the following setup, the following installations and setups are required:
    - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
    - [eksctl](https://docs.aws.amazon.com/eks/latest/userguide/eksctl.html)
    - [kubectl](https://kubernetes.io/docs/tasks/tools/)
@@ -13,45 +48,108 @@
 npm install
 ```
 
-# AWS Login and Authentication
+DISCLAIMER: this Anago setup describes a cloudhosted deployment
 
-1. Log in to your personal <a href="aws.amazon.com">AWS<a> account as an IAM user
-2. From the command line, run `aws configure` and when prompted, enter your AWS Access Key ID and AWS Secret Access Key
-3. Entering your credentials automatically creates the secret file: ~/.aws/config. You are then able to adjust that information as desired.
-   NOTE: Find the hidden file on your local machine by typing 'command-shift-g' within your Finder.
+## AWS Login and Authentication
 
-# eksctl Setup
+1. Log in to your personal <a href="aws.amazon.com">AWS</a> account as an IAM user
+2. From the command line, run
+
+```bash
+aws configure
+```
+
+and when prompted, enter your AWS Access Key ID and AWS Secret Access Key 3. Entering your credentials automatically creates the secret file: ~/.aws/config. You are then able to adjust that information as desired.
+
+NOTE: Find the hidden file on your local machine by typing 'command-shift-g' within your Finder.
+
+## eksctl Setup
 
 1. Create a cluster with your desired cluster name, region, node type, and node count
-   `eksctl create cluster --name [test-cluster] --region [us-east-2] --node-type [t2.micro] --nodes [2]`
-   NOTE: eksctl will add a config file in ~/.kube that directs local kubectl commands to your EKS instance.
-2. To access this EKS instance elsewhere:
-   `aws eks update-kubeconfig --region [us-east-2] --name [test-cluster]`
 
-# Deployment + Services
+```bash
+eksctl create cluster --name [test-cluster] --region [us-east-2] --node-type [t2.micro] --nodes [2]
+```
+
+NOTE: eksctl will add a config file in ~/.kube that directs local kubectl commands to your EKS instance.
+
+2. To access this EKS instance elsewhere:
+
+```bash
+aws eks update-kubeconfig --region [us-east-2] --name [test-cluster]
+```
+
+## Loading the image to ECR
+
+1. Create an image repo in ECR, if there isn’t one
+2. the software folder should have a Dockerfile
+3. From ECR’s image repo (must be in the right region), click “View Push Commands”
+4. Run these exact commands in order in order to hand amazon auth info to docker (expires after 12 hours), build and tag a docker image, and push it up to amazon
+
+NOTE: If using an M1 Mac, you MUST modify the docker build command in order to correct the build platform:
+
+```bash
+docker buildx build --platform linux/amd64 -t [image] .
+```
+
+## Deployment + Services
 
 1. Use kubectl to deploy deployment(+pods) and services as usual (see KubernetesDeployment doc), using the ECR image link. For example:
-   `kubectl apply -f [yaml file]` -or-
-   `kubectl create deployment [Depl-name] --image=[image]`
-2. `kubectl get svc` should surface the Service’s external IP, now accessible
 
-# Making the Metrics Available
+```bash
+kubectl apply -f [yaml file]
+```
 
-1. Connect to your desired EKS cluster
-   `aws eks --region region update-kubeconfig --name [cluster-name]`
+OR
+
+```bash
+kubectl create deployment [Depl-name] --image=[image]
+```
+
+2. To surface the Service's external IP, run this command:
+
+```bash
+kubectl get svc
+```
+
+## Making the Metrics Available
+
+1. Connect to your desired EKS cluster:
+
+```bash
+aws eks --region region update-kubeconfig --name [cluster-name]
+```
+
 2. Run the configuration to deploy the metrics server
-   `kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`
-3. Check to see that the Metrics Pod is up and running and that the /metrics endpoint is exposed
-   `kubectl get pods -n kube-system`
 
-# Prometheus Setup (using Helm)
+```bash
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+```
+
+3. Check to see that the Metrics Pod is up and running and that the /metrics endpoint is exposed
+
+```bash
+kubectl get pods -n kube-system
+```
+
+## Prometheus Setup (using Helm)
 
 1. Add the prometheus-community Helm repo and update Helm:
-   `helm repo add prometheus-community https://prometheus-community.github.io/helm-charts`
-   `helm repo update`
+
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+```
+
+```bash
+helm repo update
+```
+
 2. Install the prometheus-community Helm repo with a desired release name in a created namespace. Also,
    install the alert manager. For example:
-   `helm install [release-name] prometheus-community/kube-prometheus-stack --namespace [namespace] --create-namespace --set alertmanager.persistentVolume.storageClass="gp2",server.persistentVolume.storageClass="gp2"`
+
+```bash
+helm install [release-name] prometheus-community/kube-prometheus-stack --namespace [namespace] --create-namespace --set alertmanager.persistentVolume.storageClass="gp2",server.persistentVolume.storageClass="gp2"
+```
 
 NOTE: after the Helm chart has been installed, you should see this:
 
@@ -64,20 +162,43 @@ NOTE: after the Helm chart has been installed, you should see this:
 > Operator.
 
 3. use kubectl to see what is installed in the cluster:
-   `kubectl get pod -n [namespace]`
-   NOTE: you should see all nodes including the prometheus stack operator, the alert manager, and grafana
-4. use kubectl to see all services: `kubectl get services -n [namespace]`
-5. to access your prometheus instance, use the kubectl port-forward to forward a local port into the Cluster with the service name. Example:
-   `kubectl port-forward svc/[service-name] -n [namespace] 9090`
-6. navigate to http://localhost:9090 in your browser to access the Prometheus web UI.
-   NOTE: Click Status, then Targets to see a list of scrape targets configured by Helm.
 
-# AlertManager Setup
+```bash
+kubectl get pod -n [namespace]
+```
+
+NOTE: you should see all nodes including the prometheus stack operator, the alert manager, and grafana
+
+4. use kubectl to see all services:
+
+```bash
+kubectl get services -n [namespace]
+```
+
+5. to access your prometheus instance, use the kubectl port-forward to forward a local port into the Cluster with the service name. Example:
+
+```bash
+kubectl port-forward svc/[service-name] -n [namespace] 9090
+```
+
+6. navigate to http://localhost:9090 in your browser to access the Prometheus web UI.
+
+NOTE: Click Status, then Targets to see a list of scrape targets configured by Helm.
+
+NOTE: if you'd like more general information regarding Prometheus, [click here](./dev/prometheusREADME.md)
+
+## AlertManager Setup
 
 NOTE: the prometheus-community/kube-prometheus-stack includes configuration files for AlertManager.
 
-1. to access the alertManager UI, use the kubectl port-forward to forward a
-   local port into the Cluster with the service name. Example:
-   `kubectl port-forward svc/[service-name]  -n monitoring 9093`
+1. to access the alertManager UI, use the kubectl port-forward to forward a local port into the Cluster with the service name. Example:
+
+```bash
+kubectl port-forward svc/[service-name]  -n monitoring 9093
+```
+
 2. navigate to http://localhost:9093 in your browser to access the AlertManager web UI.
-   NOTE: You can see the active alerts configured by Helm. if more customization regarding alerts is needed, the configuration files may be adjusted and applied.
+
+NOTE: You can see the active alerts configured by Helm. if more customization regarding alerts is needed, the configuration files may be adjusted and applied.
+
+NOTE: if you'd like more information regarding AlertManager, [click here](./dev/alertManagerInfo.md)

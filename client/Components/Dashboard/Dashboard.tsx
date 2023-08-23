@@ -17,7 +17,7 @@ const Dashboard = () => {
 
   const [lastUpdate, setLastUpdate] = useState<Date>();
   const [addMetricModal, setAddMetricModal] = useState(false);
-  //edit mode
+  // edit mode to allow deleting metrics
   const [editMode, setEditMode] = useState<Boolean>(false);
 
   useEffect(() => {
@@ -37,6 +37,7 @@ const Dashboard = () => {
       console.log('failed to fetch pithy');
     }
   };
+
 
   function saveMetricsAndReload() {
     setEditMode(false);
