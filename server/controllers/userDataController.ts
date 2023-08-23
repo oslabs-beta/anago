@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { readUserData } from './helperFuncs.ts';
-import { Metric, UserData } from '../models/userDataClass.ts';
+import { readUserData } from './helperFuncs.js';
+import { Metric, UserData } from '../models/userDataClass.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -134,6 +134,39 @@ userDataController.saveUserData = (
   }
 };
 
+userDataController.deleteMetric = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const metricDes = req.body;
+  try {
+    const updatedUserData = readUserData();
+
+    //filter the metric from the dashboard section
+    updatedUserData.dashboards[0].metrics =
+      updatedUserData.dashboards[0].metrics.filter(
+        (value) => value !== updatedUserData
+      );
+    // filter the metric from the metrics object
+    if (updatedUserData.metrics.hasOwnProperty(updatedUserData)) {
+      delete updatedUserData.metrics[updatedUserData];
+    }
+
+    fs.writeFileSync(
+      path.resolve(__dirname, '../models/userData.json'),
+      JSON.stringify(updatedUserData)
+    );
+    next();
+  } catch (err) {
+    return next({
+      log: `failed in userDataController.deleteMetric.`,
+      status: 500,
+      message: { err: `Error: ${err}}` },
+    });
+  }
+};
+
 userDataController.addMetric = (
   req: Request,
   res: Response,
@@ -141,15 +174,15 @@ userDataController.addMetric = (
 ) => {
   console.log('Received a new Metric to configure:', req.body);
   const newMetricInfo = req.body;
-  const updatedUserData = readUserData();
-  console.log('Read Data:', updatedUserData);
-  console.log('Dashboard Size: ', updatedUserData.dashboards[0].metrics.length);
+  const updatedUserData = res.locals.userData;
 
-  const newMetric = new Metric(newMetricInfo.name, newMetricInfo.type, {
-    duration: newMetricInfo.duration,
-    stepSize: newMetricInfo.stepSize,
-  });
-  updatedUserData.dashboards[0].metrics.push(newMetric);
+  const newMetric = new Metric(
+    newMetricInfo.name,
+    newMetricInfo.lookupType,
+    newMetricInfo.scopeType,
+    res.locals.queryOptions
+  );
+  updatedUserData.dashboards[0].metrics.push(newMetric.metricId);
   updatedUserData.metrics[newMetric.metricId] = newMetric;
 
   console.log('Updated Data:', updatedUserData);

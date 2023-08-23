@@ -1,8 +1,8 @@
-import App from '../App.tsx';
-import Dashboard from '../Components/Dashboard/Dashboard.tsx';
-import ClusterView from '../Routes/ClusterView.tsx';
-import Home from '../Routes/Home.tsx';
-import SetUp from '../Routes/SetUp.tsx';
+import App from '../App';
+import Dashboard from '../Components/Dashboard/Dashboard';
+import ClusterView from '../Routes/ClusterView';
+import Home from '../Routes/Home';
+import SetUp from '../Routes/SetUp';
 import { render, screen } from './test-utils';
 import * as loaders from '../context/loaders';
 import {
@@ -12,6 +12,8 @@ import {
   Route,
   createRoutesFromElements,
 } from 'react-router-dom';
+import React from 'react';
+import { vi, expect } from 'vitest';
 
 const mockRoutes = [
   {

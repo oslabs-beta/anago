@@ -1,3 +1,3 @@
-const grafApiController:object = {};
+const grafApiController: object = {};
 
 export default grafApiController;
