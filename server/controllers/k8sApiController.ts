@@ -7,7 +7,7 @@ import {
   Service,
   Namespace,
   Cluster,
-} from '../../types.js';
+} from '../../types';
 
 const kc = new k8s.KubeConfig();
 kc.loadFromDefault();
@@ -92,12 +92,14 @@ k8sController.getNamespaces = async (
     const namespaces = data.body.items.map(data => {
       const { name, creationTimestamp, labels, uid } = data.metadata;
       const { phase } = data.status;
+      const nodeName = '';
       const namespace: Namespace = {
         name,
         uid,
         creationTimestamp,
         labels,
         phase,
+        nodeName,
       };
       return namespace;
     });
@@ -118,7 +120,7 @@ k8sController.getServices = async (
     const data: any = await k8sApi.listServiceForAllNamespaces();
     const services: Service[] = data.body.items.map(data => {
       const { name, namespace, uid, creationTimestamp, labels } = data.metadata;
-      const { ports } = data.spec;
+      const { ports, clusterIP } = data.spec;
       const { loadBalancer } = data.status;
       const service: Service = {
         name,
@@ -128,6 +130,7 @@ k8sController.getServices = async (
         labels,
         ports,
         loadBalancer,
+        clusterIP,
       };
       return service;
     });
@@ -146,6 +149,7 @@ k8sController.getDeployments = async (
 ) => {
   try {
     const data: any = await k8sApi2.listDeploymentForAllNamespaces();
+
     const deployments: Deployment[] = data.body.items.map(data => {
       const { name, creationTimestamp, labels, namespace, uid } = data.metadata;
       const { replicas } = data.spec;

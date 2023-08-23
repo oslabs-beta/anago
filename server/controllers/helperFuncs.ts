@@ -3,9 +3,9 @@ import {
   yAxis,
   plotData,
   promResResultElements,
-} from '../../types.js';
-import newUserData from '../models/defaultUserData.js';
-import { NEW_USER, ACTIVE_DEPLOYMENT } from '../../user-config.js';
+} from '../../types.ts';
+import newUserData from '../models/defaultUserData.ts';
+import { NEW_USER, ACTIVE_DEPLOYMENT } from '../../user-config.ts';
 // File Read/Write
 import fs from 'fs';
 import path from 'path';
@@ -36,7 +36,7 @@ export function readUserData(): any {
       );
       return newUserData;
     }
-    console.log('Successfully read user data, returning now.');
+    //console.log('Successfully read user data, returning now.');
     return userData;
   } catch (err) {
     console.log(
@@ -72,36 +72,67 @@ export function cleanTime(date: Date, options: any) {
   }
 }
 
-export function namePlot(obj: any, type: LookupType) {
+export function namePlot(obj: any, type: LookupType, queryOptions: any) {
+  //console.log('INSIDE NAMING: ', obj.metric, type, queryOptions);
+
   switch (type) {
-    case LookupType.CPUIdleByCluster: {
-      return 'MVP-Cluster';
+    case LookupType.CustomEntry: {
+      // iterate over obj.metric and filter out matching values, return first non-matching
+      return 'obj.metric.id';
     }
-    case LookupType.MemoryIdleByCluster: {
-      return 'MVP-Cluster';
-    }
-    case LookupType.MemoryUsed: {
-      return obj.metric.pod;
-    }
-    case LookupType.CPUUsedByContainer: {
-      return obj.metric.node;
-    }
-    case LookupType.FreeDiskUsage: {
-      return obj.metric.pod;
-    }
-    case LookupType.ReadyNodesByCluster: {
-      return 'MVP-Cluster';
-    }
-    case LookupType.NodesReadinessFlapping: {
-      console.log('NAMING', type);
-      console.log(obj.metric);
-      return 'data';
+
+    case LookupType.CPUUsage:
+    case LookupType.MemoryUsed:
+    case LookupType.PodRestarts: {
+      if (!queryOptions.hasOwnProperty('target')) {
+        if (obj.metric.hasOwnProperty('name')) return obj.metric.name;
+        else return 'data';
+      }
+      if (queryOptions.target === 'container') {
+        if (obj.metric.hasOwnProperty('container')) return obj.metric.container;
+        return 'Sum of all Containers';
+      }
+      if (queryOptions.target === 'node') return obj.metric.node;
+      if (queryOptions.target === 'namespace') return obj.metric.namespace;
+      return obj.metric.id;
     }
     case LookupType.PodCount: {
-      return obj.metric.namespace;
+      if (!queryOptions.hasOwnProperty('target')) {
+        if (obj.metric.hasOwnProperty('id')) return obj.metric.id;
+        else return 'Pods in Cluster';
+      }
+      if (queryOptions.target === 'container')
+        return obj.metric.created_by_name;
+      if (queryOptions.target === 'node') return obj.metric.node;
+      if (queryOptions.target === 'namespace') return obj.metric.namespace;
+      return obj.metric.id;
     }
-    default:
+
+    case LookupType.FreeDiskinNode:
+    case LookupType.MemoryFreeInNode: {
+      if (!obj.metric.hasOwnProperty('instance')) return 'data';
+      return obj.metric.instance;
+    }
+    case LookupType.NodesReadinessFlapping: {
+      if (!obj.metric.hasOwnProperty('node')) return 'data';
+      return obj.metric.node;
+    }
+
+    case LookupType.CPUIdle: {
+      return 'Requested vCPUs Unused';
+    }
+    case LookupType.MemoryIdle: {
+      return 'Requested GiB RAM Unused';
+    }
+
+    case LookupType.ReadyNodesByCluster: {
+      return 'Nodes Ready for Pods';
+    }
+
+    case LookupType.DiskUsage:
+    default: {
       return 'data';
+    }
   }
 }
 
@@ -141,7 +172,7 @@ export function placeholderData(
     }
     // populate the y-axis object with the scraped metrics
     // yAxis.label = obj.metric.toString();
-    yAxis.label = namePlot(obj, userData.metrics[metricId].lookupType);
+    yAxis.label = namePlot(obj, userData.metrics[metricId].lookupType, {});
     obj.values.forEach((arr: any[]) => {
       yAxis.data.push(Number(arr[1]));
     });

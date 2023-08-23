@@ -1,5 +1,6 @@
 import { randomUUID } from 'crypto';
-import { LookupType } from '../../types.js';
+import { LookupType, ScopeType, GraphType } from '../../types.js';
+import { queryBuilder } from './queryBuilder.js';
 
 export class UserData {
   userId: string;
@@ -10,10 +11,16 @@ export class UserData {
   addMetric(
     metricName: string,
     lookupType: LookupType,
+    scopeType = ScopeType.Range,
     queryOptions?: any,
     dashboardNumber = 0,
   ): string {
-    const newMetric = new Metric(metricName, lookupType, queryOptions);
+    const newMetric = new Metric(
+      metricName,
+      lookupType,
+      scopeType,
+      queryOptions,
+    );
     this.dashboards[dashboardNumber].metrics.push(newMetric.metricId);
     this.metrics[newMetric.metricId] = newMetric;
     return newMetric.metricId;
@@ -71,44 +78,49 @@ export class Metric {
   metricId: string;
   metricName: string;
   lookupType: LookupType;
+  scopeType: ScopeType;
   graphType: GraphType;
   queryOptions: any;
-  searchQuery: string;
+  searchQuery: string | undefined;
   constructor(
     metricName: string,
     lookupType: LookupType,
+    scopeType = ScopeType.Range,
     queryOptions: any = {},
   ) {
     this.metricId = randomUUID();
     this.metricName = metricName;
-    this.lookupType = lookupType; // LookupType.MemoryUsed
-    this.graphType = graphForQuery(lookupType); // GraphyType.LineGraph
-    this.queryOptions = Object.assign(
-      { duration: 24 * 60 * 60, stepSize: 20 * 60 },
-      queryOptions,
+    this.lookupType = lookupType;
+    this.scopeType = scopeType;
+    this.queryOptions = queryOptions;
+    this.graphType = graphForQuery(
+      this.lookupType,
+      this.scopeType,
+      this.queryOptions,
     );
     this.searchQuery = queryBuilder(this.lookupType, this.queryOptions);
   }
 }
 
-enum GraphType {
-  PrintValue, //0
-  LineGraph, //1
-  PieChart, //2
-}
-
-function graphForQuery(lookupType: LookupType): GraphType {
+function graphForQuery(
+  lookupType: LookupType,
+  scopeType: ScopeType,
+  options: any,
+): GraphType {
   // Assigns a graph type to a query type
+  // Ranged lookups yield line graphs
+  if (scopeType == ScopeType.Range) return GraphType.LineGraph;
+  //
   switch (lookupType) {
-    case LookupType.CPUIdleByCluster:
+    case LookupType.CPUIdle:
       return GraphType.LineGraph;
-    case LookupType.MemoryIdleByCluster:
+    case LookupType.MemoryIdle:
       return GraphType.LineGraph;
     case LookupType.MemoryUsed:
       return GraphType.LineGraph;
-    case LookupType.CPUUsedByContainer:
+    case LookupType.CPUUsage:
       return GraphType.LineGraph;
-    case LookupType.FreeDiskUsage:
+    case LookupType.FreeDiskinNode:
       return GraphType.LineGraph;
     case LookupType.ReadyNodesByCluster:
       return GraphType.LineGraph;
@@ -139,97 +151,98 @@ function graphForQuery(lookupType: LookupType): GraphType {
   }
 }
 
-function queryBuilder(lookupType: LookupType, queryOptions: any): string {
-  // Creates a promQL search string for a given LookupType and set of options
-  console.log(lookupType, queryOptions);
-  switch (lookupType) {
-    case LookupType.CustomEntry: {
-      return queryOptions.customQuery;
-    }
+// OLD queryBuilder -- replaced by queryBuilder.ts
+// function queryBuilder(lookupType: LookupType, queryOptions: any): string {
+//   // Creates a promQL search string for a given LookupType and set of options
+//   console.log(lookupType, queryOptions);
+//   switch (lookupType) {
+//     case LookupType.CustomEntry: {
+//       return queryOptions.customQuery;
+//     }
 
-    case LookupType.CPUIdleByCluster: {
-      return 'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
-    }
+//     case LookupType.CPUIdle: {
+//       return 'sum((rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="cpu"})) * -1 >0)';
+//     }
 
-    case LookupType.MemoryIdleByCluster: {
-      return 'sum((container_memory_usage_bytes{container!="POD",container!=""} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
-    }
+//     case LookupType.MemoryIdle: {
+//       return 'sum((container_memory_usage_bytes{container!="POD",container!=""} - on (namespace,pod,container) avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource="memory"})) * -1 >0 ) / (1024*1024*1024)';
+//     }
 
-    case LookupType.MemoryUsed: {
-      return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';
-    }
+//     case LookupType.MemoryUsed: {
+//       return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';
+//     }
 
-    case LookupType.CPUUsedByContainer: {
-      return 'container_cpu_usage_seconds_total';
-    }
+//     case LookupType.CPUUsage: {
+//       return 'container_cpu_usage_seconds_total';
+//     }
 
-    case LookupType.FreeDiskUsage: {
-      return 'node_filesystem_avail_bytes/node_filesystem_size_bytes*100';
-    }
+//     case LookupType.FreeDiskinNode: {
+//       return 'node_filesystem_avail_bytes/node_filesystem_size_bytes*100';
+//     }
 
-    case LookupType.ReadyNodesByCluster: {
-      return 'sum(kube_node_status_condition{condition="Ready", status="true"}==1)';
-    }
+//     case LookupType.ReadyNodesByCluster: {
+//       return 'sum(kube_node_status_condition{condition="Ready", status="true"}==1)';
+//     }
 
-    case LookupType.NodesReadinessFlapping: {
-      return 'sum(changes(kube_node_status_condition{status="true",condition="Ready"}[15m])) by (node) > 2';
-    }
+//     case LookupType.NodesReadinessFlapping: {
+//       return 'sum(changes(kube_node_status_condition{status="true",condition="Ready"}[15m])) by (node) > 2';
+//     }
 
-    case LookupType.PodCount: {
-      return 'sum by (namespace) (kube_pod_info)';
-    }
+//     case LookupType.PodCount: {
+//       return 'sum by (namespace) (kube_pod_info)';
+//     }
 
-    case LookupType.HPAByDeployment: {
-      return 'kube_horizontalpodautoscaler_metadata_generation';
-    }
+//     case LookupType.HPAByDeployment: {
+//       return 'kube_horizontalpodautoscaler_metadata_generation';
+//     }
 
-    case LookupType.HPATargetStatus: {
-      return 'kube_horizontalpodautoscaler_status_target_metric{metric_target_type="utilization"}';
-    }
+//     case LookupType.HPATargetStatus: {
+//       return 'kube_horizontalpodautoscaler_status_target_metric{metric_target_type="utilization"}';
+//     }
 
-    case LookupType.HPATargetSpec: {
-      return 'kube_horizontalpodautoscaler_spec_target_metric';
-    }
+//     case LookupType.HPATargetSpec: {
+//       return 'kube_horizontalpodautoscaler_spec_target_metric';
+//     }
 
-    case LookupType.HPAMinReplicas: {
-      return 'kube_horizontalpodautoscaler_spec_min_replicas';
-    }
+//     case LookupType.HPAMinReplicas: {
+//       return 'kube_horizontalpodautoscaler_spec_min_replicas';
+//     }
 
-    case LookupType.HPAMaxReplicas: {
-      return 'kube_horizontalpodautoscaler_spec_max_replicas';
-    }
+//     case LookupType.HPAMaxReplicas: {
+//       return 'kube_horizontalpodautoscaler_spec_max_replicas';
+//     }
 
-    case LookupType.HPACurrentReplicas: {
-      return 'kube_horizontalpodautoscaler_status_current_replicas';
-    }
+//     case LookupType.HPACurrentReplicas: {
+//       return 'kube_horizontalpodautoscaler_status_current_replicas';
+//     }
 
-    case LookupType.HPADesiredReplicas: {
-      return 'kube_horizontalpodautoscaler_status_desired_replicas';
-    }
+//     case LookupType.HPADesiredReplicas: {
+//       return 'kube_horizontalpodautoscaler_status_desired_replicas';
+//     }
 
-    case LookupType.HPAUtilization: {
-      // TODO: return metric back to 90%
-      // return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 >= 90';
-      return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 <= 30';
-    }
+//     case LookupType.HPAUtilization: {
+//       // TODO: return metric back to 90%
+//       // return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 >= 90';
+//       return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 <= 30';
+//     }
 
-    case LookupType.HTTPRequests: {
-      // TODO: return metric back to deployment http requests (would need to set up ingress to access it on pithy)
-      // return 'increase(http_requests_total[1m])';
-      // return 'increase(prometheus_http_requests_total[1m])';
-      return 'increase(prometheus_http_requests_total[1m])';
-    }
+//     case LookupType.HTTPRequests: {
+//       // TODO: return metric back to deployment http requests (would need to set up ingress to access it on pithy)
+//       // return 'increase(http_requests_total[1m])';
+//       // return 'increase(prometheus_http_requests_total[1m])';
+//       return 'increase(prometheus_http_requests_total[1m])';
+//     }
 
-    case LookupType.PodCountByHPA: {
-      // TODO: make it not just for pithy
-      // return 'sum by (created_by_name) (kube_pod_info)';
-      // return 'sum by (created_by_name) (kube_pod_info{created_by_name=~"pithy-deployment.+"})';
-      // return 'count(kube_pod_info{created_by_name=~"pithy-deployment.+"})';
-      return 'sum by (created_by_name) (kube_pod_info{created_by_name="prometheus-prometheus-node-exporter"})';
-    }
+//     case LookupType.PodCountByHPA: {
+//       // TODO: make it not just for pithy
+//       // return 'sum by (created_by_name) (kube_pod_info)';
+//       // return 'sum by (created_by_name) (kube_pod_info{created_by_name=~"pithy-deployment.+"})';
+//       // return 'count(kube_pod_info{created_by_name=~"pithy-deployment.+"})';
+//       return 'sum by (created_by_name) (kube_pod_info{created_by_name="prometheus-prometheus-node-exporter"})';
+//     }
 
-    default: {
-      return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';
-    }
-  }
-}
+//     default: {
+//       return 'node_memory_Active_bytes/node_memory_MemTotal_bytes*100';
+//     }
+//   }
+// }

@@ -1,3 +1,5 @@
+import { RequestHandler } from 'express';
+//global error handler type
 export type ServerError = {
   log: string;
   status: number;
@@ -5,11 +7,13 @@ export type ServerError = {
 };
 
 export type MetricProps = {
-  graphType: number;
-  lookupType: number;
-  metricId: string;
-  metricName: string;
-  searchQuery: string;
+  graphType: GraphType;
+  lookupType: LookupType;
+  scopeType: ScopeType;
+  metricId?: string;
+  metricName?: string;
+  searchQuery?: string;
+  queryOptions?: any;
 };
 
 export interface UserData {
@@ -18,8 +22,10 @@ export interface UserData {
   clusterName: string;
   dashboards: {}[];
   metrics: {};
+  hiddenAlerts: [];
 }
 
+//represents properties on Node object passed from API request in K8s API controller to components on FE
 export interface Node {
   name: string;
   namespace: any;
@@ -30,6 +36,7 @@ export interface Node {
   status: {};
 }
 
+//represents properties on Pod object passed from API request in K8s API controller to components on FE
 export interface Pod {
   name: string;
   namespace: string;
@@ -45,14 +52,17 @@ export interface Pod {
   uid: string;
 }
 
+//represents properties on Namespace object passed from API request in K8s API controller to components on FE
 export interface Namespace {
   name: string;
   creationTimestamp: string;
   labels: [];
   uid: string;
   phase: string;
+  nodeName: string;
 }
 
+//represents properties on Service object passed from API request in K8s API controller to components on FE
 export interface Service {
   name: string;
   namespace: string;
@@ -61,8 +71,10 @@ export interface Service {
   uid: string;
   ports: [];
   loadBalancer: [];
+  clusterIP;
 }
 
+//represents properties on Deployment object passed from API request in K8s API controller to components on FE
 export interface Deployment {
   name: string;
   creationTimestamp: string;
@@ -73,6 +85,7 @@ export interface Deployment {
   status: {};
 }
 
+//represents properties on Cluster object passed from API request in K8s API controller to components on FE
 export interface Cluster {
   nodes: Node[];
   pods: Pod[];
@@ -81,16 +94,31 @@ export interface Cluster {
   deployments: Deployment[];
 }
 
+//filtering through alert data and cleaning it up for improved iteration
+export interface CleanAlert {
+  name: string;
+  description: string;
+  summary: string;
+  severity: string;
+  affectedPod?: string | undefined;
+  affectedNamespace?: string | undefined;
+  startTime: string;
+  lastUpdated: string;
+}
+
 export enum LookupType {
   CustomEntry, //0
-  CPUIdleByCluster, //1
-  MemoryIdleByCluster,
-  MemoryUsed,
-  CPUUsedByContainer,
-  FreeDiskUsage,
-  ReadyNodesByCluster,
-  NodesReadinessFlapping,
-  PodCount,
+  CPUUsage, // 1 - Current CPU Usage
+  CPUIdle, // 2 - Rylie help fill this out
+  MemoryUsed, // 3
+  MemoryFreeInNode, // 4 - Needs work
+  MemoryIdle, // 5 - Rylie help!
+  DiskUsage, // 6
+  FreeDiskinNode, // 7
+  ReadyNodesByCluster, // 8
+  NodesReadinessFlapping, // 9
+  PodRestarts, //10
+  PodCount, // 11
   HPAByDeployment, //9
   HPATargetStatus, //10
   HPATargetSpec, //11
@@ -103,26 +131,43 @@ export enum LookupType {
   PodCountByHPA, //18
 }
 
+export enum ScopeType {
+  Range,
+  Instant,
+}
+
+export enum GraphType {
+  PrintValue, //0 Print Value or Bar Chart
+  LineGraph, //1
+  PieChart, //2
+}
+
 export const lookupName = (type: LookupType): string => {
   switch (type) {
     case LookupType.CustomEntry:
       return 'Custom PromQL Entry';
-    case LookupType.CPUIdleByCluster:
-      return 'CPU Idle by Cluster';
-    case LookupType.MemoryIdleByCluster:
-      return 'Memory Idle by Cluster';
+    case LookupType.CPUUsage:
+      return 'CPU Usage';
+    case LookupType.CPUIdle:
+      return 'CPU Underutilization';
     case LookupType.MemoryUsed:
-      return '% Memory Used by Node';
-    case LookupType.CPUUsedByContainer:
-      return 'CPU Usage by Container';
-    case LookupType.FreeDiskUsage:
-      return 'Disk Space by Container';
+      return 'Memory Usage by Container';
+    case LookupType.MemoryFreeInNode:
+      return 'Memory Available in Nodes (%)';
+    case LookupType.MemoryIdle:
+      return 'Memory Underutilization';
+    case LookupType.DiskUsage:
+      return 'Disk Usage';
+    case LookupType.FreeDiskinNode:
+      return 'Disk Space Available on Nodes (%)';
     case LookupType.ReadyNodesByCluster:
       return 'Ready Nodes by Cluster';
     case LookupType.NodesReadinessFlapping:
       return 'Node Readiness Flapping';
+    case LookupType.PodRestarts:
+      return 'Pod Restart Rates';
     case LookupType.PodCount:
-      return 'Pod Count by Namespace';
+      return 'Pod Counts';
     default:
       return 'Lookup Type Not Found';
   }
@@ -133,6 +178,7 @@ export const lookupName = (type: LookupType): string => {
 export type yAxis = {
   label: string;
   data: number[];
+  pointStyle?: boolean;
 };
 // object to send to front end to plot on a graph
 export type plotData = {

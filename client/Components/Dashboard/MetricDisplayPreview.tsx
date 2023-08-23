@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { UserData } from '../../types';
+import { useEffect, useState } from 'react';
 import { Modal } from 'react-responsive-modal';
 import {
   Chart as ChartJS,
@@ -25,35 +24,31 @@ ChartJS.register(
   Legend,
 );
 
-const MetricDisplay = ({ metricId }) => {
-  const userData = useRouteLoaderData('home') as UserData;
-
+const MetricDisplay = ({ lookupType, metricData }) => {
   //state to handle modal and handling fetched data router
   const [open, setOpen]: any = useState(false);
-  const [metricData, setMetricData]: any = useState({});
 
   // display options for metrics
-  const options = {
+  const options: any = {
     plugins: {
       legend: {
         display: false,
       },
     },
+    interaction: {
+      intersect: false,
+      mode: 'nearest',
+    },
   };
 
-  //fetching data from Prometheus
-  useEffect(() => {
-    //console.log('Current user in metric:', userData);
-    fetch(`/api/data/metrics/${metricId}`, {
-      method: 'GET',
-    })
-      .then(data => data.json())
-      .then(data => {
-        //console.log('fetched data', data);
-        setMetricData(data);
-      })
-      .catch(err => console.log(err));
-  }, []);
+  // Most axes should always start at 0, but some may not -- uncomment next line and add items that may not need 0-basis for plotting
+  // if (![].includes(lookupType))
+  Object.assign(options, { scales: { y: { beginAtZero: true } } });
+  // Some axes should go up to ~100
+  if ([4, 7].includes(lookupType))
+    Object.assign(options, {
+      scales: { y: { suggestedMax: 100, suggestedMin: 0 } },
+    });
 
   //modal handler functions
   const openModal = () => setOpen(true);
@@ -61,17 +56,22 @@ const MetricDisplay = ({ metricId }) => {
 
   return (
     <div className='metric-container'>
-      <h4 className='metric-title'>{userData.metrics[metricId].metricName}</h4>
-      {metricData.hasOwnProperty('labels') && (
-        <Line data={metricData} options={options} onClick={openModal} />
-      )}
+      <Line data={metricData} options={options} onClick={openModal} />
       <div className='modal'>
         {/* {metricId && <button onClick={openModal}>See more</button>} */}
         <Modal open={open} onClose={closeModal}>
-          <h4 className='metric-title'>
-            {userData.metrics[metricId].metricName}
-          </h4>
-          {metricData.hasOwnProperty('labels') && <Line data={metricData} />}
+          <h4 className='metric-title'>Query Preview</h4>
+          <Line
+            data={metricData}
+            options={{
+              ...options,
+              plugins: {
+                legend: {
+                  display: true,
+                },
+              },
+            }}
+          />
         </Modal>
       </div>
     </div>

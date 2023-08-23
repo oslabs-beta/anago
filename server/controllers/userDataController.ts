@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { readUserData } from './helperFuncs.js';
-import { Metric } from '../models/userDataClass.js';
+import { Metric, UserData } from '../models/userDataClass.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 const userDataController: any = {};
 
 userDataController.sendUserData = (
@@ -13,17 +12,18 @@ userDataController.sendUserData = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log('in sendUserData');
   try {
     const userData = readUserData();
-  if (!userData) {
-    next({
-      log: `Reading User Data failed in userDataController.sendUserData.`,
-      status: 500,
-      message: { err: 'Error retreiving user data.' },
-    });
-  }
+    if (!userData) {
+      next({
+        log: `Reading User Data failed in userDataController.sendUserData.`,
+        status: 500,
+        message: { err: 'Error retreiving user data.' },
+      });
+    }
     res.locals.userData = userData;
-    next();
+    return next();
   } catch (err) {
     next({
       log: `error in userDataController.sendUserData: ${err}`,
@@ -33,13 +33,49 @@ userDataController.sendUserData = (
   }
 };
 
-userDataController.saveHiddenAlert = (
+userDataController.getHiddenAlerts = (
   _req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    // add hidden alert!
+    const userData = readUserData();
+    if (!userData) {
+      next({
+        log: `Reading User Data failed in userDataController.getHiddenAlerts.`,
+        status: 500,
+        message: { err: 'Error retreiving user data.' },
+      });
+    }
+    res.locals.hiddenAlerts = userData.hiddenAlerts;
+    next();
+  } catch (err) {
+    next({
+      log: `error in userDataController.getHiddenAlerts: ${err}`,
+      status: 500,
+      message: { err: 'Error retreiving hidden alerts' },
+    });
+  }
+};
+
+userDataController.saveHiddenAlert = (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+) => {
+  try {
+    // grab just the string from the {hidden: string} param
+    const newHiddenAlert = req.body.hidden;
+    //grab the current userData
+    const updatedUserData = readUserData();
+    // if the current user does not have this saved error, add it
+    if (!updatedUserData.hiddenAlerts.includes(newHiddenAlert)) {
+      updatedUserData.hiddenAlerts.push(newHiddenAlert);
+    }
+    fs.writeFileSync(
+      path.resolve(__dirname, '../models/userData.json'),
+      JSON.stringify(updatedUserData)
+    );
     next();
   } catch (err) {
     next({
@@ -51,12 +87,22 @@ userDataController.saveHiddenAlert = (
 };
 
 userDataController.deleteHiddenAlert = (
-  _req: Request,
-  res: Response,
+  req: Request,
+  _res: Response,
   next: NextFunction
 ) => {
   try {
-    // delete hidden alert!
+    const unhideAlert = req.body.hidden;
+    const updatedUserData = readUserData();
+    //filter the current hiddenAlerts array
+    updatedUserData.hiddenAlerts = updatedUserData.hiddenAlerts.filter(
+      (value) => value !== unhideAlert
+    );
+
+    fs.writeFileSync(
+      path.resolve(__dirname, '../models/userData.json'),
+      JSON.stringify(updatedUserData)
+    );
     next();
   } catch (err) {
     next({
@@ -72,7 +118,6 @@ userDataController.saveUserData = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('Saving updated user data.');
   const updatedUserData = req.body;
   try {
     fs.writeFileSync(
@@ -89,6 +134,39 @@ userDataController.saveUserData = (
   }
 };
 
+userDataController.deleteMetric = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const metricDes = req.body;
+  try {
+    const updatedUserData = readUserData();
+
+    //filter the metric from the dashboard section
+    updatedUserData.dashboards[0].metrics =
+      updatedUserData.dashboards[0].metrics.filter(
+        (value) => value !== updatedUserData
+      );
+    // filter the metric from the metrics object
+    if (updatedUserData.metrics.hasOwnProperty(updatedUserData)) {
+      delete updatedUserData.metrics[updatedUserData];
+    }
+
+    fs.writeFileSync(
+      path.resolve(__dirname, '../models/userData.json'),
+      JSON.stringify(updatedUserData)
+    );
+    next();
+  } catch (err) {
+    return next({
+      log: `failed in userDataController.deleteMetric.`,
+      status: 500,
+      message: { err: `Error: ${err}}` },
+    });
+  }
+};
+
 userDataController.addMetric = (
   req: Request,
   res: Response,
@@ -96,14 +174,14 @@ userDataController.addMetric = (
 ) => {
   console.log('Received a new Metric to configure:', req.body);
   const newMetricInfo = req.body;
-  const updatedUserData = readUserData();
-  console.log('Read Data:', updatedUserData);
-  console.log('Dashboard Size: ', updatedUserData.dashboards[0].metrics.length);
+  const updatedUserData = res.locals.userData;
 
-  const newMetric = new Metric(newMetricInfo.name, newMetricInfo.type, {
-    duration: newMetricInfo.duration,
-    stepSize: newMetricInfo.stepSize,
-  });
+  const newMetric = new Metric(
+    newMetricInfo.name,
+    newMetricInfo.lookupType,
+    newMetricInfo.scopeType,
+    res.locals.queryOptions
+  );
   updatedUserData.dashboards[0].metrics.push(newMetric);
   updatedUserData.metrics[newMetric.metricId] = newMetric;
 
