@@ -83,7 +83,13 @@ const HPADisplay = () => {
 
   return (
     <div>
-      {fetchCount === 7 && <TableDisplay tableData={tableData} logId={log} />}
+      {fetchCount === 7 && (
+        <TableDisplay
+          tableData={tableData}
+          logId={log}
+          graphIds={doubleLineGraph}
+        />
+      )}
       <DoubleLineGraph metricIds={doubleLineGraph} />
       {/* reccomendations */}
     </div>

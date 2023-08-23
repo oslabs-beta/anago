@@ -55,7 +55,7 @@ function cleanTime(date: Date, options: any) {
 }
 */
 
-const TableDisplay = ({ tableData, logId }) => {
+const TableDisplay = ({ tableData, logId, graphIds }) => {
   // const [tableData, setTableData]: any = useState(new Map());
   const [fetchCount, setFetchCount] = useState(0);
   const [filteredTableData, setfilteredTableData]: any[] = useState([]);
