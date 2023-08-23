@@ -25,7 +25,7 @@ const promURLAlerts = promURL + 'alerts';
 const promApiController: any = {
   metricQueryLookup: (req: Request, res: Response, next: NextFunction) => {
     // When FE fetches a particular metricId, this middleware adds the metric basics (lookupType, searchQuery, queryOptions) onto res.locals for access in other middleware.
-
+    console.log('Using metricId to look up', req.params.id);
     // Fetch userData
     const userData = readUserData();
     if (!userData) {
@@ -38,6 +38,14 @@ const promApiController: any = {
     res.locals.userData = userData;
 
     const metricId = req.params.id;
+    if (userData.metrics === undefined) {
+      console.log(
+        'About to crash when trying to set Res.Locals with metricId',
+        metricId,
+        'from metrics',
+        userData.metrics[metricId]
+      );
+    }
     res.locals.lookupType = userData.metrics[metricId].lookupType;
     res.locals.scopeType = userData.metrics[metricId].scopeType;
     res.locals.searchQuery = userData.metrics[metricId].searchQuery;
