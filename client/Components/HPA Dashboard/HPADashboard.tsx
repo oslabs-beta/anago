@@ -45,38 +45,32 @@ const HPADisplay = () => {
       ? table.push(id)
       : doubleLineGraph.push(id);
   });
-  console.log('table', table.length);
-  console.log('doubleLineGraph', doubleLineGraph);
-  console.log('log', log);
 
   // fetch hpa table specific metrics to display
   const getTableData = async () => {
     // perserve the order of the metric results after fetching
-    console.log('entered getTableData in HPADashboard');
     const tableOrder = tableData;
     let count = 0;
-    try {
-      table.forEach(async id => {
-        tableOrder.set(id, null);
+    table.forEach(async id => {
+      tableOrder.set(id, null);
 
-        fetch(`/api/data/metrics/${id}`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
+      fetch(`/api/data/metrics/${id}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      })
+        .then((data: Response): any => {
+          return data.json();
         })
-          .then((data: Response): any => {
-            return data.json();
-          })
-          .then(data => {
-            tableOrder.set(id, data);
-            setTableData(tableOrder);
-            count += 1;
-            setFetchCount(count);
-          })
-          .catch(err => console.log('err', err));
-      });
-    } catch (err) {
-      console.log(err);
-    }
+        .then(data => {
+          tableOrder.set(id, data);
+          setTableData(tableOrder);
+          count += 1;
+          setFetchCount(count);
+        })
+        .catch(err =>
+          console.log('Error fetching metrics from Prometheus:', err),
+        );
+    });
   };
 
   // fetch hpa table data on mount
@@ -111,7 +105,6 @@ const HPADisplay = () => {
         />
       )}
       <DoubleLineGraph metricIds={doubleLineGraph} />
-      {/* reccomendations */}
     </div>
   );
 };
