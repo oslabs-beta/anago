@@ -1,8 +1,11 @@
 import Namespaces from './Namespaces';
 import { useRouteLoaderData } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { StoreContext } from '../../context/stateStore';
+import MetricDisplayPreview from '../Dashboard/MetricDisplayPreview';
+import { LookupType } from '../../../types';
+
 const Nodes = ({
   name,
   creationTimestamp,
@@ -15,15 +18,73 @@ const Nodes = ({
   const clusterData: any = useRouteLoaderData('cluster');
   const namespaces: any = clusterData.namespaces;
   const [open, setOpen]: any = useState(false);
+  const [metricData1, setMetricData1]: any = useState({});
+  const [metricData2, setMetricData2]: any = useState({});
   const { selectedStates, displayedAlerts }: any = useContext(StoreContext);
 
   //modal handler functions
-  const openModal = () => setOpen(true);
+  const openModal = () => {
+    const nodeIp: string = name.slice(3).split('.')[0].replaceAll('-', '.');
+    const nodeMetric1 = {
+      name: '',
+      lookupType: 4,
+      duration: 259200,
+      stepSize: 3600,
+      scopeType: 0,
+      context: 'Node',
+      contextChoice: nodeIp,
+    };
+    const nodeMetric2 = {
+      name: '',
+      lookupType: 7,
+      duration: 259200,
+      stepSize: 3600,
+      scopeType: 0,
+      context: 'Node',
+      contextChoice: nodeIp,
+    };
+    try {
+      fetch('/api/data/metric', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(nodeMetric1),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          // Should verify query validity as part of this process
+          console.log('1', res.metricData);
+          setMetricData1(res.metricData);
+        });
+    } catch (err) {
+      console.log('Error receiving metric preview: ', err);
+    }
+    try {
+      fetch('/api/data/metric', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(nodeMetric2),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          // Should verify query validity as part of this process
+          console.log('2', res.metricData);
+          setMetricData2(res.metricData);
+        });
+    } catch (err) {
+      console.log('Error receiving metric preview: ', err);
+    }
+
+    setOpen(true);
+  };
   const closeModal = () => setOpen(false);
 
   //determines how many nodes have been selected in dropdown by mapping over selected states stateful array
   const numNodes = Object.keys(selectedStates).filter(
-    item => item.charAt(0) === 'i' && selectedStates[item] === true,
+    (item) => item.charAt(0) === 'i' && selectedStates[item] === true
   ).length;
 
   //if no nodes are selected (default, all nodes will display) or the node's name is selected, display the node and its child components. else, display null.
@@ -72,7 +133,7 @@ const Nodes = ({
                   <h3>Addresses: </h3>
                   <tr className='column-names'>
                     {clusterData &&
-                      status.addresses.map(address => {
+                      status.addresses.map((address) => {
                         return (
                           <th key={address.type + address.id}>
                             {address.type}
@@ -82,7 +143,7 @@ const Nodes = ({
                   </tr>
                   <tr className='table-row'>
                     {clusterData &&
-                      status.addresses.map(address => {
+                      status.addresses.map((address) => {
                         return (
                           <td key={address.address + address.id}>
                             {address.address}
@@ -118,14 +179,14 @@ const Nodes = ({
                   <h3>Conditions: </h3>
                   <tr className='column-names'>
                     {clusterData &&
-                      status.conditions.map(condition => {
+                      status.conditions.map((condition) => {
                         return <th key={condition.type}>{condition.type}</th>;
                       })}
                   </tr>
 
                   <tr className='table-row'>
                     {clusterData &&
-                      status.conditions.map(condition => {
+                      status.conditions.map((condition) => {
                         return (
                           <td key={condition.message}>{condition.message}</td>
                         );
@@ -133,10 +194,11 @@ const Nodes = ({
                   </tr>
                   <tr className='table-row'>
                     {clusterData &&
-                      status.conditions.map(condition => {
+                      status.conditions.map((condition) => {
                         return (
                           <td
-                            key={condition.type + condition.lastHeartbeatTime}>
+                            key={condition.type + condition.lastHeartbeatTime}
+                          >
                             {'Last Heartbeat Time: ' +
                               condition.lastHeartbeatTime}
                           </td>
@@ -145,10 +207,11 @@ const Nodes = ({
                   </tr>
                   <tr className='table-row'>
                     {clusterData &&
-                      status.conditions.map(condition => {
+                      status.conditions.map((condition) => {
                         return (
                           <td
-                            key={condition.type + condition.lastTransitionTime}>
+                            key={condition.type + condition.lastTransitionTime}
+                          >
                             {'Last Transition Time: ' +
                               condition.lastTransitionTime}
                           </td>
@@ -157,12 +220,36 @@ const Nodes = ({
                   </tr>
                 </table>
               </div>
+              <div className='cluster-graphs'>
+                <div className='new-metric-preview-image'>
+                  {metricData1.hasOwnProperty('labels') && (
+                    <div>
+                      <h3>Available Memory in Node</h3>
+                      <MetricDisplayPreview
+                        metricData={metricData1}
+                        lookupType={LookupType.MemoryFreeInNode}
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className='new-metric-preview-image'>
+                  {metricData2.hasOwnProperty('labels') && (
+                    <div>
+                      <h3>Available Disk in Node</h3>
+                      <MetricDisplayPreview
+                        metricData={metricData2}
+                        lookupType={LookupType.FreeDiskinNode}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </Modal>
         </div>
         <div className='namespace-container'>
           {clusterData &&
-            namespaces.map(namespace => (
+            namespaces.map((namespace) => (
               <Namespaces
                 key={namespace.uid}
                 id={namespace.uid}

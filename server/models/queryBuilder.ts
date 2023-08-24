@@ -15,7 +15,6 @@ import { LookupType, ScopeType, GraphType } from '../../types.js';
 // Metrics Generate .graphType by ScopeType (future: options?)
 // Metrics Generate .searchQuery using queryOptions -> queryBuilder
 
-
 export function optionsBuilder(obj: any): any {
   const options: any = {};
   if (obj.lookupType === LookupType.CustomEntry)
@@ -145,10 +144,6 @@ export function queryBuilder(
       return str;
     }
 
-    case LookupType.MemoryFreeInNode: {
-      return 'node_memory_MemAvailable_bytes/node_memory_MemTotal_bytes*100';
-    }
-
     case LookupType.MemoryIdle: {
       // Tracks difference between requested ram resources and actual ram usage
       let str =
@@ -176,7 +171,25 @@ export function queryBuilder(
       return undefined;
     }
 
+    case LookupType.MemoryFreeInNode: {
+      if (queryOptions.hasOwnProperty('contextChoice')) {
+        return (
+          "node_memory_MemAvailable_bytes{instance='" +
+          queryOptions.contextChoice +
+          ":9100'}/node_memory_MemTotal_bytes*100"
+        );
+      }
+      return 'node_memory_MemAvailable_bytes/node_memory_MemTotal_bytes*100';
+    }
+
     case LookupType.FreeDiskinNode: {
+      if (queryOptions.hasOwnProperty('contextChoice')) {
+        return (
+          "node_filesystem_avail_bytes/node_filesystem_size_bytes{fstype='xfs',instance='" +
+          queryOptions.contextChoice +
+          ":9100'}*100"
+        );
+      }
       return "node_filesystem_avail_bytes/node_filesystem_size_bytes{fstype='xfs'}*100";
     }
 

@@ -371,6 +371,13 @@ nav {
   flex-flow: row wrap;
   justify-content: flex-start;
   word-wrap: break-word;
+  .cluster-graphs {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
 }
 
 .modal-content h2 {
