@@ -64,6 +64,7 @@ const DoubleLineGraph = ({ metricIds }) => {
       ].datasets.push({
         label: obj.label,
         data: obj.data,
+        pointStyle: false,
         borderColor: 'rgb(53, 162, 235)',
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
         yAxisID: 'y1',
@@ -79,6 +80,7 @@ const DoubleLineGraph = ({ metricIds }) => {
         cacheByHPA[obj.label.slice(9, obj.label.indexOf(`-`))].datasets.push({
           label: obj.label,
           data: obj.data,
+          pointStyle: false,
           borderColor: `rgb(${r}, 99, 132)`,
           backgroundColor: `rgba(${r}, 99, 132, 0.5)`,
           yAxisID: 'y',

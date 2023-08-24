@@ -1,2 +1,7 @@
 /node_modules
 /pithy/node_modules
+
+/client/assets/images/.DS_Store
+.DS_Store
+client/assets/.DS_Store
+

@@ -30,6 +30,10 @@ const IndivDLG = ({ graphData, graphTitle }) => {
   // customize Chatjs graph options
   const options: any = {
     responsive: true,
+    // interaction: {
+    //   mode: 'index' as const,
+    //   intersect: false,
+    // },
     interaction: {
       mode: 'nearest',
       intersect: false,

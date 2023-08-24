@@ -12,7 +12,6 @@ const ClusterView = () => {
   const clusterData: any = useRouteLoaderData('cluster');
   const { setClusterData }: any = useContext(StoreContext);
   setClusterData(clusterData);
-  console.log(clusterData);
   const nodes: Node[] = clusterData.nodes;
 
   return (
@@ -31,7 +30,7 @@ const ClusterView = () => {
               providerID={node.providerID}
               status={node.status}
               nodeName={undefined}
-              key={node.uid}
+              key={node.uid + node.name}
             />
           ))}
       </div>

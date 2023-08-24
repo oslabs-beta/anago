@@ -7,7 +7,6 @@ import {
 import { UserData } from '../../types';
 import React, { useContext, useEffect } from 'react';
 import { StoreContext } from '../context/stateStore';
-import AlertBar from '../Components/AlertBar';
 
 export default function Home() {
   const userData = useRouteLoaderData('home') as UserData;
@@ -16,14 +15,13 @@ export default function Home() {
     useContext(StoreContext);
 
   const dashboards = userData.dashboards;
-
   //set default dashboard and route to that dashboard
   useEffect(() => {
     setHasFetchedUserData(true);
     if (window.location.pathname === '/') return navigate('0');
   }, []);
 
-  // // Fetch Cluster Data
+  // Fetch Cluster Data
   useEffect(() => {
     fetch('api/k8s/cluster')
       .then(data => data.json())
@@ -58,9 +56,6 @@ export default function Home() {
           <NavLink to={'/setup'} className='nav-btn'>
             Getting Started
           </NavLink>
-          {/* <NavLink to={'/login'} className='nav-btn'>
-            Log Out
-          </NavLink> */}
         </nav>
       </header>
 

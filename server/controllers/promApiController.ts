@@ -18,6 +18,7 @@ import { optionsBuilder, queryBuilder } from '../models/queryBuilder.js';
 const promApiController: any = {
   metricQueryLookup: (req: Request, res: Response, next: NextFunction) => {
     // When FE fetches a particular metricId, this middleware adds the metric basics (lookupType, searchQuery, queryOptions) onto res.locals for access in other middleware.
+
     // Fetch userData
     const userData = readUserData();
     if (!userData) {
@@ -69,8 +70,9 @@ const promApiController: any = {
     res.locals.queryOptions = optionsBuilder(req.body);
     res.locals.searchQuery = queryBuilder(
       req.body.lookupType,
-      res.locals.queryOptions,
+      res.locals.queryOptions
     );
+    console.log(res.locals.searchQuery);
     next();
   },
 
@@ -116,7 +118,7 @@ const promApiController: any = {
       const placeholderFetch = placeholderData(
         metricId,
         res.locals.userData,
-        res.locals.queryOptions,
+        res.locals.queryOptions
       );
       res.locals.promMetrics = placeholderFetch;
       return next();
@@ -124,6 +126,7 @@ const promApiController: any = {
 
     try {
       // query Prometheus
+      console.log(res.locals.promQuery);
       const response = await fetch(res.locals.promQuery);
       const data = await response.json();
       // if the prometheus query response indicates a failure, then send an error message
@@ -136,7 +139,6 @@ const promApiController: any = {
       }
       // if no metrics meet the query requirements, then no metrics data will be returned from prometheus
       else if (data.data.result.length === 0) {
-        // res.locals.promMetrics = 'No metrics meet the scope of the query';
         res.locals.promMetrics = ['No metrics meet the scope of the query'];
         return next();
       }
@@ -174,7 +176,7 @@ const promApiController: any = {
           yAxis.label = namePlot(
             obj,
             res.locals.lookupType,
-            res.locals.queryOptions,
+            res.locals.queryOptions
           );
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));
