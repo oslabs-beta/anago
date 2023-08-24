@@ -18,7 +18,7 @@ k8sRouter.get(
   k8sController.getNamespaces,
   async (_, res: Response) => {
     return res.status(200).json(res.locals.namespaces);
-  }
+  },
 );
 
 k8sRouter.get(
@@ -26,7 +26,7 @@ k8sRouter.get(
   k8sController.getServices,
   async (_, res: Response) => {
     return res.status(200).json(res.locals.services);
-  }
+  },
 );
 
 k8sRouter.get(
@@ -34,7 +34,7 @@ k8sRouter.get(
   k8sController.getDeployments,
   async (_, res: Response) => {
     return res.status(200).json(res.locals.deployments);
-  }
+  },
 );
 
 k8sRouter.get(
@@ -47,7 +47,7 @@ k8sRouter.get(
   k8sController.getCluster,
   async (_, res: Response) => {
     return res.status(200).json(res.locals.cluster);
-  }
+  },
 );
 
 //k8sRouter.get('/portforward', k8sController.portForward);

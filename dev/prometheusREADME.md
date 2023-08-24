@@ -2,53 +2,41 @@
 
 ### Contents:
 
-1. Introduction
-2. Configuration
-3. PromQL
-4. Metric Types and Query Examples
-5. Alerting
-6. AWS Quick Start
+1. [Introduction](#introduction)
+2. [Configuration](#configuring-prometheus)
+3. [PromQL](#promql-prometheus-querying-language)
+4. [Metric Types and Query Examples](#prometheus-metric-types-and-query-examples)
+5. [Alerting]($prometheus-alerting)
 
 ## Introduction
 
 Prometheus is a powerful open-source systems monitoring and alerting toolkit
 originally built at Soundcloud in 2012. It is widely used for collecting and
-storing metrics as _time series data_ that provide insight as to the
+storing metrics as _time series data_ that provide insight into the
 functionality and behavior of your application.
 
 Prometheus's main features include:
 
-- a multi-dimension data model with time-series data identified by metric name
+- Multi-dimension data model with time-series data identified by metric name
   and key/value pairs
-- PromQL, a flexible query language to leverage this dimensionality
-- autonomous single server nodes (no reliance on distributed storage)
-- collection of time series metrics implementing a pull model over HTTP
-- pushing time series is supported via an intermediary gateway
-- targets are discovered via service discovery or static configuration
-- multiple modes of graphing and dashboarding support
+- PromQL, a flexible query language to leverage this dimensional data model
+- Autonomous single server nodes (no reliance on distributed storage)
+- Time series metric data collected via pull model over HTTP 
+- Scraping target endpoints are found via service discovery or static configuration
 
-Prometheus components:
+Relevant Prometheus components:
 
-- the main Prometheus server that scrapes and stores time-series data
-- client libraries for instrumenting application code
-- a push gateway for supporting short-lived jobs
-- special-purpose exporters for services like HAProxy, StatsD, Graphite, etc.
-- an alertmanager to handle alerts
-- various support tools
+- Main Prometheus server: scrapes and stores time-series data
+- Client libraries: supports application code
+- Prometheus Alertmanager: configuration and handling of alerts
 
 ### What is the pull model?
 
 Prometheus uses a _pull model_ to collect metrics. This means it scrapes HTTP
 endpoints where metrics are exposed either natively by the component being
 monitored, or through the use of community-built Prometheus exporters. In
-Kubernetes, the service exposes the endpoints for us, making Prometheus and
-Kubernetes easily integrated. Prometheus expects the exposed metrics at the HTTP
-endpoint in either a simple text-based format (more commonly used and widely
-supported) or a more efficient and robust protocol buffer format. One big
-advantage of the text format is that it is human-readable, which means you can
-open it in your browser or use a tool like curl to retrieve the current set of
-exposed metrics. Examples of this are seen below under the 'Prometheus Metric
-Types and Query Examples' heading.
+Kubernetes, the service exposes the endpoints for us, which allows for easy integration between the technologies. Prometheus expects the exposed metrics at the HTTP
+endpoint in either a simple text-based, human readable format (more commonly used and widely supported) or a more efficient and robust protocol buffer format. Examples of the text-based format are seen below under the 'Prometheus Metric Types and Query Examples' heading.
 
 ## Configuring Prometheus
 
@@ -72,15 +60,14 @@ statements and have Prometheus load the file in the rule_files field in the
 Prometheus configuration.
 
 **Recording rules** allow you to precompute frequently needed or computationally
-expensive expressions and save their result as a new set of time series.
+expensive expressions and cache their result as a new set of time series data.
 Querying the precomputed result will then often be much faster than executing
 the original expression every time it is needed. This is especially useful for
-dashboards, which need to query the same expression repeatedly every time they
-refresh. When configured, the names of recording rules must be valid metric
+dashboards, which query the same expression repeatedly every time they refresh. When configured, the names of recording rules must be valid metric
 names.
 
-**Alerting rules** allow you to define conditions that trigger an alert based on
-Prometheus expression language expressions and to send notifications about
+**Alerting rules** allow you to define conditions that trigger an alert (based on
+Prometheus language expressions) and to send notifications about
 currently firing alerts to an external service. If an alert expression triggers
 an alert for multiple vector elements at a given point in time, the alert will
 be active for each of those elements' label sets. Read more on alerting under
@@ -96,12 +83,12 @@ expressions, or subqueries, produce values that serve as arguments or operands
 for the larger expressions. PromQL is also useful for grouping and sorting
 metrics by type or label.
 
-PromQL data types: (MORE ON THIS?) -Floats/Scalars: Literals that can be
+PromQL data types: 
+- Floats/Scalars: Literals that can be
 integers or strings, and can be used with regex. For example, you can return all
-values in the 200s or 400s by writing code=~"2._\4._" -Range vectors: select
-from a range within the instant that instant vectors select. -Instant vectors:
-queries simply by identifying the metric name. They can be filtered by referring
-to their labels within curly brackets.
+values in the 200s or 400s by writing code=~"2._\4._" 
+- Range vectors: select from a range within the instant that instant vectors select. 
+- Instant vectors: simple queries made by identifying the metric name. They can be filtered by referring to labels within curly brackets.
 
 Querying in Prometheus is made more sophisticated by PromQL's feature flags,
 functions, and operators for more specific and relevant data. Each query returns
@@ -419,21 +406,7 @@ critical alert.
 
 https://www.groundcover.com/blog/prometheus-alert-manager
 
-## Quick Start with AWS EKS:
 
-(These steps assume you have an existing VPC)
-
-A Kubernetes namespace for Prometheus. Node-exporter DaemonSet with a pod to
-monitor Amazon EKS nodes. Pushgateway deployment with a pod to push metrics from
-short-lived jobs to intermediary jobs that Prometheus can scrape.
-Kube-state-metrics DaemonSet with a pod to monitor the Kubernetes API server.
-Server StatefulSet with a pod and attached persistent volume (PV) to scrape and
-store time-series data. The pod uses persistent volume claims (PVCs) to request
-PV resources. Alertmanager StatefulSet with a pod and attached PV for
-deduplication, grouping, and routing of alerts. Amazon Elastic Block Storage
-(Amazon EBS) General Purpose SSD (gp2) storage volume.
-
-![](2023-08-01-09-02-36.png)
 
 References: https://andykuszyk.github.io/2020-07-24-prometheus-histograms.html
 https://www.timescale.com/blog/four-types-prometheus-metrics-to-collect/#:~:text=The%20histogram%20buckets%20are%20exposed,than%20or%20equal%20to%20N.
