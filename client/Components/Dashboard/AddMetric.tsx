@@ -257,6 +257,7 @@ const AddMetric = (props): any => {
     setMessageText('Querying Preview Metric...');
     setIntervalNote('');
     const newMetric = formData(true);
+    console.log(newMetric);
     try {
       fetch('/api/data/metric', {
         method: 'POST',
@@ -295,7 +296,6 @@ const AddMetric = (props): any => {
     })
       .then((res) => res.json())
       .then((res) => {
-
         // Should verify query validity as part of this process
         setMessageText('New Metric Saved!');
         // Dismiss message

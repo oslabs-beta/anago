@@ -17,7 +17,6 @@ import ErrorElement from '../ErrorElement';
 import * as loaders from './context/loaders';
 import React from 'react';
 
-
 //create router to pass into router provider component returned from app. createBrowserRouter recommended for all latest React Router web projects.
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,7 +25,8 @@ const router = createBrowserRouter(
       element={<Home />}
       loader={loaders.userLoader}
       id='home'
-      errorElement={<ErrorElement />}>
+      errorElement={<ErrorElement />}
+    >
       <Route
         path='/1'
         element={<HPADashboard />}
@@ -45,8 +45,8 @@ const router = createBrowserRouter(
         errorElement={<ErrorElement />}
       />
       <Route path='setup' element={<SetUp />} errorElement={<ErrorElement />} />
-    </Route>,
-  ),
+    </Route>
+  )
 );
 
 //provide router to application

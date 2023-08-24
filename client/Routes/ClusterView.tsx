@@ -1,4 +1,4 @@
-import { useRouteLoaderData } from 'react-router-dom';
+import { useRouteLoaderData, Outlet } from 'react-router-dom';
 import { StoreContext } from '../context/stateStore';
 import { useContext } from 'react';
 import { Dropdown } from '../Components/Visualizer/Dropdown';
@@ -21,7 +21,7 @@ const ClusterView = () => {
         {clusterData && <Dropdown />}
         <ControlPlane />
         {clusterData &&
-          nodes.map(node => (
+          nodes.map((node) => (
             <Nodes
               name={node.name}
               creationTimestamp={node.creationTimestamp}
@@ -30,7 +30,7 @@ const ClusterView = () => {
               providerID={node.providerID}
               status={node.status}
               nodeName={undefined}
-              key={node.uid}
+              key={node.uid + node.name}
             />
           ))}
       </div>

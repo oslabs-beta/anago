@@ -22,7 +22,7 @@ ChartJS.register(
   Colors,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
 const IndivDLG = ({ graphData }) => {
@@ -31,8 +31,11 @@ const IndivDLG = ({ graphData }) => {
   // customize Chatjs graph options
   const options = {
     responsive: true,
+    // interaction: {
+    //   mode: 'index' as const,
+    //   intersect: false,
+    // },
     interaction: {
-      mode: 'index' as const,
       intersect: false,
     },
     stacked: false,
@@ -41,7 +44,7 @@ const IndivDLG = ({ graphData }) => {
         display: false,
       },
       title: {
-        display: true,
+        display: false,
         text: 'Chart.js Line Chart - Multi Axis',
       },
     },

@@ -5,8 +5,8 @@ import Modal from 'react-responsive-modal';
 import { useRouteLoaderData } from 'react-router-dom';
 import React, { useContext, useState, useEffect } from 'react';
 import { StoreContext } from '../../context/stateStore';
-import { cleanTime } from '../../context/functions';
-import { Pod, Service, Deployment } from '../../../types';
+import { cleanTime, handleAlerts } from '../../context/functions';
+import { Pod, Service, Deployment, CleanAlert } from '../../../types';
 import AlertFlag from './AlertFlag';
 
 const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
@@ -32,14 +32,15 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
 
   //determine the number of namespaces selected in the dropdown menu by filtering the selectedStates stateful array
   const numNamespaces = Object.keys(selectedStates).filter(
-    item => item.charAt(0) !== 'i' && selectedStates[item] === true,
+    (item) => item.charAt(0) !== 'i' && selectedStates[item] === true
   ).length;
 
+  //if the number of namespaces selected is zero (default, every namespace is displayed, or if the current namespace name is selected, render the namespace and its child components, or else render null)
   //if the number of namespaces selected is zero (default, every namespace is displayed, or if the current namespace name is selected, render the namespace and its child components, or else render null)
   return numNamespaces === 0 || selectedStates[name] ? (
     <div id={id} className='namespace' key={id}>
       {namespaceAlerts.length > 0 &&
-        namespaceAlerts.map(alert => {
+        namespaceAlerts.map((alert) => {
           if (alert['affectedNamespace'] === name) {
             return <AlertFlag key={alert.startTime} />;
           }
@@ -54,7 +55,8 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
         <div className='namespace-info'>
           <h3>{`${name[0].toUpperCase().concat(name.slice(1))}`} </h3>
           <h3
-            style={phase === 'Active' ? { color: 'green' } : { color: 'red' }}>
+            style={phase === 'Active' ? { color: 'green' } : { color: 'red' }}
+          >
             Status: {phase}
           </h3>
           <h4>{'Created: ' + cleanTime(creationTimestamp)}</h4>
@@ -64,13 +66,14 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
             <h2>Namespace Information:</h2>
             <div className='modal-content'>
               {namespaceAlerts.length > 0 &&
-                namespaceAlerts.map(alert => {
+                namespaceAlerts.map((alert) => {
                   if (alert['affectedNamespace'] === name) {
                     return (
                       <div
                         className='alert-info'
                         style={{ color: 'red' }}
-                        key={name + 'alert'}>
+                        key={name + 'alert'}
+                      >
                         <h3>Alert Information:</h3>
                         <div className='info-item'>
                           <h3>Alert Name:</h3>
@@ -106,7 +109,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
         <div className='namespace-contents'>
           <div className='namespace-deployments'>
             {clusterData &&
-              deployments.map(deployment =>
+              deployments.map((deployment) =>
                 deployment.namespace === name ? (
                   <Deployments
                     key={deployment.uid}
@@ -117,11 +120,11 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
                     namespace={deployment.namespace}
                     id={deployment.uid}
                   />
-                ) : null,
+                ) : null
               )}
           </div>
           <div className='namespace-pods'>
-            {pods.map(pod => {
+            {pods.map((pod) => {
               if (pod.namespace === name && pod.nodeName === nodeName)
                 return (
                   <Pods
@@ -144,7 +147,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
           </div>
           <div className='namespace-services'>
             {clusterData &&
-              services.map(service =>
+              services.map((service) =>
                 service.namespace === name ? (
                   <Services
                     name={service.name}
@@ -156,7 +159,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
                     id={service.uid}
                     key={service.uid}
                   />
-                ) : null,
+                ) : null
               )}
           </div>
         </div>

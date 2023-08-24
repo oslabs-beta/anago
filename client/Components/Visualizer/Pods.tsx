@@ -36,6 +36,7 @@ const Pods = ({
       }
     });
   }, []);
+  console.log('Pod id: ', id);
 
   return (
     <div className='pod' id={id} key={id}>
@@ -58,13 +59,14 @@ const Pods = ({
           <h2>Pod Information:</h2>
           <div className='modal-content'>
             {podAlerts.length > 0 &&
-              podAlerts.map(alert => {
+              podAlerts.map((alert) => {
                 if (alert['affectedPod'].includes(name)) {
                   return (
                     <div
                       className='alert-info'
                       style={{ color: 'red' }}
-                      key={'podalert' + name}>
+                      key={'podalert' + name}
+                    >
                       <h3>Alert Information:</h3>
                       <div className='info-item'>
                         <h3>Alert Name:</h3>
@@ -131,7 +133,7 @@ const Pods = ({
                 <h3>Conditions: </h3>
 
                 <tr className='column-names'>
-                  {conditions.map(condition => {
+                  {conditions.map((condition) => {
                     return (
                       <th key={condition.type}>
                         {`${condition.type} Status: ${condition.status}`}
@@ -140,7 +142,7 @@ const Pods = ({
                   })}
                 </tr>
                 <tr className='table-row'>
-                  {conditions.map(condition => {
+                  {conditions.map((condition) => {
                     return (
                       <td key={condition.type + id}>
                         {'Last Transition Time: ' +
@@ -150,7 +152,7 @@ const Pods = ({
                   })}
                 </tr>
                 <tr className='table-row'>
-                  {conditions.map(condition => {
+                  {conditions.map((condition) => {
                     return (
                       <td key={condition.type + podIP}>
                         {'Last Probe Time: ' + condition.lastProbeTime}
@@ -161,7 +163,7 @@ const Pods = ({
               </table>
             </div>
             <h2>Container Information: </h2>
-            {containers.map(container => {
+            {containers.map((container) => {
               return (
                 <div key={container.name + id}>
                   <div className='info-item'>
@@ -169,7 +171,7 @@ const Pods = ({
                     <p>{container.name}</p>
                   </div>
 
-                  {containerStatuses.map(status => {
+                  {containerStatuses.map((status) => {
                     if (status.name === container.name) {
                       return (
                         <div key={status.id}>
@@ -201,7 +203,7 @@ const Pods = ({
                       </tr>
 
                       {container.ports ? (
-                        container.ports.map(port => {
+                        container.ports.map((port) => {
                           return (
                             <tr className='table-row' key={port.name + id}>
                               <td>{port.name}</td>
@@ -226,7 +228,7 @@ const Pods = ({
                         <th>Name:</th>
                         <th>Path:</th>
                       </tr>
-                      {container.volumeMounts.map(element => {
+                      {container.volumeMounts.map((element) => {
                         return (
                           <tr className='table-row' key={element.name + id}>
                             <td>{element.name}</td>

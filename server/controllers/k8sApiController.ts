@@ -20,11 +20,11 @@ const k8sController: any = {};
 k8sController.getNodes = async (
   _req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const data: any = await k8sApi.listNode();
-    const nodes: Node[] = data.body.items.map(data => {
+    const nodes: Node[] = data.body.items.map((data) => {
       const { name, namespace, creationTimestamp, labels, uid } = data.metadata;
       const { providerID } = data.spec;
       const { status } = data;
@@ -45,6 +45,7 @@ k8sController.getNodes = async (
   } catch (error) {
     return next({
       log: 'Error caught in k8sController getNodes',
+
       error,
       status: 400,
       message: {
@@ -57,11 +58,11 @@ k8sController.getNodes = async (
 k8sController.getPods = async (
   _req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const data: any = await k8sApi.listPodForAllNamespaces();
-    const pods: Pod[] = data.body.items.map(data => {
+    const pods: Pod[] = data.body.items.map((data) => {
       const { name, namespace, creationTimestamp, uid, labels } = data.metadata;
       const { nodeName, containers, serviceAccount } = data.spec;
       const { conditions, containerStatuses, phase, podIP } = data.status;
@@ -99,11 +100,11 @@ k8sController.getPods = async (
 k8sController.getNamespaces = async (
   _req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const data: any = await k8sApi.listNamespace();
-    const namespaces = data.body.items.map(data => {
+    const namespaces = data.body.items.map((data) => {
       const { name, creationTimestamp, labels, uid } = data.metadata;
       const { phase } = data.status;
       const nodeName = '';
@@ -135,11 +136,11 @@ k8sController.getNamespaces = async (
 k8sController.getServices = async (
   _req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const data: any = await k8sApi.listServiceForAllNamespaces();
-    const services: Service[] = data.body.items.map(data => {
+    const services: Service[] = data.body.items.map((data) => {
       const { name, namespace, uid, creationTimestamp, labels } = data.metadata;
       const { ports, clusterIP } = data.spec;
       const { loadBalancer } = data.status;
@@ -173,12 +174,12 @@ k8sController.getServices = async (
 k8sController.getDeployments = async (
   _req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const data: any = await k8sApi2.listDeploymentForAllNamespaces();
 
-    const deployments: Deployment[] = data.body.items.map(data => {
+    const deployments: Deployment[] = data.body.items.map((data) => {
       const { name, creationTimestamp, labels, namespace, uid } = data.metadata;
       const { replicas } = data.spec;
       const { status } = data.status;
@@ -211,7 +212,7 @@ k8sController.getDeployments = async (
 k8sController.getCluster = async (
   _req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const nodes = res.locals.nodes;
