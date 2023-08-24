@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-responsive-modal';
 import MetricDisplay from './MetricDisplay';
 import { UserData } from '../../../types';
-import {
-  useRouteLoaderData,
-  useParams,
-  Outlet
-} from 'react-router-dom';
+import { useRouteLoaderData, useParams, Outlet } from 'react-router-dom';
 import AddMetric from './AddMetric';
 import AlertBar from '../AlertBar';
 
@@ -32,11 +28,10 @@ const Dashboard = () => {
         .then((res) => {
           setTimeout(() => pithy(), 700);
         });
-    } catch {
-      console.log('failed to fetch pithy');
+    } catch (err) {
+      console.log(`failed to fetch pithy: ${err}`);
     }
   };
-
 
   function saveMetricsAndReload() {
     setEditMode(false);
