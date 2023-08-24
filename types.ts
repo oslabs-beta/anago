@@ -78,7 +78,7 @@ export interface Service {
 export interface Deployment {
   name: string;
   creationTimestamp: string;
-  labels: [] | [undefined];
+  labels?: [];
   namespace: string;
   replicas: any;
   uid: string;

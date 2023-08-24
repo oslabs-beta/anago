@@ -45,8 +45,13 @@ k8sController.getNodes = async (
   } catch (error) {
     return next({
       log: 'Error caught in k8sController getNodes',
+     
       error,
       status: 400,
+      message: {
+        err: 'An error occured when fetching Node information from the Kubernetes API',
+      },
+    });
       message: {
         err: 'An error occured when fetching Node information from the Kubernetes API',
       },
@@ -240,42 +245,6 @@ k8sController.getCluster = async (
     });
   }
 };
-
-k8sController.getHpa = async (
-  _req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const data: any = await k8sApi.listPodForAllNamespaces();
-    const pods: Pod[] = data.body.items.map((data) => {
-      const { name, namespace, creationTimestamp, uid, labels } = data.metadata;
-      const { nodeName, containers, serviceAccount } = data.spec;
-      const { conditions, containerStatuses, phase, podIP } = data.status;
-      const pod: Pod = {
-        name,
-        namespace,
-        uid,
-        creationTimestamp,
-        labels,
-        nodeName,
-        containers,
-        serviceAccount,
-        conditions,
-        containerStatuses,
-        phase,
-        podIP,
-      };
-      return pod;
-    });
-    res.locals.pods = pods;
-    res.locals.cluster = { pods: pods };
-    next();
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 // k8sController.portForward = () => {
 //     const forward = new k8s.PortForward(kc);
 //     const server = net.createServer((socket)=> {
