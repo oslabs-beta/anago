@@ -31,7 +31,6 @@ ChartJS.register(
 const HPADisplay = () => {
   const [tableData, setTableData]: any = useState(new Map());
   const [fetchCount, setFetchCount] = useState(0);
-  const [displayTable, setDisplayTable] = useState<any>(undefined);
 
   const userData = useRouteLoaderData('home') as UserData;
   const metricIds: string[] = userData.dashboards[1].metrics;

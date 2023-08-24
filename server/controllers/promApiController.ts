@@ -19,7 +19,6 @@ import { optionsBuilder, queryBuilder } from '../models/queryBuilder.js';
 const promURL = DEPLOYMENT_URL + 'api/v1/';
 const promURLInstant = promURL + 'query?query=';
 const promURLRange = promURL + 'query_range?query=';
-// TODO: update alerts url if need
 const promURLAlerts = promURL + 'alerts';
 
 const promApiController: any = {
@@ -176,7 +175,6 @@ const promApiController: any = {
             });
           }
           // populate the y-axis object with the scraped metrics
-          // yAxis.label = obj.metric.toString();
           yAxis.label = namePlot(
             obj,
             res.locals.lookupType,

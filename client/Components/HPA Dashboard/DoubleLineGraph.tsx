@@ -67,13 +67,11 @@ const DoubleLineGraph = ({ metricIds }) => {
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
         yAxisID: 'y1',
       });
-      console.log('DoubleLineGraph cache', cacheByHPA);
     });
 
     // assign HTTP Requests Total, organized by endpoints, to the graph
     metricData[queriesById['HTTP Requests Total']].datasets.forEach(obj => {
       let r = Math.random() * 100 + 127;
-      console.log('obj.label', obj.label.slice(9, obj.label.indexOf(`-`)));
       if (
         cacheByHPA.hasOwnProperty(obj.label.slice(9, obj.label.indexOf(`-`)))
       ) {
@@ -104,7 +102,7 @@ const DoubleLineGraph = ({ metricIds }) => {
           count += 1;
           setFetchCount(count);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log('Error fetching from Prometheus: ', err));
     });
   };
 
@@ -116,7 +114,6 @@ const DoubleLineGraph = ({ metricIds }) => {
   //   create double line graph once both metrics have been retrieved
   useEffect(() => {
     if (fetchCount === 2) {
-      console.log('metricData', metricData);
       shapeData();
     }
   }, [fetchCount]);
