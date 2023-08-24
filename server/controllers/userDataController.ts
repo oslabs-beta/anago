@@ -174,24 +174,31 @@ userDataController.addMetric = (
 ) => {
   const newMetricInfo = req.body;
   const updatedUserData = res.locals.userData;
+  try {
+    const newMetric = new Metric(
+      newMetricInfo.name,
+      newMetricInfo.lookupType,
+      newMetricInfo.scopeType,
+      res.locals.queryOptions
+    );
+    updatedUserData.dashboards[0].metrics.push(newMetric.metricId);
+    updatedUserData.metrics[newMetric.metricId] = newMetric;
 
-  const newMetric = new Metric(
-    newMetricInfo.name,
-    newMetricInfo.lookupType,
-    newMetricInfo.scopeType,
-    res.locals.queryOptions
-  );
-  updatedUserData.dashboards[0].metrics.push(newMetric.metricId);
-  updatedUserData.metrics[newMetric.metricId] = newMetric;
+    console.log('Added new metric. Updated User Data:', updatedUserData);
 
-  console.log('Added new metric. Updated User Data:', updatedUserData);
-
-  fs.writeFileSync(
-    path.resolve(__dirname, '../models/userData.json'),
-    JSON.stringify(updatedUserData)
-  );
-  res.locals.userData = updatedUserData;
-  next();
+    fs.writeFileSync(
+      path.resolve(__dirname, '../models/userData.json'),
+      JSON.stringify(updatedUserData)
+    );
+    res.locals.userData = updatedUserData;
+    next();
+  } catch (err) {
+    return next({
+      log: `failed in userDataController.addMetric.`,
+      status: 500,
+      message: { err: `Error: ${err}}` },
+    });
+  }
 };
 
 export default userDataController;
