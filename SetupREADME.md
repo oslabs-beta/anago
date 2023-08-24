@@ -5,26 +5,32 @@ Welcome to Anago. The first section of this set-up document walks through instal
 # Setup for Anago:
 
 1. Clone the Anago repository locally and install required modules:
+
 ```bash
 kubectl port-forward svc/[service-name] -n [namespace] 9090
 ```
+
 2. Modify the [user-config.ts](/user-config.ts) file to point to access your Prometheus instance and Alertmanager. For example, forward these services to the default ports (9090 and 9093):
+
 ```bash
 kubectl port-forward svc/[service-name] -n [namespace] 9090
-kubectl port-forward svc/[service-name]  -n [namespace] 9093
+kubectl port-forward svc/[service-name] -n [namespace] 9093
 ```
+
 3. Launch Anago from the command line:
+
 ```bash
 npm run dev
 ```
-Navigating to the local access point for Vite (by default, [http://locahost:5173](http://locahost:5173)), and you should see Anago! 
-Several core metrics are populated by default (or if ```NEW_USER=true``` in user-config.ts). 
+
+Navigating to the local access point for Vite (by default, [http://locahost:5173](http://locahost:5173)), and you should see Anago!
+Several core metrics are populated by default (or if `NEW_USER=true` in user-config.ts).
 
 All set? click [here](/README.md) to return to the main README.md
 
 # New to Kubernetes?
 
-Teams without an active cluster will have a longer path for initially setting up Kubernetes and then Anago. The following step-by-step guide will move through one use case for deploying and monitoring a simple cluster using the eksctl tool to configure an EKS cluster on EC2 instances with Prometheus and Anago for monitoring.
+Teams without an active cluster will have a longer path for initially setting up Kubernetes and then Anago. The following step-by-step guide will move through one use case for deploying and monitoring a simple cluster using the eksctl tool to configure an EKS cluster on EC2 instances with Prometheus. At the end of these steps, you should be ready to use Anago (described above). Depending on your needs, only some of these steps may be necessary.
 
 ## Table of Contents
 
