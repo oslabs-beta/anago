@@ -16,7 +16,6 @@ const Deployments = ({
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
 
-
   //create an array of 'labels' keys to be mapped over in the return statement
   const deploymentLabels = Object.keys(labels);
 
@@ -52,7 +51,7 @@ const Deployments = ({
               <h3>Namespace</h3>
               <p>{namespace}</p>
             </div>
-            {deploymentLabels.map(label => {
+            {deploymentLabels.map((label) => {
               if (
                 label === 'app' ||
                 label === 'k8s-app' ||
@@ -70,7 +69,7 @@ const Deployments = ({
                 );
               }
             })}
-            {deploymentLabels.map(label => {
+            {deploymentLabels.map((label) => {
               {
                 if (label === 'app.kubernetes.io/managed-by') {
                   return (
@@ -82,7 +81,7 @@ const Deployments = ({
                 }
               }
             })}
-            {deploymentLabels.map(label => {
+            {deploymentLabels.map((label) => {
               if (label === 'chart' || label === 'helm.sh/chart') {
                 return (
                   <div key={id + creationTimestamp} className='info-item'>

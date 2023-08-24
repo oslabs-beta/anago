@@ -11,9 +11,10 @@ import { StoreContext } from '../context/stateStore';
 export default function Home() {
   const userData = useRouteLoaderData('home') as UserData;
   const navigate = useNavigate();
-  const { setHasFetchedUserData, setClusterData }: any =
+  const { setHasFetchedUserData, setCurrentDashboard, setClusterData }: any =
     useContext(StoreContext);
 
+  const dashboards = userData.dashboards;
   //set default dashboard and route to that dashboard
   useEffect(() => {
     setHasFetchedUserData(true);

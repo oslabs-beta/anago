@@ -22,7 +22,7 @@ ChartJS.register(
   Colors,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 import IndivDLG from './IndivDLG';
 
@@ -53,7 +53,7 @@ const DoubleLineGraph = ({ metricIds }) => {
     };
 
     // filter data to display a graph for each deployed hpa
-    metricData[queriesById['Number of Pods']].datasets.forEach(obj => {
+    metricData[queriesById['Number of Pods']].datasets.forEach((obj) => {
       cacheByHPA[
         obj.label.slice(obj.label.indexOf(`"`) + 1, obj.label.indexOf(`-`))
       ] = JSON.parse(JSON.stringify(finalShape));
@@ -63,6 +63,7 @@ const DoubleLineGraph = ({ metricIds }) => {
       ].datasets.push({
         label: obj.label,
         data: obj.data,
+        pointStyle: false,
         borderColor: 'rgb(53, 162, 235)',
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
         yAxisID: 'y1',
@@ -70,7 +71,7 @@ const DoubleLineGraph = ({ metricIds }) => {
     });
 
     // assign HTTP Requests Total, organized by endpoints, to the graph
-    metricData[queriesById['HTTP Requests Total']].datasets.forEach(obj => {
+    metricData[queriesById['HTTP Requests Total']].datasets.forEach((obj) => {
       let r = Math.random() * 100 + 127;
       if (
         cacheByHPA.hasOwnProperty(obj.label.slice(9, obj.label.indexOf(`-`)))
@@ -78,6 +79,7 @@ const DoubleLineGraph = ({ metricIds }) => {
         cacheByHPA[obj.label.slice(9, obj.label.indexOf(`-`))].datasets.push({
           label: obj.label,
           data: obj.data,
+          pointStyle: false,
           borderColor: `rgb(${r}, 99, 132)`,
           backgroundColor: `rgba(${r}, 99, 132, 0.5)`,
           yAxisID: 'y',
@@ -91,18 +93,18 @@ const DoubleLineGraph = ({ metricIds }) => {
   const getPodsAndRequests = async () => {
     const currMetricCache: any = metricData;
     let count = 0;
-    metricIds.forEach(id => {
+    metricIds.forEach((id) => {
       fetch(`/api/data/metrics/${id}`, {
         method: 'GET',
       })
-        .then(data => data.json())
-        .then(data => {
+        .then((data) => data.json())
+        .then((data) => {
           currMetricCache[id] = data;
           setMetricData(currMetricCache);
           count += 1;
           setFetchCount(count);
         })
-        .catch(err => console.log('Error fetching from Prometheus: ', err));
+        .catch((err) => console.log('Error fetching from Prometheus: ', err));
     });
   };
 
@@ -121,7 +123,7 @@ const DoubleLineGraph = ({ metricIds }) => {
   return (
     <div>
       {graphData &&
-        Object.values(JSON.parse(JSON.stringify(graphData))).map(graphObj => {
+        Object.values(JSON.parse(JSON.stringify(graphData))).map((graphObj) => {
           return <IndivDLG graphData={graphObj} />;
         })}
     </div>

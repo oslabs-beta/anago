@@ -5,8 +5,8 @@ import Modal from 'react-responsive-modal';
 import { useRouteLoaderData } from 'react-router-dom';
 import React, { useContext, useState, useEffect } from 'react';
 import { StoreContext } from '../../context/stateStore';
-import { cleanTime } from '../../context/functions';
-import { Pod, Service, Deployment } from '../../../types';
+import { cleanTime, handleAlerts } from '../../context/functions';
+import { Pod, Service, Deployment, CleanAlert } from '../../../types';
 import AlertFlag from './AlertFlag';
 
 const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
@@ -37,21 +37,21 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
 
   //if the number of namespaces selected is zero (default, every namespace is displayed, or if the current namespace name is selected, render the namespace and its child components, or else render null)
   return numNamespaces === 0 || selectedStates[name] ? (
-    <div id={id} className="namespace" key={id}>
+    <div id={id} className='namespace' key={id}>
       {namespaceAlerts.length > 0 &&
         namespaceAlerts.map((alert) => {
           if (alert['affectedNamespace'] === name) {
-            return <AlertFlag key={alert.startTime}/>;
+            return <AlertFlag key={alert.startTime} />;
           }
         })}
       <img
-        className="k8logo"
-        id="namespace-logo"
-        src="client/assets/images/namespace.png"
+        className='k8logo'
+        id='namespace-logo'
+        src='client/assets/images/namespace.png'
         onClick={openModal}
       />
-      <div className="ns-inner-border">
-        <div className="namespace-info">
+      <div className='ns-inner-border'>
+        <div className='namespace-info'>
           <h3>{`${name[0].toUpperCase().concat(name.slice(1))}`} </h3>
           <h3
             style={phase === 'Active' ? { color: 'green' } : { color: 'red' }}
@@ -60,37 +60,41 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
           </h3>
           <h4>{'Created: ' + cleanTime(creationTimestamp)}</h4>
         </div>
-        <div className="modal">
+        <div className='modal'>
           <Modal open={open} onClose={closeModal}>
             <h2>Namespace Information:</h2>
-            <div className="modal-content">
+            <div className='modal-content'>
               {namespaceAlerts.length > 0 &&
                 namespaceAlerts.map((alert) => {
                   if (alert['affectedNamespace'] === name) {
                     return (
-                      <div className='alert-info' style={{color: 'red'}} key={name + 'alert'}>
+                      <div
+                        className='alert-info'
+                        style={{ color: 'red' }}
+                        key={name + 'alert'}
+                      >
                         <h3>Alert Information:</h3>
-                        <div className="info-item">
+                        <div className='info-item'>
                           <h3>Alert Name:</h3>
                           <p>{alert.name}</p>
                         </div>
-                        <div className="info-item">
+                        <div className='info-item'>
                           <h3>Description:</h3>
                           <p>{alert.description}</p>
                         </div>
-                        <div className="info-item">
+                        <div className='info-item'>
                           <h3>Summary:</h3>
                           <p>{alert.summary}</p>
                         </div>
-                        <div className="info-item">
+                        <div className='info-item'>
                           <h3>Severity:</h3>
                           <p>{alert.severity}</p>
                         </div>
-                        <div className="info-item">
+                        <div className='info-item'>
                           <h3>Start Time:</h3>
                           <p>{alert.startTime}</p>
                         </div>
-                        <div className="info-item">
+                        <div className='info-item'>
                           <h3>Last Updated:</h3>
                           <p>{alert.lastUpdated}</p>
                         </div>
@@ -101,8 +105,8 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
             </div>
           </Modal>
         </div>
-        <div className="namespace-contents">
-          <div className="namespace-deployments">
+        <div className='namespace-contents'>
+          <div className='namespace-deployments'>
             {clusterData &&
               deployments.map((deployment) =>
                 deployment.namespace === name ? (
@@ -118,7 +122,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
                 ) : null
               )}
           </div>
-          <div className="namespace-pods">
+          <div className='namespace-pods'>
             {pods.map((pod) => {
               if (pod.namespace === name && pod.nodeName === nodeName)
                 return (
@@ -140,7 +144,7 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
                 );
             })}
           </div>
-          <div className="namespace-services">
+          <div className='namespace-services'>
             {clusterData &&
               services.map((service) =>
                 service.namespace === name ? (
