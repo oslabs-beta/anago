@@ -45,13 +45,9 @@ k8sController.getNodes = async (
   } catch (error) {
     return next({
       log: 'Error caught in k8sController getNodes',
-     
+
       error,
       status: 400,
-      message: {
-        err: 'An error occured when fetching Node information from the Kubernetes API',
-      },
-    });
       message: {
         err: 'An error occured when fetching Node information from the Kubernetes API',
       },
