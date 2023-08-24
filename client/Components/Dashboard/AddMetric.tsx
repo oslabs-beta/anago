@@ -8,16 +8,6 @@ const AddMetric = (props): any => {
   const userData = useRouteLoaderData('home') as UserData;
   const { clusterData, setClusterData }: any = useContext(StoreContext);
 
-  // Fetch Cluster Data
-  useEffect(() => {
-    fetch('api/k8s/cluster')
-      .then((data) => data.json())
-      .then((data) => {
-        setClusterData(data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
   // The preconfiged queries to show in the selector
   const lookupOptions = [
     LookupType.CPUUsage,
@@ -68,122 +58,9 @@ const AddMetric = (props): any => {
   // Query Summary Text
   const [querySummary, setQuerySummary] = useState('');
   const [queryPromQL, setQueryPromQL] = useState('');
+  const [intervalNote, setIntervalNote] = useState('');
 
-  // Preview the user's current query, if possible
-  const previewMetric = () => {
-    // Mostly same as Save Metric, but different route, get back data + promQL
-    setMessageText('Querying Preview Metric...');
-    const newMetric = formData();
-    console.log('Trying to make a preview for metric:\n', newMetric);
-    try {
-      fetch('/api/data/metric', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newMetric),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          // Should verify query validity as part of this process
-          setMessageText('Metric Preview Successful');
-
-          setMetricData(res.metricData);
-          setQueryPromQL('PromQL Lookup: "' + res.searchQuery + '"');
-
-          // Dismiss message
-          setTimeout(() => setMessageText(''), 2500);
-        });
-    } catch (err) {
-      console.log('Error receiving metric preview: ', err);
-    }
-  };
-
-  // Save the user's current query, if valid
-  const saveMetric = () => {
-    setMessageText('Saving New Metric...');
-    const newMetric = formData();
-    console.log('Trying to save a new metric:\n', newMetric);
-
-    fetch('/api/user/add-metric', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newMetric),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log('Received reply', res);
-
-        // Should verify query validity as part of this process
-        setMessageText('New Metric Saved!');
-
-        // Restore defaults? Maybe not..
-        /*setTypes([types[0], types[1], LookupType.CustomEntry]);
-        setFields({
-          name: '',
-          duration: '',
-          step: '',
-          customQuery: '',
-          refresh: '',
-        });
-        setMetricData({});*/
-
-        // Refetch user data for updated Dashboard[0] ?
-
-        // Dismiss message
-        setTimeout(() => setMessageText(''), 2500);
-      });
-  };
-
-  // Generate data object for previewing or saving query
-  function formData(): any {
-    // Standard Metrics
-    const newMetric: any = {
-      name: fields.name,
-      lookupType: types[2],
-      scopeType: types[0],
-    };
-
-    if (types[1] == 'entry-precon') {
-      // Preconfigured Query - get target/context, if applicable
-      // Context: If there is a context, save it
-      if (contextMatrix[types[2]].length) {
-        // If contextChoice is blank, stick with cluster
-        if (chosenDomains[1].length > 0) {
-          newMetric.context = chosenDomains[0];
-          newMetric.contextChoice = chosenDomains[1];
-        } else newMetric.context = 'cluster';
-      }
-      // Target: If there is a target, save it
-      if (targetMatrix[types[2]].length) newMetric.target = chosenDomains[2];
-    } else {
-      // Custom entry: set LookupType to .CustomEntry and save the query
-      newMetric.lookupType = LookupType.CustomEntry;
-      newMetric.customQuery = fields.customQuery;
-    }
-
-    // Timing: For Range / Instant scope, save entered (or def) vals
-    if (newMetric.scopeType === ScopeType.Range) {
-      // Range Query - get values or use defaults
-      newMetric.duration = fields.duration.length
-        ? timeConverter(fields.duration)
-        : 24 * 60 * 60;
-      newMetric.stepSize = fields.step ? timeConverter(fields.step) : 60 * 20;
-    } else {
-      // Instant Query - get refresh rate or supply default
-      newMetric.refresh = fields.refresh ? timeConverter(fields.refresh) : 60;
-    }
-
-    // Add default name if unfilled values
-    if (newMetric.name.length === 0)
-      newMetric.name = lookupName(newMetric.lookupType);
-
-    return newMetric;
-  }
-
-  // Query type options have changed and may change the form fields
+  // Query type options have changed: update displayed form fields
   const typeChanged = (e) => {
     // Check Scope Radio
     const scope =
@@ -219,6 +96,7 @@ const AddMetric = (props): any => {
       }
     }
 
+    // If Context selection involves Cluster data, populate it
     let contextChoices = [''];
     console.log(clusterData);
     if (
@@ -318,6 +196,118 @@ const AddMetric = (props): any => {
 
     setQuerySummary(str);
   }, [types, fields, chosenDomains]);
+
+  // Generate data object for previewing or saving query
+  function formData(adjustableStep: boolean): any {
+    // Standard Metrics
+    const newMetric: any = {
+      name: fields.name,
+      lookupType: types[2],
+      scopeType: types[0],
+    };
+
+    if (types[1] == 'entry-precon') {
+      // Preconfigured Query - get target/context, if applicable
+      // Context: If there is a context, save it
+      if (contextMatrix[types[2]].length) {
+        // If contextChoice is blank, stick with cluster
+        if (chosenDomains[1].length > 0) {
+          newMetric.context = chosenDomains[0];
+          newMetric.contextChoice = chosenDomains[1];
+        } else newMetric.context = 'cluster';
+      }
+      // Target: If there is a target, save it
+      if (targetMatrix[types[2]].length) newMetric.target = chosenDomains[2];
+    } else {
+      // Custom entry: set LookupType to .CustomEntry and save the query
+      newMetric.lookupType = LookupType.CustomEntry;
+      newMetric.customQuery = fields.customQuery;
+    }
+
+    // Timing: For Range / Instant scope, save entered (or def) vals
+    if (newMetric.scopeType === ScopeType.Range) {
+      // Range Query - get values or use defaults
+      newMetric.duration = fields.duration.length
+        ? timeConverter(fields.duration)
+        : 24 * 60 * 60;
+      newMetric.stepSize = fields.step ? timeConverter(fields.step) : 60 * 20;
+
+      // Check for proportionately small step sizes (they slow stateful field performance)
+      if (adjustableStep && newMetric.duration / newMetric.stepSize > 400) {
+        // Step size will hinder page
+        newMetric.stepSize = newMetric.duration / 400;
+        console.log('over the line');
+        setIntervalNote(
+          'Note: Current time ratio may slow performance. Precision adjusted for preview.'
+        );
+      }
+    } else {
+      // Instant Query - get refresh rate or supply default
+      newMetric.refresh = fields.refresh ? timeConverter(fields.refresh) : 60;
+    }
+
+    // Add default name if unfilled values
+    if (newMetric.name.length === 0)
+      newMetric.name = lookupName(newMetric.lookupType);
+
+    return newMetric;
+  }
+
+  // Preview the user's current query, if possible
+  const previewMetric = () => {
+    // Mostly same as Save Metric, but different route, get back data + promQL
+
+    setMessageText('Querying Preview Metric...');
+    setIntervalNote('');
+    const newMetric = formData(true);
+    console.log('Trying to make a preview for metric:\n', newMetric);
+    try {
+      fetch('/api/data/metric', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newMetric),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          // Should verify query validity as part of this process
+          setMessageText('Metric Preview Successful');
+
+          setMetricData(res.metricData);
+          setQueryPromQL('PromQL Lookup: "' + res.searchQuery + '"');
+
+          // Dismiss message
+          setTimeout(() => setMessageText(''), 2500);
+        });
+    } catch (err) {
+      console.log('Error receiving metric preview: ', err);
+    }
+  };
+
+  // Save the user's current query, if valid
+  const saveMetric = () => {
+    setMessageText('Saving New Metric...');
+    const newMetric = formData(false);
+    console.log('Trying to save a new metric:\n', newMetric);
+
+    fetch('/api/user/add-metric', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newMetric),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log('Received reply', res);
+
+        // Should verify query validity as part of this process
+        setMessageText('New Metric Saved!');
+        // Dismiss message
+        setTimeout(() => setMessageText(''), 2500);
+      });
+  };
 
   return (
     <div className='new-metric-modal'>
@@ -484,13 +474,16 @@ const AddMetric = (props): any => {
           {/* RANGE METRIC STEPSIZE */}
           {types[0] == ScopeType.Range && (
             <div>
-              <label>Time Interval: </label>{' '}
-              <input
-                id='new-metric-step'
-                value={fields.step}
-                placeholder='20 mins'
-                onChange={(e) => textChanged(e, 'step')}
-              ></input>
+              <div>
+                <label>Time Interval: </label>{' '}
+                <input
+                  id='new-metric-step'
+                  value={fields.step}
+                  placeholder='20 mins'
+                  onChange={(e) => textChanged(e, 'step')}
+                ></input>
+              </div>
+              <div className='interval-note'>{intervalNote}</div>
             </div>
           )}
 
@@ -521,6 +514,7 @@ const AddMetric = (props): any => {
           )}
         </div>
 
+        {/* SHOW METRIC PREVIEW GRAPH */}
         <div className='new-metric-preview'>
           <div className='new-metric-preview-image'>
             <h3>Query Preview</h3>
@@ -531,15 +525,21 @@ const AddMetric = (props): any => {
               />
             )}
           </div>
+
+          {/* MESSAGE ABOUT PREVIEW/SAVE CLICK */}
           <div className='new-metric-status'>
             <h4 className='new-metric-status-message'>{messageText}</h4>
           </div>
         </div>
       </div>
+
+      {/* QUERY SEMANTIC+PROMQL SUMMARY */}
       <div className='summary-container'>
         <p>{querySummary}</p>
         <p className='summary-query'>{queryPromQL}</p>
       </div>
+
+      {/* BUTTONS */}
       <div className='new-metric-buttons'>
         <button className='btn' onClick={saveMetric}>
           Save
@@ -557,32 +557,40 @@ const AddMetric = (props): any => {
 
 export default AddMetric;
 
+// Parse the entered time
 function timeConverter(input: string): number | undefined {
+  // Split number and units
   let numPart, stringPart;
-  // if (input.includes(' ')) {
-  numPart = Number(input.split(' ')[0]);
-  stringPart = input.split(' ')[1];
-  // } else {
-  //   // Find num/letter break
-  //   let firstLetter = 0;
-  //   for (let i = 0; i < input.length; i++) {
-  //     if (input[i].toLowerCase() !== input[i].toUpperCase()) {
-  //       firstLetter = i;
-  //       break;
-  //     }
-  //   }
-  //   // let cleanBreak = true;
-  //   // for (let i = 0; i < firstLetter; i++) {
-  //   //   if (input[i].toLowerCase() !== input[i].toUpperCase()) cleanBreak = false;
-  //   // }
-  //   // for (let i = firstLetter; i < input.length; i++) {
-  //   //   if (input[i].toLowerCase() === input[i].toUpperCase()) cleanBreak = false;
-  //   // }
-  //   // if (cleanBreak) {
-  //   numPart = input.slice(0, firstLetter);
-  //   stringPart = input.slice(firstLetter);
-  //   // } else return undefined;
-  // }
+  // ...using a space
+  if (input.includes(' ')) {
+    numPart = Number(input.split(' ')[0]);
+    stringPart = input.split(' ')[1];
+  } else {
+    // ... or with no space
+    let firstLetter = 0;
+    for (let i = 0; i < input.length; i++) {
+      if (input[i].toLowerCase() !== input[i].toUpperCase()) {
+        firstLetter = i;
+        break;
+      }
+    }
+    // Make sure it's NumLetters format
+    let cleanBreak = true;
+    for (let i = 0; i < firstLetter; i++) {
+      if (input[i].toLowerCase() !== input[i].toUpperCase()) cleanBreak = false;
+    }
+    for (let i = firstLetter; i < input.length; i++) {
+      if (input[i].toLowerCase() === input[i].toUpperCase()) cleanBreak = false;
+    }
+    if (cleanBreak) {
+      numPart = input.slice(0, firstLetter);
+      stringPart = input.slice(firstLetter);
+    } else {
+      // ... or if it doesn't fit, use undefined -> defaults
+      return undefined;
+    }
+  }
+  // Parse the units
   switch (stringPart) {
     case 's':
     case 'seconds':
@@ -623,6 +631,8 @@ function timeConverter(input: string): number | undefined {
   }
 }
 
+// Only some LookupTypes should allow for refining contexts or grouping metrics
+// This pair of matrices is keyed to those values for generating pulldown menus
 const contextMatrix = [
   [],
   ['Cluster', 'Namespace', 'Node'],
