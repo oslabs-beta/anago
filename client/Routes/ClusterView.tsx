@@ -1,4 +1,4 @@
-import { useRouteLoaderData, Outlet } from 'react-router-dom';
+import { useRouteLoaderData } from 'react-router-dom';
 import { StoreContext } from '../context/stateStore';
 import { useContext } from 'react';
 import { Dropdown } from '../Components/Visualizer/Dropdown';
@@ -12,7 +12,6 @@ const ClusterView = () => {
   const clusterData: any = useRouteLoaderData('cluster');
   const { setClusterData }: any = useContext(StoreContext);
   setClusterData(clusterData);
-  console.log(clusterData);
   const nodes: Node[] = clusterData.nodes;
 
   return (

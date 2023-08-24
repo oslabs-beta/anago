@@ -5,8 +5,8 @@ import Modal from 'react-responsive-modal';
 import { useRouteLoaderData } from 'react-router-dom';
 import React, { useContext, useState, useEffect } from 'react';
 import { StoreContext } from '../../context/stateStore';
-import { cleanTime, handleAlerts } from '../../context/functions';
-import { Pod, Service, Deployment, CleanAlert } from '../../../types';
+import { cleanTime } from '../../context/functions';
+import { Pod, Service, Deployment } from '../../../types';
 import AlertFlag from './AlertFlag';
 
 const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
@@ -22,8 +22,6 @@ const Namespaces = ({ id, name, creationTimestamp, phase, nodeName }) => {
 
   //clean up alert data for relevant information and assign relevant alerts to namespace state
   useEffect(() => {
-    console.log('Current Alerts', displayedAlerts);
-    // const alerts: CleanAlert[] = handleAlerts(displayedAlerts);
     const alerts: any = displayedAlerts;
     alerts.forEach((alert: any) => {
       if (alert['affectedNamespace'] && !namespaceAlerts[alert]) {
