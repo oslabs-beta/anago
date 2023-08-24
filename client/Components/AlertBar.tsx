@@ -291,7 +291,7 @@ const AlertBar = () => {
         {!noErrors && fetched && !clicked && (
           <h3 id='mouseNotOver' onClick={() => setClicked(true)}>
             <strong>
-              ALERTS PREVIEW: {criticalCount} Critical, {warningCount} Warning
+              ALERTS: {criticalCount} Critical, {warningCount} Warning
             </strong>
           </h3>
         )}

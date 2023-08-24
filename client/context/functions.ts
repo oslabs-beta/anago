@@ -19,7 +19,6 @@ export function cleanName(name: string) {
 
 //handle alert data processing for FE
 export function handleAlerts(statefulAlerts: []) {
-  console.log('Handling alerts: ', statefulAlerts);
   const current = [...statefulAlerts].map((alert) => {
     const obj = <CleanAlert>{};
     // obj['name'] = alert['name'];
