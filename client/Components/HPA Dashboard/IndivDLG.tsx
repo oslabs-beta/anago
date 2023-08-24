@@ -27,12 +27,12 @@ ChartJS.register(
 
 const IndivDLG = ({ graphData, graphTitle }) => {
   const [open, setOpen]: any = useState(false);
-  console.log('graphData:', graphData);
   // customize Chatjs graph options
-  const options = {
+  const options: any = {
     responsive: true,
     interaction: {
-      mode: 'index' as const,
+      // mode: 'index' as const,
+      mode: 'nearest',
       intersect: false,
     },
     stacked: false,
@@ -70,14 +70,16 @@ const IndivDLG = ({ graphData, graphTitle }) => {
 
   return (
     <div className='metric-container'>
-      <h4 className='metric-title'>{graphTitle}</h4>
+      {/* change to {graphTitle} */}
+      <h4 className='metric-title'>Pithy</h4>
       {graphData.hasOwnProperty('labels') && (
         <Line data={graphData} options={options} onClick={openModal} />
       )}
       <div className='modal'>
         <button onClick={openModal}>See more</button>
         <Modal open={open} onClose={closeModal}>
-          <h4 className='metric-title'>{graphTitle}</h4>
+          {/* change to  {graphTitle} */}
+          <h4 className='metric-title'>Pithy</h4>
           {graphData.hasOwnProperty('labels') && (
             <Line data={graphData} options={optionsWithLegend} />
           )}

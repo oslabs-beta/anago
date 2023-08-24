@@ -30,7 +30,6 @@ const TableDisplay = ({ tableData, logId, graphIds }) => {
   const [filteredTableData, setfilteredTableData]: any[] = useState([]);
 
   const getHPAUtilization = async () => {
-    console.log('logId', logId);
     fetch(`/api/data/metrics/${logId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -40,7 +39,6 @@ const TableDisplay = ({ tableData, logId, graphIds }) => {
     })
       .then(data => data.json())
       .then(data => {
-        console.log('data', data);
         filterHPAUtilization(data);
       })
       .catch(err => console.log('Error retrieving HPA Utilization data', err));

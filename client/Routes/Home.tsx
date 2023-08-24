@@ -26,11 +26,11 @@ export default function Home() {
   // // Fetch Cluster Data
   useEffect(() => {
     fetch('api/k8s/cluster')
-      .then((data) => data.json())
-      .then((data) => {
+      .then(data => data.json())
+      .then(data => {
         setClusterData(data);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }, []);
 
   return (
@@ -50,7 +50,7 @@ export default function Home() {
             Dashboard
           </NavLink>
           <NavLink to={'/1'} className='nav-btn'>
-            HPA Monitor/Test
+            HPA Monitor
           </NavLink>
           <NavLink to={'/clusterview'} className='nav-btn'>
             ClusterView

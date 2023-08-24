@@ -42,8 +42,10 @@ const DoubleLineGraph = ({ metricIds }) => {
   interface graphShape {
     labels: any[];
     datasets: any[];
+    pointStyle: boolean;
   }
-
+  //TODO: UNCOMENT BELOW-
+  /*
   const shapeData = () => {
     const cacheByHPA = {};
     // transform the data into the shape required for Chartjs multi axis line chart
@@ -84,7 +86,103 @@ const DoubleLineGraph = ({ metricIds }) => {
         });
       }
     });
-    console.log('cacheByHPA:', cacheByHPA);
+    // only display graphs that have metrics for both Pod Count and HTTP Requests
+    Object.keys(cacheByHPA).forEach(key => {
+      if (cacheByHPA[key].datasets.length < 2) {
+        delete cacheByHPA[key];
+      }
+    });
+    setGraphData(cacheByHPA);
+  };
+  */
+  // TODO: DELETE
+  const shapeData = () => {
+    const cacheByHPA = {};
+    // transform the data into the shape required for Chartjs multi axis line chart
+    const finalShape: graphShape = {
+      labels: metricData[queriesById['HTTP Requests Total']].labels,
+      datasets: [],
+      pointStyle: false,
+    };
+
+    // filter data to display a graph for each deployed hpa
+    metricData[queriesById['Number of Pods']].datasets.forEach(obj => {
+      cacheByHPA[
+        obj.label.slice(obj.label.indexOf(`"`) + 1, obj.label.indexOf(`-`))
+      ] = JSON.parse(JSON.stringify(finalShape));
+
+      cacheByHPA[
+        obj.label.slice(obj.label.indexOf(`"`) + 1, obj.label.indexOf(`-`))
+      ].datasets.push({
+        // TODO: DELETE BELOW LINE, THEN UNCOMMENT LINE BELOW THAT
+        label: `created_by_name="pithy-deployment"`,
+        // label: obj.label,
+        data: obj.data,
+        borderColor: 'rgb(53, 162, 235)',
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        yAxisID: 'y1',
+      });
+    });
+    // TODO: DELETE ENPOINTS AND COUNTENDPT
+    const endpoints = [
+      'http-web',
+      'http-web',
+      'http-web',
+      'http-web',
+      'mid',
+      'mid',
+      'mid',
+      'mid',
+      'fast',
+      'fast',
+      'fast',
+      'fast',
+      'fast',
+      'slow',
+      'slow',
+      'slow',
+      'slow',
+      'slow',
+      'client',
+      'client',
+      'client',
+      'client',
+      'user',
+      'user',
+      'user',
+      'user',
+      'metrics',
+      'metrics',
+      'metrics',
+      'metrics',
+    ];
+    let countEndpt = 0;
+    // assign HTTP Requests Total, organized by endpoints, to the graph
+    metricData[queriesById['HTTP Requests Total']].datasets.forEach(obj => {
+      let r = Math.random() * 100 + 127;
+      if (
+        cacheByHPA.hasOwnProperty(obj.label.slice(9, obj.label.indexOf(`-`)))
+      ) {
+        let assignLabel =
+          `service="pithy=deployment" endpoint="` + endpoints[countEndpt] + `"`;
+        cacheByHPA[obj.label.slice(9, obj.label.indexOf(`-`))].datasets.push({
+          // TODO: DELETE LINE BELOW, UNCOMMENT LINE BELOW THAT
+          label: assignLabel,
+          // label: obj.label,
+          data: obj.data,
+          borderColor: `rgb(${r}, 99, 132)`,
+          backgroundColor: `rgba(${r}, 99, 132, 0.5)`,
+          yAxisID: 'y',
+        });
+        countEndpt += 1;
+      }
+    });
+    // only display graphs that have metrics for both Pod Count and HTTP Requests
+    Object.keys(cacheByHPA).forEach(key => {
+      if (cacheByHPA[key].datasets.length < 2) {
+        delete cacheByHPA[key];
+      }
+    });
     setGraphData(cacheByHPA);
   };
 
@@ -97,7 +195,6 @@ const DoubleLineGraph = ({ metricIds }) => {
       })
         .then(data => data.json())
         .then(data => {
-          console.log('getPodsAndRequests', 'id', id, 'data', data);
           currMetricCache[id] = data;
           setMetricData(currMetricCache);
           count += 1;
