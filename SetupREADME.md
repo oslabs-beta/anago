@@ -1,26 +1,30 @@
-# Welcome
+# Setting up Anago
 
-to the Anago setup page. Follow these two simple instructions to start monitoring your Kubernetes cluster!
+Welcome to Anago. The first section of this set-up document walks through installing and configuring Anago for an existing cluster with Prometheus available. The rest of the document describes the basic steps of deploying an EKS cluster from scratch, intended for a development or DevOps team newly approaching K8s.
 
 # Setup for Anago:
 
-1. Turn on portforwarding to access your Prometheus instance. Anago is expecting to access your prometheus instance at port 9090 as dictated in the [user-config.ts](/user-config.ts) file. To accomplished this, use the kubectl port-forward command:
-
+1. Clone the Anago repository locally and install required modules:
 ```bash
 kubectl port-forward svc/[service-name] -n [namespace] 9090
 ```
-
-2. Similarly, allow portforwarding to access the alertManager UI. Anago is expected access at Port 9093, as described in the [user-config.ts](/user-config.ts) file. Port-forward with the following command:
-
+2. Modify the [user-config.ts](/user-config.ts) file to point to access your Prometheus instance and Alertmanager. For example, forward these services to the default ports (9090 and 9093):
 ```bash
+kubectl port-forward svc/[service-name] -n [namespace] 9090
 kubectl port-forward svc/[service-name]  -n [namespace] 9093
 ```
+3. Launch Anago from the command line:
+```bash
+npm run dev
+```
+Navigating to the local access point for Vite (by default, [http://locahost:5173](http://locahost:5173)), and you should see Anago! 
+Several core metrics are populated by default (or if ```NEW_USER=true``` in user-config.ts). 
 
 All set? click [here](/README.md) to return to the main README.md
 
-# New To AWS?
+# New to Kubernetes?
 
-AWS can be very ticky to navigate so Anago is here to help guide you. Follow along with our comprehensive step-by-step guide to deploying and monitoring your own kubernetes cluster!
+Teams without an active cluster will have a longer path for initially setting up Kubernetes and then Anago. The following step-by-step guide will move through one use case for deploying and monitoring a simple cluster using the eksctl tool to configure an EKS cluster on EC2 instances with Prometheus and Anago for monitoring.
 
 ## Table of Contents
 
