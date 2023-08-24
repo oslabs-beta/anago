@@ -21,7 +21,7 @@ const ClusterView = () => {
         {clusterData && <Dropdown />}
         <ControlPlane />
         {clusterData &&
-          nodes.map(node => (
+          nodes.map((node) => (
             <Nodes
               name={node.name}
               creationTimestamp={node.creationTimestamp}
@@ -30,7 +30,7 @@ const ClusterView = () => {
               providerID={node.providerID}
               status={node.status}
               nodeName={undefined}
-              key={node.uid}
+              key={node.uid + node.name}
             />
           ))}
       </div>
