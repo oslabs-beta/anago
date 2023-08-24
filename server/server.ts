@@ -31,14 +31,12 @@ if (process.env.NODE_ENV !== 'dev') {
 
 // Server index.html explicilty if grabbed (production mode)
 app.get('/', (_req: Request, res: Response) => {
-  console.log('Front page contact');
   res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 app.get('/api/pithy', async (_req: Request, res: Response) => {
   const pithyRes = await fetch(PITHY_URL);
   const pithyPrimes = await pithyRes.json();
-  //console.log(pithyPrimes);
   console.log('Sending Pithy data');
   res.json(pithyPrimes);
 });

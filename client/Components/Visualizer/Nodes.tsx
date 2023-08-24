@@ -54,7 +54,6 @@ const Nodes = ({
         .then((res) => res.json())
         .then((res) => {
           // Should verify query validity as part of this process
-          console.log('1', res.metricData);
           setMetricData1(res.metricData);
         });
     } catch (err) {
@@ -71,7 +70,6 @@ const Nodes = ({
         .then((res) => res.json())
         .then((res) => {
           // Should verify query validity as part of this process
-          console.log('2', res.metricData);
           setMetricData2(res.metricData);
         });
     } catch (err) {

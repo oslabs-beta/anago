@@ -76,7 +76,6 @@ const promApiController: any = {
       req.body.lookupType,
       res.locals.queryOptions
     );
-    console.log(res.locals.searchQuery);
     next();
   },
 
@@ -130,7 +129,6 @@ const promApiController: any = {
 
     try {
       // query Prometheus
-      console.log(res.locals.promQuery);
       const response = await fetch(res.locals.promQuery);
       const data = await response.json();
       // if the prometheus query response indicates a failure, then send an error message

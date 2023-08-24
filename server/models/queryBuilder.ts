@@ -55,11 +55,6 @@ export function queryBuilder(
   lookupType: LookupType,
   queryOptions: any
 ): string | undefined {
-  // console.log(
-  //   'Query builder for Lookup Type: ',
-  //   lookupType,
-  //   'and options ' + queryOptions
-  // );
 
   switch (lookupType) {
     case LookupType.CustomEntry: {
