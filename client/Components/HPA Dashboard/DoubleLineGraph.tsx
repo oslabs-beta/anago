@@ -84,7 +84,7 @@ const DoubleLineGraph = ({ metricIds }) => {
         });
       }
     });
-
+    console.log('cacheByHPA:', cacheByHPA);
     setGraphData(cacheByHPA);
   };
 
@@ -97,6 +97,7 @@ const DoubleLineGraph = ({ metricIds }) => {
       })
         .then(data => data.json())
         .then(data => {
+          console.log('getPodsAndRequests', 'id', id, 'data', data);
           currMetricCache[id] = data;
           setMetricData(currMetricCache);
           count += 1;
@@ -121,8 +122,9 @@ const DoubleLineGraph = ({ metricIds }) => {
   return (
     <div>
       {graphData &&
-        Object.values(JSON.parse(JSON.stringify(graphData))).map(graphObj => {
-          return <IndivDLG graphData={graphObj} />;
+        Object.keys(JSON.parse(JSON.stringify(graphData))).map(hpa => {
+          let title = hpa.slice(0, 1).toUpperCase() + hpa.slice(1);
+          return <IndivDLG graphData={graphData[hpa]} graphTitle={title} />;
         })}
     </div>
   );

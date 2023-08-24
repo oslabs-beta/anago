@@ -15,7 +15,6 @@ import { LookupType, ScopeType, GraphType } from '../../types.js';
 // Metrics Generate .graphType by ScopeType (future: options?)
 // Metrics Generate .searchQuery using queryOptions -> queryBuilder
 
-
 export function optionsBuilder(obj: any): any {
   const options: any = {};
   if (obj.lookupType === LookupType.CustomEntry)
@@ -54,21 +53,15 @@ export function optionsBuilder(obj: any): any {
 // Build PromQL queries with the appropriate syntax, account for queryOptions
 export function queryBuilder(
   lookupType: LookupType,
-  queryOptions: any
+  queryOptions: any,
 ): string | undefined {
-  // console.log(
-  //   'Query builder for Lookup Type: ',
-  //   lookupType,
-  //   'and options ' + queryOptions
-  // );
-
   switch (lookupType) {
     case LookupType.CustomEntry: {
       if (queryOptions.hasOwnProperty('customQuery'))
         return queryOptions.customQuery;
       else {
         console.log(
-          'Error in queryBuilder: Tried to create a custom query with no custom query string provided.'
+          'Error in queryBuilder: Tried to create a custom query with no custom query string provided.',
         );
         return undefined;
       }
@@ -269,15 +262,12 @@ export function queryBuilder(
     }
 
     case LookupType.HPAUtilization: {
-      // TODO: return metric back to 90%
-      // return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 >= 90';
-      return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 <= 30';
+      return '(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 >= 80';
     }
-    // !SMKLC;MDLMCL;S
+
     case LookupType.HTTPRequests: {
       // TODO: return metric back to deployment http requests (would need to set up ingress to access it on pithy)
       // return 'increase(http_requests_total[1m])';
-      // return 'increase(prometheus_http_requests_total[1m])';
       let str = 'increase(prometheus_http_requests_total[1m])';
       // ! examples
       // increase(prometheus_http_requests_total{endpoint="http-web"}[1m])
@@ -291,9 +281,6 @@ export function queryBuilder(
         queryOptions.hasOwnProperty('hpa') &&
         queryOptions.hasOwnProperty('endpoint')
       ) {
-        // const service = () => {
-        //   return queryOptions.hpa.slice(0, queryOptions.hpa.indexOf('-'));
-        // };
         str =
           str.slice(0, 39) +
           `{service=~"` +
@@ -325,8 +312,8 @@ export function queryBuilder(
     case LookupType.PodCountByHPA: {
       // TODO: make it not just for pithy
       // let str = `count by (created_by_name)(kube_pod_info{created_by_name="pithy-deployment-f77bd655c"})`;
-      // let str = 'count by (created_by_name)(kube_pod_info)';
-      let str = '{created_by_name="prometheus-kube-state-metrics-7d8b486d89"}';
+      let str = 'count by (created_by_name)(kube_pod_info)';
+      // let str = '{created_by_name="prometheus-kube-state-metrics-7d8b486d89"}';
       if (queryOptions.hasOwnProperty('hpa')) {
         str =
           str.slice(0, str.length - 1) +

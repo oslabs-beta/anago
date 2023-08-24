@@ -1,1 +1,220 @@
-{"userId":"f01cf3d2-abb0-427a-a3fe-e24521d57fb6","clusters":[{"clusterId":"da206865-6ff5-491b-9909-cf169ab008df","clusterName":"Testing Cluster","clusterUrl":"http://localhost:9090/"}],"dashboards":[{"dashboardId":"56ea9b75-909a-42df-8751-098eefe7db13","dashboardName":"Kubernetes Dashboard","metrics":["6f00acc9-22a9-498f-880f-6613ad2bda97","76fb3419-fd74-4f8b-8239-869666a181b1","953b0a2d-52fd-47c0-87b9-08c5537bbe55","c3b29796-7590-4082-a141-e561de155588","30b8382e-67ab-4e3e-8cee-2c77f582f7ac","c0d1aab8-75bd-458d-be6b-6b24a4df384f","804ba04e-5c5f-45b2-8536-bd68e0b1b89d"]},{"dashboardId":"4148cf49-3d3a-47a6-9e75-288dd6b7ffaa","dashboardName":"HPA Monitoring","metrics":["4d2e27dd-225a-4a94-93ea-af914d34e827","731cf762-98c7-4861-8fcb-51ab37745c22","7a2e4d71-0338-4c2e-b272-438643ea8ef1","d6564743-be4a-4d9f-a415-cbd5a91af24a","3d75abd4-14ca-4a06-993f-c5eaae2aaab5","e6847f06-f4b5-4d15-bd57-67f3dc4d6d1f","a7239a40-a754-430c-a575-ed8422e1e011","819d3dd8-487c-4dd2-9dff-efa40e735574","604a2f70-dc84-4200-a20b-9f107ef7b0d6","56ce7314-6989-48a5-9e8c-b251ad19514b"]}],"hiddenAlerts":["KubeControllerManager has disappeared from Prometheus target discovery.","KubeScheduler has disappeared from Prometheus target discovery."],"metrics":{"6f00acc9-22a9-498f-880f-6613ad2bda97":{"metricId":"6f00acc9-22a9-498f-880f-6613ad2bda97","metricName":"CPU Usage by Namespace","lookupType":1,"scopeType":0,"graphType":1,"queryOptions":{"duration":7200,"stepSize":300,"target":"namespace"},"searchQuery":"sum (rate (container_cpu_usage_seconds_total{mode!=\"idle\"}[10m])) by (namespace)"},"76fb3419-fd74-4f8b-8239-869666a181b1":{"metricId":"76fb3419-fd74-4f8b-8239-869666a181b1","metricName":"Memory Usage by Container","lookupType":3,"scopeType":0,"graphType":1,"queryOptions":{"duration":7200,"stepSize":300,"target":"container"},"searchQuery":"sum (container_memory_working_set_bytes) by (container)/ (1024*1024*1024)"},"953b0a2d-52fd-47c0-87b9-08c5537bbe55":{"metricId":"953b0a2d-52fd-47c0-87b9-08c5537bbe55","metricName":"% Disk Space Available by Node","lookupType":7,"scopeType":0,"graphType":1,"queryOptions":{"duration":18000,"stepSize":300},"searchQuery":"node_filesystem_avail_bytes/node_filesystem_size_bytes{fstype='xfs'}*100"},"c3b29796-7590-4082-a141-e561de155588":{"metricId":"c3b29796-7590-4082-a141-e561de155588","metricName":"CPU Underutilization","lookupType":2,"scopeType":0,"graphType":1,"queryOptions":{"duration":18000,"stepSize":300},"searchQuery":"sum((rate(container_cpu_usage_seconds_total{container!=\"POD\",container!=\"\"}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource=\"cpu\"})) * -1 >0)"},"4d2e27dd-225a-4a94-93ea-af914d34e827":{"metricId":"4d2e27dd-225a-4a94-93ea-af914d34e827","metricName":"HPA by Deployment","lookupType":12,"scopeType":1,"graphType":0,"queryOptions":null,"searchQuery":"kube_horizontalpodautoscaler_metadata_generation"},"731cf762-98c7-4861-8fcb-51ab37745c22":{"metricId":"731cf762-98c7-4861-8fcb-51ab37745c22","metricName":"HPA Target Status","lookupType":13,"scopeType":1,"graphType":0,"queryOptions":null,"searchQuery":"kube_horizontalpodautoscaler_status_target_metric{metric_target_type=\"utilization\"}"},"7a2e4d71-0338-4c2e-b272-438643ea8ef1":{"metricId":"7a2e4d71-0338-4c2e-b272-438643ea8ef1","metricName":"HPA Target","lookupType":14,"scopeType":1,"graphType":0,"queryOptions":null,"searchQuery":"kube_horizontalpodautoscaler_spec_target_metric"},"d6564743-be4a-4d9f-a415-cbd5a91af24a":{"metricId":"d6564743-be4a-4d9f-a415-cbd5a91af24a","metricName":"HPA Minimum Replicas","lookupType":15,"scopeType":1,"graphType":0,"queryOptions":null,"searchQuery":"kube_horizontalpodautoscaler_spec_min_replicas"},"3d75abd4-14ca-4a06-993f-c5eaae2aaab5":{"metricId":"3d75abd4-14ca-4a06-993f-c5eaae2aaab5","metricName":"HPA Maximum Replicas","lookupType":16,"scopeType":1,"graphType":0,"queryOptions":null,"searchQuery":"kube_horizontalpodautoscaler_spec_max_replicas"},"e6847f06-f4b5-4d15-bd57-67f3dc4d6d1f":{"metricId":"e6847f06-f4b5-4d15-bd57-67f3dc4d6d1f","metricName":"HPA Current Replicas","lookupType":17,"scopeType":1,"graphType":0,"queryOptions":null,"searchQuery":"kube_horizontalpodautoscaler_status_current_replicas"},"a7239a40-a754-430c-a575-ed8422e1e011":{"metricId":"a7239a40-a754-430c-a575-ed8422e1e011","metricName":"HPA Desired Replicas","lookupType":18,"scopeType":1,"graphType":0,"queryOptions":null,"searchQuery":"kube_horizontalpodautoscaler_status_desired_replicas"},"819d3dd8-487c-4dd2-9dff-efa40e735574":{"metricId":"819d3dd8-487c-4dd2-9dff-efa40e735574","metricName":"Total HTTP Requests","lookupType":20,"scopeType":0,"graphType":1,"queryOptions":{"duration":18000,"stepSize":300},"searchQuery":"increase(prometheus_http_requests_total[1m])"},"604a2f70-dc84-4200-a20b-9f107ef7b0d6":{"metricId":"604a2f70-dc84-4200-a20b-9f107ef7b0d6","metricName":"Pod Count by HPA Deployment","lookupType":21,"scopeType":0,"graphType":1,"queryOptions":{"duration":18000,"stepSize":300},"searchQuery":"{created_by_name=\"prometheus-kube-state-metrics-7d8b486d89\"}"},"56ce7314-6989-48a5-9e8c-b251ad19514b":{"metricId":"56ce7314-6989-48a5-9e8c-b251ad19514b","metricName":"HPA Utilization >= 90%","lookupType":19,"scopeType":0,"graphType":1,"queryOptions":{"duration":3600,"stepSize":60},"searchQuery":"(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 <= 30"},"30b8382e-67ab-4e3e-8cee-2c77f582f7ac":{"metricId":"30b8382e-67ab-4e3e-8cee-2c77f582f7ac","metricName":"CPU Usage","lookupType":1,"scopeType":0,"graphType":1,"queryOptions":{"duration":2592000,"stepSize":7200,"context":"cluster"},"searchQuery":"rate (container_cpu_usage_seconds_total{mode!=\"idle\"}[10m])"},"c0d1aab8-75bd-458d-be6b-6b24a4df384f":{"metricId":"c0d1aab8-75bd-458d-be6b-6b24a4df384f","metricName":"CPU Usage in Monitoring NS","lookupType":1,"scopeType":0,"graphType":1,"queryOptions":{"duration":86400,"stepSize":1200,"context":"namespace","contextChoice":"monitoring","target":"container"},"searchQuery":"sum (rate (container_cpu_usage_seconds_total{mode!=\"idle\",namespace=\"monitoring\"}[10m])) by (container)"},"804ba04e-5c5f-45b2-8536-bd68e0b1b89d":{"metricId":"804ba04e-5c5f-45b2-8536-bd68e0b1b89d","metricName":"Node 1 Memory Usage","lookupType":3,"scopeType":0,"graphType":1,"queryOptions":{"duration":1209600,"stepSize":21600,"context":"cluster","target":"container"},"searchQuery":"sum (container_memory_working_set_bytes) by (container)/ (1024*1024*1024)"}}}
+{
+  "userId": "f01cf3d2-abb0-427a-a3fe-e24521d57fb6",
+  "clusters": [
+    {
+      "clusterId": "da206865-6ff5-491b-9909-cf169ab008df",
+      "clusterName": "Testing Cluster",
+      "clusterUrl": "http://localhost:9090/"
+    }
+  ],
+  "dashboards": [
+    {
+      "dashboardId": "56ea9b75-909a-42df-8751-098eefe7db13",
+      "dashboardName": "Kubernetes Dashboard",
+      "metrics": [
+        "6f00acc9-22a9-498f-880f-6613ad2bda97",
+        "76fb3419-fd74-4f8b-8239-869666a181b1",
+        "953b0a2d-52fd-47c0-87b9-08c5537bbe55",
+        "c3b29796-7590-4082-a141-e561de155588",
+        "30b8382e-67ab-4e3e-8cee-2c77f582f7ac",
+        "c0d1aab8-75bd-458d-be6b-6b24a4df384f",
+        "804ba04e-5c5f-45b2-8536-bd68e0b1b89d"
+      ]
+    },
+    {
+      "dashboardId": "4148cf49-3d3a-47a6-9e75-288dd6b7ffaa",
+      "dashboardName": "HPA Monitoring",
+      "metrics": [
+        "4d2e27dd-225a-4a94-93ea-af914d34e827",
+        "731cf762-98c7-4861-8fcb-51ab37745c22",
+        "7a2e4d71-0338-4c2e-b272-438643ea8ef1",
+        "d6564743-be4a-4d9f-a415-cbd5a91af24a",
+        "3d75abd4-14ca-4a06-993f-c5eaae2aaab5",
+        "e6847f06-f4b5-4d15-bd57-67f3dc4d6d1f",
+        "a7239a40-a754-430c-a575-ed8422e1e011",
+        "819d3dd8-487c-4dd2-9dff-efa40e735574",
+        "604a2f70-dc84-4200-a20b-9f107ef7b0d6",
+        "56ce7314-6989-48a5-9e8c-b251ad19514b"
+      ]
+    }
+  ],
+  "hiddenAlerts": [],
+  "metrics": {
+    "6f00acc9-22a9-498f-880f-6613ad2bda97": {
+      "metricId": "6f00acc9-22a9-498f-880f-6613ad2bda97",
+      "metricName": "CPU Usage by Namespace",
+      "lookupType": 1,
+      "scopeType": 0,
+      "graphType": 1,
+      "queryOptions": {
+        "duration": 7200,
+        "stepSize": 300,
+        "target": "namespace"
+      },
+      "searchQuery": "sum (rate (container_cpu_usage_seconds_total{mode!=\"idle\"}[10m])) by (namespace)"
+    },
+    "76fb3419-fd74-4f8b-8239-869666a181b1": {
+      "metricId": "76fb3419-fd74-4f8b-8239-869666a181b1",
+      "metricName": "Memory Usage by Container",
+      "lookupType": 3,
+      "scopeType": 0,
+      "graphType": 1,
+      "queryOptions": {
+        "duration": 7200,
+        "stepSize": 300,
+        "target": "container"
+      },
+      "searchQuery": "sum (container_memory_working_set_bytes) by (container)/ (1024*1024*1024)"
+    },
+    "953b0a2d-52fd-47c0-87b9-08c5537bbe55": {
+      "metricId": "953b0a2d-52fd-47c0-87b9-08c5537bbe55",
+      "metricName": "% Disk Space Available by Node",
+      "lookupType": 7,
+      "scopeType": 0,
+      "graphType": 1,
+      "queryOptions": { "duration": 18000, "stepSize": 300 },
+      "searchQuery": "node_filesystem_avail_bytes/node_filesystem_size_bytes{fstype='xfs'}*100"
+    },
+    "c3b29796-7590-4082-a141-e561de155588": {
+      "metricId": "c3b29796-7590-4082-a141-e561de155588",
+      "metricName": "CPU Underutilization",
+      "lookupType": 2,
+      "scopeType": 0,
+      "graphType": 1,
+      "queryOptions": { "duration": 18000, "stepSize": 300 },
+      "searchQuery": "sum((rate(container_cpu_usage_seconds_total{container!=\"POD\",container!=\"\"}[30m]) - on (namespace,pod,container) group_left avg by (namespace,pod,container)(kube_pod_container_resource_requests{resource=\"cpu\"})) * -1 >0)"
+    },
+    "4d2e27dd-225a-4a94-93ea-af914d34e827": {
+      "metricId": "4d2e27dd-225a-4a94-93ea-af914d34e827",
+      "metricName": "HPA by Deployment",
+      "lookupType": 12,
+      "scopeType": 1,
+      "graphType": 0,
+      "queryOptions": null,
+      "searchQuery": "kube_horizontalpodautoscaler_metadata_generation"
+    },
+    "731cf762-98c7-4861-8fcb-51ab37745c22": {
+      "metricId": "731cf762-98c7-4861-8fcb-51ab37745c22",
+      "metricName": "HPA Target Status",
+      "lookupType": 13,
+      "scopeType": 1,
+      "graphType": 0,
+      "queryOptions": null,
+      "searchQuery": "kube_horizontalpodautoscaler_status_target_metric{metric_target_type=\"utilization\"}"
+    },
+    "7a2e4d71-0338-4c2e-b272-438643ea8ef1": {
+      "metricId": "7a2e4d71-0338-4c2e-b272-438643ea8ef1",
+      "metricName": "HPA Target",
+      "lookupType": 14,
+      "scopeType": 1,
+      "graphType": 0,
+      "queryOptions": null,
+      "searchQuery": "kube_horizontalpodautoscaler_spec_target_metric"
+    },
+    "d6564743-be4a-4d9f-a415-cbd5a91af24a": {
+      "metricId": "d6564743-be4a-4d9f-a415-cbd5a91af24a",
+      "metricName": "HPA Minimum Replicas",
+      "lookupType": 15,
+      "scopeType": 1,
+      "graphType": 0,
+      "queryOptions": null,
+      "searchQuery": "kube_horizontalpodautoscaler_spec_min_replicas"
+    },
+    "3d75abd4-14ca-4a06-993f-c5eaae2aaab5": {
+      "metricId": "3d75abd4-14ca-4a06-993f-c5eaae2aaab5",
+      "metricName": "HPA Maximum Replicas",
+      "lookupType": 16,
+      "scopeType": 1,
+      "graphType": 0,
+      "queryOptions": null,
+      "searchQuery": "kube_horizontalpodautoscaler_spec_max_replicas"
+    },
+    "e6847f06-f4b5-4d15-bd57-67f3dc4d6d1f": {
+      "metricId": "e6847f06-f4b5-4d15-bd57-67f3dc4d6d1f",
+      "metricName": "HPA Current Replicas",
+      "lookupType": 17,
+      "scopeType": 1,
+      "graphType": 0,
+      "queryOptions": null,
+      "searchQuery": "kube_horizontalpodautoscaler_status_current_replicas"
+    },
+    "a7239a40-a754-430c-a575-ed8422e1e011": {
+      "metricId": "a7239a40-a754-430c-a575-ed8422e1e011",
+      "metricName": "HPA Desired Replicas",
+      "lookupType": 18,
+      "scopeType": 1,
+      "graphType": 0,
+      "queryOptions": null,
+      "searchQuery": "kube_horizontalpodautoscaler_status_desired_replicas"
+    },
+    "819d3dd8-487c-4dd2-9dff-efa40e735574": {
+      "metricId": "819d3dd8-487c-4dd2-9dff-efa40e735574",
+      "metricName": "Total HTTP Requests",
+      "lookupType": 20,
+      "scopeType": 0,
+      "graphType": 1,
+      "queryOptions": { "duration": 18000, "stepSize": 300 },
+      "searchQuery": "increase(prometheus_http_requests_total[1m])"
+    },
+    "604a2f70-dc84-4200-a20b-9f107ef7b0d6": {
+      "metricId": "604a2f70-dc84-4200-a20b-9f107ef7b0d6",
+      "metricName": "Pod Count by HPA Deployment",
+      "lookupType": 21,
+      "scopeType": 0,
+      "graphType": 1,
+      "queryOptions": { "duration": 18000, "stepSize": 300 },
+      "searchQuery": "{created_by_name=\"prometheus-kube-state-metrics-7d8b486d89\"}"
+    },
+    "56ce7314-6989-48a5-9e8c-b251ad19514b": {
+      "metricId": "56ce7314-6989-48a5-9e8c-b251ad19514b",
+      "metricName": "HPA Utilization >= 80%",
+      "lookupType": 19,
+      "scopeType": 0,
+      "graphType": 1,
+      "queryOptions": { "duration": 18000, "stepSize": 60 },
+      "searchQuery": "(kube_horizontalpodautoscaler_status_current_replicas/kube_horizontalpodautoscaler_spec_max_replicas) * 100 >= 80"
+    },
+    "30b8382e-67ab-4e3e-8cee-2c77f582f7ac": {
+      "metricId": "30b8382e-67ab-4e3e-8cee-2c77f582f7ac",
+      "metricName": "CPU Usage",
+      "lookupType": 1,
+      "scopeType": 0,
+      "graphType": 1,
+      "queryOptions": {
+        "duration": 2592000,
+        "stepSize": 7200,
+        "context": "cluster"
+      },
+      "searchQuery": "rate (container_cpu_usage_seconds_total{mode!=\"idle\"}[10m])"
+    },
+    "c0d1aab8-75bd-458d-be6b-6b24a4df384f": {
+      "metricId": "c0d1aab8-75bd-458d-be6b-6b24a4df384f",
+      "metricName": "CPU Usage in Monitoring NS",
+      "lookupType": 1,
+      "scopeType": 0,
+      "graphType": 1,
+      "queryOptions": {
+        "duration": 86400,
+        "stepSize": 1200,
+        "context": "namespace",
+        "contextChoice": "monitoring",
+        "target": "container"
+      },
+      "searchQuery": "sum (rate (container_cpu_usage_seconds_total{mode!=\"idle\",namespace=\"monitoring\"}[10m])) by (container)"
+    },
+    "804ba04e-5c5f-45b2-8536-bd68e0b1b89d": {
+      "metricId": "804ba04e-5c5f-45b2-8536-bd68e0b1b89d",
+      "metricName": "Node 1 Memory Usage",
+      "lookupType": 3,
+      "scopeType": 0,
+      "graphType": 1,
+      "queryOptions": {
+        "duration": 1209600,
+        "stepSize": 21600,
+        "context": "cluster",
+        "target": "container"
+      },
+      "searchQuery": "sum (container_memory_working_set_bytes) by (container)/ (1024*1024*1024)"
+    }
+  }
+}

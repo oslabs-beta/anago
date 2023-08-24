@@ -25,9 +25,9 @@ ChartJS.register(
   Legend,
 );
 
-const IndivDLG = ({ graphData }) => {
+const IndivDLG = ({ graphData, graphTitle }) => {
   const [open, setOpen]: any = useState(false);
-
+  console.log('graphData:', graphData);
   // customize Chatjs graph options
   const options = {
     responsive: true,
@@ -42,7 +42,7 @@ const IndivDLG = ({ graphData }) => {
       },
       title: {
         display: true,
-        text: 'Chart.js Line Chart - Multi Axis',
+        text: 'HTTP Request vs Pod Count',
       },
     },
     scales: {
@@ -70,14 +70,14 @@ const IndivDLG = ({ graphData }) => {
 
   return (
     <div className='metric-container'>
-      <h4 className='metric-title'>Pod Count vs HTTP Request</h4>
+      <h4 className='metric-title'>{graphTitle}</h4>
       {graphData.hasOwnProperty('labels') && (
         <Line data={graphData} options={options} onClick={openModal} />
       )}
       <div className='modal'>
         <button onClick={openModal}>See more</button>
         <Modal open={open} onClose={closeModal}>
-          <h4 className='metric-title'>Pod Count vs HTTP Request</h4>
+          <h4 className='metric-title'>{graphTitle}</h4>
           {graphData.hasOwnProperty('labels') && (
             <Line data={graphData} options={optionsWithLegend} />
           )}
