@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-responsive-modal';
 import MetricDisplay from './MetricDisplay';
 import { UserData } from '../../../types';
-import {
-  useRouteLoaderData,
-  useParams,
-  Outlet
-} from 'react-router-dom';
+import { useRouteLoaderData, useParams, Outlet } from 'react-router-dom';
 import AddMetric from './AddMetric';
 import AlertBar from '../AlertBar';
 
@@ -37,7 +33,6 @@ const Dashboard = () => {
     }
   };
 
-
   function saveMetricsAndReload() {
     setEditMode(false);
     setAddMetricModal(false);
@@ -61,11 +56,11 @@ const Dashboard = () => {
                   Refresh
                 </button>
               </span>
-              <span>
+              {/* <span>
                 <button className='btn' onClick={pithy}>
                   Pithy Loop
                 </button>
-              </span>
+              </span> */}
               <span>
                 <button className='btn' onClick={() => setAddMetricModal(true)}>
                   Add Metric
