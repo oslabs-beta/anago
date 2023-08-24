@@ -12,7 +12,6 @@ userDataController.sendUserData = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('in sendUserData');
   try {
     const userData = readUserData();
     if (!userData) {
