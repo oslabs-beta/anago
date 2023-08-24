@@ -19,13 +19,12 @@ import { optionsBuilder, queryBuilder } from '../models/queryBuilder.js';
 const promURL = DEPLOYMENT_URL + 'api/v1/';
 const promURLInstant = promURL + 'query?query=';
 const promURLRange = promURL + 'query_range?query=';
-// TODO: update alerts url if need
 const promURLAlerts = promURL + 'alerts';
 
 const promApiController: any = {
   metricQueryLookup: (req: Request, res: Response, next: NextFunction) => {
     // When FE fetches a particular metricId, this middleware adds the metric basics (lookupType, searchQuery, queryOptions) onto res.locals for access in other middleware.
-    console.log('Using metricId to look up', req.params.id);
+
     // Fetch userData
     const userData = readUserData();
     if (!userData) {
@@ -75,15 +74,7 @@ const promApiController: any = {
     res.locals.queryOptions = optionsBuilder(req.body);
     res.locals.searchQuery = queryBuilder(
       req.body.lookupType,
-      res.locals.queryOptions
-    );
-    console.log(
-      'In query base builder with req.body',
-      req.body,
-      '\nBuilt query Options',
       res.locals.queryOptions,
-      '\nBuilt searchQuery',
-      res.locals.searchQuery
     );
     next();
   },
@@ -91,11 +82,10 @@ const promApiController: any = {
   // build the query to send to the prometheus http api
   queryBuilder: (req: Request, res: Response, next: NextFunction) => {
     // prometheus http api url's to query
-    const promURL = DEPLOYMENT_URL+'api/v1/';
+    const promURL = DEPLOYMENT_URL + 'api/v1/';
     const promURLInstant = promURL + 'query?query=';
     const promURLRange = promURL + 'query_range?query=';
     const promURLAlerts = promURL + 'alerts';
-
     // build a range promql
     if (res.locals.scopeType === 0) {
       const end = Math.floor(Date.now() / 1000); // current date and time
@@ -119,7 +109,6 @@ const promApiController: any = {
     }
 
     return next();
-    // TODO: add error handler
   },
 
   // get request querying prometheus http api that exists as an instance in kubernetes
@@ -129,13 +118,11 @@ const promApiController: any = {
     if (!ACTIVE_DEPLOYMENT) {
       // retrieve metricId from request query parameter
       const metricId = req.params.id;
-      console.log('Supplying Placeholder data for metricId ', metricId);
       const placeholderFetch = placeholderData(
         metricId,
         res.locals.userData,
-        res.locals.queryOptions
+        res.locals.queryOptions,
       );
-      // console.log('Local data for metric ', metricId, ':\n', placeholderFetch);
       res.locals.promMetrics = placeholderFetch;
       return next();
     }
@@ -144,7 +131,6 @@ const promApiController: any = {
       // query Prometheus
       const response = await fetch(res.locals.promQuery);
       const data = await response.json();
-      // console.log('prom response data: ', data.data.result);
       // if the prometheus query response indicates a failure, then send an error message
       if (data.status === 'error') {
         return next({
@@ -160,35 +146,12 @@ const promApiController: any = {
         return next();
       }
       // if instant query type
-      else if (
-        res.locals.scopeType === 1 ||
-        // TODO: MAKE ADDITIONAL MIDDLEWARE TO SHAPE DATA TO APPROPRIATE GRAPH TYPE
-        req.body.displayType === 'log'
-      ) {
+      else if (res.locals.scopeType === 1 || req.body.displayType === 'log') {
         res.locals.promMetrics = data.data.result;
         return next();
       }
       // if prometheus query response contains metric data, then filter data into an object of plotData type
       else {
-        // TEMP: record data for testing later
-        /*        const currentData = fs.readFile(
-          path.resolve(__dirname, '../models/demoData.json'),
-          'utf-8',
-          (err, readData) => {
-            const parsedData = JSON.parse(readData);
-            parsedData[metricId] = data.data.result;
-            console.log(parsedData);
-            const writeData = JSON.stringify(parsedData);
-            fs.writeFile(
-              path.resolve(__dirname, '../models/demoData.json'),
-              writeData,
-              () => console.log('write complete')
-            );
-          }
-        );
-        */
-        // console.log('range query ');
-
         // initialize object to store scraped metrics. This object shape is required by ChartJS to graph
         const promMetrics: plotData = {
           labels: [],
@@ -213,11 +176,10 @@ const promApiController: any = {
             });
           }
           // populate the y-axis object with the scraped metrics
-          // yAxis.label = obj.metric.toString();
           yAxis.label = namePlot(
             obj,
             res.locals.lookupType,
-            res.locals.queryOptions
+            res.locals.queryOptions,
           );
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));
@@ -226,7 +188,6 @@ const promApiController: any = {
         });
 
         res.locals.promMetrics = promMetrics;
-        // console.log('promMetrics', promMetrics);
         return next();
       }
     } catch (err) {

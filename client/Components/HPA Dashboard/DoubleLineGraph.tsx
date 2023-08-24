@@ -44,34 +44,14 @@ const DoubleLineGraph = ({ metricIds }) => {
     datasets: any[];
   }
 
-  // let indivGraphs: any;
-  // const createIndivGraphs = cacheByHPA => {
-  //   indivGraphs = Object.values(cacheByHPA).map(graphObj => {
-  //     return <IndivDLG graphData={graphObj} />;
-  //   });
-  //   setGraphData(Object.values(cacheByHPA));
-  //   console.log('complete');
-  //   // setGraphData(true);
-  // };
-
   const shapeData = () => {
     const cacheByHPA = {};
     // transform the data into the shape required for Chartjs multi axis line chart
     const finalShape: graphShape = {
       labels: metricData[queriesById['HTTP Requests Total']].labels,
-      datasets: [
-        // {
-        //   label: metricData[queriesById['Number of Pods']].datasets[0].label,
-        //   data: metricData[queriesById['Number of Pods']].datasets[0].data,
-        //   borderColor: 'rgb(53, 162, 235)',
-        //   backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        //   yAxisID: 'y1',
-        // },
-      ],
+      datasets: [],
     };
 
-    // "created_by_name": "alertmanager-prometheus-kube-prometheus-alertmanager"
-    // label: 'created_by_name="pithy-deployment-f77bd655c"';
     // filter data to display a graph for each deployed hpa
     metricData[queriesById['Number of Pods']].datasets.forEach(obj => {
       cacheByHPA[
@@ -87,27 +67,11 @@ const DoubleLineGraph = ({ metricIds }) => {
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
         yAxisID: 'y1',
       });
-      console.log('DoubleLineGraph cache', cacheByHPA);
     });
 
     // assign HTTP Requests Total, organized by endpoints, to the graph
-    /*
-    metricData[queriesById['HTTP Requests Total']].datasets.forEach(obj => {
-      console.log('http req obj.label', obj.label);
-      let r = Math.random() * 100 + 127;
-      // finalShape.datasets.push({
-      //   label: obj.label,
-      //   data: obj.data,
-      //   borderColor: `rgb(${r}, 99, 132)`,
-      //   backgroundColor: `rgba(${r}, 99, 132, 0.5)`,
-      //   yAxisID: 'y',
-      // });
-    });
-    */
-    //  "service": "prometheus-kube-prometheus-prometheus"
     metricData[queriesById['HTTP Requests Total']].datasets.forEach(obj => {
       let r = Math.random() * 100 + 127;
-      console.log('obj.label', obj.label.slice(9, obj.label.indexOf(`-`)));
       if (
         cacheByHPA.hasOwnProperty(obj.label.slice(9, obj.label.indexOf(`-`)))
       ) {
@@ -121,9 +85,7 @@ const DoubleLineGraph = ({ metricIds }) => {
       }
     });
 
-    // setGraphData(finalShape);
     setGraphData(cacheByHPA);
-    // createIndivGraphs(cacheByHPA);
   };
 
   const getPodsAndRequests = async () => {
@@ -140,7 +102,7 @@ const DoubleLineGraph = ({ metricIds }) => {
           count += 1;
           setFetchCount(count);
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log('Error fetching from Prometheus: ', err));
     });
   };
 
@@ -152,7 +114,6 @@ const DoubleLineGraph = ({ metricIds }) => {
   //   create double line graph once both metrics have been retrieved
   useEffect(() => {
     if (fetchCount === 2) {
-      console.log('metricData', metricData);
       shapeData();
     }
   }, [fetchCount]);

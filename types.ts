@@ -109,11 +109,11 @@ export interface CleanAlert {
 export enum LookupType {
   // Default Dashboard
   CustomEntry, //0
-  CPUUsage, // 1 - Current CPU Usage
-  CPUIdle, // 2 - Rylie help fill this out
+  CPUUsage, // 1 
+  CPUIdle, // 2
   MemoryUsed, // 3
-  MemoryFreeInNode, // 4 - Needs work
-  MemoryIdle, // 5 - Rylie help!
+  MemoryFreeInNode, // 4 
+  MemoryIdle, // 5
   DiskUsage, // 6
   FreeDiskinNode, // 7
   ReadyNodesByCluster, // 8

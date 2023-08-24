@@ -20,10 +20,10 @@
 
 > [default] region = us-east-2
 >
-> [profile schlep] region = us-east-2 output = json
+> [profile USERNAME] region = us-east-2 output = json
 >
-> [profile S3FullAccess] role_arn = arn:aws:iam::180202761917:role/Admin-Kub
-> source_profile = schlep region = us-east-2
+> [profile S3FullAccess] role_arn = arn:aws:iam::AWS_ACCOUNT_ID:role/Admin-Kub
+> source_profile = USERNAME region = us-east-2
 
 Note: (Notes on the importance of the region, etc.)
 
@@ -53,7 +53,7 @@ Note: (Notes on the importance of the region, etc.)
 1. Use kubectl to deploy deployment(+pods) and services as usual (see Kubernetes
    Deployment doc), using the ECR image link. For example:
    `kubectl apply -f aws-pithy.yaml` (modify aws-pithy image uri) -or-
-   `kubectl create deployment [Depl-name] --image=[180202761917.dkr.ecr.us-east-2.amazonaws.com/pithy]`
+   `kubectl create deployment [Depl-name] --image=[AMAZON_ACCOUNT_ID.dkr.ecr.us-east-2.amazonaws.com/pithy]`
 2. `kubectl get svc` should surface the Service’s external IP, now accessible
 
 ## Make the Metrics available
