@@ -70,17 +70,14 @@ const IndivDLG = ({ graphData }) => {
 
   return (
     <div className='metric-container'>
-      {/* <h4 className='metric-title'>{userData.metrics[metricId].metricName}</h4> */}
+      <h4 className='metric-title'>Pod Count vs HTTP Request</h4>
       {graphData.hasOwnProperty('labels') && (
         <Line data={graphData} options={options} onClick={openModal} />
       )}
       <div className='modal'>
-        {/* {metricId && <button onClick={openModal}>See more</button>} */}
         <button onClick={openModal}>See more</button>
         <Modal open={open} onClose={closeModal}>
-          {/* <h4 className='metric-title'>
-            {userData.metrics[metricId].metricName}
-          </h4> */}
+          <h4 className='metric-title'>Pod Count vs HTTP Request</h4>
           {graphData.hasOwnProperty('labels') && (
             <Line data={graphData} options={optionsWithLegend} />
           )}
