@@ -21,8 +21,14 @@ ChartJS.register(
   Colors,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
+
+//
+//
+// Largely a copy of Metric Display, but takes fetched data instead of metricId
+//
+//
 
 const MetricDisplay = ({ lookupType, metricData }) => {
   //state to handle modal and handling fetched data router

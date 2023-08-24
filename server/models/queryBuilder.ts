@@ -15,19 +15,6 @@ import { LookupType, ScopeType, GraphType } from '../../types.js';
 // Metrics Generate .graphType by ScopeType (future: options?)
 // Metrics Generate .searchQuery using queryOptions -> queryBuilder
 
-// Front-End Object Properties:
-// Always
-// ... name:string
-// ... lookupType:enum
-// ... scopeType: enum
-// Depends
-// ... .lookupType = LookupType.CustomEntry: customQuery:string
-// ... .scopeType = ScopeType.Range: duration:number
-// ... .scopeType = ScopeType.Range: stepSize:number
-// ... .scopeType = ScopeType.Instant: refresh:number
-// ... some .lookupType: context:string (1,2,3,5,6,9,10,11)
-// ... some precons: chosenContext:string (same)
-// ... some precons: target:string (1,6,11)
 
 export function optionsBuilder(obj: any): any {
   const options: any = {};
@@ -61,10 +48,10 @@ export function optionsBuilder(obj: any): any {
         break;
     }
   }
-
   return options;
 }
 
+// Build PromQL queries with the appropriate syntax, account for queryOptions
 export function queryBuilder(
   lookupType: LookupType,
   queryOptions: any

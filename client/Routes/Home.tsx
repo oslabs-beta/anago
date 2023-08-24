@@ -24,14 +24,14 @@ export default function Home() {
   }, []);
 
   // // Fetch Cluster Data
-  // useEffect(() => {
-  //   fetch('api/k8s/cluster')
-  //     .then((data) => data.json())
-  //     .then((data) => {
-  //       setClusterData(data);
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, []);
+  useEffect(() => {
+    fetch('api/k8s/cluster')
+      .then((data) => data.json())
+      .then((data) => {
+        setClusterData(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div className='home-layout'>
