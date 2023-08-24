@@ -37,7 +37,6 @@ const Pods = ({
       }
     });
   }, []);
-  console.log('podAlerts', podAlerts);
 
   return (
     <div className='pod' id={id} key={id}>

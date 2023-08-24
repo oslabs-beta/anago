@@ -118,11 +118,7 @@ const MetricDisplay = ({ metricId, editMode }) => {
       // clear interval so it only runs the setInterval when component is mounted
       return () => clearInterval(interval);
     },
-    [
-      // userData.metrics[metricId].scopeType,
-      // userData.metrics[metricId].queryOptions.stepSize,
-      // userData.metrics[metricId].queryOptions.refresh,
-    ]
+    []
   );
 
   //modal handler functions

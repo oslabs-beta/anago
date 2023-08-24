@@ -7,15 +7,12 @@ import {
 import { UserData } from '../../types';
 import React, { useContext, useEffect } from 'react';
 import { StoreContext } from '../context/stateStore';
-import AlertBar from '../Components/AlertBar';
 
 export default function Home() {
   const userData = useRouteLoaderData('home') as UserData;
   const navigate = useNavigate();
-  const { setHasFetchedUserData, setCurrentDashboard, setClusterData }: any =
+  const { setHasFetchedUserData, setClusterData }: any =
     useContext(StoreContext);
-
-  const dashboards = userData.dashboards;
 
   //set default dashboard and route to that dashboard
   useEffect(() => {
@@ -23,7 +20,7 @@ export default function Home() {
     if (window.location.pathname === '/') return navigate('0');
   }, []);
 
-  // // Fetch Cluster Data
+  // Fetch Cluster Data
   useEffect(() => {
     fetch('api/k8s/cluster')
       .then((data) => data.json())
@@ -50,7 +47,7 @@ export default function Home() {
             Dashboard
           </NavLink>
           <NavLink to={'/1'} className='nav-btn'>
-            HPA Monitor/Test
+            HPA Monitor
           </NavLink>
           <NavLink to={'/clusterview'} className='nav-btn'>
             ClusterView
@@ -58,9 +55,6 @@ export default function Home() {
           <NavLink to={'/setup'} className='nav-btn'>
             Getting Started
           </NavLink>
-          {/* <NavLink to={'/login'} className='nav-btn'>
-            Log Out
-          </NavLink> */}
         </nav>
       </header>
 

@@ -25,7 +25,7 @@ const promURLAlerts = promURL + 'alerts';
 const promApiController: any = {
   metricQueryLookup: (req: Request, res: Response, next: NextFunction) => {
     // When FE fetches a particular metricId, this middleware adds the metric basics (lookupType, searchQuery, queryOptions) onto res.locals for access in other middleware.
-    console.log('Using metricId to look up', req.params.id);
+    
     // Fetch userData
     const userData = readUserData();
     if (!userData) {
@@ -144,7 +144,6 @@ const promApiController: any = {
       // query Prometheus
       const response = await fetch(res.locals.promQuery);
       const data = await response.json();
-      // console.log('prom response data: ', data.data.result);
       // if the prometheus query response indicates a failure, then send an error message
       if (data.status === 'error') {
         return next({
@@ -226,7 +225,6 @@ const promApiController: any = {
         });
 
         res.locals.promMetrics = promMetrics;
-        // console.log('promMetrics', promMetrics);
         return next();
       }
     } catch (err) {

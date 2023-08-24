@@ -5,8 +5,7 @@ import { UserData } from '../../../types';
 import {
   useRouteLoaderData,
   useParams,
-  Outlet,
-  useLocation,
+  Outlet
 } from 'react-router-dom';
 import AddMetric from './AddMetric';
 import AlertBar from '../AlertBar';
