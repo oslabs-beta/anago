@@ -7,7 +7,7 @@ Welcome to Anago. The first section of this set-up document walks through instal
 1. Clone the Anago repository locally and install required modules:
 
 ```bash
-kubectl port-forward svc/[service-name] -n [namespace] 9090
+npm install
 ```
 
 2. Modify the [user-config.ts](/user-config.ts) file to point to access your Prometheus instance and Alertmanager. For example, forward these services to the default ports (9090 and 9093):
@@ -23,7 +23,7 @@ kubectl port-forward svc/[service-name] -n [namespace] 9093
 npm run dev
 ```
 
-Navigating to the local access point for Vite (by default, [http://locahost:5173](http://locahost:5173)), and you should see Anago!
+Navigate to the local access point for Vite (by default, [http://locahost:5173](http://locahost:5173)), and you should see Anago!
 Several core metrics are populated by default (or if `NEW_USER=true` in user-config.ts).
 
 All set? click [here](/README.md) to return to the main README.md

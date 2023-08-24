@@ -12,6 +12,7 @@ $highlight-dark: rgb(33, 81, 155);
 $highlight-light: rgba(97, 145, 215, 0.7);
 $highlight-bright: rgba(143, 166, 200, 0.9);
 $highlight-gray: rgba(143, 166, 200, 0.5);
+$brown: #372715;
 
 * {
   font-family: 'Ubuntu', sans-serif;
@@ -83,6 +84,84 @@ $highlight-gray: rgba(143, 166, 200, 0.5);
 }
 #trash-can {
   padding-left: 5px;
+}
+
+//setup page
+#setup-page {
+  color: $highlight-dark;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+#welcome {
+  font-size: 30px;
+  margin: 10px;
+}
+#setuplist {
+  border: 2px solid $highlight-light;
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: auto;
+  background-color: rgba(97, 144, 215, 0.296);
+}
+
+#setuplist .individSetup a {
+  color: $highlight;
+}
+
+#setuplist .individSetup .npm {
+  border: 2px solid $brown;
+  background-color: $brown;
+  color: white;
+  border-radius: 5px;
+  height: auto;
+  font-size: 13px;
+  text-align: left;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  margin-top: 3px;
+  margin-left: 10px;
+  margin-right: px;
+}
+
+#localAccess a,
+#setup-title a {
+  color: $highlight-dark;
+}
+
+#localAccess p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#localAccess {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#moreInfo a {
+  color: $highlight-dark;
+  text-align: center;
+}
+
+#setup-title,
+#localAccess {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  color: $highlight-dark;
+}
+
+#setup-page p {
+  font-size: 13px;
 }
 
 header {
@@ -192,6 +271,16 @@ header {
   display: flex;
   flex-direction: column;
   cursor: pointer;
+}
+
+#mouseNotOverGrey {
+  color: rgb(145, 143, 143);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  align-self: center;
+  justify-content: center;
+  height: 1rem;
 }
 
 #noAlertTitle {
@@ -513,14 +602,15 @@ td {
   font-size: 10px;
   font-weight: 400;
   justify-content: center;
-  line-height: 20px;
-  margin: 10px;
+  line-height: 25px;
+  margin: 8px;
   padding-top: 2px;
-  width: 50px;
-  height: 25px;
+  width: 70px;
+  height: 30px;
   overflow: hidden;
   padding-left: 20px;
   padding-right: 20px;
+  font-size: 13px;
   text-align: center;
   touch-action: manipulation;
   transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
