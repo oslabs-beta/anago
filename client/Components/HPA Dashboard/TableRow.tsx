@@ -20,7 +20,6 @@ import metricsController from '../../../server/controllers/metricsController';
 const Row = (props: { hpa: string; row: (string | number)[]; log: any }) => {
   const { hpa, row, log } = props;
   const [open, setOpen] = React.useState(false);
-  const [filteredLog, setFilteredLog] = useState<any>(undefined);
 
   const filterLogHPA = () => {
     if (typeof log === 'string') {
@@ -54,9 +53,6 @@ const Row = (props: { hpa: string; row: (string | number)[]; log: any }) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        {/* <TableCell component='th' scope='row'>
-          {row.name}
-        </TableCell> */}
         <TableCell align='right'>{hpa}</TableCell>
         <TableCell align='right'>{row[0]}</TableCell>
         <TableCell align='right'>{row[1]}</TableCell>

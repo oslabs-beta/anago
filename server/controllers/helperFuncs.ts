@@ -36,7 +36,6 @@ export function readUserData(): any {
       );
       return newUserData;
     }
-    //console.log('Successfully read user data, returning now.');
     return userData;
   } catch (err) {
     console.log(
@@ -196,6 +195,5 @@ export function placeholderData(
     });
     promMetrics.datasets.push(yAxis);
   });
-  // console.log(promMetrics);
   return promMetrics;
 }

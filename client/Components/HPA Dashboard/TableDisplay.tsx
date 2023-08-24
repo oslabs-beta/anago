@@ -27,15 +27,11 @@ interface RowsObj {
 }
 
 const TableDisplay = ({ tableData, logId, graphIds }) => {
-  // const [tableData, setTableData]: any = useState(new Map());
-  const [fetchCount, setFetchCount] = useState(0);
   const [filteredTableData, setfilteredTableData]: any[] = useState([]);
-  const [logHPA, setLogHPA] = useState<string | promResResultElements[][]>([]);
 
   const newData: promResResultElements[][] = [];
 
   const getHPAUtilization = async () => {
-    console.log('getHPAUtilization logId', logId);
     fetch(`/api/data/metrics/${logId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -45,17 +41,14 @@ const TableDisplay = ({ tableData, logId, graphIds }) => {
     })
       .then(data => data.json())
       .then(data => {
-        console.log('data in  getHPAUtilization', data);
         filterHPAUtilization(data);
-        // setLogHPA(data);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log('Error retrieving HPA Utilization data', err));
   };
 
   const filterHPAUtilization = (data: any[]) => {
     // initialize cache to store an array of metric values by their associated hpa
     const cache = {};
-    console.log('data in filterHPAUtilization', data);
     // if not metrics met the scope of the query
     if (data[0] === 'No metrics meet the scope of the query') {
       return filterTableData(cache);
@@ -64,36 +57,16 @@ const TableDisplay = ({ tableData, logId, graphIds }) => {
         cache[metricObj.metric.horizontalpodautoscaler] = [];
         if (!Array.isArray(metricObj.values[0][0])) {
           metricObj.values.forEach(arr => {
-            // ! may need to update duration when fixing the HPA Utilization query
-            /*
-            cache[metricObj.metric.horizontalpodautoscaler].push([
-              cleanTime(arr[0], { duration: 60 * 60 }),
-              arr[1],
-            ]);
-            */
             cache[metricObj.metric.horizontalpodautoscaler].push([
               cleanTime(arr[0]),
               arr[1],
             ]);
-            /*
-            cache[metricObj.metric.horizontalpodautoscaler].push([
-              arr[0],
-              arr[1],
-            ]);
-            */
           });
         }
         // if the values array from prometheus is >99, then it will return nested arrays of the values array (each holds the metrics for every 99 set of values)
         // in this case, only display the most recent 99 metrics
         else {
           metricObj.values[0].forEach(arr => {
-            // ! may need to update duration when fixing the HPA Utilization query
-            /*
-          cache[metricObj.metric.horizontalpodautoscaler].push(
-            [cleanTime(arr[0], { duration: 60 * 60 }),
-            arr[1]]
-          );
-          */
             cache[metricObj.metric.horizontalpodautoscaler].push([
               arr[0],
               arr[1],
@@ -122,7 +95,6 @@ const TableDisplay = ({ tableData, logId, graphIds }) => {
       });
       column += 1;
     }
-    // !may need to be a separate func
     setfilteredTableData(
       Object.keys(rows).map(hpa => {
         return (
@@ -143,12 +115,6 @@ const TableDisplay = ({ tableData, logId, graphIds }) => {
   useEffect(() => {
     getHPAUtilization();
   }, []);
-
-  // useEffect(() => {
-  //   filterTableData();
-  // }, [logHPA]);
-
-  // TODO GET METRICS FOR HPA UTILIZATION (final element in array) and display when click the down arrow on table
 
   return (
     <div>

@@ -172,7 +172,6 @@ userDataController.addMetric = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('Received a new Metric to configure:', req.body);
   const newMetricInfo = req.body;
   const updatedUserData = res.locals.userData;
 

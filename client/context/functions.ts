@@ -21,14 +21,6 @@ export function cleanName(name: string) {
 export function handleAlerts(statefulAlerts: []) {
   const current = [...statefulAlerts].map((alert) => {
     const obj = <CleanAlert>{};
-    // obj['name'] = alert['name'];
-    // obj['description'] = alert['description'];
-    // obj['summary'] = alert['summary'];
-    // obj['severity'] = alert['severity'];
-    // if (alert['pod']) obj['affectedPod'] = alert['pod'];
-    // if (alert['namespace']) obj['affectedNamespace'] = alert['namespace'];
-    // obj['startTime'] = cleanTime(alert['startTime']);
-    // obj['lastUpdated'] = cleanTime(alert['lastUpdated']);
     obj['name'] = alert['labels']['alertname'];
     obj['description'] = alert['annotations']['description'];
     obj['summary'] = alert['annotations']['summary'];

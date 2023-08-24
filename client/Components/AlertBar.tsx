@@ -6,8 +6,6 @@ import { handleAlerts } from '../context/functions';
 import Modal from 'react-responsive-modal';
 import { ALERT_URL } from '../../user-config.js';
 
-//TODO: add displayed to the state store
-
 const AlertBar = () => {
   //keep track of displayed alerts
   const { displayedAlerts, setDisplayedAlerts }: any = useContext(StoreContext);

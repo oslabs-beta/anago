@@ -7,7 +7,6 @@ import {
 
 //import routes
 import Home from './Routes/Home';
-// import Login from './Routes/Login';
 import HPADashboard from './Components/HPA Dashboard/HPADashboard';
 import Dashboard from './Components/Dashboard/Dashboard';
 import ClusterView from './Routes/ClusterView';
@@ -17,7 +16,7 @@ import ErrorElement from '../ErrorElement';
 //import loaders
 import * as loaders from './context/loaders';
 import React from 'react';
-// import React from 'react';
+
 
 //create router to pass into router provider component returned from app. createBrowserRouter recommended for all latest React Router web projects.
 const router = createBrowserRouter(
@@ -38,7 +37,6 @@ const router = createBrowserRouter(
         element={<Dashboard />}
         errorElement={<ErrorElement />}
       />
-      {/* <Route path='login' element={<Login />} /> */}
       <Route
         path='clusterview'
         element={<ClusterView />}
