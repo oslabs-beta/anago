@@ -15,12 +15,6 @@ import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 import type { Request, Response, NextFunction } from 'express';
 import { optionsBuilder, queryBuilder } from '../models/queryBuilder.js';
 
-// prometheus http api url's to query
-const promURL = DEPLOYMENT_URL + 'api/v1/';
-const promURLInstant = promURL + 'query?query=';
-const promURLRange = promURL + 'query_range?query=';
-const promURLAlerts = promURL + 'alerts';
-
 const promApiController: any = {
   metricQueryLookup: (req: Request, res: Response, next: NextFunction) => {
     // When FE fetches a particular metricId, this middleware adds the metric basics (lookupType, searchQuery, queryOptions) onto res.locals for access in other middleware.
@@ -37,6 +31,7 @@ const promApiController: any = {
     res.locals.userData = userData;
 
     const metricId = req.params.id;
+    console.log('metricId', metricId);
     if (
       userData.metrics === undefined ||
       userData.metrics[metricId] === undefined ||
@@ -51,6 +46,7 @@ const promApiController: any = {
     res.locals.lookupType = userData.metrics[metricId].lookupType;
     res.locals.scopeType = userData.metrics[metricId].scopeType;
     res.locals.searchQuery = userData.metrics[metricId].searchQuery;
+    console.log('res.locals.searchQuery', res.locals.searchQuery);
     res.locals.queryOptions = userData.metrics[metricId].queryOptions;
     next();
   },
@@ -86,7 +82,7 @@ const promApiController: any = {
     const promURL = DEPLOYMENT_URL + 'api/v1/';
     const promURLInstant = promURL + 'query?query=';
     const promURLRange = promURL + 'query_range?query=';
-    const promURLAlerts = promURL + 'alerts';
+
     // build a range promql
     if (res.locals.scopeType === 0) {
       const end = Math.floor(Date.now() / 1000); // current date and time
