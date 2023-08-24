@@ -5,7 +5,6 @@ import promApiController from '../controllers/promApiController.js';
 const userRouter = express.Router();
 
 userRouter.get('/', userDataController.sendUserData, (_, res: Response) => {
-  // console.log(res.locals.userData.dashboards[0]);
   return res.status(200).json(res.locals.userData);
 });
 

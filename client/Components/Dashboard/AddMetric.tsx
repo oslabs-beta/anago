@@ -87,7 +87,6 @@ const AddMetric = (props): any => {
 
     // Filter Targets based on current Context
     let filteredTargets = [...targetMatrix[searchType]];
-    // console.log(filteredTargets);
     if (filteredTargets.length) {
       if (newChosenDomains[0] == 'Node') filteredTargets.splice(1, 1);
       // Can't query Namespaces in Node
@@ -98,7 +97,6 @@ const AddMetric = (props): any => {
 
     // If Context selection involves Cluster data, populate it
     let contextChoices = [''];
-    console.log(clusterData);
     if (
       newChosenDomains[0] !== 'Cluster' &&
       clusterData.hasOwnProperty('namespaces')
@@ -188,7 +186,7 @@ const AddMetric = (props): any => {
         }
       } else {
         // Couldn't convert time, so use default
-        str += "24 hours (couldn't parse time).";
+        str += "24 hours (couldn't understand time).";
       }
     } else {
       str += '.';
@@ -236,7 +234,6 @@ const AddMetric = (props): any => {
       if (adjustableStep && newMetric.duration / newMetric.stepSize > 400) {
         // Step size will hinder page
         newMetric.stepSize = newMetric.duration / 400;
-        console.log('over the line');
         setIntervalNote(
           'Note: Current time ratio may slow performance. Precision adjusted for preview.'
         );
@@ -260,7 +257,6 @@ const AddMetric = (props): any => {
     setMessageText('Querying Preview Metric...');
     setIntervalNote('');
     const newMetric = formData(true);
-    console.log('Trying to make a preview for metric:\n', newMetric);
     try {
       fetch('/api/data/metric', {
         method: 'POST',
@@ -289,7 +285,6 @@ const AddMetric = (props): any => {
   const saveMetric = () => {
     setMessageText('Saving New Metric...');
     const newMetric = formData(false);
-    console.log('Trying to save a new metric:\n', newMetric);
 
     fetch('/api/user/add-metric', {
       method: 'POST',
@@ -300,7 +295,6 @@ const AddMetric = (props): any => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log('Received reply', res);
 
         // Should verify query validity as part of this process
         setMessageText('New Metric Saved!');

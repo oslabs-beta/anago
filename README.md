@@ -65,6 +65,7 @@ If you wish to contribute, please follow these guidelines:
 | ------------------------------------------------ | ------ |
 | HPA Recommendations                              | ⏳     |
 | Integrate CI/CD pipeline                         | ⏳     |
+| Automated Monitoring Tool Deployment & Config    | ⏳     |
 | Increase Test Coverage                           | 🙏🏻     |
 | Historical data page                             | 🙏🏻     |
 | Ability to export metric data in-app             | 🙏🏻     |

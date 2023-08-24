@@ -6,8 +6,6 @@ import { handleAlerts } from '../context/functions';
 import Modal from 'react-responsive-modal';
 import { ALERT_URL } from '../../user-config.js';
 
-//TODO: add displayed to the state store
-
 const AlertBar = () => {
   //keep track of displayed alerts
   const { displayedAlerts, setDisplayedAlerts }: any = useContext(StoreContext);
@@ -297,7 +295,7 @@ const AlertBar = () => {
         {!noErrors && fetched && !clicked && !allHidden && (
           <h3 id='mouseNotOver' onClick={() => setClicked(true)}>
             <strong>
-              ALERTS PREVIEW: {criticalCount} Critical, {warningCount} Warning
+              ALERTS: {criticalCount} Critical, {warningCount} Warning
             </strong>
           </h3>
         )}

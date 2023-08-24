@@ -25,9 +25,7 @@ ChartJS.register(
 );
 
 //
-//
 // Largely a copy of Metric Display, but takes fetched data instead of metricId
-//
 //
 
 const MetricDisplay = ({ lookupType, metricData }) => {
