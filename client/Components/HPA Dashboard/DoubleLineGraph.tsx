@@ -22,7 +22,7 @@ ChartJS.register(
   Colors,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 import IndivDLG from './IndivDLG';
 
@@ -42,18 +42,19 @@ const DoubleLineGraph = ({ metricIds }) => {
   interface graphShape {
     labels: any[];
     datasets: any[];
+    pointStyle: boolean;
   }
 
   const shapeData = () => {
     const cacheByHPA = {};
     // transform the data into the shape required for Chartjs multi axis line chart
-    const finalShape: graphShape = {
+    const finalShape: graphShape | any = {
       labels: metricData[queriesById['HTTP Requests Total']].labels,
       datasets: [],
     };
 
     // filter data to display a graph for each deployed hpa
-    metricData[queriesById['Number of Pods']].datasets.forEach((obj) => {
+    metricData[queriesById['Number of Pods']].datasets.forEach(obj => {
       cacheByHPA[
         obj.label.slice(obj.label.indexOf(`"`) + 1, obj.label.indexOf(`-`))
       ] = JSON.parse(JSON.stringify(finalShape));
@@ -71,7 +72,7 @@ const DoubleLineGraph = ({ metricIds }) => {
     });
 
     // assign HTTP Requests Total, organized by endpoints, to the graph
-    metricData[queriesById['HTTP Requests Total']].datasets.forEach((obj) => {
+    metricData[queriesById['HTTP Requests Total']].datasets.forEach(obj => {
       let r = Math.random() * 100 + 127;
       if (
         cacheByHPA.hasOwnProperty(obj.label.slice(9, obj.label.indexOf(`-`)))
@@ -86,25 +87,30 @@ const DoubleLineGraph = ({ metricIds }) => {
         });
       }
     });
-
+    // only display graphs that have metrics for both Pod Count and HTTP Requests
+    Object.keys(cacheByHPA).forEach(key => {
+      if (cacheByHPA[key].datasets.length < 2) {
+        delete cacheByHPA[key];
+      }
+    });
     setGraphData(cacheByHPA);
   };
 
   const getPodsAndRequests = async () => {
     const currMetricCache: any = metricData;
     let count = 0;
-    metricIds.forEach((id) => {
+    metricIds.forEach(id => {
       fetch(`/api/data/metrics/${id}`, {
         method: 'GET',
       })
-        .then((data) => data.json())
-        .then((data) => {
+        .then(data => data.json())
+        .then(data => {
           currMetricCache[id] = data;
           setMetricData(currMetricCache);
           count += 1;
           setFetchCount(count);
         })
-        .catch((err) => console.log('Error fetching from Prometheus: ', err));
+        .catch(err => console.log('Error fetching from Prometheus: ', err));
     });
   };
 
@@ -123,8 +129,9 @@ const DoubleLineGraph = ({ metricIds }) => {
   return (
     <div>
       {graphData &&
-        Object.values(JSON.parse(JSON.stringify(graphData))).map((graphObj) => {
-          return <IndivDLG graphData={graphObj} />;
+        Object.keys(JSON.parse(JSON.stringify(graphData))).map(hpa => {
+          let title = hpa.slice(0, 1).toUpperCase() + hpa.slice(1);
+          return <IndivDLG graphData={graphData[hpa]} graphTitle={title} />;
         })}
     </div>
   );

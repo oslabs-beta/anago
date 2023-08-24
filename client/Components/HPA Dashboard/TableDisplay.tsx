@@ -29,8 +29,6 @@ interface RowsObj {
 const TableDisplay = ({ tableData, logId, graphIds }) => {
   const [filteredTableData, setfilteredTableData]: any[] = useState([]);
 
-  const newData: promResResultElements[][] = [];
-
   const getHPAUtilization = async () => {
     fetch(`/api/data/metrics/${logId}`, {
       method: 'POST',
@@ -104,7 +102,7 @@ const TableDisplay = ({ tableData, logId, graphIds }) => {
             row={rows[hpa]}
             log={
               cache[hpa] ||
-              'This HPA has not reached 90% or more utilization within the last day'
+              'This HPA has not reached 80% or more utilization within the last day'
             }
           />
         );
