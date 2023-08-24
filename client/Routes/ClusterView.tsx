@@ -12,7 +12,6 @@ const ClusterView = () => {
   const clusterData: any = useRouteLoaderData('cluster');
   const { setClusterData }: any = useContext(StoreContext);
   setClusterData(clusterData);
-  console.log(clusterData);
   const nodes: Node[] = clusterData.nodes;
 
   return (
@@ -22,7 +21,7 @@ const ClusterView = () => {
         {clusterData && <Dropdown />}
         <ControlPlane />
         {clusterData &&
-          nodes.map((node) => (
+          nodes.map(node => (
             <Nodes
               name={node.name}
               creationTimestamp={node.creationTimestamp}
