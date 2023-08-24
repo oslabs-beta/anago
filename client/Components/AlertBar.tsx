@@ -23,6 +23,7 @@ const AlertBar = () => {
   // total counts for alert preview
   const [criticalCount, setCriticalCount] = useState<number>();
   const [warningCount, setWarningCount] = useState<number>();
+  const [allHidden, setAllHidden] = useState<Boolean>(false);
   const userData = useRouteLoaderData('home') as UserData;
   //make sure this local host address gives the alert JSON object
 
@@ -92,6 +93,11 @@ const AlertBar = () => {
       if (displayed[i].severity === 'warning') {
         warningCount += 1;
       }
+    }
+    if (criticalCount === 0 && warningCount === 0) {
+      setAllHidden(true);
+    } else {
+      setAllHidden(false);
     }
     // update state for each alert count
     setCriticalCount(criticalCount);
@@ -288,8 +294,15 @@ const AlertBar = () => {
           </div>
         )}
         {/* if there are errors, the data is fetched, but the area is not clicked */}
-        {!noErrors && fetched && !clicked && (
+        {!noErrors && fetched && !clicked && !allHidden && (
           <h3 id='mouseNotOver' onClick={() => setClicked(true)}>
+            <strong>
+              ALERTS PREVIEW: {criticalCount} Critical, {warningCount} Warning
+            </strong>
+          </h3>
+        )}
+        {!noErrors && fetched && !clicked && allHidden && (
+          <h3 id='mouseNotOverGrey' onClick={() => setClicked(true)}>
             <strong>
               ALERTS PREVIEW: {criticalCount} Critical, {warningCount} Warning
             </strong>
