@@ -70,6 +70,12 @@ const IndivDLG = ({ graphData, graphTitle }) => {
   //modal handler functions
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
+  useEffect(() => {
+    graphData.datasets = graphData.datasets.map(el => {
+      el.pointStyle = false;
+      return el;
+    });
+  }, []);
 
   return (
     <div className='metric-container'>
