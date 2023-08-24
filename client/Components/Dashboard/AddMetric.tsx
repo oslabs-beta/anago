@@ -286,21 +286,24 @@ const AddMetric = (props): any => {
   const saveMetric = () => {
     setMessageText('Saving New Metric...');
     const newMetric = formData(false);
-
-    fetch('/api/user/add-metric', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newMetric),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        // Should verify query validity as part of this process
-        setMessageText('New Metric Saved!');
-        // Dismiss message
-        setTimeout(() => setMessageText(''), 2500);
-      });
+    try {
+      fetch('/api/user/add-metric', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newMetric),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          // Should verify query validity as part of this process
+          setMessageText('New Metric Saved!');
+          // Dismiss message
+          setTimeout(() => setMessageText(''), 2500);
+        });
+    } catch (err) {
+      console.log(`failed to save new metric! Error: ${err}`);
+    }
   };
 
   return (
