@@ -2,9 +2,9 @@
 
 ![Anago-Banner](client/assets/images/abg3.png)
 
-Anago, in Ancient Greek, means to lead to a higher place, to uplift, and to take to sea. In this spirit, Anago serves as a perfect compass to help you manage your containerized application deployments on the Kubernetes platform.
-
 Anago is a tool to help developers monitor and visualize their Kubernetes clusters. Team Anago is equipped for monitoring Kubernetes clusters hosted both on local servers and on cloud-based platforms. Anago provides out-of-the-box support for Prometheus and Prometheus’ Alertmanager for scraping metrics and alerts, and integrates with Chart.JS for the dashboard graphs.
+
+The name Anago, originates from Greek, meaning to lead to a higher place, to uplift, and to take to sea. In this spirit, Anago serves as a perfect compass to help you manage your containerized application deployments on the Kubernetes platform.
 
 Let’s dive into how the features of Anago’s platform can simplify and streamline managing your Kubernetes clusters.
 
@@ -30,15 +30,15 @@ Let’s dive into how the features of Anago’s platform can simplify and stream
 Anago is a Kubernetes cluster monitoring and visualization tool providing relevant, richly detailed insights into the health of your application deployments with the following useful features:
 
 1. **Real-time Data Monitoring**: Anago seamlessly integrates with your cloud-based and/or locally hosted Kubernetes clusters to allow for a real-time analysis of cluster performance.
-![data-monitoring](/client/assets/gifs/MonitorVid.gif)
+   ![data-monitoring](/client/assets/gifs/MonitorVid.gif)
 2. **Customizable Metrics**: Anago harnesses the power of Prometheus to scrape time-series data from your Kubernetes clusters. We offer customized query-building to configure your dashboard to display cluster metrics and data insights relevant to you. We provide the tools for your cluster management, and you decide which direction you want to take them.
-![data-monitoring](/client/assets/gifs/AddMetric.gif)
+   ![data-monitoring](/client/assets/gifs/AddMetric.gif)
 3. **Alerts**: Anago displays relevant real-time alerts relating to cluster health concerns, allowing you to address issues with your deployments proactively to combat downtime in production.
-![data-monitoring](/client/assets/gifs/AlertVid.gif)
+   ![data-monitoring](/client/assets/gifs/AlertVid.gif)
 4. **Horizontal Pod Autoscaler Monitoring**: Anago allows you to monitor actively deployed Horizontal Pod Autoscalers in real-time or connect to your test application to see isolated test results prior to rollout of new features or deployment configurations. Anago stores logs of notable historical timestamps for you to reference as to not miss meaningful warning signs and/or longer-term trends, diminishing the abstraction of your HPA usage by providing insights into areas lacking efficiency alongside any bottlenecks that can slow your deployed applications and also drive up the cost of your clusters astronomically. Anago will act as an additional set of eyes and devise tailored recommendations on how to optimize your current HPA configurations.
-![data-monitoring](/client/assets/gifs/HPAVid.gif)
+   ![data-monitoring](/client/assets/gifs/HPAVid.gif)
 5. **Cluster Visualization**: Anago provides flexible and detailed visualization of your Kubernetes clusters on our ClusterView dashboard. See your clusters in their entirety with all of their nested components, or filter to display specific clusters, nodes, and namespaces that are relevant for your needs. ClusterView provides extremely detailed insights into each component in your cluster with real-time data from Prometheus and the Kubernetes API. Alerts are displayed visually so you can see which parts of your cluster require your attention.
-![data-monitoring](/client/assets/gifs/ClusterVid.gif)
+   ![data-monitoring](/client/assets/gifs/ClusterVid.gif)
 6. **Platform-agnostic**: Anago supports clusters hosted on cloud-computing platforms and local servers. We are flexible and adaptable for your scale and configuration needs and provide tools to help you integrate your clusters with our technology seamlessly. Anago is for everyone.
 
 ## Getting Started with Anago
