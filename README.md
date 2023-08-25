@@ -109,7 +109,7 @@ Below are descriptions of each npm script:
       <a href="https://github.com/hhaynes4"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
     </td>
     <td align="center">
-      <img src="client/assets/Anago-Members/Rylie.jpg" alt= "Rylie" width="140px;" />
+      <img src="client/assets/Anago-Members/Rylie.jpg" alt= "Rylie" width="150px;" />
       <br />
       <sub><b>Rylie Pereira</b></sub>
       <br />
@@ -117,7 +117,7 @@ Below are descriptions of each npm script:
       <a href="https://github.com/ryliep"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
     </td>
      <td align="center">
-      <img src="client/assets/Anago-Members/Steve.jpeg" alt= "Steve" width="140px"/>
+      <img src="client/assets/Anago-Members/Steve.jpeg" alt= "Steve" width="150px"/>
       <br />
       <sub><b>Steve Schlepphorst</b></sub>
       <br />
