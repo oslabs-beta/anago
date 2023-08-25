@@ -34,7 +34,6 @@ const DoubleLineGraph = ({ metricIds }) => {
   };
 
   //state to handle modal and handling fetched data router
-  const [open, setOpen]: any = useState(false);
   const [metricData, setMetricData] = useState<any>({});
   const [fetchCount, setFetchCount] = useState<number>(0);
   const [graphData, setGraphData] = useState<any>(undefined);
@@ -96,6 +95,7 @@ const DoubleLineGraph = ({ metricIds }) => {
     setGraphData(cacheByHPA);
   };
 
+  // fetch total number of pods and total HTTP request metrics
   const getPodsAndRequests = async () => {
     const currMetricCache: any = metricData;
     let count = 0;

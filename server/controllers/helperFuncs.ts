@@ -20,7 +20,7 @@ export function readUserData(): any {
   try {
     const readData = fs.readFileSync(
       path.resolve(__dirname, '../models/userData.json'),
-      'utf-8'
+      'utf-8',
     );
     const userData = JSON.parse(readData);
     if (
@@ -28,18 +28,18 @@ export function readUserData(): any {
       !userData.hasOwnProperty('metrics')
     ) {
       console.log(
-        'Read UserData is missing metrics. Using and saving default data.'
+        'Read UserData is missing metrics. Using and saving default data.',
       );
       fs.writeFileSync(
         path.resolve(__dirname, '../models/userData.json'),
-        JSON.stringify(newUserData)
+        JSON.stringify(newUserData),
       );
       return newUserData;
     }
     return userData;
   } catch (err) {
     console.log(
-      'Error reading User Data from disk in helper function readUserData.'
+      'Error reading User Data from disk in helper function readUserData.',
     );
     return;
   }
@@ -76,8 +76,6 @@ export function cleanTime(date: Date, options: any) {
 // Note: could use work on hard-coded data points, as some are context-unaware and may misrepresent data or lose data on some data points
 // Ideally, all promql info would be preserved in graphs
 export function namePlot(obj: any, type: LookupType, queryOptions: any) {
-  //console.log('INSIDE NAMING: ', obj.metric, type, queryOptions);
-
   switch (type) {
     case LookupType.CustomEntry: {
       // iterate over obj.metric and filter out matching values, return first non-matching
@@ -156,7 +154,7 @@ export function namePlot(obj: any, type: LookupType, queryOptions: any) {
 export function placeholderData(
   metricId: string,
   userData: any,
-  options: any
+  options: any,
 ): any {
   const promMetrics: plotData = {
     labels: [],
@@ -165,7 +163,7 @@ export function placeholderData(
 
   const readData = fs.readFileSync(
     path.resolve(__dirname, '../models/demoData.json'),
-    'utf-8'
+    'utf-8',
   );
   const parsedData = JSON.parse(readData);
   const myMetrics = parsedData[metricId];
@@ -188,7 +186,6 @@ export function placeholderData(
       });
     }
     // populate the y-axis object with the scraped metrics
-    // yAxis.label = obj.metric.toString();
     yAxis.label = namePlot(obj, userData.metrics[metricId].lookupType, {});
     obj.values.forEach((arr: any[]) => {
       yAxis.data.push(Number(arr[1]));

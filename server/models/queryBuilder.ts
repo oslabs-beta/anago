@@ -280,17 +280,10 @@ export function queryBuilder(
     }
 
     case LookupType.HTTPRequests: {
-      // TODO: return metric back to deployment http requests (would need to set up ingress to access it on pithy)
-      // return 'increase(http_requests_total[1m])';
-      let str = 'increase(prometheus_http_requests_total[1m])';
-      // ! examples
-      // increase(prometheus_http_requests_total{endpoint="http-web"}[1m])
-      // handler="/"
-      // ! increase(prometheus_http_requests_total{service="prometheus-kube-prometheus-prometheus"}[1m])
-      // service=pithy-service
-      // hpa=pithy-deployment
-      // increase(prometheus_http_requests_total{service="prometheus-kube-prometheus-prometheus", endpoint="http-web"}[1m])
-      // {service=~"prometheus.+"}
+      // this promQL will only work if you have Ingress
+      // it can be customized to work without ingress by injecting the desired deployment
+      // Example: let str = 'increase(prometheus_http_requests_total[1m])';
+      let str = 'increase(http_requests_total[1m])';
       if (
         queryOptions.hasOwnProperty('hpa') &&
         queryOptions.hasOwnProperty('endpoint')
@@ -324,10 +317,7 @@ export function queryBuilder(
     }
 
     case LookupType.PodCountByHPA: {
-      // TODO: make it not just for pithy
-      // let str = `count by (created_by_name)(kube_pod_info{created_by_name="pithy-deployment-f77bd655c"})`;
       let str = 'count by (created_by_name)(kube_pod_info)';
-      // let str = '{created_by_name="prometheus-kube-state-metrics-7d8b486d89"}';
       if (queryOptions.hasOwnProperty('hpa')) {
         str =
           str.slice(0, str.length - 1) +

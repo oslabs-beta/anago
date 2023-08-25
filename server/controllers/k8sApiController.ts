@@ -240,13 +240,16 @@ k8sController.getCluster = async (
     });
   }
 };
-// k8sController.portForward = () => {
-//     const forward = new k8s.PortForward(kc);
-//     const server = net.createServer((socket)=> {
-//         forward.portForward('default', 'demo', [9090], socket, null, socket )
-//     });
-//     server.listen(9090, '127.0.0.1')
-// }
-// k8sController.getDeployments = k8sController.portForward = async () => {};
+// untested potential future feature
+/*
+k8sController.portForward = () => {
+    const forward = new k8s.PortForward(kc);
+    const server = net.createServer((socket)=> {
+        forward.portForward('default', 'demo', [9090], socket, null, socket )
+    });
+    server.listen(9090, '127.0.0.1')
+}
+k8sController.getDeployments = k8sController.portForward = async () => {};
+*/
 
 export default k8sController;
