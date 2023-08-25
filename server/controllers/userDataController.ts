@@ -10,7 +10,7 @@ const userDataController: any = {};
 userDataController.sendUserData = (
   _req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userData = readUserData();
@@ -35,7 +35,7 @@ userDataController.sendUserData = (
 userDataController.getHiddenAlerts = (
   _req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userData = readUserData();
@@ -60,7 +60,7 @@ userDataController.getHiddenAlerts = (
 userDataController.saveHiddenAlert = (
   req: Request,
   _res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     // grab just the string from the {hidden: string} param
@@ -73,7 +73,7 @@ userDataController.saveHiddenAlert = (
     }
     fs.writeFileSync(
       path.resolve(__dirname, '../models/userData.json'),
-      JSON.stringify(updatedUserData)
+      JSON.stringify(updatedUserData),
     );
     next();
   } catch (err) {
@@ -88,19 +88,19 @@ userDataController.saveHiddenAlert = (
 userDataController.deleteHiddenAlert = (
   req: Request,
   _res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const unhideAlert = req.body.hidden;
     const updatedUserData = readUserData();
     //filter the current hiddenAlerts array to delete alert
     updatedUserData.hiddenAlerts = updatedUserData.hiddenAlerts.filter(
-      (value) => value !== unhideAlert
+      value => value !== unhideAlert,
     );
 
     fs.writeFileSync(
       path.resolve(__dirname, '../models/userData.json'),
-      JSON.stringify(updatedUserData)
+      JSON.stringify(updatedUserData),
     );
     next();
   } catch (err) {
@@ -115,13 +115,13 @@ userDataController.deleteHiddenAlert = (
 userDataController.saveUserData = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const updatedUserData = req.body;
   try {
     fs.writeFileSync(
       path.resolve(__dirname, '../models/userData.json'),
-      JSON.stringify(updatedUserData)
+      JSON.stringify(updatedUserData),
     );
     next();
   } catch (err) {
@@ -136,7 +136,7 @@ userDataController.saveUserData = (
 userDataController.deleteMetric = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const metridId = req.params.id;
   try {
@@ -144,9 +144,7 @@ userDataController.deleteMetric = (
 
     //filter the metric from the dashboard section
     updatedUserData.dashboards[0].metrics =
-      updatedUserData.dashboards[0].metrics.filter(
-        (value) => value !== metridId
-      );
+      updatedUserData.dashboards[0].metrics.filter(value => value !== metridId);
     // filter the metric from the metrics object
     if (updatedUserData.metrics.hasOwnProperty(metridId)) {
       delete updatedUserData.metrics[metridId];
@@ -154,7 +152,7 @@ userDataController.deleteMetric = (
 
     fs.writeFileSync(
       path.resolve(__dirname, '../models/userData.json'),
-      JSON.stringify(updatedUserData)
+      JSON.stringify(updatedUserData),
     );
     next();
   } catch (err) {
@@ -169,7 +167,7 @@ userDataController.deleteMetric = (
 userDataController.addMetric = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const newMetricInfo = req.body;
   const updatedUserData = res.locals.userData;
@@ -178,16 +176,14 @@ userDataController.addMetric = (
       newMetricInfo.name,
       newMetricInfo.lookupType,
       newMetricInfo.scopeType,
-      res.locals.queryOptions
+      res.locals.queryOptions,
     );
     updatedUserData.dashboards[0].metrics.push(newMetric.metricId);
     updatedUserData.metrics[newMetric.metricId] = newMetric;
 
-    console.log('Added new metric. Updated User Data:', updatedUserData);
-
     fs.writeFileSync(
       path.resolve(__dirname, '../models/userData.json'),
-      JSON.stringify(updatedUserData)
+      JSON.stringify(updatedUserData),
     );
     res.locals.userData = updatedUserData;
     next();

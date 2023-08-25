@@ -1,4 +1,4 @@
-import { Metric } from '../models/userDataClass.ts';
+import { Metric } from '../models/userDataClass.js';
 import {
   yAxis,
   plotData,
@@ -10,7 +10,7 @@ import {
   cleanTime,
   namePlot,
   readUserData,
-} from './helperFuncs.ts';
+} from './helperFuncs.js';
 import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 import type { Request, Response, NextFunction } from 'express';
 import { optionsBuilder, queryBuilder } from '../models/queryBuilder.js';
@@ -31,7 +31,6 @@ const promApiController: any = {
     res.locals.userData = userData;
 
     const metricId = req.params.id;
-    console.log('metricId', metricId);
     if (
       userData.metrics === undefined ||
       userData.metrics[metricId] === undefined ||
@@ -43,12 +42,12 @@ const promApiController: any = {
         message: { err: 'Bad lookup request.' },
       });
     }
+    // accumulate and pass all pertinent metric query information along to next middleware
     res.locals.lookupType = userData.metrics[metricId].lookupType;
     res.locals.scopeType = userData.metrics[metricId].scopeType;
     res.locals.searchQuery = userData.metrics[metricId].searchQuery;
-    console.log('res.locals.searchQuery', res.locals.searchQuery);
     res.locals.queryOptions = userData.metrics[metricId].queryOptions;
-    next();
+    return next();
   },
 
   queryBaseBuilder: (req: Request, res: Response, next: NextFunction) => {
@@ -63,14 +62,14 @@ const promApiController: any = {
         message: { err: 'Error retreiving user data.' },
       });
     }
+    // accumulate and pass all pertinent metric query information along to next middleware
     res.locals.userData = userData;
-
     res.locals.lookupType = req.body.lookupType;
     res.locals.scopeType = req.body.scopeType;
     res.locals.queryOptions = optionsBuilder(req.body);
     res.locals.searchQuery = queryBuilder(
       req.body.lookupType,
-      res.locals.queryOptions
+      res.locals.queryOptions,
     );
     next();
   },
@@ -117,7 +116,7 @@ const promApiController: any = {
       const placeholderFetch = placeholderData(
         metricId,
         res.locals.userData,
-        res.locals.queryOptions
+        res.locals.queryOptions,
       );
       res.locals.promMetrics = placeholderFetch;
       return next();
@@ -174,7 +173,7 @@ const promApiController: any = {
           yAxis.label = namePlot(
             obj,
             res.locals.lookupType,
-            res.locals.queryOptions
+            res.locals.queryOptions,
           );
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));

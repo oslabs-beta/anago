@@ -61,6 +61,9 @@ const HPADisplay = () => {
           return data.json();
         })
         .then(data => {
+          // if (data[0] === 'No metrics meet the scope of the query') {
+          //   return console.log('No metrics meet the scope of the query');
+          // }
           tableOrder.set(id, data);
           setTableData(tableOrder);
           count += 1;
