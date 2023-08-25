@@ -136,11 +136,6 @@ const DoubleLineGraph = ({ metricIds }) => {
 
   return (
     <div>
-      {/* {graphData &&
-        Object.keys(JSON.parse(JSON.stringify(graphData))).map(hpa => {
-          let title = hpa.slice(0, 1).toUpperCase() + hpa.slice(1);
-          return <IndivDLG graphData={graphData[hpa]} graphTitle={title} />;
-        })} */}
       {/* display HTTP Requests vs Pod Count if graphData is defined */}
       {graphData ? (
         Object.keys(JSON.parse(JSON.stringify(graphData))).map(hpa => {
