@@ -45,13 +45,21 @@ const DoubleLineGraph = ({ metricIds }) => {
   }
 
   const shapeData = () => {
+    // check if all metrics have been successfully fetched
+    // if not, do not display graph
+    if (
+      Array.isArray(metricData[queriesById['HTTP Requests Total']]) ||
+      Array.isArray(metricData[queriesById['Number of Pods']])
+    ) {
+      return;
+    }
     const cacheByHPA = {};
     // transform the data into the shape required for Chartjs multi axis line chart
     const finalShape: graphShape | any = {
       labels: metricData[queriesById['HTTP Requests Total']].labels,
       datasets: [],
     };
-
+    console.log('metricData', metricData);
     // filter data to display a graph for each deployed hpa
     metricData[queriesById['Number of Pods']].datasets.forEach(obj => {
       cacheByHPA[
@@ -128,11 +136,30 @@ const DoubleLineGraph = ({ metricIds }) => {
 
   return (
     <div>
-      {graphData &&
+      {/* {graphData &&
         Object.keys(JSON.parse(JSON.stringify(graphData))).map(hpa => {
           let title = hpa.slice(0, 1).toUpperCase() + hpa.slice(1);
           return <IndivDLG graphData={graphData[hpa]} graphTitle={title} />;
-        })}
+        })} */}
+      {/* display HTTP Requests vs Pod Count if graphData is defined */}
+      {graphData ? (
+        Object.keys(JSON.parse(JSON.stringify(graphData))).map(hpa => {
+          let title = hpa.slice(0, 1).toUpperCase() + hpa.slice(1);
+          return <IndivDLG graphData={graphData[hpa]} graphTitle={title} />;
+        })
+      ) : (
+        <div>
+          <h4>Error displaying graph(s):</h4>
+          <p>
+            Metrics can not be retrieved for either the Total HTTP Requests or
+            Total Number of Pods.
+          </p>
+          <p>
+            Please ensure your metric endpoints are exposed and your Ingress is
+            set up.
+          </p>
+        </div>
+      )}
     </div>
   );
 };

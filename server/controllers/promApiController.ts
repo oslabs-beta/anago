@@ -1,4 +1,4 @@
-import { Metric } from '../models/userDataClass.ts';
+import { Metric } from '../models/userDataClass.js';
 import {
   yAxis,
   plotData,
@@ -10,7 +10,7 @@ import {
   cleanTime,
   namePlot,
   readUserData,
-} from './helperFuncs.ts';
+} from './helperFuncs.js';
 import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 import type { Request, Response, NextFunction } from 'express';
 import { optionsBuilder, queryBuilder } from '../models/queryBuilder.js';

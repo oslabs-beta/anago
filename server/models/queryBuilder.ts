@@ -55,7 +55,6 @@ export function queryBuilder(
   lookupType: LookupType,
   queryOptions: any,
 ): string | undefined {
-
   switch (lookupType) {
     case LookupType.CustomEntry: {
       if (queryOptions.hasOwnProperty('customQuery'))
@@ -283,7 +282,7 @@ export function queryBuilder(
     case LookupType.HTTPRequests: {
       // this promQL will only work if you have Ingress
       // it can be customized to work without ingress by injecting the desired deployment
-      // Example: let str = 'increase(prometheus_http_requests_total[1m])';
+      // Example: 'increase(prometheus_http_requests_total[1m])';
       let str = 'increase(http_requests_total[1m])';
       if (
         queryOptions.hasOwnProperty('hpa') &&
