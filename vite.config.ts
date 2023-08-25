@@ -13,7 +13,6 @@ export default defineConfig({
     setupFiles: './client/__tests__/setup.ts',
   },
   server: {
-    port: 5175,
     proxy: {
       '/api': {
         target: 'http://localhost:3000/',

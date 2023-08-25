@@ -30,11 +30,19 @@ export function readUserData(): any {
       console.log(
         'Read UserData is missing metrics. Using and saving default data.',
       );
-      fs.writeFileSync(
-        path.resolve(__dirname, '../models/userData.json'),
-        JSON.stringify(newUserData),
-      );
-      return newUserData;
+
+      try {
+        fs.writeFileSync(
+          path.resolve(__dirname, '../models/userData.json'),
+          JSON.stringify(newUserData)
+        );
+        return newUserData;
+      } catch (err) {
+        console.log(
+          'Error reading User Data from disk in helper function readUserData.'
+        );
+        return;
+      }
     }
     return userData;
   } catch (err) {
@@ -161,10 +169,19 @@ export function placeholderData(
     datasets: [],
   };
 
-  const readData = fs.readFileSync(
-    path.resolve(__dirname, '../models/demoData.json'),
-    'utf-8',
-  );
+  let readData;
+  try {
+    readData = fs.readFileSync(
+      path.resolve(__dirname, '../models/demoData.json'),
+      'utf-8'
+    );
+  } catch (err) {
+    console.log(
+      'Error reading User Data from disk in helper function readUserData.'
+    );
+    return;
+  }
+
   const parsedData = JSON.parse(readData);
   const myMetrics = parsedData[metricId];
 
