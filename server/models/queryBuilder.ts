@@ -55,6 +55,7 @@ export function queryBuilder(
   lookupType: LookupType,
   queryOptions: any,
 ): string | undefined {
+
   switch (lookupType) {
     case LookupType.CustomEntry: {
       if (queryOptions.hasOwnProperty('customQuery'))

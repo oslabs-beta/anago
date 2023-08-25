@@ -8,7 +8,7 @@ The name Anago, originates from Greek, meaning to lead to a higher place, to upl
 
 Let’s dive into how the features of Anago’s platform can simplify and streamline managing your Kubernetes clusters.
 
-<div style="text-align: center;">
+<div align= "center">
 
 [![Kubernetes](https://img.shields.io/badge/kubernetes-326ce5.svg?&style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/) [![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/) [![AWS](https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)](https://aws.amazon.com/) [![Prometheus](https://img.shields.io/badge/Prometheus-000000?style=for-the-badge&logo=prometheus&labelColor=000000)](https://prometheus.io/) [![Chart.js](https://img.shields.io/badge/Chart%20js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)](https://www.chartjs.org/) [![Helm](https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=Helm&labelColor=0F1689)](https://helm.sh/) [![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)](https://vitejs.dev/) [![VitesT](https://img.shields.io/badge/Vitest-86b91a?style=for-the-badge&logo=vitest&logoColor=edd532)](https://vitest.dev/) [![ts-node](https://img.shields.io/badge/ts--node-3178C6?style=for-the-badge&logo=ts-node&logoColor=white)](https://www.npmjs.com/package/ts-node) [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)](https://developer.mozilla.org/en-US/docs/Web/JavaScript) [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/) [![ReactRouter](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)](https://reactrouter.com/en/main) [![Express](https://img.shields.io/badge/Express%20js-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/) [![Node.js](https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/en) [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Glossary/HTML5) [![NPM](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)](https://www.npmjs.com/) [![Eslint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)](https://eslint.org/)
 
@@ -90,48 +90,43 @@ Below are descriptions of each npm script:
 
 ## Our Team
 
-<div style="text-align: center; display: flex; flex-direction: row; flex-wrap: wrap; width: 100% align-items: center">
-
-<div style="display: flex; flex-direction: column; align-items: center; padding: 10px">
-
-<img src="client/assets/Anago-Members/alexandra.png" alt= “Alexandra” height="200px">
-
-**Alexandra Ashcraft**
-
-[![LinkedIn](https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png)](https://www.linkedin.com/in/alexandra-ashcraft1) [![GitHub](https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png)](https://github.com/AlexandraAshcraft)
-
-</div>
-
-<div style="display: flex; flex-direction: column; align-items: center; padding: 10px">
-
-<img src="client/assets/Anago-Members/halia2.jpg" alt= "Halia" height="200px">
-
-**Halia Haynes**
-
-[![LinkedIn](https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png)](https://www.linkedin.com/in/haliahaynes/)[![GitHub](https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png)](https://github.com/hhaynes4)
-
-</div>
-
-<div style="display: flex; flex-direction: column; align-items: center; padding: 10px">
-
-<img src="client/assets/Anago-Members/Rylie.jpg" alt= "Rylie" height="200px">
-
-**Rylie Pereira**
-
-[![LinkedIn](https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png)](https://www.linkedin.com/in/rylie-pereira-524711225/)[![GitHub](https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png)](https://github.com/ryliep)
-
-</div>
-
-<div style="display: flex; flex-direction: column; align-items: center; padding: 10px">
-
-<img src="client/assets/Anago-Members/Steve.jpeg" alt= "Halia" height="200px">
-
-**Steve Schlepphorst**
-
-[![LinkedIn](https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png)](https://www.linkedin.com/in/schlepphorst/)[![GitHub](https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png)](https://github.com/schlepphorst)
-
-</div>
-</div>
+  <table>
+  <tr>
+    <td align="center">
+      <img src="client/assets/Anago-Members/alexandra.png" alt= “Alexandra” width="150px;" alt=""/>
+      <br />
+      <sub><b>Alexandra Ashcraft</b></sub>
+      <br />
+      <a href="https://www.linkedin.com/in/alexandra-ashcraft1"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png" height="30px"/></a>
+      <a href="https://github.com/AlexandraAshcraft"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
+    </td>
+    <td align="center">
+      <img src="client/assets/Anago-Members/halia2.jpg" alt= "Halia" width="150px"/>
+      <br />
+      <sub><b>Halia Haynes</b></sub>
+      <br />
+    <a href="https://www.linkedin.com/in/haliahaynes/"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png" height="30px"/></a>
+      <a href="https://github.com/hhaynes4"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
+    </td>
+    <td align="center">
+      <img src="client/assets/Anago-Members/Rylie.jpg" alt= "Rylie" width="150px;" />
+      <br />
+      <sub><b>Rylie Pereira</b></sub>
+      <br />
+      <a href="https://www.linkedin.com/in/rylie-pereira-524711225/"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png" height="30px"/></a>
+      <a href="https://github.com/ryliep"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
+    </td>
+     <td align="center">
+      <img src="client/assets/Anago-Members/Steve.jpeg" alt= "Steve" width="150px"/>
+      <br />
+      <sub><b>Steve Schlepphorst</b></sub>
+      <br />
+      <a href="https://www.linkedin.com/in/schlepphorst/"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png" height="30px"/></a>
+      <a href="https://github.com/schlepphorst"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
+    </td>
+  <tr>
+  </tr>
+</table>
 
 ## License
 

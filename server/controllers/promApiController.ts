@@ -71,7 +71,6 @@ const promApiController: any = {
       req.body.lookupType,
       res.locals.queryOptions,
     );
-
     next();
   },
 
