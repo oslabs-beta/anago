@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pithy
+spec:
+  selector:
+    matchLabels:
+      app: pithy
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: pithy
+    spec:
+      containers:
+        - name: pithy
+          image: pithy
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              cpu: 400m
+            requests:
+              cpu: 200m
