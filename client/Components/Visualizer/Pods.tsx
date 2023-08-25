@@ -36,7 +36,6 @@ const Pods = ({
       }
     });
   }, []);
-  console.log('Pod id: ', id);
 
   return (
     <div className='pod' id={id} key={id}>

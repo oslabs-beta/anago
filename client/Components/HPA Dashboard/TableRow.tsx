@@ -13,9 +13,6 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { promResResultElements } from '../../../types';
-import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
-import metricsController from '../../../server/controllers/metricsController';
 
 const Row = (props: { hpa: string; row: (string | number)[]; log: any }) => {
   const { hpa, row, log } = props;
@@ -31,7 +28,15 @@ const Row = (props: { hpa: string; row: (string | number)[]; log: any }) => {
         </TableRow>
       );
     } else {
-      return log.map(arr => (
+      const removeDuplicateTimestamps: any[] = [];
+      const finalLog: any[][] = [];
+      log.forEach(arr => {
+        if (!removeDuplicateTimestamps.includes(arr[0])) {
+          removeDuplicateTimestamps.push(arr[0]);
+          finalLog.push(arr);
+        }
+      });
+      return finalLog.map(arr => (
         <TableRow key={JSON.stringify(log)}>
           <TableCell component='th' scope='row'>
             {arr[0]}
@@ -66,7 +71,7 @@ const Row = (props: { hpa: string; row: (string | number)[]; log: any }) => {
           <Collapse in={open} timeout='auto' unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant='h6' gutterBottom component='div'>
-                {`HPA Utlization >= 90%`}
+                {`HPA Utlization >= 80%`}
               </Typography>
               <Table size='small' aria-label='purchases'>
                 <TableHead>

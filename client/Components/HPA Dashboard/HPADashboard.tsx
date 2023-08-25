@@ -77,21 +77,6 @@ const HPADisplay = () => {
     getTableData();
   }, []);
 
-  // const renderTable = () => {
-  //   setDisplayTable(
-  //     <TableDisplay
-  //       tableData={tableData}
-  //       logId={log}
-  //       graphIds={doubleLineGraph}
-  //     />,
-  //   );
-  // };
-  // useEffect(() => {
-  //   if (fetchCount === 7) {
-  //     renderTable();
-  //   }
-  // }, [fetchCount]);
-
   return (
     <div>
       <AlertBar />

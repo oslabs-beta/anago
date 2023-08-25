@@ -257,7 +257,6 @@ const AddMetric = (props): any => {
     setMessageText('Querying Preview Metric...');
     setIntervalNote('');
     const newMetric = formData(true);
-    console.log(newMetric);
     try {
       fetch('/api/data/metric', {
         method: 'POST',

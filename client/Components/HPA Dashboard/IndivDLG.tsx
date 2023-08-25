@@ -22,20 +22,20 @@ ChartJS.register(
   Colors,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
-const IndivDLG = ({ graphData }) => {
+const IndivDLG = ({ graphData, graphTitle }) => {
   const [open, setOpen]: any = useState(false);
-
   // customize Chatjs graph options
-  const options = {
+  const options: any = {
     responsive: true,
     // interaction: {
     //   mode: 'index' as const,
     //   intersect: false,
     // },
     interaction: {
+      mode: 'nearest',
       intersect: false,
     },
     stacked: false,
@@ -44,8 +44,8 @@ const IndivDLG = ({ graphData }) => {
         display: false,
       },
       title: {
-        display: false,
-        text: 'Chart.js Line Chart - Multi Axis',
+        display: true,
+        text: 'HTTP Request vs Pod Count',
       },
     },
     scales: {
@@ -70,17 +70,23 @@ const IndivDLG = ({ graphData }) => {
   //modal handler functions
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
+  useEffect(() => {
+    graphData.datasets = graphData.datasets.map(el => {
+      el.pointStyle = false;
+      return el;
+    });
+  }, []);
 
   return (
     <div className='metric-container'>
-      <h4 className='metric-title'>Pod Count vs HTTP Request</h4>
+      <h4 className='metric-title'>{graphTitle}</h4>
       {graphData.hasOwnProperty('labels') && (
         <Line data={graphData} options={options} onClick={openModal} />
       )}
       <div className='modal'>
         <button onClick={openModal}>See more</button>
         <Modal open={open} onClose={closeModal}>
-          <h4 className='metric-title'>Pod Count vs HTTP Request</h4>
+          <h4 className='metric-title'>{graphTitle}</h4>
           {graphData.hasOwnProperty('labels') && (
             <Line data={graphData} options={optionsWithLegend} />
           )}

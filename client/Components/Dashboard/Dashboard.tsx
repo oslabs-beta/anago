@@ -56,11 +56,11 @@ const Dashboard = () => {
                   Refresh
                 </button>
               </span>
-              <span>
+              {/* <span>
                 <button className='btn' onClick={pithy}>
                   Pithy Loop
                 </button>
-              </span>
+              </span> */}
               <span>
                 <button className='btn' onClick={() => setAddMetricModal(true)}>
                   Add Metric
