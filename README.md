@@ -90,48 +90,43 @@ Below are descriptions of each npm script:
 
 ## Our Team
 
-<div style="text-align: center; display: flex; flex-direction: row; flex-wrap: wrap; width: 100% align-items: center">
-
-<div style="display: flex; flex-direction: column; align-items: center; padding: 10px">
-
-<img src="client/assets/Anago-Members/alexandra.png" alt= “Alexandra” height="200px">
-
-**Alexandra Ashcraft**
-
-[![LinkedIn](https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png)](https://www.linkedin.com/in/alexandra-ashcraft1) [![GitHub](https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png)](https://github.com/AlexandraAshcraft)
-
-</div>
-
-<div style="display: flex; flex-direction: column; align-items: center; padding: 10px">
-
-<img src="client/assets/Anago-Members/halia2.jpg" alt= "Halia" height="200px">
-
-**Halia Haynes**
-
-[![LinkedIn](https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png)](https://www.linkedin.com/in/haliahaynes/)[![GitHub](https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png)](https://github.com/hhaynes4)
-
-</div>
-
-<div style="display: flex; flex-direction: column; align-items: center; padding: 10px">
-
-<img src="client/assets/Anago-Members/Rylie.jpg" alt= "Rylie" height="200px">
-
-**Rylie Pereira**
-
-[![LinkedIn](https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png)](https://www.linkedin.com/in/rylie-pereira-524711225/)[![GitHub](https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png)](https://github.com/ryliep)
-
-</div>
-
-<div style="display: flex; flex-direction: column; align-items: center; padding: 10px">
-
-<img src="client/assets/Anago-Members/Steve.jpeg" alt= "Halia" height="200px">
-
-**Steve Schlepphorst**
-
-[![LinkedIn](https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png)](https://www.linkedin.com/in/schlepphorst/)[![GitHub](https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png)](https://github.com/schlepphorst)
-
-</div>
-</div>
+  <table>
+  <tr>
+    <td align="center">
+      <img src="client/assets/Anago-Members/alexandra.png" alt= “Alexandra” width="150px;" alt=""/>
+      <br />
+      <sub><b>Alexandra Ashcraft</b></sub>
+      <br />
+      <a href="https://www.linkedin.com/in/alexandra-ashcraft1"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png" height="30px"/></a>
+      <a href="https://github.com/AlexandraAshcraft"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
+    </td>
+    <td align="center">
+      <img src="client/assets/Anago-Members/halia2.jpg" alt= "Halia" width="150px"/>
+      <br />
+      <sub><b>Halia Haynes</b></sub>
+      <br />
+    <a href="https://www.linkedin.com/in/haliahaynes/"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png" height="30px"/></a>
+      <a href="https://github.com/hhaynes4"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
+    </td>
+    <td align="center">
+      <img src="client/assets/Anago-Members/Rylie.jpg" alt= "Rylie" width="140px;" />
+      <br />
+      <sub><b>Rylie Pereira</b></sub>
+      <br />
+      <a href="https://www.linkedin.com/in/rylie-pereira-524711225/"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png" height="30px"/></a>
+      <a href="https://github.com/ryliep"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
+    </td>
+     <td align="center">
+      <img src="client/assets/Anago-Members/Steve.jpeg" alt= "Steve" width="140px"/>
+      <br />
+      <sub><b>Natalie Klein</b></sub>
+      <br />
+      <a href="https://www.linkedin.com/in/schlepphorst/"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png" height="30px"/></a>
+      <a href="https://github.com/schlepphorst"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
+    </td>
+  <tr>
+  </tr>
+</table>
 
 ## License
 
