@@ -165,25 +165,7 @@ const AddMetric = (props): any => {
         ? timeConverter(fields.duration)
         : 24 * 60 * 60;
       if (timeSec) {
-        if (timeSec > 1 * 60 * 60 * 24 * 365) {
-          str += `${
-            Math.round((timeSec / 60 / 60 / 24 / 365) * 10) / 10
-          } years.`;
-        } else if (timeSec > 60 * 60 * 24 * 90) {
-          str += `${
-            Math.round((timeSec / 60 / 60 / 24 / 30) * 10) / 10
-          } months.`;
-        } else if (timeSec > 60 * 60 * 24 * 20) {
-          str += `${Math.round((timeSec / 60 / 60 / 24 / 7) * 10) / 10} weeks.`;
-        } else if (timeSec > 60 * 60 * 24 * 3.5) {
-          str += `${Math.round((timeSec / 60 / 60 / 24) * 10) / 10} days.`;
-        } else if (timeSec > 60 * 60 * 3.5) {
-          str += `${Math.round((timeSec / 60 / 60) * 10) / 10} hours.`;
-        } else if (timeSec > 60 * 3.5) {
-          str += `${Math.round((timeSec / 60) * 10) / 10} minutes.`;
-        } else {
-          str += `${timeSec} seconds.`;
-        }
+        str += timeToString(timeSec);
       } else {
         // Couldn't convert time, so use default
         str += "24 hours (couldn't understand time).";
@@ -554,7 +536,7 @@ const AddMetric = (props): any => {
 export default AddMetric;
 
 // Parse the entered time
-function timeConverter(input: string): number | undefined {
+export function timeConverter(input: string): number | undefined {
   // Split number and units
   let numPart, stringPart;
   // ...using a space
@@ -592,7 +574,7 @@ function timeConverter(input: string): number | undefined {
     case 'seconds':
     case 'second':
     case 'secs':
-      return numPart;
+      return numPart * 1;
     case 'min':
     case 'm':
     case 'minutes':
@@ -658,3 +640,21 @@ const targetMatrix = [
   ['View All', 'Namespaces', 'Nodes', 'Containers'],
   ['View All', 'Namespaces', 'Nodes', 'Containers'],
 ];
+
+export function timeToString(timeSec: number): string {
+  if (timeSec > 1 * 60 * 60 * 24 * 365) {
+    return `${Math.round((timeSec / 60 / 60 / 24 / 365) * 10) / 10} years.`;
+  } else if (timeSec > 60 * 60 * 24 * 90) {
+    return `${Math.round((timeSec / 60 / 60 / 24 / 30) * 10) / 10} months.`;
+  } else if (timeSec > 60 * 60 * 24 * 20) {
+    return `${Math.round((timeSec / 60 / 60 / 24 / 7) * 10) / 10} weeks.`;
+  } else if (timeSec > 60 * 60 * 24 * 3.5) {
+    return `${Math.round((timeSec / 60 / 60 / 24) * 10) / 10} days.`;
+  } else if (timeSec > 60 * 60 * 3.5) {
+    return `${Math.round((timeSec / 60 / 60) * 10) / 10} hours.`;
+  } else if (timeSec > 60 * 3.5) {
+    return `${Math.round((timeSec / 60) * 10) / 10} minutes.`;
+  } else {
+    return `${timeSec} seconds.`;
+  }
+}
