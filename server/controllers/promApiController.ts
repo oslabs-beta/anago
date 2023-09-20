@@ -6,11 +6,11 @@ import {
   promResResultElements,
 } from '../../types';
 import {
-  placeholderData,
+  // placeholderData,
   cleanTime,
   namePlot,
-  readUserData,
 } from './helperFuncs.js';
+import { readUserData } from './readData.js';
 import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 import type { Request, Response, NextFunction } from 'express';
 import { optionsBuilder, queryBuilder } from '../models/queryBuilder.js';
@@ -69,7 +69,7 @@ const promApiController: any = {
     res.locals.queryOptions = optionsBuilder(req.body);
     res.locals.searchQuery = queryBuilder(
       req.body.lookupType,
-      res.locals.queryOptions,
+      res.locals.queryOptions
     );
     next();
   },
@@ -110,17 +110,17 @@ const promApiController: any = {
   getMetrics: async (req: Request, res: Response, next: NextFunction) => {
     // Placeholder Data for Offline Development
     // Read placeholder data instead of fetching- if the cluster is not currently running on AWS
-    if (!ACTIVE_DEPLOYMENT) {
-      // retrieve metricId from request query parameter
-      const metricId = req.params.id;
-      const placeholderFetch = placeholderData(
-        metricId,
-        res.locals.userData,
-        res.locals.queryOptions,
-      );
-      res.locals.promMetrics = placeholderFetch;
-      return next();
-    }
+    // if (!ACTIVE_DEPLOYMENT) {
+    //   // retrieve metricId from request query parameter
+    //   const metricId = req.params.id;
+    //   const placeholderFetch = placeholderData(
+    //     metricId,
+    //     res.locals.userData,
+    //     res.locals.queryOptions
+    //   );
+    //   res.locals.promMetrics = placeholderFetch;
+    //   return next();
+    // }
 
     try {
       // query Prometheus
@@ -173,7 +173,7 @@ const promApiController: any = {
           yAxis.label = namePlot(
             obj,
             res.locals.lookupType,
-            res.locals.queryOptions,
+            res.locals.queryOptions
           );
           obj.values.forEach((arr: any[]) => {
             yAxis.data.push(Number(arr[1]));
