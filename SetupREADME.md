@@ -32,6 +32,8 @@ All set? click [here](/README.md) to return to the main README.md
 
 Teams without an active cluster will have a longer path for initially setting up Kubernetes and then Anago. The following step-by-step guide will move through one use case for deploying and monitoring a simple cluster using the eksctl tool to configure an EKS cluster on EC2 instances with Prometheus. At the end of these steps, you should be ready to use Anago (described above). Depending on your needs, only some of these steps may be necessary.
 
+NOTE: to deploy K8s cluster locally, consider using [minikube](https://minikube.sigs.k8s.io/docs/)
+
 ## Table of Contents
 
 1. [Prerequisites](#Prerequisites)

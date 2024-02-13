@@ -97,32 +97,32 @@ Below are descriptions of each npm script:
       <br />
       <sub><b>Alexandra Ashcraft</b></sub>
       <br />
-      <a href="https://www.linkedin.com/in/alexandra-ashcraft1"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png" height="30px"/></a>
-      <a href="https://github.com/AlexandraAshcraft"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
+      <a href="https://www.linkedin.com/in/alexandra-ashcraft1"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_black_28dp.png" height="30px"/></a>
+      <a href="https://github.com/AlexandraAshcraft"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_black_28dp.png" height="30px"/></a>
     </td>
     <td align="center">
       <img src="client/assets/Anago-Members/halia2.jpg" alt= "Halia" width="150px"/>
       <br />
       <sub><b>Halia Haynes</b></sub>
       <br />
-    <a href="https://www.linkedin.com/in/haliahaynes/"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png" height="30px"/></a>
-      <a href="https://github.com/hhaynes4"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
+    <a href="https://www.linkedin.com/in/haliahaynes/"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_black_28dp.png" height="30px"/></a>
+      <a href="https://github.com/hhaynes4"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_black_28dp.png" height="30px"/></a>
     </td>
     <td align="center">
       <img src="client/assets/Anago-Members/Rylie.jpg" alt= "Rylie" width="150px;" />
       <br />
       <sub><b>Rylie Pereira</b></sub>
       <br />
-      <a href="https://www.linkedin.com/in/rylie-pereira-524711225/"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png" height="30px"/></a>
-      <a href="https://github.com/ryliep"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
+      <a href="https://www.linkedin.com/in/rylie-pereira-524711225/"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_black_28dp.png" height="30px"/></a>
+      <a href="https://github.com/ryliep"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_black_28dp.png" height="30px"/></a>
     </td>
      <td align="center">
       <img src="client/assets/Anago-Members/Steve.jpeg" alt= "Steve" width="150px"/>
       <br />
       <sub><b>Steve Schlepphorst</b></sub>
       <br />
-      <a href="https://www.linkedin.com/in/schlepphorst/"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_white_28dp.png" height="30px"/></a>
-      <a href="https://github.com/schlepphorst"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_white_28dp.png" height="30px"/></a>
+      <a href="https://www.linkedin.com/in/schlepphorst/"><img src="https://ssl.gstatic.com/atari/images/sociallinks/linkedin_black_28dp.png" height="30px"/></a>
+      <a href="https://github.com/schlepphorst"><img src="https://ssl.gstatic.com/atari/images/sociallinks/github_black_28dp.png" height="30px"/></a>
     </td>
   <tr>
   </tr>
