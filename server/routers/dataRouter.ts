@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response } from 'express';
 import promApiController from '../controllers/promApiController.ts';
 const dataRouter = express.Router();
 

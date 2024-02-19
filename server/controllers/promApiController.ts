@@ -15,7 +15,7 @@ import { ACTIVE_DEPLOYMENT, DEPLOYMENT_URL } from '../../user-config.js';
 import type { Request, Response, NextFunction } from 'express';
 import { optionsBuilder, queryBuilder } from '../models/queryBuilder.js';
 
-const promApiController: any = {
+const promApiController = {
   metricQueryLookup: (req: Request, res: Response, next: NextFunction) => {
     // When FE fetches a particular metricId, this middleware adds the metric basics (lookupType, searchQuery, queryOptions) onto res.locals for access in other middleware.
 

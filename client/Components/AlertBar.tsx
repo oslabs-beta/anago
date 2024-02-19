@@ -30,7 +30,7 @@ const AlertBar = () => {
   //fetching function to API
   const fetching = async () => {
     try {
-      const alertResponse = await fetch(alertsAPI);
+      const alertResponse: Response = await fetch(alertsAPI);
       const alertData = await alertResponse.json();
       // filter the alerts with a helper function
       const filtered = handleAlerts(alertData);
